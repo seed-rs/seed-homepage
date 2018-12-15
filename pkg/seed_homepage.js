@@ -376,9 +376,9 @@ __exports.__wbindgen_cb_drop = function(i) {
     return 0;
 };
 
-__exports.__wbindgen_closure_wrapper602 = function(a, b, _ignored) {
-    const f = wasm.__wbg_function_table.get(12);
-    const d = wasm.__wbg_function_table.get(13);
+__exports.__wbindgen_closure_wrapper530 = function(a, b, _ignored) {
+    const f = wasm.__wbg_function_table.get(23);
+    const d = wasm.__wbg_function_table.get(24);
     const cb = function(arg0) {
         this.cnt++;
         let a = this.a;
@@ -406,7 +406,7 @@ __exports.__wbindgen_throw = function(ptr, len) {
 
 function init(path_or_module) {
     let instantiation;
-    const imports = { './homepage': __exports };
+    const imports = { './seed_homepage': __exports };
     if (path_or_module instanceof WebAssembly.Module) {
         instantiation = WebAssembly.instantiate(path_or_module, imports)
         .then(instance => {
