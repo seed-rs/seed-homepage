@@ -1,5 +1,5 @@
-//! The Seed homepage - hosting the guide, and acting as an example. Contains
-//! simple interactions, markdown elements, and lots of view markup.
+//! The Seed homepage - hosting the guide, and acting as an example. Includes
+//! simple interactions, markdown elements, basic routing, and lots of view markup.
 
 mod book;
 
@@ -30,13 +30,17 @@ struct Model {
     guide_sections: Vec<GuideSection>,
 }
 
+use std::collections::HashMap;
 
 // Setup a default here, for initialization later.
 impl Default for Model {
     fn default() -> Self {
         let mut guide_sections = Vec::new();
         let md_texts = vec![
-            ("First", crate::book::guide::text()),
+            ("Quickstart", crate::book::quickstart::text()),
+            ("Structure", crate::book::structure::text()),
+            ("Events", crate::book::events::text()),
+//            ("Release and Debugging", crate::book::release_and_debugging::text()),
         ];
 
         for (title, md_text) in md_texts {
@@ -45,7 +49,7 @@ impl Default for Model {
         }
 
         Self {
-            page: Page::Guide,
+            page: 0,
             guide_page: 0,
             guide_sections,
         }
@@ -62,10 +66,16 @@ enum Msg {
 }
 
 /// The sole source of updating the model; returns a fresh one.
-fn update(msg: Msg, model: Model) -> Model {
+fn update(history: &mut History<Model, Msg>, msg: Msg, model: Model) -> Model {
     match msg {
-        Msg::ChangePage(page) => Model {page, ..model},
-        Msg::ChangeGuidePage(guide_page) => Model {guide_page, ..model},
+        Msg::ChangePage(page) => {
+            Model {page, ..model}
+        },
+        Msg::ChangeGuidePage(guide_page) => {
+            history.push(&guide_page.to_string(), "MOOSE", msg.clone(), model.clone());
+
+            Model {guide_page, ..model}
+        },
     }
 }
 
@@ -79,17 +89,16 @@ fn header(version: &str) -> El<Msg> {
         "margin-right" => 20;
         "font-weight" => "bold";
         "font-size" => "1.2em";
-//        "text-decoration" => "none";
     };
 
-    div![ style!{"display" => "flex"; "justify-content" => "right"},
+    div![ style!{"display" => "flex"; "justify-content" => "right"; "background-color" => "#bc4639";},
         ul![
-            a![ &link_style, "Guide", attrs!{"href" => "#/guide"}, simple_ev("click", Msg::ChangePage(Page::Guide)) ],
+            a![ &link_style, "Guide", simple_ev("click", Msg::ChangePage(Page::Guide)) ],
             a![ &link_style, "Changelog", attrs!{"href" => "#/changelog"}, simple_ev("click", Msg::ChangePage(Page::Changelog)) ],
             a![ &link_style, "Repo", attrs!{"href" => "https://github.com/David-OConnor/seed"} ],
             a![ &link_style, "Quickstart repo", attrs!{"href" => "https://github.com/David-OConnor/seed-quickstart"} ],
             a![ &link_style, "Crate", attrs!{"href" => "https://crates.io/crates/seed"} ],
-            a![ &link_style, "API docs", attrs!{"href" => format!("https://docs.rs/seed/{}/seed/", version)} ]
+            a![ &link_style, "API docs", attrs!{"href" => "https://docs.rs/seed"} ]
         ]
     ]
 }
@@ -107,14 +116,28 @@ fn title() -> El<Msg> {
 
 fn guide(sections: Vec<GuideSection>, guide_page: usize) -> El<Msg> {
     let menu_item_style = style!{
-        "margin" => "auto";
+        "display" => "flex";  // So we can vertically center
+        "align-items" => "center";
+        "padding" => 10;
         "cursor" => "pointer";
+        "height" => 40;
+        "margin-bottom" => 0;
+        "width" => "100%";
+        "background-color" => "#bc4639";
+        "color" => "black";
+        "font-size" => "1.2em";
     };
+
     let menu_items: Vec<El<Msg>> = sections
         .iter()
         .enumerate()
         .map(|(i, s)|
-        h3![ &menu_item_style, simple_ev("click", Msg::ChangeGuidePage(i)), s.title ]
+        h4![ &menu_item_style,
+            // We use a link tag here to help with routing.
+            a![ attrs!{"href" => format!("#/guide/{}", guide_page)},
+                simple_ev("click", Msg::ChangeGuidePage(i)), s.title
+            ]
+        ]
     ).collect();
 
     div![ style! {
@@ -130,7 +153,7 @@ fn guide(sections: Vec<GuideSection>, guide_page: usize) -> El<Msg> {
                      "grid-column" => "1 / 2";
 //                      "grid-row" => "1 / 2";
                       "justify-content" => "flex-start";
-                     "background-color" => "#bc4639"; "padding" => 20;},
+                     "padding" => 10;},
             menu_items
         ],
 
@@ -174,20 +197,13 @@ fn footer() -> El<Msg> {
 
 
 fn view(model: Model) -> El<Msg> {
-    let version = "0.1.4";
+    let version = "0.1.6";
     let changelog_entries = vec![
         changelog_entry("v0.1.0", vec![ "Initial release" ]),
     ];
 
     div![
-//        style!{
-//            // todo: How do we do areas?
-//            "display" => "grid";
-//            "grid-template-columns" => "auto";
-//            "grid-template-rows" => "100px auto auto 100px"
-//        },
         style!{
-            // todo: How do we do areas?
             "display" => "flex";
             "flex-direction" => "column";
         },
@@ -213,5 +229,10 @@ fn view(model: Model) -> El<Msg> {
 
 #[wasm_bindgen]
 pub fn render() {
-    seed::run(Model::default(), update, view, "main");
+    let mut route_map = HashMap::new();
+    // todo remove #
+    route_map.insert("/guide", Msg::ChangePage(Page::Guide));
+    route_map.insert("/changelog", Msg::ChangePage(Page::Changelog));
+
+    seed::run(Model::default(), update, view, "main", Some(route_map));
 }

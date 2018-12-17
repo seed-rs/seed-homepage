@@ -9,23 +9,36 @@ body {
 
 /*  Looks like we need to set all of these for a... */
 a{
-    color: #f3e0dc;
+    color: black;
+    /*color: #4285f4;*/
     text-decoration: none;
 }
 
 a:link {
-    color: #f3e0dc;
+    color: black;
+    /*color: #4285f4;*/
     text-decoration: none;
 }
 
 a:visited {
-    color: #f3e0dc;
+    color: black;
+    /*color: #4285f4;*/
     text-decoration: none;
 }
 
 a:hover {
     color: #d4a59a;
     text-decoration: underline;
+}
+
+code { /* Eg inline code */
+    background-color: #f3e0dc;
+}
+
+pre > code { /* This affects full code blocks only (not inline) */
+    display: block;
+    padding: 20px;
+    background-color: #f3e0dc;
 }
 
 div {
