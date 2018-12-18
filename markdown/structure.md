@@ -164,7 +164,8 @@ fn update(history: &mut History<Model, Msg>, msg: Msg, model: Model) -> Model {
     };
     model
 }
- ```
+```
+
 This approach, where we mutate the model directly, is much more concise when
 handling collections. How-to: Reassign `model` as mutable at the start of `update`. 
 Return `model` at the end. Mutate it during the match legs.
@@ -175,25 +176,26 @@ sub-functions to aid code organization.
 Note that you can perform updates recursively, ie have one update trigger another. For example,
 here's a non-recursive approach, where functions do_things() and do_other_things() each
 act on an Model, and output a Model:
- ```rust
+```rust
 fn update(fn update(history: &mut History<Model, Msg>, msg: Msg, model: Model) -> Model {
     match msg {
         Msg::A => do_things(model),
         Msg::B => do_other_things(do_things(model)),
     }
 }
- ```
+```
+
 Here's a recursive equivalent:
- ```rust
+```rust
 fn update(fn update(history: &mut History<Model, Msg>, msg: Msg, model: Model) -> Model {
     match msg {
         Msg::A => do_things(model),
         Msg::B => do_other_things(update(history, Msg::A, model)),
     }
 }
- ```
+```
 
- The history parameter is currently unused; it will be used for routing in the future.
+The history parameter is currently unused; it will be used for routing in the future.
 
  
 ### View

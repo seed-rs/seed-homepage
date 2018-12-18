@@ -1,21 +1,11 @@
 pub fn text() -> String {
 r#"
 <h1 id="about">About</h1>
-<h2 id="reference">Reference</h2>
-<ul>
-<li><a href="https://rustwasm.github.io/wasm-bindgen/introduction.html">wasm-bindgen guide</a></li>
-<li><a href="https://developer.mozilla.org/en-US/">Mozilla MDN web docs</a></li>
-<li><a href="https://rustwasm.github.io/wasm-bindgen/api/web_sys/">web-sys api</a> (A good partner for the MDN docs - most DOM items have web-sys equivalents used internally)</li>
-<li><a href="https://doc.rust-lang.org/book/index.html">Rust book</a></li>
-<li><a href="https://doc.rust-lang.org/std/">Rust standard library api</a></li>
-<li><a href="https://docs.rs/seed">Seed's API docs</a></li>
-<li><a href="https://www.rust-lang.org/learn">Learn Rust</a></li>
-</ul>
 <h2 id="goals">Goals</h2>
 <ul>
 <li><p>Learning the syntax, creating a project, and building it should be easy - regardless of your familiarity with Rust.</p></li>
 <li><p>Complete documentation that always matches the current version. Getting examples working, and starting a project should be painless, and require nothing beyond this guide.</p></li>
-<li><p>Concise, flexibilty vew syntax that's easy to read and write.</p></li>
+<li><p>Expressive, flexible vew syntax that's easy to read and write.</p></li>
 </ul>
 <h2 id="a-note-on-view-syntax">A note on view syntax</h2>
 <p>This project takes a different approach to describing how to display DOM elements than others. It neither uses completely natural (ie macro-free) Rust code, nor an HTML-like abstraction (eg JSX or templates). My intent is to make the code close to natural Rust, while streamlining the syntax in a way suited for creating a visual layout with minimal repetition. The macros used here are thin wrappers for constructors, and don't conceal much. Specifically, the element-creation macros allow for accepting a variable number of arguments, and the attrs/style marcros are essentially HashMap literals, with wrappers that let el macros know to distinguish them.</p>
@@ -53,5 +43,6 @@ r#"
 <li>High-level CSS-grid/Flexbox API ?</li>
 </ul>
 <p>### Bugs to fix - Text renders above children instead of below</p>
+<p>## Reference - <a href="https://rustwasm.github.io/wasm-bindgen/introduction.html">wasm-bindgen guide</a> - <a href="https://developer.mozilla.org/en-US/">Mozilla MDN web docs</a> - <a href="https://rustwasm.github.io/wasm-bindgen/api/web_sys/">web-sys api</a> (A good partner for the MDN docs - most DOM items have web-sys equivalents used internally) - <a href="https://doc.rust-lang.org/book/index.html">Rust book</a> - <a href="https://doc.rust-lang.org/std/">Rust standard library api</a> - <a href="https://docs.rs/seed">Seed's API docs</a> - <a href="https://www.rust-lang.org/learn">Learn Rust</a></p>
 "#.into()
 }

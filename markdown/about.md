@@ -1,14 +1,5 @@
 # About
 
-## Reference
-- [wasm-bindgen guide](https://rustwasm.github.io/wasm-bindgen/introduction.html)
-- [Mozilla MDN web docs](https://developer.mozilla.org/en-US/)
-- [web-sys api](https://rustwasm.github.io/wasm-bindgen/api/web_sys/) (A good partner for the MDN docs - most DOM items have web-sys equivalents used internally)
-- [Rust book](https://doc.rust-lang.org/book/index.html)
-- [Rust standard library api](https://doc.rust-lang.org/std/)
-- [Seed's API docs](https://docs.rs/seed)
-- [Learn Rust](https://www.rust-lang.org/learn)
-
 ## Goals
 - Learning the syntax, creating a project, and building it should be easy - regardless
 of your familiarity with Rust.
@@ -16,7 +7,7 @@ of your familiarity with Rust.
 - Complete documentation that always matches the current version. Getting examples working, and
  starting a project should be painless, and require nothing beyond this guide.
  
-- Concise, flexibilty vew syntax that's easy to read and write.
+- Expressive, flexible vew syntax that's easy to read and write.
 
 
 ## A note on view syntax
@@ -99,7 +90,6 @@ wasm-bindgen than with npm.
  closure system can be used to update state.
  - Tim Robinson, for being very helpful on the [Rust Gitter](https://gitter.im/rust-lang/rust).
 
-
 ### Features to add
  - Router
  - High-level fetch API
@@ -110,3 +100,13 @@ wasm-bindgen than with npm.
  
  ### Bugs to fix
  - Text renders above children instead of below
+ 
+ ## Reference
+- [wasm-bindgen guide](https://rustwasm.github.io/wasm-bindgen/introduction.html)
+- [Mozilla MDN web docs](https://developer.mozilla.org/en-US/)
+- [web-sys api](https://rustwasm.github.io/wasm-bindgen/api/web_sys/) (A good partner for the MDN docs - most DOM items have web-sys equivalents used internally)
+- [Rust book](https://doc.rust-lang.org/book/index.html)
+- [Rust standard library api](https://doc.rust-lang.org/std/)
+- [Seed's API docs](https://docs.rs/seed)
+- [Learn Rust](https://www.rust-lang.org/learn)
+

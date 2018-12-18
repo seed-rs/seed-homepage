@@ -74,6 +74,23 @@ __exports.__widl_f_create_element_Document = function(arg0, arg1, arg2, exnptr) 
     }
 };
 
+const __widl_f_create_element_ns_Document_target = typeof Document === 'undefined' ? null : Document.prototype.createElementNS || function() {
+    throw new Error(`wasm-bindgen: Document.createElementNS does not exist`);
+};
+
+__exports.__widl_f_create_element_ns_Document = function(arg0, arg1, arg2, arg3, arg4, exnptr) {
+    let varg1 = arg1 == 0 ? undefined : getStringFromWasm(arg1, arg2);
+    let varg3 = getStringFromWasm(arg3, arg4);
+    try {
+        return addHeapObject(__widl_f_create_element_ns_Document_target.call(getObject(arg0), varg1, varg3));
+    } catch (e) {
+        const view = getUint32Memory();
+        view[exnptr / 4] = 1;
+        view[exnptr / 4 + 1] = addHeapObject(e);
+
+    }
+};
+
 const __widl_f_create_text_node_Document_target = typeof Document === 'undefined' ? null : Document.prototype.createTextNode || function() {
     throw new Error(`wasm-bindgen: Document.createTextNode does not exist`);
 };
