@@ -166,7 +166,7 @@ fn guide(sections: Vec<GuideSection>, guide_page: usize) -> El<Msg> {
 
         div![ style!{"display" => "flex"; "grid-column" => "2 / 3";
 //                     "grid-row" => "1 / 2";
-                     "padding" => 40; "background-color" => "#d4a59a";},
+                     "padding" => 80; "background-color" => "#d4a59a";},
             sections[guide_page].clone().element
         ]
     ]
