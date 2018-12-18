@@ -95,7 +95,7 @@ fn header(version: &str) -> El<Msg> {
         "font-size" => "1.2em";
     };
 
-    div![ style!{"display" => "flex"; "justify-content" => "right"; "background-color" => "#bc4639";},
+    div![ style!{"display" => "flex"; "justify-content" => "flex-end"; "background-color" => "#bc4639";},
         ul![
             a![ &link_style, "Guide", attrs!{"href" => "#/guide"}, simple_ev("click", Msg::ChangePage(Page::Guide)) ],
             a![ &link_style, "Changelog", attrs!{"href" => "#/changelog"}, simple_ev("click", Msg::ChangePage(Page::Changelog)) ],
