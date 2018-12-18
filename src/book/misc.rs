@@ -9,7 +9,7 @@ r#"
 <a class="sourceLine" id="cb1-2" title="2">        <span class="pp">Msg::</span>ChangePage(page) =&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-3" title="3">            Model <span class="op">{</span>page, ..model<span class="op">}</span></a>
 <a class="sourceLine" id="cb1-4" title="4">        <span class="op">}</span>,</a></code></pre></div>
-<p>To set up the initial routing, we pass a HashMap&lt;&amp;str, Msg&gt; describing the possible routings as the last parameter of <code>https://docs.rs/seed/0.1.7/seed/fn.run.html</code>:</p>
+<p>To set up the initial routing, we pass a HashMap&lt;&amp;str, Msg&gt; describing the possible routings as the last parameter of <a href="https://docs.rs/seed/0.1.7/seed/fn.run.html">Seed::run</a>:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
 <a class="sourceLine" id="cb2-3" title="3">    <span class="kw">let</span> <span class="kw">mut</span> route_map = <span class="pp">HashMap::</span>new();</a>

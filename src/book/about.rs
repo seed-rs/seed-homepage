@@ -8,8 +8,8 @@ r#"
 <li><p>Expressive, flexible vew syntax that's easy to read and write.</p></li>
 </ul>
 <h2 id="a-note-on-view-syntax">A note on view syntax</h2>
-<p>This project takes a different approach to describing how to display DOM elements than others. It neither uses completely natural (ie macro-free) Rust code, nor an HTML-like abstraction (eg JSX or templates). My intent is to make the code close to natural Rust, while streamlining the syntax in a way suited for creating a visual layout with minimal repetition. The macros used here are thin wrappers for constructors, and don't conceal much. Specifically, the element-creation macros allow for accepting a variable number of arguments, and the attrs/style marcros are essentially HashMap literals, with wrappers that let el macros know to distinguish them.</p>
-<p>The relative lack of resemblance to HTML be offputting at first, but the learning curve is shallow, and I think the macro syntax used to create elements, attributes etc is close-enough to normal Rust syntax that it's easy to reason about how the code should come together, without compartmentalizing it into logic code and display code. This lack of separation in particlar is a subjective, controversial decision, but I think the benefits are worth it.</p>
+<p>This project takes a different approach to describing how to display DOM elements than others. It neither uses completely natural (ie macro-free) Rust code, nor an HTML-like abstraction (eg JSX or templates). My intent is to make the code close to natural Rust, while streamlining the syntax in a way suited for creating a visual layout with minimal repetition. The macros used here are thin wrappers for constructors, and don't conceal much. Specifically, the element-creation macros allow for accepting a variable number of arguments, and the attrs/style marcros are essentially HashMap literals, with wrappers that let el macros know how to distinguish them.</p>
+<p>The lack of resemblance to HTML be offputting, but the learning curve is shallow, and I think the macro syntax used to create elements, attributes etc is close-enough to normal Rust syntax that it's easy to reason about how the code should come together, without compartmentalizing it into logic code and display code. This lack of separation in particlar is a subjective, controversial decision, but I think the benefits are worth it.</p>
 <h2 id="where-to-start-if-youre-familiar-with-existing-frontend-frameworks">Where to start if you're familiar with existing frontend frameworks</h2>
 <p>The <a href="https://github.com/David-OConnor/seed/tree/master/examples/todomvc">todomvc example</a> is an implementation of the <a href="http://todomvc.com/">TodoMVC project</a>, which has example code in my frameworks that do the same thing. Compare the example in this project to one on that page that uses a framework you're familiar with.</p>
 <h2 id="suggestions-critique-submit-an-issue-or-pull-request-on-github">Suggestions? Critique? Submit an issue or pull request on Github</h2>
@@ -35,8 +35,9 @@ r#"
 </ul>
 <h3 id="features-to-add">Features to add</h3>
 <ul>
-<li>Router</li>
 <li>High-level fetch API</li>
+<li>Router</li>
+<li>Lifecycle hooks</li>
 <li>SVG support</li>
 <li>Virtual DOM optimization</li>
 <li>High-level CSS-grid/Flexbox API ?</li>

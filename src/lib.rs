@@ -108,10 +108,8 @@ fn header(version: &str) -> El<Msg> {
 
     div![ style!{"display" => "flex"; "justify-content" => "flex-end"; "background-color" => "#bc4639";},
         ul![
-            a![ &link_style, "Guide", attrs!{"href" => "#/guide"}, simple_ev("click", Msg::ChangePage(Page::Guide)) ],
-//            a![ &link_style, "Guide", simple_ev("click", Msg::ChangePage(Page::Guide)) ],
+            a![ &link_style, "Guide", attrs!{"href" => ""}, simple_ev("click", Msg::ChangePage(Page::Guide)) ],
             a![ &link_style, "Changelog", attrs!{"href" => ""}, simple_ev("click", Msg::ChangePage(Page::Changelog)) ],
-//            a![ &link_style, "Changelog", attrs!{"href" => "#/changelog"}, simple_ev("click", Msg::ChangePage(Page::Changelog)) ],
             a![ &link_style, "Repo", attrs!{"href" => "https://github.com/David-OConnor/seed"} ],
             a![ &link_style, "Quickstart repo", attrs!{"href" => "https://github.com/David-OConnor/seed-quickstart"} ],
             a![ &link_style, "Crate", attrs!{"href" => "https://crates.io/crates/seed"} ],

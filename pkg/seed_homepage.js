@@ -199,8 +199,28 @@ __exports.__widl_f_remove_event_listener_with_callback_EventTarget = function(ar
     }
 };
 
+__exports.__widl_instanceof_HTMLButtonElement = function(idx) {
+    return getObject(idx) instanceof HTMLButtonElement ? 1 : 0;
+};
+
+const __widl_f_set_autofocus_HTMLButtonElement_target = GetOwnOrInheritedPropertyDescriptor(typeof HTMLButtonElement === 'undefined' ? null : HTMLButtonElement.prototype, 'autofocus').set || function() {
+    throw new Error(`wasm-bindgen: HTMLButtonElement.autofocus does not exist`);
+};
+
+__exports.__widl_f_set_autofocus_HTMLButtonElement = function(arg0, arg1) {
+    __widl_f_set_autofocus_HTMLButtonElement_target.call(getObject(arg0), arg1 !== 0);
+};
+
 __exports.__widl_instanceof_HTMLInputElement = function(idx) {
     return getObject(idx) instanceof HTMLInputElement ? 1 : 0;
+};
+
+const __widl_f_set_autofocus_HTMLInputElement_target = GetOwnOrInheritedPropertyDescriptor(typeof HTMLInputElement === 'undefined' ? null : HTMLInputElement.prototype, 'autofocus').set || function() {
+    throw new Error(`wasm-bindgen: HTMLInputElement.autofocus does not exist`);
+};
+
+__exports.__widl_f_set_autofocus_HTMLInputElement = function(arg0, arg1) {
+    __widl_f_set_autofocus_HTMLInputElement_target.call(getObject(arg0), arg1 !== 0);
 };
 
 const __widl_f_set_checked_HTMLInputElement_target = GetOwnOrInheritedPropertyDescriptor(typeof HTMLInputElement === 'undefined' ? null : HTMLInputElement.prototype, 'checked').set || function() {
@@ -209,6 +229,30 @@ const __widl_f_set_checked_HTMLInputElement_target = GetOwnOrInheritedPropertyDe
 
 __exports.__widl_f_set_checked_HTMLInputElement = function(arg0, arg1) {
     __widl_f_set_checked_HTMLInputElement_target.call(getObject(arg0), arg1 !== 0);
+};
+
+__exports.__widl_instanceof_HTMLSelectElement = function(idx) {
+    return getObject(idx) instanceof HTMLSelectElement ? 1 : 0;
+};
+
+const __widl_f_set_autofocus_HTMLSelectElement_target = GetOwnOrInheritedPropertyDescriptor(typeof HTMLSelectElement === 'undefined' ? null : HTMLSelectElement.prototype, 'autofocus').set || function() {
+    throw new Error(`wasm-bindgen: HTMLSelectElement.autofocus does not exist`);
+};
+
+__exports.__widl_f_set_autofocus_HTMLSelectElement = function(arg0, arg1) {
+    __widl_f_set_autofocus_HTMLSelectElement_target.call(getObject(arg0), arg1 !== 0);
+};
+
+__exports.__widl_instanceof_HTMLTextAreaElement = function(idx) {
+    return getObject(idx) instanceof HTMLTextAreaElement ? 1 : 0;
+};
+
+const __widl_f_set_autofocus_HTMLTextAreaElement_target = GetOwnOrInheritedPropertyDescriptor(typeof HTMLTextAreaElement === 'undefined' ? null : HTMLTextAreaElement.prototype, 'autofocus').set || function() {
+    throw new Error(`wasm-bindgen: HTMLTextAreaElement.autofocus does not exist`);
+};
+
+__exports.__widl_f_set_autofocus_HTMLTextAreaElement = function(arg0, arg1) {
+    __widl_f_set_autofocus_HTMLTextAreaElement_target.call(getObject(arg0), arg1 !== 0);
 };
 
 const __widl_f_push_state_History_target = typeof History === 'undefined' ? null : History.prototype.pushState || function() {
@@ -240,10 +284,10 @@ function passStringToWasm(arg) {
     return ptr;
 }
 
-__exports.__widl_f_href_Location = function(ret, arg0, exnptr) {
+__exports.__widl_f_pathname_Location = function(ret, arg0, exnptr) {
     try {
 
-        const retptr = passStringToWasm(getObject(arg0).href);
+        const retptr = passStringToWasm(getObject(arg0).pathname);
         const retlen = WASM_VECTOR_LEN;
         const mem = getUint32Memory();
         mem[ret / 4] = retptr;
@@ -441,7 +485,7 @@ __exports.__wbindgen_cb_drop = function(i) {
     return 0;
 };
 
-__exports.__wbindgen_closure_wrapper587 = function(a, b, _ignored) {
+__exports.__wbindgen_closure_wrapper540 = function(a, b, _ignored) {
     const f = wasm.__wbg_function_table.get(20);
     const d = wasm.__wbg_function_table.get(21);
     const cb = function(arg0) {

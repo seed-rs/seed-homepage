@@ -44,7 +44,7 @@ r#"
 <a class="sourceLine" id="cb3-2" title="2"><span class="kw">enum</span> Msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-3" title="3">    Increment,</a>
 <a class="sourceLine" id="cb3-4" title="4">    Decrement,</a>
-<a class="sourceLine" id="cb3-5" title="5">    ChangeDescrip(<span class="dt">String</span>),</a>
+<a class="sourceLine" id="cb3-5" title="5">    ChangeDescrip(<span class="dt">String</span>),  <span class="co">//  We could use &amp;&#39;static str here too.</span></a>
 <a class="sourceLine" id="cb3-6" title="6"><span class="op">}</span></a></code></pre></div>
 <p>The update <a href="https://doc.rust-lang.org/book/ch03-03-how-functions-work.html">function</a> you pass to <code>seed::run</code> describes how the state should change, upon receiving each type of Message. It is the only place where the model is changed. It accepts a message, and model as parameters, and returns a model. This function signature cannot be changed. Note that it doesn't update the model in place: It returns a new one.</p>
 <p>Example:</p>
@@ -163,8 +163,9 @@ r#"
 <a class="sourceLine" id="cb11-9" title="9">            <span class="pp">li!</span><span class="op">[</span> &amp;item_style, <span class="st">&quot;Item 2&quot;</span>, <span class="op">]</span>,</a>
 <a class="sourceLine" id="cb11-10" title="10">        <span class="op">]</span></a>
 <a class="sourceLine" id="cb11-11" title="11">    <span class="op">]</span></a></code></pre></div>
-<p>Setting an InputElement's <code>checked</code> property is done through normal attributes:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb12-1" title="1"><span class="pp">input!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="st">&quot;type&quot;</span> =&gt; <span class="st">&quot;checkbox&quot;</span>; <span class="st">&quot;checked&quot;</span> =&gt; <span class="cn">true</span><span class="op">}</span> <span class="op">]</span></a></code></pre></div>
+<p>Setting an InputElement's <code>checked</code>, or <code>autofocus</code> property is done through normal attributes:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb12-1" title="1"><span class="pp">input!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="st">&quot;type&quot;</span> =&gt; <span class="st">&quot;checkbox&quot;</span>; <span class="st">&quot;checked&quot;</span> =&gt; <span class="cn">true</span><span class="op">}</span> <span class="op">]</span></a>
+<a class="sourceLine" id="cb12-2" title="2"><span class="pp">input!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="st">&quot;autofocus&quot;</span> =&gt; <span class="cn">true</span><span class="op">}</span> <span class="op">]</span></a></code></pre></div>
 <p>To change Attrs or Styles you've created, edit their .vals HashMap. To add a new part to them, use their .add method:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">let</span> <span class="kw">mut</span> attributes = <span class="pp">attrs!</span><span class="op">{}</span>;</a>
 <a class="sourceLine" id="cb13-2" title="2">attributes.add(<span class="st">&quot;class&quot;</span>, <span class="st">&quot;truckloads&quot;</span>);</a></code></pre></div>

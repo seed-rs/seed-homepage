@@ -45,7 +45,7 @@ def main():
 
         body = m.groups(0)[0]
 
-        body = re.sub(r'0\.1\.(d{1,2}?)', body)
+        body = re.sub(r'0\.1\.(d{1,2}?)', VERSION, body)
 
         # Create a new rust file
         with open(f'./src/book/{filename}.rs', 'w', encoding="utf8") as f:
