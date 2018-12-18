@@ -62,7 +62,7 @@ If you wish to do something like prevent_default(), or anything not listed above
 you need to take this approach. Note that for many common operations, like taking
 the value of an input element after an `input` or `change` event, you have to deal with
 casting from a generic event or target to the specific one. Seed provides convenience
-functions to handle this. They wrap wasm-bindgen's .dyn_ref() and .dyn_into(), from its
+functions to handle this. They wrap wasm-bindgen's .dyn_ref(), from its
 [JsCast](https://rustwasm.github.io/wasm-bindgen/api/wasm_bindgen/trait.JsCast.html) trait.
 
 Example syntax showing how you might use raw_ev; processing an input and handling a keyboard
@@ -82,7 +82,7 @@ Msg::KeyPress(event) => {
 }
 ```
 Seed also provides `to_textarea` and `to_select` functions, which you'd use as
-`to_input`.
+`to_input`. It provides `to_html_el`, which is useful for changing settings like `focus`.
 
 This extra step is caused by a conflict between Rust's type system, and the way DOM events
 are handled. For example, you may wish to pull text from an input field by reading the event target's

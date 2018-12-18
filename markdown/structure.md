@@ -70,7 +70,7 @@ for this, but an enum is explicitly limited in which values it can take. Example
 enum Msg {
     Increment,
     Decrement,
-    ChangeDescrip(String),
+    ChangeDescrip(String),  //  We could use &'static str here too.
 }
 ```
  
@@ -268,9 +268,10 @@ the same one more than once:
     ]
 ```
 
-Setting an InputElement's `checked` property is done through normal attributes:
+Setting an InputElement's `checked`, or `autofocus` property is done through normal attributes:
 ```rust
 input![ attrs!{"type" => "checkbox"; "checked" => true} ]
+input![ attrs!{"autofocus" => true} ]
 ```
 
 To change Attrs or Styles you've created, edit their .vals HashMap. To add
@@ -340,8 +341,10 @@ Example:
 ```rust
 #[wasm_bindgen]
 pub fn render() {
-    seed::run(Model::default(), update, view, "main");
+    seed::run(Model::default(), update, view, "main", None);
 }
 ```
 
-Note that you don't need to pass your Msg enum; it's inferred from the update function.
+This will render your app to the element holding the id you passed; in the case of this example,
+"main". The only part of the web page Seed will interact with is that element, so you can
+use other HTML not part of Seed, or other JS code/frameworks in the same document.

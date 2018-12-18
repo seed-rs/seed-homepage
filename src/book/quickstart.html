@@ -1,16 +1,94 @@
-pub fn text() -> String {
-r#"
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>quickstart</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  { background-color: #f8f8f8; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
 <h1 id="quickstart">Quickstart</h1>
 <h2 id="setup">Setup</h2>
 <p>This framework requires you to install <a href="https://www.rust-lang.org/tools/install">Rust</a> - This will enable the CLI commands below:</p>
-<p>You'll need a recent version of Rust: <code>rustup update</code></p>
+<p>You’ll need a recent version of Rust: <code>rustup update</code></p>
 <p>The wasm32-unknown-unknown target: <code>rustup target add wasm32-unknown-unknown</code></p>
 <p>And wasm-bindgen: <code>cargo install wasm-bindgen-cli</code></p>
 <h2 id="the-theoretical-minimum">The theoretical minimum</h2>
-<p>To start, clone <a href="https://github.com/David-OConnor/seed-quickstart">This quickstart repo</a>, run <code>build.sh</code> or <code>build.ps1</code> in a terminal, then start a dev server that supports WASM. For example, with <a href="https://www.python.org/downloads/">Python</a> installed, run <code>python serve.py</code>. (Linux users may need to run <code>python3 serve.py</code>.) Once you change your package name, you'll need to tweak the html file and build script, as described below.</p>
+<p>To start, clone <a href="https://github.com/David-OConnor/seed-quickstart">This quickstart repo</a>, run <code>build.sh</code> or <code>build.ps1</code> in a terminal, then start a dev server that supports WASM. For example, with <a href="https://www.python.org/downloads/">Python</a> installed, run <code>python serve.py</code>. (Linux users may need to run <code>python3 serve.py</code>.) Once you change your package name, you’ll need to tweak the html file and build script, as described below.</p>
 <h2 id="a-little-deeper">A little deeper</h2>
 <p>Or, create a new lib with Cargo: <code>cargo new --lib appname</code>. Here and everywhere it appears in this guide, <code>appname</code> should be replaced with the name of your app.</p>
-<p>If not using the quickstart repo, create an Html file that loads your app's compiled module, and provides an element with id to load the framework into. It also needs the following code to load your WASM module - Ie, the body should contain this:</p>
+<p>If not using the quickstart repo, create an Html file that loads your app’s compiled module, and provides an element with id to load the framework into. It also needs the following code to load your WASM module - Ie, the body should contain this:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">&lt;section</span><span class="ot"> id=</span><span class="st">&quot;main&quot;</span><span class="kw">&gt;&lt;/section&gt;</span></a>
 <a class="sourceLine" id="cb1-2" title="2"></a>
 <a class="sourceLine" id="cb1-3" title="3"><span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&#39;./pkg/appname.js&#39;</span><span class="kw">&gt;&lt;/script&gt;</span></a>
@@ -24,7 +102,7 @@ r#"
 <a class="sourceLine" id="cb1-11" title="11">       .<span class="at">then</span>(run)</a>
 <a class="sourceLine" id="cb1-12" title="12">       .<span class="at">catch</span>(<span class="va">console</span>.<span class="at">error</span>)<span class="op">;</span></a>
 <a class="sourceLine" id="cb1-13" title="13"><span class="kw">&lt;/script&gt;</span></a></code></pre></div>
-<p>The quickstart repo includes this file, but you will need to rename the two occurances of <code>appname</code>. (If your project name has a hyphen, use an underscore instead here) You will eventually need to modify this file to change the page's title, add a description, favicon, stylesheet etc.</p>
+<p>The quickstart repo includes this file, but you will need to rename the two occurances of <code>appname</code>. (If your project name has a hyphen, use an underscore instead here) You will eventually need to modify this file to change the page’s title, add a description, favicon, stylesheet etc.</p>
 <p><code>Cargo.toml</code>, which is a file created by Cargo that describes your app, needs <code>wasm-bindgen</code>, <code>web-sys</code>, and <code>seed</code> added as depdendencies, and crate-type of <code>"cdylib"</code>. (The version in the quickstart repo has these set up already) Example:</p>
 <pre class="toml"><code>[package]
 name = &quot;appname&quot;
@@ -45,7 +123,7 @@ serde = &quot;^1.0.80&quot;
 serde_derive = &quot;^1.0.80&quot;
 serde_json = &quot;1.0.33&quot;</code></pre>
 <h2 id="a-short-example">A short example</h2>
-<p>Here's an example demonstrating structure and syntax; it can be found in working form under <code>examples/counter</code>. Descriptions of its parts are in the Guide section below. Its structure follows <a href="https://guide.elm-lang.org/architecture/">The Elm Architecture</a>.</p>
+<p>Here’s an example demonstrating structure and syntax; it can be found in working form under <code>examples/counter</code>. Descriptions of its parts are in the Guide section below. Its structure follows <a href="https://guide.elm-lang.org/architecture/">The Elm Architecture</a>.</p>
 <p><em>lib.rs</em>:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"></a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="at">#[</span>macro_use<span class="at">]</span></a>
@@ -152,11 +230,11 @@ serde_json = &quot;1.0.33&quot;</code></pre>
 <pre><code>cargo build --target wasm32-unknown-unknown</code></pre>
 <p>and</p>
 <pre><code>wasm-bindgen target/wasm32-unknown-unknown/debug/appname.wasm --no modules --out-dir ./pkg</code></pre>
-<p>where <code>appname</code> is replaced with your app's name. This compiles your code in the target folder, and populates the pkg folder with your WASM module, a Typescript definitions file, and a Javascript file used to link your module from HTML.</p>
-<p>You may wish to create a build script with these two lines. (<code>build.sh</code> for Linux; <code>build.ps1</code> for Windows). The Quickstart repo includes these, but you'll still need to do the rename. You can then use <code>./build.sh</code> or <code>.\build.ps1</code></p>
+<p>where <code>appname</code> is replaced with your app’s name. This compiles your code in the target folder, and populates the pkg folder with your WASM module, a Typescript definitions file, and a Javascript file used to link your module from HTML.</p>
+<p>You may wish to create a build script with these two lines. (<code>build.sh</code> for Linux; <code>build.ps1</code> for Windows). The Quickstart repo includes these, but you’ll still need to do the rename. You can then use <code>./build.sh</code> or <code>.\build.ps1</code></p>
 <p>For development, you can view your app using a shimmed Python dev server described above. (Set up <a href="https://github.com/David-OConnor/seed-quickstart/blob/master/serve.py">this mime-type shim</a> from the quickstart repo, and run <code>python serve.py</code>).</p>
-<p>For details, reference <a href="https://rustwasm.github.io/wasm-bindgen/whirlwind-tour/basic-usage.html">the wasm-bindgen documention</a>. In the future, I'd like the build script and commands above to be replaced by <a href="https://github.com/rustwasm/wasm-pack">wasm-pack</a>.</p>
+<p>For details, reference <a href="https://rustwasm.github.io/wasm-bindgen/whirlwind-tour/basic-usage.html">the wasm-bindgen documention</a>. In the future, I’d like the build script and commands above to be replaced by <a href="https://github.com/rustwasm/wasm-pack">wasm-pack</a>.</p>
 <h2 id="running-included-examples">Running included examples</h2>
-<p>To run an example located in the <code>examples</code> folder, navigate to that folder in a terminal, run the build script for your system (<code>build.sh</code> or <code>build.ps1</code>), then start a dev server as described above. Note that if you copy an example to a separate folder, you'll need to edit its <code>Cargo.toml</code> to point to the package on <a href="https://crates.io">crates.io</a> instead of locally: Ie replace <code>seed = { path = "../../"</code> with <code>seed = "^0.1.0"</code>, and in the build script, remove the leading <code>../../</code> on the second line.</p>
-"#.into()
-}
+<p>To run an example located in the <code>examples</code> folder, navigate to that folder in a terminal, run the build script for your system (<code>build.sh</code> or <code>build.ps1</code>), then start a dev server as described above. Note that if you copy an example to a separate folder, you’ll need to edit its <code>Cargo.toml</code> to point to the package on <a href="https://crates.io">crates.io</a> instead of locally: Ie replace <code>seed = { path = "../../"</code> with <code>seed = "^0.1.0"</code>, and in the build script, remove the leading <code>../../</code> on the second line.</p>
+</body>
+</html>

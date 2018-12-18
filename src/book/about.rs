@@ -37,9 +37,8 @@ r#"
 <ul>
 <li>Router</li>
 <li>High-level fetch API</li>
-<li>Composable or mergable styles and attrs</li>
+<li>SVG support</li>
 <li>Virtual DOM optimization</li>
-<li>Docs/tutorial website example to replace this readme</li>
 <li>High-level CSS-grid/Flexbox API ?</li>
 </ul>
 <p>### Bugs to fix - Text renders above children instead of below</p>

@@ -17,6 +17,16 @@ enum Page {
     Changelog
 }
 
+impl Page {
+    fn to_string(&self) -> String {
+        // Eg for url routing
+        match self {
+            Page::Guide => "guide".into(),
+            Page::Changelog => "changelog".into(),
+        }
+    }
+}
+
 #[derive(Clone)]
 struct GuideSection {
     title: String,
@@ -74,6 +84,7 @@ enum Msg {
 fn update(history: &mut History<Model, Msg>, msg: Msg, model: Model) -> Model {
     match msg {
         Msg::ChangePage(page) => {
+//            history.history.push_state(&JsValue::from_str(&page.to_string()), &page.to_string()).unwrap(); // todo temp
             Model {page, ..model}
         },
         Msg::ChangeGuidePage(guide_page) => {
@@ -98,7 +109,9 @@ fn header(version: &str) -> El<Msg> {
     div![ style!{"display" => "flex"; "justify-content" => "flex-end"; "background-color" => "#bc4639";},
         ul![
             a![ &link_style, "Guide", attrs!{"href" => "#/guide"}, simple_ev("click", Msg::ChangePage(Page::Guide)) ],
-            a![ &link_style, "Changelog", attrs!{"href" => "#/changelog"}, simple_ev("click", Msg::ChangePage(Page::Changelog)) ],
+//            a![ &link_style, "Guide", simple_ev("click", Msg::ChangePage(Page::Guide)) ],
+            a![ &link_style, "Changelog", attrs!{"href" => ""}, simple_ev("click", Msg::ChangePage(Page::Changelog)) ],
+//            a![ &link_style, "Changelog", attrs!{"href" => "#/changelog"}, simple_ev("click", Msg::ChangePage(Page::Changelog)) ],
             a![ &link_style, "Repo", attrs!{"href" => "https://github.com/David-OConnor/seed"} ],
             a![ &link_style, "Quickstart repo", attrs!{"href" => "https://github.com/David-OConnor/seed-quickstart"} ],
             a![ &link_style, "Crate", attrs!{"href" => "https://crates.io/crates/seed"} ],
@@ -109,12 +122,28 @@ fn header(version: &str) -> El<Msg> {
 
 fn title() -> El<Msg> {
     div![ style!{
-            "display" => "flex";
-            "flex-direction" => "column";
+            // todo look up areas
+            "display" => "grid";
+            "grid-template-rows" => "auto 160px";
+            "grid-template-columns" => "1fr 1fr 1fr";
+            "text-align" => "center";
             "align-items" => "center";
+//            "justify-items" => "center";
             },
-        h1![ style!{"font-size" => "2em"}, "Seed" ],
-        p![ style!{"font-size" => "1.5em"}, "A tool for building interactive webapps with Rust" ],
+        div![ style!{"grid-row" => "1/2"; "grid-column" => "1 / 4"},
+            h1![ style!{"font-size" => "2em"},"Seed" ],
+            h2![ style!{"font-size" => "1.2em"}, "A Rust framework for creating web apps" ],
+        ],
+        div![  style!{"grid-row" => "2/3"; "grid-column" => "1 / 2"},
+            h3![ "Expressive view syntax"]
+        ],
+        div![  style!{"grid-row" => "2/3"; "grid-column" => "2 / 3"},
+            h3![ "Compile-time error checking" ]
+        ],
+        div![  style!{"grid-row" => "2/3"; "grid-column" => "3 / 4"},
+            h3![ "Clean architecture" ]
+        ],
+
     ]
 }
 

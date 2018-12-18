@@ -22,7 +22,7 @@ match msg {
         },
 ```
 To set up the initial routing, we pass a HashMap<&str, Msg> describing the possible routings
-as the last parameter of `https://docs.rs/seed/0.1.7/seed/fn.run.html`:
+as the last parameter of [Seed::run](https://docs.rs/seed/0.1.7/seed/fn.run.html):
 
 ```rust
 #[wasm_bindgen]

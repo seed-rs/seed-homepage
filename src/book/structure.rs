@@ -206,8 +206,8 @@ r#"
 <p>Example:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb17-1" title="1"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
 <a class="sourceLine" id="cb17-2" title="2"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
-<a class="sourceLine" id="cb17-3" title="3">    <span class="pp">seed::</span>run(<span class="pp">Model::</span><span class="kw">default</span>(), update, view, <span class="st">&quot;main&quot;</span>);</a>
+<a class="sourceLine" id="cb17-3" title="3">    <span class="pp">seed::</span>run(<span class="pp">Model::</span><span class="kw">default</span>(), update, view, <span class="st">&quot;main&quot;</span>, <span class="cn">None</span>);</a>
 <a class="sourceLine" id="cb17-4" title="4"><span class="op">}</span></a></code></pre></div>
-<p>Note that you don't need to pass your Msg enum; it's inferred from the update function.</p>
+<p>This will render your app to the element holding the id you passed; in the case of this example, “main”. The only part of the web page Seed will interact with is that element, so you can use other HTML not part of Seed, or other JS code/frameworks in the same document.</p>
 "#.into()
 }

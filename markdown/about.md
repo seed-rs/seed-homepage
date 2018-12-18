@@ -18,10 +18,10 @@ to natural Rust, while streamlining the syntax in a way suited for creating
 a visual layout with minimal repetition. The macros used here are thin wrappers
 for constructors, and don't conceal much. Specifically, the element-creation macros
 allow for accepting a variable number of arguments, and the attrs/style marcros are 
-essentially HashMap literals, with wrappers that let el macros know to distinguish
+essentially HashMap literals, with wrappers that let el macros know how to distinguish
 them.
 
-The relative lack of resemblance to HTML be offputting at first, but the learning
+The lack of resemblance to HTML be offputting, but the learning
 curve is shallow, and I think the macro syntax used to create elements, attributes etc
 is close-enough to normal Rust syntax that it's easy to reason about how the code
 should come together, without compartmentalizing it into logic code and display code.
@@ -91,11 +91,11 @@ wasm-bindgen than with npm.
  - Tim Robinson, for being very helpful on the [Rust Gitter](https://gitter.im/rust-lang/rust).
 
 ### Features to add
- - Router
  - High-level fetch API
- - Composable or mergable styles and attrs
+ - Router
+ - Lifecycle hooks
+ - SVG support
  - Virtual DOM optimization 
- - Docs/tutorial website example to replace this readme
  - High-level CSS-grid/Flexbox API ?
  
  ### Bugs to fix

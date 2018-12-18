@@ -73,7 +73,6 @@ web-sys = "^0.3.6"
 serde = "^1.0.80"
 serde_derive = "^1.0.80"
 serde_json = "1.0.33"
-
 ```
 
 ## A short example
@@ -201,7 +200,8 @@ and a Javascript file used to link your module from HTML.
 
 You may wish to create a build script with these two lines. (`build.sh` for Linux; `build.ps1` for Windows).
 The Quickstart repo includes these, but you'll still need to do the rename. You can then use
-`./build.sh` or `.\build.ps1`
+`./build.sh` or `.\build.ps1` If you run into permission errors on `build.sh`, try this command
+to allow executing the file:`chmod +x build.sh`.
 
 For development, you can view your app using a shimmed Python dev server described above.
 (Set up [this mime-type shim](https://github.com/David-OConnor/seed-quickstart/blob/master/serve.py)
