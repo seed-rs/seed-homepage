@@ -1,10 +1,12 @@
-### Logging in the web browser
+# Misc features
+
+## Logging in the web browser
 To output to the web browser's console (ie `console.log()` in JS), use `web_sys::console_log1`,
 or the `log` macro that wraps it, which is imported in the seed prelude: 
 `log!("On the shoulders of", 5, "giants".to_string())`
 
 
-### Routing
+## Routing
 For now, the only supported routing feature is in setting up how to load the inintial
 page, based on the entry-point URL. As an example, let's say our site has three pages:
 a home page, a guide, and a changelog, accessible by `http://seed-rs.org/`, `http://seed-rs.org/guide`,
@@ -35,8 +37,7 @@ pub fn render() {
 Seed searches each of the route_map keys for a matching path name (url suffix). If it finds one,
 it updates the model based on its associated message. If not, no action will be taken. In our example, we assume the model initialized to page=0, for the homepage.
 
-
-### Querying servers using fetch
+## Querying servers using fetch
 To send and receive data with a server, use `wasm-bindgen`'s `web-sys` fetch methods,
 [described here](https://rustwasm.github.io/wasm-bindgen/examples/fetch.html).
 
@@ -51,7 +52,7 @@ data from the server in JSON.
 
 Seed will implement a high-level fetch API in the future, wrapping web-sys's.
 
-### Local storage
+## Local storage
 You can store page state locally using web_sys's [Storage struct](https://rustwasm.github.io/wasm-bindgen/api/web_sys/struct.Storage.html)
 
 Seed provides convenience functions `seed::storage::get_storage`, which returns 
@@ -77,10 +78,9 @@ seed::storage::store(storage, "my-data", Data::new());
 
 let loaded_serialized = storage.get_item("my-data").unwrap().unwrap();
 let data = serde_json::from_str(&loaded_serialized).unwrap();
-
 ```
 
-### Display markdown and raw HTML
+## Display markdown and raw HTML
 Seed supports creating elements from markdown text, using [pulldown-cmark](https://github.com/raphlinus/pulldown-cmark)
 internally. Use the [El::from_markdown()](https://docs.rs/seed/0.1.6/seed/dom_types/struct.El.html#method.from_markdown)
 method to create an element that accepts a markdown &str as its only parameter, and displays

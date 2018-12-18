@@ -1,7 +1,6 @@
-### App structure
+# App structure
 
-**Model**
-
+### Model
 Each app must contain a model [struct]( https://doc.rust-lang.org/book/ch05-00-structs.html), 
 which contains the app’s state and data. It must derive `Clone`, and should contain 
 [owned data](https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html). References
@@ -59,8 +58,7 @@ struct Model {
 }
 ```
 
-**Update**
-
+### Update
 The Message is an [enum]( https://doc.rust-lang.org/book/ch06-00-enums.html) which 
 categorizes each type of interaction with the app. Its fields may hold a value, or not. 
 We’ve abbreviated it as `Msg` here for brevity. If you're not familiar with enums,
@@ -190,7 +188,7 @@ Here's a recursive equivalent:
 fn update(fn update(history: &mut History<Model, Msg>, msg: Msg, model: Model) -> Model {
     match msg {
         Msg::A => do_things(model),
-        Msg::B => do_other_things(update(Msg::A, model)),
+        Msg::B => do_other_things(update(history, Msg::A, model)),
     }
 }
  ```
@@ -198,8 +196,7 @@ fn update(fn update(history: &mut History<Model, Msg>, msg: Msg, model: Model) -
  The history parameter is currently unused; it will be used for routing in the future.
 
  
-**View**
-
+### View
  Visual layout (ie HTML/DOM elements) is described declaratively in Rust, but uses 
 [macros]( https://doc.rust-lang.org/book/appendix-04-macros.html) to simplify syntax. 
 
@@ -317,6 +314,48 @@ div![
 ]
 ```
 
-
 Overall: we leverage of Rust's strict type system to flexibly-create the view
 using normal Rust code.
+
+**Initializing
+Initializing your app
+
+To start your app, pass an instance of your model, the update function, the top-level component function (not its output), and id of the element (Usually a Div or Section) you wish to mount it to to the seed::run function:
+
+#[wasm_bindgen]
+pub fn render() {
+    seed::run(Model::default(), update, view, "main");
+}
+
+This must be wrapped in a function named render, with the #[wasm_bindgen] invocation above. (More correctly, its name must match the func in this line in your html file):
+
+function run() {
+    render();
+}
+
+Note that you don't need to pass your Msg enum; it's inferred from the update function.
+
+### Initializing
+To start yoru app, call the `seed::run` function, which takes the following parameters:
+- An instance of your model
+- Your update function
+- Your top-level component function
+- The id of the element you wish to mount it to
+- Optionally, a HashMap of routings, used to initialize your state based on url (See the Routing section)
+
+This must be wrapped in a function named render, with the #[wasm_bindgen] invocation above. (More correctly, its name must match the func in this line in your html file):
+```javascript
+function run() {
+    render();
+}
+```
+
+Example:
+```rust
+#[wasm_bindgen]
+pub fn render() {
+    seed::run(Model::default(), update, view, "main");
+}
+```
+
+Note that you don't need to pass your Msg enum; it's inferred from the update function.

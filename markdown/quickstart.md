@@ -1,15 +1,6 @@
-# Seed
+# Quickstart
 
-**A Rust framework for creating web apps**
-
-[![](https://meritbadge.herokuapp.com/seed)](https://crates.io/crates/seed)
-[![](https://img.shields.io/crates/d/seed.svg)](https://crates.io/crates/seed)
-[![API Documentation on docs.rs](https://docs.rs/seed/badge.svg)](https://docs.rs/seed)
-
-
-## Quickstart
-
-### Setup
+## Setup
 This framework requires you to install [Rust](https://www.rust-lang.org/tools/install) - This will
 enable the CLI commands below:
 
@@ -20,7 +11,7 @@ The wasm32-unknown-unknown target: `rustup target add wasm32-unknown-unknown`
 And wasm-bindgen: `cargo install wasm-bindgen-cli`
 
 
-### The theoretical minimum
+## The theoretical minimum
 To start, clone [This quickstart repo](https://github.com/David-OConnor/seed-quickstart),
 run `build.sh` or `build.ps1` in a terminal, then start a dev server that supports WASM.
 For example, with [Python](https://www.python.org/downloads/) installed, run `python serve.py`.
@@ -28,7 +19,8 @@ For example, with [Python](https://www.python.org/downloads/) installed, run `py
 Once you change your package name, you'll
 need to tweak the html file and build script, as described below.
 
-### A little deeper
+
+## A little deeper
 Or, create a new lib with Cargo: `cargo new --lib appname`. Here and everywhere it appears in this guide, `
 appname` should be replaced with the name of your app.
 
@@ -84,7 +76,7 @@ serde_json = "1.0.33"
 
 ```
 
-### A short example
+## A short example
 Here's an example demonstrating structure and syntax; it can be found in working form
 under `examples/counter`. Descriptions of its parts are in the
 Guide section below. Its structure follows [The Elm Architecture](https://guide.elm-lang.org/architecture/).
@@ -193,7 +185,7 @@ pub fn render() {
 }
 ```
 
-### Building and running
+## Building and running
 To build your app, create a `pkg` subdirectory, and run the following two commands:
 
 ```
@@ -218,7 +210,7 @@ from the quickstart repo, and run `python serve.py`).
 For details, reference [the wasm-bindgen documention](https://rustwasm.github.io/wasm-bindgen/whirlwind-tour/basic-usage.html).
 In the future, I'd like the build script and commands above to be replaced by [wasm-pack](https://github.com/rustwasm/wasm-pack).
 
-### Running included examples
+## Running included examples
 To run an example located in the `examples` folder, navigate to that folder in a terminal, 
 run the build script for your system (`build.sh` or `build.ps1`), then start a dev server
  as described above. Note that if you copy an example to a separate folder, you'll need

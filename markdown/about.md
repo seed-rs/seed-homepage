@@ -1,4 +1,6 @@
-### Reference
+# About
+
+## Reference
 - [wasm-bindgen guide](https://rustwasm.github.io/wasm-bindgen/introduction.html)
 - [Mozilla MDN web docs](https://developer.mozilla.org/en-US/)
 - [web-sys api](https://rustwasm.github.io/wasm-bindgen/api/web_sys/) (A good partner for the MDN docs - most DOM items have web-sys equivalents used internally)
@@ -7,9 +9,7 @@
 - [Seed's API docs](https://docs.rs/seed)
 - [Learn Rust](https://www.rust-lang.org/learn)
 
-## About
-
-### Goals
+## Goals
 - Learning the syntax, creating a project, and building it should be easy - regardless
 of your familiarity with Rust.
 
@@ -19,7 +19,7 @@ of your familiarity with Rust.
 - Concise, flexibilty vew syntax that's easy to read and write.
 
 
-### A note on view syntax
+## A note on view syntax
 This project takes a different approach to describing how to display DOM elements 
 than others. It neither uses completely natural (ie macro-free) Rust code, nor
 an HTML-like abstraction (eg JSX or templates). My intent is to make the code close 
@@ -39,21 +39,21 @@ in particlar is a subjective, controversial decision, but I think the benefits
 are worth it.
 
 
-### Where to start if you're familiar with existing frontend frameworks
+## Where to start if you're familiar with existing frontend frameworks
 The [todomvc example](https://github.com/David-OConnor/seed/tree/master/examples/todomvc) is an implementation of the [TodoMVC project](http://todomvc.com/),
 which has example code in my frameworks that do the same thing. Compare the example in this
 project to one on that page that uses a framework you're familiar with.
 
-### Suggestions? Critique? Submit an issue or pull request on Github
+## Suggestions? Critique? Submit an issue or pull request on Github
 
-### Influences
+## Influences
 This project is strongly influenced by Elm, React, and Redux. The overall layout
 of Seed apps mimicks that of The Elm Architecture.
 
 
-### Why another entry in a saturated field?
+## Why another entry in a saturated field?
 
-**There are already several Rust/WASM frameworks; why add another?** 
+### There are already several Rust/WASM frameworks; why add another?
 
 My goal is for this to be easy to pick up from looking at a tutorial or documentation, regardless of your
 level of experience with Rust. I'm distinguising this package through clear examples
@@ -62,7 +62,7 @@ project after being unable to get existing frameworks to work
 due to lack of documented examples, and inconsistency between documentation and 
 published versions. My intent is for anyone who's proficient in a frontend
 framework to get a standalone app working in the browser within a few minutes, using just the 
-[Quickstart guide](##quickstart).
+quickstart guide.
 
 Seed approaches HTML-display syntax differently from existing packages: 
 rather than use an HTML-like markup similar to JSX, 
@@ -70,7 +70,7 @@ it uses Rust builtin types, thinly-wrapped by a macro for each DOM element.
 This decision may not appeal to everyone, 
 but I think it integrates more naturally with the language.
 
-**Why build a frontend in Rust over Elm or Javascript-based frameworks?**
+### Why build a frontend in Rust over Elm or Javascript-based frameworks?
 
 You may prefer writing in Rust, and using packages from Cargo vis npm. Getting started with
 this framework will, in most cases be faster, and require less config and setup overhead than
@@ -88,7 +88,7 @@ flexible, and avoids OOP boilerplate.
 I also hope that config, building, and dependency-management is cleaner with Cargo and
 wasm-bindgen than with npm.
 
-## Shoutouts
+### Shoutouts
  - The [WASM-Bindgen](https://github.com/rustwasm/wasm-bindgen) team: 
  For building the tools this project relies on
  - Alex Chrichton, for being extraodinarily helpful in the Rust / WASM community
@@ -100,7 +100,7 @@ wasm-bindgen than with npm.
  - Tim Robinson, for being very helpful on the [Rust Gitter](https://gitter.im/rust-lang/rust).
 
 
-## Features to add
+### Features to add
  - Router
  - High-level fetch API
  - Composable or mergable styles and attrs
@@ -108,5 +108,5 @@ wasm-bindgen than with npm.
  - Docs/tutorial website example to replace this readme
  - High-level CSS-grid/Flexbox API ?
  
- ## Bugs to fix
+ ### Bugs to fix
  - Text renders above children instead of below

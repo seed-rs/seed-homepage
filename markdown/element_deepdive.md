@@ -1,5 +1,4 @@
-### Element-creation macros, under the hood
-
+# Element-creation macros, under the hood
 The following code returns an `El` representing a few DOM elements displayed
 in a flexbox layout:
 ```rust

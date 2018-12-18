@@ -10,3 +10,5 @@ workspace.xml
 **/target/
 **.log
 
+pandoc.exe
+

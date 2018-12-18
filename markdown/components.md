@@ -1,4 +1,4 @@
-### Components
+# Components
 The analog of components in frameworks like React are normal Rust functions that that return Els.
 The parameters these functions take are not treated in a way equivalent
 to attributes on native DOM elements; they just provide a way to 
@@ -30,7 +30,7 @@ you haven't violated any rules.
 Note that unlike in JSX, there's a clear syntax delineation here between natural HTML
 elements (element macros), and custom components (function calls).
 
-### Fragments
+## Fragments
 Fragments (`<>...</>` syntax in React and Yew) are components that represent multiple
 elements without a parent. This is useful to avoid
 unecessary divs, which may be undesirable on their own, and breaks things like tables and CSS-grid. 
@@ -54,7 +54,7 @@ fn items() -> El<Msg> {
 }
 ```
 
-### Dummy elements
+## Dummy elements
 When performing ternary and related operations instead an element macro, all
 branches must return `El`s to satisfy Rust's type system. Seed provides the
 `empty()` function, which creates a VDOM element that will not be rendered:

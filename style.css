@@ -53,8 +53,14 @@ h1 {
     font-family: 'Karla', sans-serif;
 }
 
+/*pre > h2 {*/
+    /*font-family: 'Karla', sans-serif;*/
+    /*margin-top: 60px; !* To add whitespace in the guide. *!*/
+/*}*/
+
 h2 {
     font-family: 'Karla', sans-serif;
+    margin-top: 60px; /* To add whitespace in the guide. */
 }
 
 h3 {

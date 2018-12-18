@@ -1,5 +1,4 @@
-### Events
-
+# Events
 Events are created by passing a a [Listener](https://docs.rs/seed/0.1.6/seed/dom_types/struct.Listener.html),
 or vec of Listeners, created using the following four functions exposed in the prelude: `simple_ev`,
 `input_ev`, `keyboard_ev`, and `raw_ev`. The first is demonstrated in the example in the quickstart section,

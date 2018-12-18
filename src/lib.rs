@@ -38,9 +38,14 @@ impl Default for Model {
         let mut guide_sections = Vec::new();
         let md_texts = vec![
             ("Quickstart", crate::book::quickstart::text()),
+            ("Prereqs", crate::book::prereqs::text()),
             ("Structure", crate::book::structure::text()),
             ("Events", crate::book::events::text()),
-//            ("Release and Debugging", crate::book::release_and_debugging::text()),
+            ("Components", crate::book::components::text()),
+            ("Release and debugging", crate::book::release_and_debugging::text()),
+            ("Element Deep-dive", crate::book::element_deepdive::text()),
+            ("Misc features", crate::book::misc::text()),
+            ("About", crate::book::about::text()),
         ];
 
         for (title, md_text) in md_texts {
@@ -49,7 +54,7 @@ impl Default for Model {
         }
 
         Self {
-            page: 0,
+            page: Page::Guide,
             guide_page: 0,
             guide_sections,
         }
@@ -81,7 +86,6 @@ fn update(history: &mut History<Model, Msg>, msg: Msg, model: Model) -> Model {
 
 
 // View
-
 
 fn header(version: &str) -> El<Msg> {
     let link_style = style!{
@@ -118,7 +122,7 @@ fn guide(sections: Vec<GuideSection>, guide_page: usize) -> El<Msg> {
     let menu_item_style = style!{
         "display" => "flex";  // So we can vertically center
         "align-items" => "center";
-        "padding" => 10;
+        "padding" => 4;
         "cursor" => "pointer";
         "height" => 40;
         "margin-bottom" => 0;
@@ -132,6 +136,8 @@ fn guide(sections: Vec<GuideSection>, guide_page: usize) -> El<Msg> {
         .iter()
         .enumerate()
         .map(|(i, s)|
+            // todo currently a bug affecting this.
+//        h4![ &menu_item_style.merge(&style!{"background" => if i == guide_page {"#d4a59a"} else {"#bc4639"}}),
         h4![ &menu_item_style,
             // We use a link tag here to help with routing.
             a![ attrs!{"href" => format!("#/guide/{}", guide_page)},
@@ -147,6 +153,7 @@ fn guide(sections: Vec<GuideSection>, guide_page: usize) -> El<Msg> {
         "color" => "black";
         "grid-auto-rows" => "1fr";
         "align-items" => "start";
+
 //        "padding" => 20;
     },
         div![ style!{"display" => "flex"; "flex-direction" => "column";
@@ -230,7 +237,6 @@ fn view(model: Model) -> El<Msg> {
 #[wasm_bindgen]
 pub fn render() {
     let mut route_map = HashMap::new();
-    // todo remove #
     route_map.insert("/guide", Msg::ChangePage(Page::Guide));
     route_map.insert("/changelog", Msg::ChangePage(Page::Changelog));
 
