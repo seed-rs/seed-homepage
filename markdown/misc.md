@@ -104,7 +104,7 @@ and just [learn to code](https://play.rust-lang.org/).
 "
 <div>
     <p>It is a truth universally acknowledged, that a single man in 
-    possession of a good fortune, must be in want of a good time./p>
+    possession of a good fortune, must be in want of a good time.</p>
 </div>
 "
 ;
