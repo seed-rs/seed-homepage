@@ -113,76 +113,89 @@ r#"
 <a class="sourceLine" id="cb6-20" title="20"><span class="op">}</span></a></code></pre></div>
 <p>This approach, where we mutate the model directly, is much more concise when handling collections. How-to: Reassign <code>model</code> as mutable at the start of <code>update</code>. Return <code>model</code> at the end. Mutate it during the match legs.</p>
 <p>As with the model, only one update function is passed to the app, but it may be split into sub-functions to aid code organization.</p>
-<p>Note that you can perform updates recursively, ie have one update trigger another. For example, here's a non-recursive approach, where functions do_things() and do_other_things() each act on an Model, and output a Model: <code>rust fn update(fn update(history: &amp;mut History&lt;Model, Msg&gt;, msg: Msg, model: Model) -&gt; Model {     match msg {         Msg::A =&gt; do_things(model),         Msg::B =&gt; do_other_things(do_things(model)),     } }</code> Here's a recursive equivalent: <code>rust fn update(fn update(history: &amp;mut History&lt;Model, Msg&gt;, msg: Msg, model: Model) -&gt; Model {     match msg {         Msg::A =&gt; do_things(model),         Msg::B =&gt; do_other_things(update(history, Msg::A, model)),     } }</code></p>
+<p>Note that you can perform updates recursively, ie have one update trigger another. For example, here's a non-recursive approach, where functions do_things() and do_other_things() each act on an Model, and output a Model:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">fn</span> update(<span class="kw">fn</span> update(history: &amp;<span class="kw">mut</span> History&lt;Model, Msg&gt;, msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
+<a class="sourceLine" id="cb7-2" title="2">    <span class="kw">match</span> msg <span class="op">{</span></a>
+<a class="sourceLine" id="cb7-3" title="3">        <span class="pp">Msg::</span>A =&gt; do_things(model),</a>
+<a class="sourceLine" id="cb7-4" title="4">        <span class="pp">Msg::</span>B =&gt; do_other_things(do_things(model)),</a>
+<a class="sourceLine" id="cb7-5" title="5">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="op">}</span></a></code></pre></div>
+<p>Here's a recursive equivalent:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">fn</span> update(<span class="kw">fn</span> update(history: &amp;<span class="kw">mut</span> History&lt;Model, Msg&gt;, msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
+<a class="sourceLine" id="cb8-2" title="2">    <span class="kw">match</span> msg <span class="op">{</span></a>
+<a class="sourceLine" id="cb8-3" title="3">        <span class="pp">Msg::</span>A =&gt; do_things(model),</a>
+<a class="sourceLine" id="cb8-4" title="4">        <span class="pp">Msg::</span>B =&gt; do_other_things(update(history, <span class="pp">Msg::</span>A, model)),</a>
+<a class="sourceLine" id="cb8-5" title="5">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb8-6" title="6"><span class="op">}</span></a></code></pre></div>
 <p>The history parameter is currently unused; it will be used for routing in the future.</p>
 <h3 id="view">View</h3>
 <p>Visual layout (ie HTML/DOM elements) is described declaratively in Rust, but uses <a href="https://doc.rust-lang.org/book/appendix-04-macros.html">macros</a> to simplify syntax.</p>
 <h3 id="elements-attributes-styles">Elements, attributes, styles</h3>
 <p>Elements are created using macros, named by the lowercase name of each element, and imported into the global namespace:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb7-1" title="1"><span class="at">#[</span>macro_use<span class="at">]</span></a>
-<a class="sourceLine" id="cb7-2" title="2"><span class="kw">extern</span> <span class="kw">crate</span> seed;</a>
-<a class="sourceLine" id="cb7-3" title="3"></a>
-<a class="sourceLine" id="cb7-4" title="4"><span class="co">// ...</span></a>
-<a class="sourceLine" id="cb7-5" title="5"></a>
-<a class="sourceLine" id="cb7-6" title="6"><span class="pp">div!</span><span class="op">[]</span></a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb9-1" title="1"><span class="at">#[</span>macro_use<span class="at">]</span></a>
+<a class="sourceLine" id="cb9-2" title="2"><span class="kw">extern</span> <span class="kw">crate</span> seed;</a>
+<a class="sourceLine" id="cb9-3" title="3"></a>
+<a class="sourceLine" id="cb9-4" title="4"><span class="co">// ...</span></a>
+<a class="sourceLine" id="cb9-5" title="5"></a>
+<a class="sourceLine" id="cb9-6" title="6"><span class="pp">div!</span><span class="op">[]</span></a></code></pre></div>
 <p>These macros accept any combination of the following parameters: - One <a href="https://docs.rs/seed/0.1.6/seed/dom_types/struct.Attrs.html">Attrs</a> struct - One <a href="https://docs.rs/seed/0.1.6/seed/dom_types/struct.Style.html">Style</a> struct - One or more <a href="https://docs.rs/seed/0.1.6/seed/dom_types/struct.Listener.html">Listener</a> structs, which handle events - One or more Vecs of Listener structs - One String or &amp;str representing a node text - One or more <a href="https://docs.rs/seed/0.1.6/seed/dom_types/struct.El.html">El</a> structs, representing a child - One or more Vecs of El structs, representing multiple children</p>
 <p>The parameters can be passed in any order; the compiler knows how to handle them based on their types. Children are rendered in the order passed.</p>
 <p>Views are described using <a href="https://docs.rs/seed/0.1.6/seed/dom_types/struct.El.html">El structs</a>, defined in the <a href="https://docs.rs/seed/0.1.6/seed/dom_types/index.html">seed::dom_types</a> module. They're most-easily created with a shorthand using macros.</p>
 <p><code>Attrs</code> and <code>Style</code> are thinly-wrapped hashmaps created with their own macros: <code>attrs!{}</code> and <code>style!{}</code> respectively.</p>
 <p>Example:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">let</span> things = <span class="pp">vec!</span><span class="op">[</span> <span class="pp">h4!</span><span class="op">[</span> <span class="st">&quot;thing1&quot;</span> <span class="op">]</span>, <span class="pp">h4!</span><span class="op">[</span> <span class="st">&quot;thing2&quot;</span> <span class="op">]</span> <span class="op">]</span>;</a>
-<a class="sourceLine" id="cb8-2" title="2"></a>
-<a class="sourceLine" id="cb8-3" title="3"><span class="pp">div!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="st">&quot;class&quot;</span> =&gt; <span class="st">&quot;hardly-any&quot;</span><span class="op">}</span>, </a>
-<a class="sourceLine" id="cb8-4" title="4">    things,</a>
-<a class="sourceLine" id="cb8-5" title="5">    <span class="pp">h4!</span><span class="op">[</span> <span class="st">&quot;thing3?&quot;</span> <span class="op">]</span></a>
-<a class="sourceLine" id="cb8-6" title="6"><span class="op">]</span></a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb10-1" title="1"><span class="kw">let</span> things = <span class="pp">vec!</span><span class="op">[</span> <span class="pp">h4!</span><span class="op">[</span> <span class="st">&quot;thing1&quot;</span> <span class="op">]</span>, <span class="pp">h4!</span><span class="op">[</span> <span class="st">&quot;thing2&quot;</span> <span class="op">]</span> <span class="op">]</span>;</a>
+<a class="sourceLine" id="cb10-2" title="2"></a>
+<a class="sourceLine" id="cb10-3" title="3"><span class="pp">div!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="st">&quot;class&quot;</span> =&gt; <span class="st">&quot;hardly-any&quot;</span><span class="op">}</span>, </a>
+<a class="sourceLine" id="cb10-4" title="4">    things,</a>
+<a class="sourceLine" id="cb10-5" title="5">    <span class="pp">h4!</span><span class="op">[</span> <span class="st">&quot;thing3?&quot;</span> <span class="op">]</span></a>
+<a class="sourceLine" id="cb10-6" title="6"><span class="op">]</span></a></code></pre></div>
 <p>Note that you can create any of the above items inside an element macro, or create it separately, and pass it in.</p>
 <p>Values passed to <code>attrs</code>, and <code>style</code> macros can be owned <code>Strings</code>, <code>&amp;str</code>s, or when applicable, numerical and boolean values. Eg: <code>input![ attrs!{"disabled" =&gt; false]</code> and <code>input![ attrs!{"disabled" =&gt; "false"]</code> are equivalent. If a numerical value is used in a <code>Style</code>, ‘px' will be automatically appended. If you don't want this behavior, use a <code>String</code> or<code>&amp;str</code>. Eg: <code>h2![ style!{"font-size" =&gt; 16} ]</code> , or <code>h2![ style!{"font-size" =&gt; "1.5em"} ]</code> for specifying font size in pixels or em respectively. Note that once created, a <code>Style</code> instance holds all its values as <code>Strings</code>; eg that <code>16</code> above will be stored as <code>"16px"</code>; keep this in mind if editing a style that you made outside an element macro.</p>
 <p>Styles and Attrs can be passed as refs as well, which is useful if you need to pass the same one more than once:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb9-1" title="1"> <span class="kw">let</span> item_style = <span class="pp">style!</span><span class="op">{</span></a>
-<a class="sourceLine" id="cb9-2" title="2">        <span class="st">&quot;margin-top&quot;</span> =&gt; <span class="dv">10</span>;</a>
-<a class="sourceLine" id="cb9-3" title="3">        <span class="st">&quot;font-size&quot;</span> =&gt; <span class="st">&quot;1.2em&quot;</span></a>
-<a class="sourceLine" id="cb9-4" title="4">    <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb9-5" title="5"></a>
-<a class="sourceLine" id="cb9-6" title="6">    <span class="pp">div!</span><span class="op">[</span></a>
-<a class="sourceLine" id="cb9-7" title="7">        <span class="pp">ul!</span><span class="op">[</span></a>
-<a class="sourceLine" id="cb9-8" title="8">            <span class="pp">li!</span><span class="op">[</span> &amp;item_style, <span class="st">&quot;Item 1&quot;</span>, <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb9-9" title="9">            <span class="pp">li!</span><span class="op">[</span> &amp;item_style, <span class="st">&quot;Item 2&quot;</span>, <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb9-10" title="10">        <span class="op">]</span></a>
-<a class="sourceLine" id="cb9-11" title="11">    <span class="op">]</span></a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb11-1" title="1"> <span class="kw">let</span> item_style = <span class="pp">style!</span><span class="op">{</span></a>
+<a class="sourceLine" id="cb11-2" title="2">        <span class="st">&quot;margin-top&quot;</span> =&gt; <span class="dv">10</span>;</a>
+<a class="sourceLine" id="cb11-3" title="3">        <span class="st">&quot;font-size&quot;</span> =&gt; <span class="st">&quot;1.2em&quot;</span></a>
+<a class="sourceLine" id="cb11-4" title="4">    <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb11-5" title="5"></a>
+<a class="sourceLine" id="cb11-6" title="6">    <span class="pp">div!</span><span class="op">[</span></a>
+<a class="sourceLine" id="cb11-7" title="7">        <span class="pp">ul!</span><span class="op">[</span></a>
+<a class="sourceLine" id="cb11-8" title="8">            <span class="pp">li!</span><span class="op">[</span> &amp;item_style, <span class="st">&quot;Item 1&quot;</span>, <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb11-9" title="9">            <span class="pp">li!</span><span class="op">[</span> &amp;item_style, <span class="st">&quot;Item 2&quot;</span>, <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb11-10" title="10">        <span class="op">]</span></a>
+<a class="sourceLine" id="cb11-11" title="11">    <span class="op">]</span></a></code></pre></div>
 <p>Setting an InputElement's <code>checked</code> property is done through normal attributes:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb10-1" title="1"><span class="pp">input!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="st">&quot;type&quot;</span> =&gt; <span class="st">&quot;checkbox&quot;</span>; <span class="st">&quot;checked&quot;</span> =&gt; <span class="cn">true</span><span class="op">}</span> <span class="op">]</span></a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb12-1" title="1"><span class="pp">input!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="st">&quot;type&quot;</span> =&gt; <span class="st">&quot;checkbox&quot;</span>; <span class="st">&quot;checked&quot;</span> =&gt; <span class="cn">true</span><span class="op">}</span> <span class="op">]</span></a></code></pre></div>
 <p>To change Attrs or Styles you've created, edit their .vals HashMap. To add a new part to them, use their .add method:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">let</span> <span class="kw">mut</span> attributes = <span class="pp">attrs!</span><span class="op">{}</span>;</a>
-<a class="sourceLine" id="cb11-2" title="2">attributes.add(<span class="st">&quot;class&quot;</span>, <span class="st">&quot;truckloads&quot;</span>);</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">let</span> <span class="kw">mut</span> attributes = <span class="pp">attrs!</span><span class="op">{}</span>;</a>
+<a class="sourceLine" id="cb13-2" title="2">attributes.add(<span class="st">&quot;class&quot;</span>, <span class="st">&quot;truckloads&quot;</span>);</a></code></pre></div>
 <p>Example of the style tag, and how you can use pattern-matching in views:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">fn</span> view(model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb12-2" title="2">    <span class="pp">div!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span></a>
-<a class="sourceLine" id="cb12-3" title="3">        <span class="st">&quot;display&quot;</span> =&gt; <span class="st">&quot;grid&quot;</span>;</a>
-<a class="sourceLine" id="cb12-4" title="4">        <span class="st">&quot;grid-template-columns&quot;</span> =&gt; <span class="st">&quot;auto&quot;</span>;</a>
-<a class="sourceLine" id="cb12-5" title="5">        <span class="st">&quot;grid-template-rows&quot;</span> =&gt; <span class="st">&quot;100px auto 100px&quot;</span></a>
-<a class="sourceLine" id="cb12-6" title="6">        <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb12-7" title="7">        <span class="pp">section!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;1 / 2&quot;</span><span class="op">}</span>,</a>
-<a class="sourceLine" id="cb12-8" title="8">            header(),</a>
-<a class="sourceLine" id="cb12-9" title="9">        <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb12-10" title="10">        <span class="pp">section!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;2 / 3&quot;</span><span class="op">}</span>,</a>
-<a class="sourceLine" id="cb12-11" title="11">            <span class="kw">match</span> model.page <span class="op">{</span></a>
-<a class="sourceLine" id="cb12-12" title="12">                <span class="pp">Page::</span>Guide =&gt; guide(),</a>
-<a class="sourceLine" id="cb12-13" title="13">                <span class="pp">Page::</span>Changelog =&gt; changelog(),</a>
-<a class="sourceLine" id="cb12-14" title="14">            <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb12-15" title="15">        <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb12-16" title="16">        <span class="pp">section!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;3 / 4&quot;</span><span class="op">}</span>,</a>
-<a class="sourceLine" id="cb12-17" title="17">            footer()</a>
-<a class="sourceLine" id="cb12-18" title="18">        <span class="op">]</span></a>
-<a class="sourceLine" id="cb12-19" title="19">    <span class="op">]</span></a>
-<a class="sourceLine" id="cb12-20" title="20"><span class="op">}</span></a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb14-1" title="1"><span class="kw">fn</span> view(model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb14-2" title="2">    <span class="pp">div!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span></a>
+<a class="sourceLine" id="cb14-3" title="3">        <span class="st">&quot;display&quot;</span> =&gt; <span class="st">&quot;grid&quot;</span>;</a>
+<a class="sourceLine" id="cb14-4" title="4">        <span class="st">&quot;grid-template-columns&quot;</span> =&gt; <span class="st">&quot;auto&quot;</span>;</a>
+<a class="sourceLine" id="cb14-5" title="5">        <span class="st">&quot;grid-template-rows&quot;</span> =&gt; <span class="st">&quot;100px auto 100px&quot;</span></a>
+<a class="sourceLine" id="cb14-6" title="6">        <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb14-7" title="7">        <span class="pp">section!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;1 / 2&quot;</span><span class="op">}</span>,</a>
+<a class="sourceLine" id="cb14-8" title="8">            header(),</a>
+<a class="sourceLine" id="cb14-9" title="9">        <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb14-10" title="10">        <span class="pp">section!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;2 / 3&quot;</span><span class="op">}</span>,</a>
+<a class="sourceLine" id="cb14-11" title="11">            <span class="kw">match</span> model.page <span class="op">{</span></a>
+<a class="sourceLine" id="cb14-12" title="12">                <span class="pp">Page::</span>Guide =&gt; guide(),</a>
+<a class="sourceLine" id="cb14-13" title="13">                <span class="pp">Page::</span>Changelog =&gt; changelog(),</a>
+<a class="sourceLine" id="cb14-14" title="14">            <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb14-15" title="15">        <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb14-16" title="16">        <span class="pp">section!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;3 / 4&quot;</span><span class="op">}</span>,</a>
+<a class="sourceLine" id="cb14-17" title="17">            footer()</a>
+<a class="sourceLine" id="cb14-18" title="18">        <span class="op">]</span></a>
+<a class="sourceLine" id="cb14-19" title="19">    <span class="op">]</span></a>
+<a class="sourceLine" id="cb14-20" title="20"><span class="op">}</span></a></code></pre></div>
 <p>We can combine Attrs and Style instances using their <code>merge</code> methods, which take an &amp;Attrs and &amp;Style respectively. This can be used to compose styles from reusable parts. Example:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">let</span> base_style = !style<span class="op">{</span><span class="st">&quot;color&quot;</span> =&gt; <span class="st">&quot;lavender&quot;</span><span class="op">}</span>;</a>
-<a class="sourceLine" id="cb13-2" title="2"></a>
-<a class="sourceLine" id="cb13-3" title="3"><span class="pp">div!</span><span class="op">[</span></a>
-<a class="sourceLine" id="cb13-4" title="4">    <span class="pp">h1!</span><span class="op">[</span> &amp;base_style.merge(&amp;<span class="pp">style!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;1 / 2&quot;</span><span class="op">}</span>) <span class="st">&quot;First row&quot;</span> <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb13-5" title="5">    <span class="pp">h1!</span><span class="op">[</span> &amp;base_style.merge(&amp;<span class="pp">style!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;2 / 3&quot;</span><span class="op">}</span>) <span class="st">&quot;Second row&quot;</span> <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb13-6" title="6"><span class="op">]</span></a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb15-1" title="1"><span class="kw">let</span> base_style = !style<span class="op">{</span><span class="st">&quot;color&quot;</span> =&gt; <span class="st">&quot;lavender&quot;</span><span class="op">}</span>;</a>
+<a class="sourceLine" id="cb15-2" title="2"></a>
+<a class="sourceLine" id="cb15-3" title="3"><span class="pp">div!</span><span class="op">[</span></a>
+<a class="sourceLine" id="cb15-4" title="4">    <span class="pp">h1!</span><span class="op">[</span> &amp;base_style.merge(&amp;<span class="pp">style!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;1 / 2&quot;</span><span class="op">}</span>) <span class="st">&quot;First row&quot;</span> <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb15-5" title="5">    <span class="pp">h1!</span><span class="op">[</span> &amp;base_style.merge(&amp;<span class="pp">style!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;2 / 3&quot;</span><span class="op">}</span>) <span class="st">&quot;Second row&quot;</span> <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb15-6" title="6"><span class="op">]</span></a></code></pre></div>
 <p>Overall: we leverage of Rust's strict type system to flexibly-create the view using normal Rust code.</p>
 <p>**Initializing Initializing your app</p>
 <p>To start your app, pass an instance of your model, the update function, the top-level component function (not its output), and id of the element (Usually a Div or Section) you wish to mount it to to the seed::run function:</p>
@@ -193,14 +206,14 @@ r#"
 <h3 id="initializing">Initializing</h3>
 <p>To start yoru app, call the <code>seed::run</code> function, which takes the following parameters: - An instance of your model - Your update function - Your top-level component function - The id of the element you wish to mount it to - Optionally, a HashMap of routings, used to initialize your state based on url (See the Routing section)</p>
 <p>This must be wrapped in a function named render, with the #[wasm_bindgen] invocation above. (More correctly, its name must match the func in this line in your html file):</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb14-1" title="1"><span class="kw">function</span> <span class="at">run</span>() <span class="op">{</span></a>
-<a class="sourceLine" id="cb14-2" title="2">    <span class="at">render</span>()<span class="op">;</span></a>
-<a class="sourceLine" id="cb14-3" title="3"><span class="op">}</span></a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb16-1" title="1"><span class="kw">function</span> <span class="at">run</span>() <span class="op">{</span></a>
+<a class="sourceLine" id="cb16-2" title="2">    <span class="at">render</span>()<span class="op">;</span></a>
+<a class="sourceLine" id="cb16-3" title="3"><span class="op">}</span></a></code></pre></div>
 <p>Example:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb15-1" title="1"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
-<a class="sourceLine" id="cb15-2" title="2"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
-<a class="sourceLine" id="cb15-3" title="3">    <span class="pp">seed::</span>run(<span class="pp">Model::</span><span class="kw">default</span>(), update, view, <span class="st">&quot;main&quot;</span>);</a>
-<a class="sourceLine" id="cb15-4" title="4"><span class="op">}</span></a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb17-1" title="1"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
+<a class="sourceLine" id="cb17-2" title="2"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
+<a class="sourceLine" id="cb17-3" title="3">    <span class="pp">seed::</span>run(<span class="pp">Model::</span><span class="kw">default</span>(), update, view, <span class="st">&quot;main&quot;</span>);</a>
+<a class="sourceLine" id="cb17-4" title="4"><span class="op">}</span></a></code></pre></div>
 <p>Note that you don't need to pass your Msg enum; it's inferred from the update function.</p>
 "#.into()
 }
