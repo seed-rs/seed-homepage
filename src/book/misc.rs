@@ -64,7 +64,7 @@ r#"
 <a class="sourceLine" id="cb4-13" title="13"><span class="st">&quot;</span></a>
 <a class="sourceLine" id="cb4-14" title="14"><span class="st">&lt;div&gt;</span></a>
 <a class="sourceLine" id="cb4-15" title="15"><span class="st">    &lt;p&gt;It is a truth universally acknowledged, that a single man in </span></a>
-<a class="sourceLine" id="cb4-16" title="16"><span class="st">    possession of a good fortune, must be in want of a good time./p&gt;</span></a>
+<a class="sourceLine" id="cb4-16" title="16"><span class="st">    possession of a good fortune, must be in want of a good time.&lt;/p&gt;</span></a>
 <a class="sourceLine" id="cb4-17" title="17"><span class="st">&lt;/div&gt;</span></a>
 <a class="sourceLine" id="cb4-18" title="18"><span class="st">&quot;</span></a>
 <a class="sourceLine" id="cb4-19" title="19">;</a>
