@@ -319,23 +319,6 @@ div![
 Overall: we leverage of Rust's strict type system to flexibly-create the view
 using normal Rust code.
 
-**Initializing
-Initializing your app
-
-To start your app, pass an instance of your model, the update function, the top-level component function (not its output), and id of the element (Usually a Div or Section) you wish to mount it to to the seed::run function:
-
-#[wasm_bindgen]
-pub fn render() {
-    seed::run(Model::default(), update, view, "main");
-}
-
-This must be wrapped in a function named render, with the #[wasm_bindgen] invocation above. (More correctly, its name must match the func in this line in your html file):
-
-function run() {
-    render();
-}
-
-Note that you don't need to pass your Msg enum; it's inferred from the update function.
 
 ### Initializing
 To start yoru app, call the `seed::run` function, which takes the following parameters:
@@ -345,7 +328,8 @@ To start yoru app, call the `seed::run` function, which takes the following para
 - The id of the element you wish to mount it to
 - Optionally, a HashMap of routings, used to initialize your state based on url (See the Routing section)
 
-This must be wrapped in a function named render, with the #[wasm_bindgen] invocation above. (More correctly, its name must match the func in this line in your html file):
+This must be wrapped in a function named render, with the #[wasm_bindgen] invocation above.
+ (More correctly, its name must match the func in this line in your html file):
 ```javascript
 function run() {
     render();

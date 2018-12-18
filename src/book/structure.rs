@@ -197,12 +197,6 @@ r#"
 <a class="sourceLine" id="cb15-5" title="5">    <span class="pp">h1!</span><span class="op">[</span> &amp;base_style.merge(&amp;<span class="pp">style!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;2 / 3&quot;</span><span class="op">}</span>) <span class="st">&quot;Second row&quot;</span> <span class="op">]</span>,</a>
 <a class="sourceLine" id="cb15-6" title="6"><span class="op">]</span></a></code></pre></div>
 <p>Overall: we leverage of Rust's strict type system to flexibly-create the view using normal Rust code.</p>
-<p>**Initializing Initializing your app</p>
-<p>To start your app, pass an instance of your model, the update function, the top-level component function (not its output), and id of the element (Usually a Div or Section) you wish to mount it to to the seed::run function:</p>
-<p>#[wasm_bindgen] pub fn render() { seed::run(Model::default(), update, view, “main”); }</p>
-<p>This must be wrapped in a function named render, with the #[wasm_bindgen] invocation above. (More correctly, its name must match the func in this line in your html file):</p>
-<p>function run() { render(); }</p>
-<p>Note that you don't need to pass your Msg enum; it's inferred from the update function.</p>
 <h3 id="initializing">Initializing</h3>
 <p>To start yoru app, call the <code>seed::run</code> function, which takes the following parameters: - An instance of your model - Your update function - Your top-level component function - The id of the element you wish to mount it to - Optionally, a HashMap of routings, used to initialize your state based on url (See the Routing section)</p>
 <p>This must be wrapped in a function named render, with the #[wasm_bindgen] invocation above. (More correctly, its name must match the func in this line in your html file):</p>
