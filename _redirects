@@ -1,2 +1,3 @@
-/guide             /
-/changelog         /
+/guide          /guide
+/guide/*        /
+/changelog      /changelog
