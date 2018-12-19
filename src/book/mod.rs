@@ -5,6 +5,7 @@ pub mod quickstart;
 pub mod prereqs;
 pub mod structure;
 pub mod events;
+pub mod routing;
 pub mod element_deepdive;
 pub mod components;
 pub mod misc;

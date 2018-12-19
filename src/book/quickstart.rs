@@ -145,8 +145,9 @@ serde_json = &quot;1.0.33&quot;</code></pre>
 <a class="sourceLine" id="cb3-96" title="96"></a>
 <a class="sourceLine" id="cb3-97" title="97"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
 <a class="sourceLine" id="cb3-98" title="98"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-99" title="99">    <span class="pp">seed::</span>run(<span class="pp">Model::</span><span class="kw">default</span>(), update, view, <span class="st">&quot;main&quot;</span>, <span class="cn">None</span>);</a>
-<a class="sourceLine" id="cb3-100" title="100"><span class="op">}</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-99" title="99">    <span class="co">// The final parameter is an optional routing map.</span></a>
+<a class="sourceLine" id="cb3-100" title="100">    <span class="pp">seed::</span>run(<span class="pp">Model::</span><span class="kw">default</span>(), update, view, <span class="st">&quot;main&quot;</span>, <span class="cn">None</span>);</a>
+<a class="sourceLine" id="cb3-101" title="101"><span class="op">}</span></a></code></pre></div>
 <h2 id="building-and-running">Building and running</h2>
 <p>To build your app, create a <code>pkg</code> subdirectory, and run the following two commands:</p>
 <pre><code>cargo build --target wasm32-unknown-unknown</code></pre>

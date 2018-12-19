@@ -52,6 +52,7 @@ impl Default for Model {
             ("Structure", crate::book::structure::text()),
             ("Events", crate::book::events::text()),
             ("Components", crate::book::components::text()),
+            ("Routing", crate::book::routing::text()),
             ("Release and debugging", crate::book::release_and_debugging::text()),
             ("Element Deep-dive", crate::book::element_deepdive::text()),
             ("Misc features", crate::book::misc::text()),
@@ -84,10 +85,14 @@ enum Msg {
 fn update(history: &mut History<Model, Msg>, msg: Msg, model: Model) -> Model {
     match msg {
         Msg::ChangePage(page) => {
-//            history.history.push_state(&JsValue::from_str(&page.to_string()), &page.to_string()).unwrap(); // todo temp
+             // todo temp
+            let pagename = page.to_string();
+            history.history.push_state(&JsValue::from_str(&pagename), &pagename).unwrap();
             Model {page, ..model}
         },
         Msg::ChangeGuidePage(guide_page) => {
+            let pagename = "guide".to_string() + "/" + &guide_page.to_string();
+            history.history.push_state(&JsValue::from_str(&pagename), &pagename).unwrap();
             history.push(&guide_page.to_string(), "MOOSE", msg.clone(), model.clone());
 
             Model {guide_page, ..model}
@@ -108,8 +113,8 @@ fn header(version: &str) -> El<Msg> {
 
     div![ style!{"display" => "flex"; "justify-content" => "flex-end"; "background-color" => "#bc4639";},
         ul![
-            a![ &link_style, "Guide", attrs!{"href" => ""}, simple_ev("click", Msg::ChangePage(Page::Guide)) ],
-            a![ &link_style, "Changelog", attrs!{"href" => ""}, simple_ev("click", Msg::ChangePage(Page::Changelog)) ],
+            a![ &link_style, "Guide", simple_ev("click", Msg::ChangePage(Page::Guide)) ],
+            a![ &link_style, "Changelog", simple_ev("click", Msg::ChangePage(Page::Changelog)) ],
             a![ &link_style, "Repo", attrs!{"href" => "https://github.com/David-OConnor/seed"} ],
             a![ &link_style, "Quickstart repo", attrs!{"href" => "https://github.com/David-OConnor/seed-quickstart"} ],
             a![ &link_style, "Crate", attrs!{"href" => "https://crates.io/crates/seed"} ],
@@ -167,9 +172,7 @@ fn guide(sections: Vec<GuideSection>, guide_page: usize) -> El<Msg> {
 //        h4![ &menu_item_style.merge(&style!{"background" => if i == guide_page {"#d4a59a"} else {"#bc4639"}}),
         h4![ &menu_item_style,
             // We use a link tag here to help with routing.
-            a![ attrs!{"href" => format!("#/guide/{}", guide_page)},
-                simple_ev("click", Msg::ChangeGuidePage(i)), s.title
-            ]
+            a![ simple_ev("click", Msg::ChangeGuidePage(i)), s.title ]
         ]
     ).collect();
 
