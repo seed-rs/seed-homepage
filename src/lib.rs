@@ -109,6 +109,8 @@ fn header(version: &str) -> El<Msg> {
         "margin-right" => 20;
         "font-weight" => "bold";
         "font-size" => "1.2em";
+        "color" => "black";
+        "cursor" => "pointer";
     };
 
     div![ style!{"display" => "flex"; "justify-content" => "flex-end"; "background-color" => "#bc4639";},
