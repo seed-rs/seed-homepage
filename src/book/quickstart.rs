@@ -83,7 +83,7 @@ serde_json = &quot;1.0.33&quot;</code></pre>
 <a class="sourceLine" id="cb3-34" title="34"><span class="op">}</span></a>
 <a class="sourceLine" id="cb3-35" title="35"></a>
 <a class="sourceLine" id="cb3-36" title="36"><span class="co">/// The sole source of updating the model; returns a fresh one.</span></a>
-<a class="sourceLine" id="cb3-37" title="37"><span class="kw">fn</span> update(history: &amp;<span class="kw">mut</span> History&lt;Model, Msg&gt;, msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-37" title="37"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-38" title="38">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-39" title="39">        <span class="pp">Msg::</span>Increment =&gt; Model <span class="op">{</span>count: model.count + <span class="dv">1</span>, ..model<span class="op">}</span>,</a>
 <a class="sourceLine" id="cb3-40" title="40">        <span class="pp">Msg::</span>Decrement =&gt; Model <span class="op">{</span>count: model.count - <span class="dv">1</span>, ..model<span class="op">}</span>,</a>
