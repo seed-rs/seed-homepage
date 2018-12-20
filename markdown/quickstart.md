@@ -1,8 +1,7 @@
 # Quickstart
 
 ## Setup
-This framework requires you to install [Rust](https://www.rust-lang.org/tools/install) - This will
-enable the CLI commands below:
+This framework requires you to first install [Rust](https://www.rust-lang.org/tools/install).
 
  You'll need a recent version of Rust: `rustup update`
 
@@ -16,20 +15,15 @@ To start, clone [This quickstart repo](https://github.com/David-OConnor/seed-qui
 run `build.sh` or `build.ps1` in a terminal, then start a dev server that supports WASM.
 For example, with [Python](https://www.python.org/downloads/) installed, run `python serve.py`.
 (Linux users may need to run `python3 serve.py`.)
-Once you change your package name, you'll
-need to tweak the html file and build script, as described below.
+Once you change your package name, you'll need to tweak the html file and build script, as described below.
 
 
 ## A little deeper
-Or, create a new lib with Cargo: `cargo new --lib appname`. Here and everywhere it appears in this guide, `
+Alternatively, create a new lib with Cargo: `cargo new --lib appname`. Here and everywhere it appears in this guide, `
 appname` should be replaced with the name of your app.
 
-If not using the quickstart repo, create an Html file that loads your app's compiled module, 
-and provides an element with id 
-to load the framework into. It also needs the following code to load your WASM module -
- Ie, the body should contain this:
- 
- ```html
+If not using the quickstart repo, create an Html file with a body that contains this:
+  ```html
  <section id="main"></section>
 
 <script src='./pkg/appname.js'></script>
@@ -44,15 +38,16 @@ to load the framework into. It also needs the following code to load your WASM m
         .catch(console.error);
 </script>
 ```
+The first line above is an empty element with id: It's where your app will render. The subsequent ones load your app's wasm modules.
 
 The quickstart repo includes this file, but you will need to rename the two 
 occurances of `appname`. (If your project name has a hyphen, use an underscore instead here) You will eventually need to modify this file to 
 change the page's title, add a description, favicon, stylesheet etc.
 
 `Cargo.toml`, which is a file created by Cargo that describes your app, needs `wasm-bindgen`, `web-sys`, and `
-seed` added as depdendencies,
+seed` as depdendencies,
  and crate-type
-of `"cdylib"`. (The version in the quickstart repo has these set up already) Example:
+of `"cdylib"`. The version in the quickstart repo has these set up already. Example:
 
 ```toml
 [package]
@@ -188,7 +183,6 @@ For truly minimimal example, see [lib.rs in the quickstart repo](https://github.
 
 ## Building and running
 To build your app, create a `pkg` subdirectory, and run the following two commands:
-
 ```
 cargo build --target wasm32-unknown-unknown
 ```
@@ -198,24 +192,24 @@ wasm-bindgen target/wasm32-unknown-unknown/debug/appname.wasm --no modules --out
 ```
 where `appname` is replaced with your app's name. This compiles your code in the target
 folder, and populates the pkg folder with your WASM module, a Typescript definitions file,
-and a Javascript file used to link your module from HTML.
+and a JS file used to link your module from HTML.
 
 You may wish to create a build script with these two lines. (`build.sh` for Linux; `build.ps1` for Windows).
-The Quickstart repo includes these, but you'll still need to do the rename. You can then use
+The quickstart repo includes these, but you'll still need to do the rename. You can then use
 `./build.sh` or `.\build.ps1` If you run into permission errors on `build.sh`, try this command
 to allow executing the file:`chmod +x build.sh`.
 
-For development, you can view your app using a shimmed Python dev server described above.
+For development, you can view your app using a shimmed Python dev server, as described above.
 (Set up [this mime-type shim](https://github.com/David-OConnor/seed-quickstart/blob/master/serve.py)
 from the quickstart repo, and run `python serve.py`).
 
-For details, reference [the wasm-bindgen documention](https://rustwasm.github.io/wasm-bindgen/whirlwind-tour/basic-usage.html).
-In the future, I'd like the build script and commands above to be replaced by [wasm-pack](https://github.com/rustwasm/wasm-pack).
+In the future, the build script and commands above may be replaced by [wasm-pack](https://github.com/rustwasm/wasm-pack).
 
 ## Running included examples
-To run an example located in the `examples` folder, navigate to that folder in a terminal, 
+To run an example located in the [examples folder](https://github.com/David-OConnor/seed/tree/master/examples),
+navigate to that folder in a terminal, 
 run the build script for your system (`build.sh` or `build.ps1`), then start a dev server
  as described above. Note that if you copy an example to a separate folder, you'll need
 to edit its `Cargo.toml` to point to the package on [crates.io](https://crates.io) instead of locally: Ie replace
-`seed = { path = "../../"` with `seed = "^0.1.0"`, and in the build script, remove the leading `../../` on the second
+`seed = { path = "../../"` with `seed = "^0.1.8"`, and in the build script, remove the leading `../../` on the second
 line.
