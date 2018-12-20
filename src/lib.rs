@@ -11,7 +11,7 @@ use wasm_bindgen::prelude::*;
 
 // Model
 
-#[derive(Clone)]
+#[derive(Copy, Clone)]
 enum Page {
     Guide,
     Changelog
@@ -87,10 +87,12 @@ enum Msg {
 fn update(msg: Msg, model: Model) -> Model {
     match msg {
         Msg::ChangePage(page) => {
-            seed::push_route(&page.clone().to_string());
+//            seed::push_route(&page.to_string(), Msg::RoutePage(page));
+            seed::push_route(&page.to_string());
             update(Msg::RoutePage(page), model)
         },
         Msg::ChangeGuidePage(guide_page) => {
+//            seed::push_route(&format!("guide/{}", guide_page), Msg::RouteGuidePage(guide_page));
             seed::push_route(&format!("guide/{}", guide_page));
             update(Msg::RouteGuidePage(guide_page), model)
         },
@@ -275,10 +277,11 @@ pub fn render() {
     routes.insert("changelog", Msg::RoutePage(Page::Changelog));
 
 //    let mut temp;
-    let nums = [1, 2, 3];
-    for guide_page in nums.into_iter() {
-        routes.insert(&guide_page.to_string(), Msg::RouteGuidePage(*guide_page));
-    }
+//    let nums = vec!["1", "2", "3"];
+//    let nums: Vec<&str> = (0..10).into_iter().map(|v| &(v.to_string())).collect();
+//    for guide_page in nums {
+//        routes.insert(guide_page, Msg::RouteGuidePage(1));
+//    }
 
     seed::run(Model::default(), update, view, "main", Some(routes));
 }

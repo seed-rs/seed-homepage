@@ -486,9 +486,7 @@ __exports.__wbindgen_cb_drop = function(i) {
     return 0;
 };
 
-__exports.__wbindgen_cb_forget = dropObject;
-
-__exports.__wbindgen_closure_wrapper519 = function(a, b, _ignored) {
+__exports.__wbindgen_closure_wrapper521 = function(a, b, _ignored) {
     const f = wasm.__wbg_function_table.get(19);
     const d = wasm.__wbg_function_table.get(20);
     const cb = function(arg0) {
