@@ -3,7 +3,7 @@ r#"
 <h1 id="routing">Routing</h1>
 <p>Seed supports basic routing: You can trigger state changes that update the address bar, and can be nagivated to/from using forward and back buttons. This works for landing-page routing as well, provided your server is configured to support.</p>
 <p>As an example, let's say our site has three pages: a home page, a guide, and a changelog, accessible by <code>http://seed-rs.org/</code>, <code>http://seed-rs.org/guide</code>, and <code>http://seed-rs.org/changelog</code> respectively. We describe the page by a <code>page</code> field in our model, which is an integer: 0 for homepage, 1 for guide, or 2 for changelog. (An enum would work as well).</p>
-<p>To set up the initial routing, we pass a <code>Routes</code> struct describing the possible routings as the last parameter of <a href="https://docs.rs/seed/0.1.8/seed/fn.run.html">Seed::run</a>. We create it using a macro. <code>Routes</code> is a thin wrapper for HashMap, but with a convenient literal syntax. You can use its <code>insert</code> method to add new key value pairs. example:</p>
+<p>To set up the initial routing, we pass a <a href="https://docs.rs/seed/0.1.10/seed/routing/struct.Routes.html">Routes struct</a> describing the possible routings as the last parameter of <a href="https://docs.rs/seed/0.1.8/seed/fn.run.html">Seed::run</a>. We create it using a macro. <code>Routes</code> is a thin wrapper for HashMap, but with a convenient literal syntax. You can use its <code>insert</code> method to add new key value pairs. example:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-3" title="3">    <span class="kw">let</span> routes = <span class="pp">routes!</span><span class="op">{</span></a>
@@ -11,9 +11,8 @@ r#"
 <a class="sourceLine" id="cb1-5" title="5">        <span class="st">&quot;changelog&quot;</span> =&gt; <span class="pp">Msg::</span>RoutePage(<span class="pp">Page::</span>Changelog);</a>
 <a class="sourceLine" id="cb1-6" title="6">    <span class="op">}</span>;</a>
 <a class="sourceLine" id="cb1-7" title="7"></a>
-<a class="sourceLine" id="cb1-8" title="8"></a>
-<a class="sourceLine" id="cb1-9" title="9">    <span class="pp">seed::</span>run(<span class="pp">Model::</span><span class="kw">default</span>(), update, view, <span class="st">&quot;main&quot;</span>, <span class="cn">Some</span>(routes));</a>
-<a class="sourceLine" id="cb1-10" title="10"><span class="op">}</span></a></code></pre></div>
+<a class="sourceLine" id="cb1-8" title="8">    <span class="pp">seed::</span>run(<span class="pp">Model::</span><span class="kw">default</span>(), update, view, <span class="st">&quot;main&quot;</span>, <span class="cn">Some</span>(routes));</a>
+<a class="sourceLine" id="cb1-9" title="9"><span class="op">}</span></a></code></pre></div>
 <p>To make landing-page routing work, configure your server so that all three of these path point towards the app… or that any (sub)path points towards it, instead of returning an error. Once this is configured, intial routing on page load will work as expected: The page will load with the default state, then immediately trigger the update prescribed by the RoutePage message.</p>
 <p>In order to trigger our route change through in-app naviation (eg clicking a link or pushing a button), include logic like this in the update function:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
