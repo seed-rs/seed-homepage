@@ -14,21 +14,20 @@ r#"
 <a class="sourceLine" id="cb1-8" title="8"><span class="op">}</span></a></code></pre></div>
 <p>Once this is configured, intial routing on page load will work as expected: The page will load with the default state, then immediately trigger the update prescribed by the RoutePage message.</p>
 <p>In order to trigger our route change through an event (eg clicking a link or pushing a button), our update function includes the following logic:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">match</span> msg <span class="op">{</span></a>
-<a class="sourceLine" id="cb2-2" title="2">    <span class="pp">Msg::</span>ChangePage(page) =&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb2-3" title="3">        <span class="pp">seed::</span>push_route(&amp;page.to_string());</a>
-<a class="sourceLine" id="cb2-4" title="4">        update(<span class="pp">Msg::</span>RoutePage(page), model)</a>
-<a class="sourceLine" id="cb2-5" title="5">    <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb2-6" title="6"></a>
-<a class="sourceLine" id="cb2-7" title="7">    <span class="co">// This is separate, because nagivating the route triggers state updates, which would</span></a>
-<a class="sourceLine" id="cb2-8" title="8">    <span class="co">// trigger an additional push state.</span></a>
-<a class="sourceLine" id="cb2-9" title="9">    <span class="pp">Msg::</span>RoutePage(page) =&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb2-10" title="10">        Model <span class="op">{</span>page, ..model<span class="op">}</span></a>
-<a class="sourceLine" id="cb2-11" title="11">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb2-12" title="12"><span class="op">}</span></a></code></pre></div>
-<p><a href="https://docs.rs/seed/0.1.7/seed/fn.push_route.html">seed::push_route</a> accepts a single parameter: a path string corresponding to what will be appended to the url. Currently, it must match one of the keys in the route map.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-2" title="2">    <span class="kw">match</span> msg <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-3" title="3">        <span class="pp">Msg::</span>ChangePage(page) =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-4" title="4">            <span class="pp">seed::</span>push_route(&amp;page.to_string());</a>
+<a class="sourceLine" id="cb2-5" title="5">            update(<span class="pp">Msg::</span>RoutePage(page), model)</a>
+<a class="sourceLine" id="cb2-6" title="6">        <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb2-7" title="7">        <span class="co">// This is separate, because nagivating the route triggers state updates, which would</span></a>
+<a class="sourceLine" id="cb2-8" title="8">        <span class="co">// trigger an additional push state.</span></a>
+<a class="sourceLine" id="cb2-9" title="9">        <span class="pp">Msg::</span>RoutePage(page) =&gt; Model <span class="op">{</span>page, ..model<span class="op">}</span>,</a>
+<a class="sourceLine" id="cb2-10" title="10"><span class="op">}</span></a></code></pre></div>
+<p><a href="https://docs.rs/seed/0.1.8/seed/fn.push_route.html">seed::push_route</a> accepts a single parameter: a path &amp;str corresponding to what will be appended to the url. Currently, it must match one of the keys in the route map.</p>
 <p>When a page is loaded, or naviation occurs (eg back button), Seed searches each of the route_map keys for a matching path name (url suffix). If it finds one, it updates the model based on its associated message. If not, no action will be taken. In our example, we assume the model initialized to page=0, for the homepage.</p>
-<p>Notice how we keep ChangePage and RoutePage separate in our example: RoutePage performs the action associated with routing, while ChangePage updates our route history, then recursively calls RoutePage. If you were to attempt this in the same message, each navigation event would add a redundant route history entry, interfering with navigation.</p>
+<p>Notice how we keep ChangePage and RoutePage separate in our example: RoutePage performs the action associated with routing, while ChangePage updates our route history, then recursively calls RoutePage. If you were to attempt this in the same message, each navigation event would add a redundant route history entry, interfering with navigation. We call RoutePage from ChangePage, and in the route map, and call ChangePage from an event, like this:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="pp">h2!</span><span class="op">[</span> simple_ev(<span class="st">&quot;click&quot;</span>, <span class="pp">Msg::</span>ChangePage(<span class="dv">1</span>)), <span class="st">&quot;Guide&quot;</span> <span class="op">]</span></a></code></pre></div>
 <p>Dynamic routes are not yet supported.</p>
 "#.into()
 }

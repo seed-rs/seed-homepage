@@ -31,21 +31,19 @@ message.
 In order to trigger our route change through an event (eg clicking a link or pushing a button), our update function 
 includes the following logic:
 ```rust
-match msg {
-    Msg::ChangePage(page) => {
-        seed::push_route(&page.to_string());
-        update(Msg::RoutePage(page), model)
-    },
-
-    // This is separate, because nagivating the route triggers state updates, which would
-    // trigger an additional push state.
-    Msg::RoutePage(page) => {
-        Model {page, ..model}
-    }
+fn update(msg: Msg, model: Model) -> Model {
+    match msg {
+        Msg::ChangePage(page) => {
+            seed::push_route(&page.to_string());
+            update(Msg::RoutePage(page), model)
+        },
+        // This is separate, because nagivating the route triggers state updates, which would
+        // trigger an additional push state.
+        Msg::RoutePage(page) => Model {page, ..model},
 }
 ```
-[seed::push_route](https://docs.rs/seed/0.1.7/seed/fn.push_route.html) accepts a single parameter:
-a path string corresponding to what will be appended to the url. Currently, it must match one of the
+[seed::push_route](https://docs.rs/seed/0.1.8/seed/fn.push_route.html) accepts a single parameter:
+a path &str corresponding to what will be appended to the url. Currently, it must match one of the
 keys in the route map.
 
 When a page is loaded, or naviation occurs (eg back button), Seed searches each of the route_map keys for 
@@ -56,6 +54,11 @@ In our example, we assume the model initialized to page=0, for the homepage.
 Notice how we keep ChangePage and RoutePage separate in our example: RoutePage performs
 the action associated with routing, while ChangePage updates our route history, then
 recursively calls RoutePage. If you were to attempt this in the same message, each
-navigation event would add a redundant route history entry, interfering with navigation.
+navigation event would add a redundant route history entry, interfering with navigation. We call
+RoutePage from ChangePage, and in the route map, and call ChangePage from an event, like this:
+
+```rust
+h2![ simple_ev("click", Msg::ChangePage(1)), "Guide" ]
+```
 
 Dynamic routes are not yet supported.
