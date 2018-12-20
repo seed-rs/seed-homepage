@@ -23,13 +23,20 @@ r#"
 <a class="sourceLine" id="cb2-7" title="7"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
 <a class="sourceLine" id="cb2-8" title="8">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb2-9" title="9">        <span class="pp">Msg::</span>ChangePage(page) =&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb2-10" title="10">            <span class="pp">seed::</span>push_route(&amp;page.to_string());</a>
-<a class="sourceLine" id="cb2-11" title="11">            update(<span class="pp">Msg::</span>RoutePage(page), model)</a>
-<a class="sourceLine" id="cb2-12" title="12">        <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb2-13" title="13">        <span class="co">// This is separate, because nagivating the route triggers state updates, which would</span></a>
-<a class="sourceLine" id="cb2-14" title="14">        <span class="co">// trigger an additional push state.</span></a>
-<a class="sourceLine" id="cb2-15" title="15">        <span class="pp">Msg::</span>RoutePage(page) =&gt; Model <span class="op">{</span>page, ..model<span class="op">}</span>,</a>
-<a class="sourceLine" id="cb2-16" title="16"><span class="op">}</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-10" title="10">            <span class="co">// An enum, with a to_string() method might be a more elegant way</span></a>
+<a class="sourceLine" id="cb2-11" title="11">            <span class="co">// to store page state.</span></a>
+<a class="sourceLine" id="cb2-12" title="12">            <span class="kw">let</span> page_name = <span class="kw">match</span> page <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-13" title="13">                <span class="dv">0</span> =&gt; <span class="st">&quot;&quot;</span>,</a>
+<a class="sourceLine" id="cb2-14" title="14">                <span class="dv">1</span> =&gt; <span class="st">&quot;guide&quot;</span>,</a>
+<a class="sourceLine" id="cb2-15" title="15">                <span class="dv">2</span> =&gt; <span class="st">&quot;chnagelog&quot;</span></a>
+<a class="sourceLine" id="cb2-16" title="16">            <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb2-17" title="17">            <span class="pp">seed::</span>push_route(page_name);</a>
+<a class="sourceLine" id="cb2-18" title="18">            update(<span class="pp">Msg::</span>RoutePage(page), model)</a>
+<a class="sourceLine" id="cb2-19" title="19">        <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb2-20" title="20">        <span class="co">// This is separate, because nagivating the route triggers state updates, which would</span></a>
+<a class="sourceLine" id="cb2-21" title="21">        <span class="co">// trigger an additional push state.</span></a>
+<a class="sourceLine" id="cb2-22" title="22">        <span class="pp">Msg::</span>RoutePage(page) =&gt; Model <span class="op">{</span>page, ..model<span class="op">}</span>,</a>
+<a class="sourceLine" id="cb2-23" title="23"><span class="op">}</span></a></code></pre></div>
 <p><a href="https://docs.rs/seed/0.1.8/seed/fn.push_route.html">seed::push_route</a> accepts a single parameter: a path &amp;str corresponding to what will be appended to the url. Currently, it must match one of the keys in the route map.</p>
 <p>When a page is loaded, or naviation occurs (eg back button), Seed searches each of the route_map keys for a matching path name (url suffix). If it finds one, it updates the model based on its associated message. If not, no action will be taken. In our example, we assume the model initialized to page=0, for the homepage.</p>
 <p>Notice how we keep ChangePage and RoutePage separate in our example: RoutePage performs the action associated with routing, while ChangePage updates our route history, then recursively calls RoutePage. If you were to attempt this in the same message, each navigation event would add a redundant route history entry, interfering with navigation. We call RoutePage from ChangePage, and in the route map. We call ChangePage from an event, like this:</p>

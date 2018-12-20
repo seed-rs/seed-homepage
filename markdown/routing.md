@@ -40,7 +40,14 @@ enum Msg {
 fn update(msg: Msg, model: Model) -> Model {
     match msg {
         Msg::ChangePage(page) => {
-            seed::push_route(&page.to_string());
+            // An enum, with a to_string() method might be a more elegant way
+            // to store page state.
+            let page_name = match page {
+                0 => "",
+                1 => "guide",
+                2 => "chnagelog"
+            };
+            seed::push_route(page_name);
             update(Msg::RoutePage(page), model)
         },
         // This is separate, because nagivating the route triggers state updates, which would
