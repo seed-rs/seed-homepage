@@ -102,11 +102,11 @@ wasm-bindgen than with npm.
  - Text renders above children instead of below
  
  ## Reference
-- [wasm-bindgen guide](https://rustwasm.github.io/wasm-bindgen/introduction.html)
-- [Mozilla MDN web docs](https://developer.mozilla.org/en-US/)
-- [web-sys api](https://rustwasm.github.io/wasm-bindgen/api/web_sys/) (A good partner for the MDN docs - most DOM items have web-sys equivalents used internally)
-- [Rust book](https://doc.rust-lang.org/book/index.html)
-- [Rust standard library api](https://doc.rust-lang.org/std/)
-- [Seed's API docs](https://docs.rs/seed)
-- [Learn Rust](https://www.rust-lang.org/learn)
+ - [wasm-bindgen guide](https://rustwasm.github.io/wasm-bindgen/introduction.html)
+ - [Mozilla MDN web docs](https://developer.mozilla.org/en-US/)
+ - [web-sys api](https://rustwasm.github.io/wasm-bindgen/api/web_sys/) (A good partner for the MDN docs - most DOM items have web-sys equivalents used internally)
+ - [Rust book](https://doc.rust-lang.org/book/index.html)
+ - [Rust standard library api](https://doc.rust-lang.org/std/)
+ - [Seed's API docs](https://docs.rs/seed)
+ - [Learn Rust](https://www.rust-lang.org/learn)
 

@@ -1,5 +1,5 @@
 # Routing
-Seed supports basic routing features: You can trigger state changes that update the address bar,
+Seed supports basic routings: You can trigger state changes that update the address bar,
  and can be nagivated to/from using forward and back buttons. This works for custom landing-page
   routing as well, provided your server is configured to support this. (eg sub-paths will redirect to
   the main path instead of throwing errors.)

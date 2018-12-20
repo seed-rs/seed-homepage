@@ -1,7 +1,7 @@
 pub fn text() -> String {
 r#"
 <h1 id="routing">Routing</h1>
-<p>Seed supports basic routing features: You can trigger state changes that update the address bar, and can be nagivated to/from using forward and back buttons. This works for custom landing-page routing as well, provided your server is configured to support this. (eg sub-paths will redirect to the main path instead of throwing errors.)</p>
+<p>Seed supports basic routings: You can trigger state changes that update the address bar, and can be nagivated to/from using forward and back buttons. This works for custom landing-page routing as well, provided your server is configured to support this. (eg sub-paths will redirect to the main path instead of throwing errors.)</p>
 <p>As an example, let's say our site has three pages: a home page, a guide, and a changelog, accessible by <code>http://seed-rs.org/</code>, <code>http://seed-rs.org/guide</code>, and <code>http://seed-rs.org/changelog</code> respectively. First, we need to set up our backend server so that all three of these endpoints point towards our app. We describe the page by a <code>page</code> field in our model, which is an integer: 0 for homepage, 1 for guide, or 2 for changelog. (An enum would work as well).</p>
 <p>To set up the initial routing, we pass a HashMap&lt;&amp;str, Msg&gt; describing the possible routings as the last parameter of <a href="https://docs.rs/seed/0.1.7/seed/fn.run.html">Seed::run</a>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
