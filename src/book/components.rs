@@ -30,7 +30,7 @@ r#"
 <a class="sourceLine" id="cb2-13" title="13"><span class="op">}</span></a></code></pre></div>
 <p>You can mix <code>El</code> <code>Vec</code>s with <code>Els</code> in macros:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">fn</span> items() -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-2" title="2">    <span class="co">// You may wish to keep complicated or dynamic logic outside of the element macros.</span></a>
+<a class="sourceLine" id="cb3-2" title="2">    <span class="co">// You may wish to keep complicated or dynamic logic separate.</span></a>
 <a class="sourceLine" id="cb3-3" title="3">    <span class="kw">let</span> <span class="kw">mut</span> more_cols = <span class="pp">vec!</span><span class="op">[</span> <span class="pp">td!</span><span class="op">[</span> <span class="st">&quot;another col&quot;</span> <span class="op">]</span>, <span class="pp">td!</span><span class="op">[</span> <span class="st">&quot;and another&quot;</span> <span class="op">]</span> <span class="op">]</span>;</a>
 <a class="sourceLine" id="cb3-4" title="4">    more_cols.push(<span class="pp">td!</span><span class="op">[</span> <span class="st">&quot;yet another&quot;</span> <span class="op">]</span>);</a>
 <a class="sourceLine" id="cb3-5" title="5"></a>

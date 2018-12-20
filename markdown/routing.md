@@ -21,13 +21,6 @@ pub fn render() {
     seed::run(Model::default(), update, view, "main", Some(routes));
 }
 ```
-<<<<<<< HEAD
-Once this is configured, intial routing on page load will work as expected: The page will
-load with the default state, then immediately trigger the update prescribed by the RoutePage
-message. std::collections::HashMap is included in the Seed prelude.
-=======
->>>>>>> 08868931b8bbf1292915b9f288d34355ef2eae10
-
 To make landing-page routing work, configure your server so that all three of these path point towards the app...
 or that any (sub)path points towards it, instead of returning an error. Once this is configured, intial 
 routing on page load will work as expected: The page will load with the default state, then immediately 

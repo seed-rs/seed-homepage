@@ -53,7 +53,7 @@ fn items() -> El<Msg> {
 You can mix `El` `Vec`s with `Els` in macros:
 ```rust
 fn items() -> El<Msg> {
-    // You may wish to keep complicated or dynamic logic outside of the element macros.
+    // You may wish to keep complicated or dynamic logic separate.
     let mut more_cols = vec![ td![ "another col" ], td![ "and another" ] ];
     more_cols.push(td![ "yet another" ]);
 

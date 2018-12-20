@@ -275,10 +275,9 @@ pub fn render() {
     routes.insert("changelog", Msg::RoutePage(Page::Changelog));
 
 //    let mut temp;
-    for guide_page in 0..10 {
-//        temp = format!("guide_page/{}", guide_page);
-//        routes.insert(&temp.clone(), Msg::RouteGuidePage(guide_page));
-//        routes.insert(&guide_page.to_string(), Msg::RouteGuidePage(1));
+    let nums = [1, 2, 3];
+    for guide_page in nums.into_iter() {
+        routes.insert(&guide_page.to_string(), Msg::RouteGuidePage(*guide_page));
     }
 
     seed::run(Model::default(), update, view, "main", Some(routes));

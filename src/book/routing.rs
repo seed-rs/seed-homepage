@@ -12,7 +12,6 @@ r#"
 <a class="sourceLine" id="cb1-6" title="6"></a>
 <a class="sourceLine" id="cb1-7" title="7">    <span class="pp">seed::</span>run(<span class="pp">Model::</span><span class="kw">default</span>(), update, view, <span class="st">&quot;main&quot;</span>, <span class="cn">Some</span>(routes));</a>
 <a class="sourceLine" id="cb1-8" title="8"><span class="op">}</span></a></code></pre></div>
-<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD Once this is configured, intial routing on page load will work as expected: The page will load with the default state, then immediately trigger the update prescribed by the RoutePage message. std::collections::HashMap is included in the Seed prelude. ======= &gt;&gt;&gt;&gt;&gt;&gt;&gt; 08868931b8bbf1292915b9f288d34355ef2eae10</p>
 <p>To make landing-page routing work, configure your server so that all three of these path point towards the app… or that any (sub)path points towards it, instead of returning an error. Once this is configured, intial routing on page load will work as expected: The page will load with the default state, then immediately trigger the update prescribed by the RoutePage message.</p>
 <p>In order to trigger our route change through in-app naviation (eg clicking a link or pushing a button), include logic like this in the update function:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
