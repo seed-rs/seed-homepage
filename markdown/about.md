@@ -80,33 +80,33 @@ I also hope that config, building, and dependency-management is cleaner with Car
 wasm-bindgen than with npm.
 
 ### Shoutouts
- - The [WASM-Bindgen](https://github.com/rustwasm/wasm-bindgen) team: 
+- The [WASM-Bindgen](https://github.com/rustwasm/wasm-bindgen) team: 
  For building the tools this project relies on
- - Alex Chrichton, for being extraodinarily helpful in the Rust / WASM community
- - The [Elm](https://elm-lang.org/) team: For creating and standardizing the Elm architecture
- - Denis Kolodin: for creating the inspirational [Yew framework](https://github.com/DenisKolodin/yew)
- - Utkarsh Kukreti, for through his [Draco repo](https://github.com/utkarshkukreti/draco), 
+- Alex Chrichton, for being extraodinarily helpful in the Rust / WASM community
+- The [Elm](https://elm-lang.org/) team: For creating and standardizing the Elm architecture
+- Denis Kolodin: for creating the inspirational [Yew framework](https://github.com/DenisKolodin/yew)
+- Utkarsh Kukreti, for through his [Draco repo](https://github.com/utkarshkukreti/draco), 
  helping me understand how wasm-bindgen's
  closure system can be used to update state.
- - Tim Robinson, for being very helpful on the [Rust Gitter](https://gitter.im/rust-lang/rust).
+- Tim Robinson, for being very helpful on the [Rust Gitter](https://gitter.im/rust-lang/rust).
 
 ### Features to add
- - High-level fetch API
- - Lifecycle hooks
- - SVG support
- - More flexible routing
- - Virtual DOM optimization 
- - High-level CSS-grid/Flexbox API ?
+- High-level fetch API
+- Lifecycle hooks
+- SVG support
+- More flexible routing
+- Virtual DOM optimization 
+- High-level CSS-grid/Flexbox API ?
  
- ### Bugs to fix
+### Bugs to fix
  - Text renders above children instead of below
  
- ## Reference
- - [wasm-bindgen guide](https://rustwasm.github.io/wasm-bindgen/introduction.html)
- - [Mozilla MDN web docs](https://developer.mozilla.org/en-US/)
- - [web-sys api](https://rustwasm.github.io/wasm-bindgen/api/web_sys/) (A good partner for the MDN docs - most DOM items have web-sys equivalents used internally)
- - [Rust book](https://doc.rust-lang.org/book/index.html)
- - [Rust standard library api](https://doc.rust-lang.org/std/)
- - [Seed's API docs](https://docs.rs/seed)
- - [Learn Rust](https://www.rust-lang.org/learn)
+## Reference
+- [wasm-bindgen guide](https://rustwasm.github.io/wasm-bindgen/introduction.html)
+- [Mozilla MDN web docs](https://developer.mozilla.org/en-US/)
+- [web-sys api](https://rustwasm.github.io/wasm-bindgen/api/web_sys/) (A good partner for the MDN docs - most DOM items have web-sys equivalents used internally)
+- [Rust book](https://doc.rust-lang.org/book/index.html)
+- [Rust standard library api](https://doc.rust-lang.org/std/)
+- [Seed's API docs](https://docs.rs/seed)
+- [Learn Rust](https://www.rust-lang.org/learn)
 

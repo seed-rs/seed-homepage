@@ -42,7 +42,19 @@ r#"
 <li>Virtual DOM optimization</li>
 <li>High-level CSS-grid/Flexbox API ?</li>
 </ul>
-<p>### Bugs to fix - Text renders above children instead of below</p>
-<p>## Reference - <a href="https://rustwasm.github.io/wasm-bindgen/introduction.html">wasm-bindgen guide</a> - <a href="https://developer.mozilla.org/en-US/">Mozilla MDN web docs</a> - <a href="https://rustwasm.github.io/wasm-bindgen/api/web_sys/">web-sys api</a> (A good partner for the MDN docs - most DOM items have web-sys equivalents used internally) - <a href="https://doc.rust-lang.org/book/index.html">Rust book</a> - <a href="https://doc.rust-lang.org/std/">Rust standard library api</a> - <a href="https://docs.rs/seed">Seed's API docs</a> - <a href="https://www.rust-lang.org/learn">Learn Rust</a></p>
+<h3 id="bugs-to-fix">Bugs to fix</h3>
+<ul>
+<li>Text renders above children instead of below</li>
+</ul>
+<h2 id="reference">Reference</h2>
+<ul>
+<li><a href="https://rustwasm.github.io/wasm-bindgen/introduction.html">wasm-bindgen guide</a></li>
+<li><a href="https://developer.mozilla.org/en-US/">Mozilla MDN web docs</a></li>
+<li><a href="https://rustwasm.github.io/wasm-bindgen/api/web_sys/">web-sys api</a> (A good partner for the MDN docs - most DOM items have web-sys equivalents used internally)</li>
+<li><a href="https://doc.rust-lang.org/book/index.html">Rust book</a></li>
+<li><a href="https://doc.rust-lang.org/std/">Rust standard library api</a></li>
+<li><a href="https://docs.rs/seed">Seed's API docs</a></li>
+<li><a href="https://www.rust-lang.org/learn">Learn Rust</a></li>
+</ul>
 "#.into()
 }

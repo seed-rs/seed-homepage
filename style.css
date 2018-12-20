@@ -15,13 +15,13 @@ a{
 }
 
 a:link {
-    color: black;
+    color: #515294;
     /*color: #4285f4;*/
     text-decoration: none;
 }
 
 a:visited {
-    color: black;
+    color: #515294;
     /*color: #4285f4;*/
     text-decoration: none;
 }
