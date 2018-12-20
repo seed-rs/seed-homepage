@@ -33,8 +33,8 @@ includes the following logic:
 ```rust
 #[derive(Clone)]
 enum Msg {
-    ChangePage(Page),
-    RoutePage(Page),
+    ChangePage(u32),
+    RoutePage(u32),
 }
 
 fn update(msg: Msg, model: Model) -> Model {

@@ -16,8 +16,8 @@ r#"
 <p>In order to trigger our route change through an event (eg clicking a link or pushing a button), our update function includes the following logic:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="kw">enum</span> Msg <span class="op">{</span></a>
-<a class="sourceLine" id="cb2-3" title="3">    ChangePage(Page),</a>
-<a class="sourceLine" id="cb2-4" title="4">    RoutePage(Page),</a>
+<a class="sourceLine" id="cb2-3" title="3">    ChangePage(<span class="dt">u32</span>),</a>
+<a class="sourceLine" id="cb2-4" title="4">    RoutePage(<span class="dt">u32</span>),</a>
 <a class="sourceLine" id="cb2-5" title="5"><span class="op">}</span></a>
 <a class="sourceLine" id="cb2-6" title="6"></a>
 <a class="sourceLine" id="cb2-7" title="7"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>

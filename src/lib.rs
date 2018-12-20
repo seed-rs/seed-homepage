@@ -79,8 +79,6 @@ impl Default for Model {
 enum Msg {
     ChangePage(Page),
     ChangeGuidePage(usize),
-
-    // todo temp?
     RoutePage(Page)
 }
 
