@@ -100,7 +100,7 @@ fn update(msg: Msg, model: Model) -> Model {
         // This is separate, because nagivating the route triggers state updates, which would
         // trigger an additional push state.
         Msg::RoutePage(page) => Model {page, ..model},
-        Msg::RouteGuidePage(guide_page) => Model {guide_page, ..model},
+        Msg::RouteGuidePage(guide_page) => Model {guide_page, page: Page::Guide, ..model},
     }
 }
 

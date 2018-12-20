@@ -1,7 +1,8 @@
 # Routing
 Seed supports basic routing: You can trigger state changes that update the address bar,
  and can be nagivated to/from using forward and back buttons. This works for landing-page
-routing as well, provided your server is configured to support.
+routing as well, provided your server is configured to support. For an example of routes in use,
+see the [homepage example](https://github.com/David-OConnor/seed/tree/master/examples/homepage).
   
 As an example, let's say our site has three pages:
 a home page, a guide, and a changelog, accessible by `http://seed-rs.org/`, `http://seed-rs.org/guide`,
