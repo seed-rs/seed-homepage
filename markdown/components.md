@@ -1,43 +1,39 @@
 # Components
-The analog of components in frameworks like React are normal Rust functions that that return Els.
-The parameters these functions take are not treated in a way equivalent
+The analog of components in frameworks like React are normal Rust functions that that return
+[El](https://docs.rs/seed/0.1.8/seed/dom_types/struct.El.html)s.
+These functions take parameters that are not treated in a way equivalent
 to attributes on native DOM elements; they just provide a way to 
-organize your code. In practice, they feel similar to components in React, but are just
-functions used to create elements that end up in the `children` property of
-parent elements.
+organize your code. In practice, they're used in a way similar to components in React.
 
-For example, you could break up one of the above examples like this:
-
+For example, you could organize one of the examples in the Structure section of the guide like this:
 ```rust
     fn text_display(text: &str) -> El<Msg> {
         h3![ text ]
     }  
     
-    div![ style!{"display" => "flex"; flex-direction: "column"},
+    div![ style!{"display" => "flex"; "flex-direction" => "column"},
         text_display("Some things"),
         button![ simple_ev("click", Msg::SayHi), "Click me!" ]
     ]
 ```
 
-The text_display() component returns a single El that is inserted into its parents'
+The text_display component returns a single `El` that is inserted into its parents'
 `children` Vec; you can use this in patterns as you would in React. You can also use
-functions that return Vecs of Els, which you can incorporate into other components
-using normal Rust code. See Fragments
-section below. Rust's type system
+functions that return `Vec`s of`El`s, which you can incorporate into other `El`s
+using normal Rust code. See the Fragments section below. Rust's type system
 ensures that only `El`s  can end up as children, so if your app compiles,
 you haven't violated any rules.
  
-Note that unlike in JSX, there's a clear syntax delineation here between natural HTML
-elements (element macros), and custom components (function calls).
+Unlike in JSX, there's a clear syntax delineation between natural DOM
+elements (element macros), and custom components (function calls): We called text_display
+above as `text_display("Some things")`, not `text_display![ "Some things" ]`.
 
 ## Fragments
 Fragments (`<>...</>` syntax in React and Yew) are components that represent multiple
-elements without a parent. This is useful to avoid
-unecessary divs, which may be undesirable on their own, and breaks things like tables and CSS-grid. 
-There's no special syntax; just have your component return a Vec of `El`s instead of 
-one, and add it to the parent's element macro; on its own like in the example below,
- or with other children, or Vecs of children.
-
+elements without a parent. They're useful to avoid
+unecessary divs, which clutter teh DOM, and breaks things like tables and CSS-grid. 
+There's no special fragment syntax: have your component return a `Vec` of `El`s instead of 
+one. Add it to the parent's element macro:
 ```rust
 fn cols() -> Vec<El<Msg>> {
     vec![
@@ -54,15 +50,32 @@ fn items() -> El<Msg> {
 }
 ```
 
-## Dummy elements
-When performing ternary and related operations instead an element macro, all
-branches must return `El`s to satisfy Rust's type system. Seed provides the
-`empty()` function, which creates a VDOM element that will not be rendered:
+You can mix `El` `Vec`s with `Els` in macros:
+```rust
+fn items() -> El<Msg> {
+    // You may wish to keep complicated or dynamic logic outside of the element macros.
+    let mut more_cols = vec![ td![ "another col" ], td![ "and another" ] ];
+    more_cols.push(td![ "yet another" ]);
 
+    table![
+        tr![
+            td![ "first col" ],  // A lone element
+            cols(),  // A "fragment" component.
+            td![ "an extra col" ], // A element after the fragment
+            // A Vec of Els, not in a separate func
+            vec![ td![ "another col" ], td![ "and another" ] ],
+            more_cols  // A vec of Els created separately.
+        ]
+    ]
+}
+```
+
+## Dummy elements
+When performing ternary operations inside an element macro, all
+branches must return an `El` (Or `Vec` of `El`s) to satisfy Rust's type system. Seed provides the
+[empty](https://docs.rs/seed/0.1.8/seed/fn.empty.html) function, which creates an element that will not be rendered:
 ```rust
 div![
     if model.count >= 10 { h2![ style!{"padding" => 50}, "Nice!" ] } else { seed::empty() }
 ]
 ```
-For more complicated construsts, you may wish to create the `children` Vec separately,
-push what components are needed, and pass it into the element macro.

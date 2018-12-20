@@ -5,7 +5,7 @@ To output to the web browser's console (ie `console.log()` in JS), use `web_sys:
 or the `log` macro that wraps it, which is imported in the seed prelude: 
 `log!("On the shoulders of", 5, "giants".to_string())`
 
-## ## Querying servers using fetch
+## Querying servers using fetch
 To send and receive data with a server, use `wasm-bindgen`'s `web-sys` fetch methods,
 [described here](https://rustwasm.github.io/wasm-bindgen/examples/fetch.html).
 

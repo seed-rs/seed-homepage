@@ -3,7 +3,7 @@ r#"
 <h1 id="misc-features">Misc features</h1>
 <h2 id="logging-in-the-web-browser">Logging in the web browser</h2>
 <p>To output to the web browser's console (ie <code>console.log()</code> in JS), use <code>web_sys::console_log1</code>, or the <code>log</code> macro that wraps it, which is imported in the seed prelude: <code>log!("On the shoulders of", 5, "giants".to_string())</code></p>
-<h2 id="querying-servers-using-fetch">## Querying servers using fetch</h2>
+<h2 id="querying-servers-using-fetch">Querying servers using fetch</h2>
 <p>To send and receive data with a server, use <code>wasm-bindgen</code>'s <code>web-sys</code> fetch methods, <a href="https://rustwasm.github.io/wasm-bindgen/examples/fetch.html">described here</a>.</p>
 <p>Use the <a href="https://serde.rs/">Serde</a> crate to serialize and deserialize data, eg when sending and receiving data from a REST-etc. It supports most popular formats, including <code>JSON</code>, <code>YAML</code>, and <code>XML</code>.</p>
 <p>(Example, and with our integration)</p>
