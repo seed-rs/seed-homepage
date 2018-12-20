@@ -48,15 +48,15 @@ r#"
 <a class="sourceLine" id="cb3-6" title="6"><span class="op">}</span></a></code></pre></div>
 <p>The update <a href="https://doc.rust-lang.org/book/ch03-03-how-functions-work.html">function</a> you pass to <code>seed::run</code> describes how the state should change, upon receiving each type of Message. It is the only place where the model is changed. It accepts a message, and model as parameters, and returns a model. This function signature cannot be changed. Note that it doesn't update the model in place: It returns a new one.</p>
 <p>Example:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">fn</span> update(history: &amp;<span class="kw">mut</span> History&lt;Model, Msg&gt;, msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
 <a class="sourceLine" id="cb4-2" title="2">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb4-3" title="3">        <span class="pp">Msg::</span>Increment =&gt; Model <span class="op">{</span>count: model.count + <span class="dv">1</span>, ..model<span class="op">}</span>,</a>
 <a class="sourceLine" id="cb4-4" title="4">        <span class="pp">Msg::</span>SetCount(count) =&gt; Model <span class="op">{</span>count, ..model<span class="op">}</span>,</a>
 <a class="sourceLine" id="cb4-5" title="5">    <span class="op">}</span></a>
 <a class="sourceLine" id="cb4-6" title="6"><span class="op">}</span></a></code></pre></div>
-<p>While the signature of the update function is fixed (Accepts a History struct, Msg and ref to the model; outputs a new model), and will usually involve a match pattern, with an arm for each Msg, there are many ways you can structure this function. Some may be easier to write, and others may be more efficient, or appeal to specific aesthetics. While the example above it straightforward, this becomes import with more complicated updates.</p>
+<p>While the signature of the update function is fixed (Accepts a Msg and ref to the model; outputs a new model), and will usually involve a match pattern, with an arm for each Msg, there are many ways you can structure this function. Some may be easier to write, and others may be more efficient, or appeal to specific aesthetics. While the example above it straightforward, this becomes import with more complicated updates.</p>
 <p>The signature suggests taking an immutable-design/functional approach. This can be verbose when modifying collections, but is a common pattern in Elm and Redux. Unlike in a pure functional language, side-effects (ie other things that happen other than updating the model) don't require special handling. Example, from the todomvc example:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">fn</span> update(history: &amp;<span class="kw">mut</span> History&lt;Model, Msg&gt;, msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
 <a class="sourceLine" id="cb5-2" title="2">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb5-3" title="3">        <span class="pp">Msg::</span>ClearCompleted =&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb5-4" title="4">            <span class="kw">let</span> todos = model.todos.into_iter()</a>
@@ -91,7 +91,7 @@ r#"
 <a class="sourceLine" id="cb5-33" title="33"><span class="op">}</span></a></code></pre></div>
 <p>In this example, we avoid mutating data. In the first two Msgs, we filter the todos, then pass them to a new model using <a href="https://doc.rust-lang.org/book/ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax">struct update syntax</a> . In the third Msg, we mutate todos, but don't mutate the model itself. In the fourth, we build a new todo list using a functional technique. The <a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html">docs for Rust Iterators</a> show helpful methods for functional iterator manipulation.</p>
 <p>Alternatively, we could write the same update function like this:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">fn</span> update(history: &amp;<span class="kw">mut</span> History&lt;Model, Msg&gt;, msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
 <a class="sourceLine" id="cb6-2" title="2">    <span class="kw">let</span> <span class="kw">mut</span> model = model;</a>
 <a class="sourceLine" id="cb6-3" title="3">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb6-4" title="4">        <span class="pp">Msg::</span>ClearCompleted =&gt; <span class="op">{</span></a>
@@ -114,20 +114,19 @@ r#"
 <p>This approach, where we mutate the model directly, is much more concise when handling collections. How-to: Reassign <code>model</code> as mutable at the start of <code>update</code>. Return <code>model</code> at the end. Mutate it during the match legs.</p>
 <p>As with the model, only one update function is passed to the app, but it may be split into sub-functions to aid code organization.</p>
 <p>Note that you can perform updates recursively, ie have one update trigger another. For example, here's a non-recursive approach, where functions do_things() and do_other_things() each act on an Model, and output a Model:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">fn</span> update(<span class="kw">fn</span> update(history: &amp;<span class="kw">mut</span> History&lt;Model, Msg&gt;, msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
+<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">fn</span> update(<span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
 <a class="sourceLine" id="cb7-2" title="2">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb7-3" title="3">        <span class="pp">Msg::</span>A =&gt; do_things(model),</a>
 <a class="sourceLine" id="cb7-4" title="4">        <span class="pp">Msg::</span>B =&gt; do_other_things(do_things(model)),</a>
 <a class="sourceLine" id="cb7-5" title="5">    <span class="op">}</span></a>
 <a class="sourceLine" id="cb7-6" title="6"><span class="op">}</span></a></code></pre></div>
 <p>Here's a recursive equivalent:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">fn</span> update(<span class="kw">fn</span> update(history: &amp;<span class="kw">mut</span> History&lt;Model, Msg&gt;, msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
+<div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">fn</span> update(<span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
 <a class="sourceLine" id="cb8-2" title="2">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb8-3" title="3">        <span class="pp">Msg::</span>A =&gt; do_things(model),</a>
-<a class="sourceLine" id="cb8-4" title="4">        <span class="pp">Msg::</span>B =&gt; do_other_things(update(history, <span class="pp">Msg::</span>A, model)),</a>
+<a class="sourceLine" id="cb8-4" title="4">        <span class="pp">Msg::</span>B =&gt; do_other_things(update(<span class="pp">Msg::</span>A, model)),</a>
 <a class="sourceLine" id="cb8-5" title="5">    <span class="op">}</span></a>
 <a class="sourceLine" id="cb8-6" title="6"><span class="op">}</span></a></code></pre></div>
-<p>The history parameter is currently unused; it will be used for routing in the future.</p>
 <h3 id="view">View</h3>
 <p>Visual layout (ie HTML/DOM elements) is described declaratively in Rust, but uses <a href="https://doc.rust-lang.org/book/appendix-04-macros.html">macros</a> to simplify syntax.</p>
 <h3 id="elements-attributes-styles">Elements, attributes, styles</h3>

@@ -60,7 +60,7 @@ impl Default for Model {
         ];
 
         for (title, md_text) in md_texts {
-            let mut element = El::from_markdown(&md_text);
+            let element = El::from_markdown(&md_text);
             guide_sections.push(GuideSection{title: title.to_string(), element});
         }
 
@@ -79,7 +79,8 @@ impl Default for Model {
 enum Msg {
     ChangePage(Page),
     ChangeGuidePage(usize),
-    RoutePage(Page)
+    RoutePage(Page),
+    RouteGuidePage(usize),
 }
 
 /// The sole source of updating the model; returns a fresh one.
@@ -90,13 +91,14 @@ fn update(msg: Msg, model: Model) -> Model {
             update(Msg::RoutePage(page), model)
         },
         Msg::ChangeGuidePage(guide_page) => {
-            seed::push_route(&guide_page.to_string());
-            Model {guide_page, ..model}
+            seed::push_route(&format!("guide/{}", guide_page));
+            update(Msg::RouteGuidePage(guide_page), model)
         },
 
-    // This is separate, because nagivating the route triggers state updates, which would
-    // trigger an additional push state.
+        // This is separate, because nagivating the route triggers state updates, which would
+        // trigger an additional push state.
         Msg::RoutePage(page) => Model {page, ..model},
+        Msg::RouteGuidePage(guide_page) => Model {guide_page, ..model},
     }
 }
 
@@ -268,9 +270,16 @@ fn view(model: Model) -> El<Msg> {
 
 #[wasm_bindgen]
 pub fn render() {
-    let mut route_map = HashMap::new();
-    route_map.insert("guide", Msg::RoutePage(Page::Guide));
-    route_map.insert("changelog", Msg::RoutePage(Page::Changelog));
+    let mut routes = HashMap::new();
+    routes.insert("guide", Msg::RoutePage(Page::Guide));
+    routes.insert("changelog", Msg::RoutePage(Page::Changelog));
 
-    seed::run(Model::default(), update, view, "main", Some(route_map));
+//    let mut temp;
+    for guide_page in 0..10 {
+//        temp = format!("guide_page/{}", guide_page);
+//        routes.insert(&temp.clone(), Msg::RouteGuidePage(guide_page));
+//        routes.insert(&guide_page.to_string(), Msg::RouteGuidePage(1));
+    }
+
+    seed::run(Model::default(), update, view, "main", Some(routes));
 }

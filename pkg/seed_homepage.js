@@ -376,10 +376,6 @@ __exports.__widl_f_length_NodeList = function(arg0) {
     return __widl_f_length_NodeList_target.call(getObject(arg0));
 };
 
-__exports.__widl_instanceof_PopStateEvent = function(idx) {
-    return getObject(idx) instanceof PopStateEvent ? 1 : 0;
-};
-
 __exports.__widl_instanceof_Window = function(idx) {
     return getObject(idx) instanceof Window ? 1 : 0;
 };
@@ -492,9 +488,9 @@ __exports.__wbindgen_cb_drop = function(i) {
 
 __exports.__wbindgen_cb_forget = dropObject;
 
-__exports.__wbindgen_closure_wrapper521 = function(a, b, _ignored) {
-    const f = wasm.__wbg_function_table.get(20);
-    const d = wasm.__wbg_function_table.get(21);
+__exports.__wbindgen_closure_wrapper519 = function(a, b, _ignored) {
+    const f = wasm.__wbg_function_table.get(19);
+    const d = wasm.__wbg_function_table.get(20);
     const cb = function(arg0) {
         this.cnt++;
         let a = this.a;

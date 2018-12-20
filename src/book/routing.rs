@@ -12,7 +12,7 @@ r#"
 <a class="sourceLine" id="cb1-6" title="6"></a>
 <a class="sourceLine" id="cb1-7" title="7">    <span class="pp">seed::</span>run(<span class="pp">Model::</span><span class="kw">default</span>(), update, view, <span class="st">&quot;main&quot;</span>, <span class="cn">Some</span>(route_map));</a>
 <a class="sourceLine" id="cb1-8" title="8"><span class="op">}</span></a></code></pre></div>
-<p>Once this is configured, intial routing on page load will work as expected: The page will load with the default state, then immediately trigger the update prescribed by the RoutePage message.</p>
+<p>Once this is configured, intial routing on page load will work as expected: The page will load with the default state, then immediately trigger the update prescribed by the RoutePage message. std::collections::HashMap is included in the Seed prelude.</p>
 <p>In order to trigger our route change through an event (eg clicking a link or pushing a button), our update function includes the following logic:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="kw">enum</span> Msg <span class="op">{</span></a>
@@ -28,7 +28,7 @@ r#"
 <a class="sourceLine" id="cb2-12" title="12">            <span class="kw">let</span> page_name = <span class="kw">match</span> page <span class="op">{</span></a>
 <a class="sourceLine" id="cb2-13" title="13">                <span class="dv">0</span> =&gt; <span class="st">&quot;&quot;</span>,</a>
 <a class="sourceLine" id="cb2-14" title="14">                <span class="dv">1</span> =&gt; <span class="st">&quot;guide&quot;</span>,</a>
-<a class="sourceLine" id="cb2-15" title="15">                <span class="dv">2</span> =&gt; <span class="st">&quot;chnagelog&quot;</span></a>
+<a class="sourceLine" id="cb2-15" title="15">                <span class="dv">2</span> =&gt; <span class="st">&quot;changelog&quot;</span></a>
 <a class="sourceLine" id="cb2-16" title="16">            <span class="op">}</span>;</a>
 <a class="sourceLine" id="cb2-17" title="17">            <span class="pp">seed::</span>push_route(page_name);</a>
 <a class="sourceLine" id="cb2-18" title="18">            update(<span class="pp">Msg::</span>RoutePage(page), model)</a>

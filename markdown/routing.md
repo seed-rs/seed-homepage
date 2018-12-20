@@ -26,7 +26,7 @@ pub fn render() {
 ```
 Once this is configured, intial routing on page load will work as expected: The page will
 load with the default state, then immediately trigger the update prescribed by the RoutePage
-message.
+message. std::collections::HashMap is included in the Seed prelude.
 
 In order to trigger our route change through an event (eg clicking a link or pushing a button), our update function 
 includes the following logic:
@@ -45,7 +45,7 @@ fn update(msg: Msg, model: Model) -> Model {
             let page_name = match page {
                 0 => "",
                 1 => "guide",
-                2 => "chnagelog"
+                2 => "changelog"
             };
             seed::push_route(page_name);
             update(Msg::RoutePage(page), model)

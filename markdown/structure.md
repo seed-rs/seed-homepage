@@ -83,7 +83,7 @@ and model as parameters, and returns a model. This function signature cannot be 
 Example:
 
 ```rust
-fn update(history: &mut History<Model, Msg>, msg: Msg, model: Model) -> Model {
+fn update(msg: Msg, model: Model) -> Model {
     match msg {
         Msg::Increment => Model {count: model.count + 1, ..model},
         Msg::SetCount(count) => Model {count, ..model},
@@ -91,7 +91,7 @@ fn update(history: &mut History<Model, Msg>, msg: Msg, model: Model) -> Model {
 }
 ```
 
- While the signature of the update function is fixed (Accepts a History struct, Msg and ref to the model; outputs
+ While the signature of the update function is fixed (Accepts a Msg and ref to the model; outputs
  a new model), and will usually involve a match pattern, with an arm for each Msg, there
  are many ways you can structure this function. Some may be easier to write, and others may 
  be more efficient, or appeal to specific aesthetics. While the example above
@@ -102,7 +102,7 @@ fn update(history: &mut History<Model, Msg>, msg: Msg, model: Model) -> Model {
  side-effects (ie other things that happen other than updating the model) don't require special 
  handling. Example, from the todomvc example:
 ```rust
-fn update(history: &mut History<Model, Msg>, msg: Msg, model: Model) -> Model {
+fn update(msg: Msg, model: Model) -> Model {
     match msg {
         Msg::ClearCompleted => {
             let todos = model.todos.into_iter()
@@ -144,7 +144,7 @@ show helpful methods for functional iterator manipulation.
 
 Alternatively, we could write the same update function like this:
 ```rust
-fn update(history: &mut History<Model, Msg>, msg: Msg, model: Model) -> Model {
+fn update(msg: Msg, model: Model) -> Model {
     let mut model = model;
     match msg {
         Msg::ClearCompleted => {
@@ -177,7 +177,7 @@ Note that you can perform updates recursively, ie have one update trigger anothe
 here's a non-recursive approach, where functions do_things() and do_other_things() each
 act on an Model, and output a Model:
 ```rust
-fn update(fn update(history: &mut History<Model, Msg>, msg: Msg, model: Model) -> Model {
+fn update(fn update(msg: Msg, model: Model) -> Model {
     match msg {
         Msg::A => do_things(model),
         Msg::B => do_other_things(do_things(model)),
@@ -187,15 +187,13 @@ fn update(fn update(history: &mut History<Model, Msg>, msg: Msg, model: Model) -
 
 Here's a recursive equivalent:
 ```rust
-fn update(fn update(history: &mut History<Model, Msg>, msg: Msg, model: Model) -> Model {
+fn update(fn update(msg: Msg, model: Model) -> Model {
     match msg {
         Msg::A => do_things(model),
-        Msg::B => do_other_things(update(history, Msg::A, model)),
+        Msg::B => do_other_things(update(Msg::A, model)),
     }
 }
 ```
-
-The history parameter is currently unused; it will be used for routing in the future.
 
  
 ### View
