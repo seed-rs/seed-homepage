@@ -9,14 +9,19 @@ and `http://seed-rs.org/changelog` respectively. We describe the page by a `page
 field in our model, which is an integer: 0 for homepage, 1 for guide, or 2 for changelog.
 (An enum would work as well). 
 
-To set up the initial routing, we pass a HashMap<&str, Msg> describing the possible routings
-as the last parameter of [Seed::run](https://docs.rs/seed/0.1.8/seed/fn.run.html):
+To set up the initial routing, we pass a `Routes` struct describing the possible routings
+as the last parameter of [Seed::run](https://docs.rs/seed/0.1.8/seed/fn.run.html). We create
+it using a macro. `Routes` is a thin wrapper for HashMap, but with a convenient
+literal syntax. You can use its `insert` method to add new key value pairs.
+example:
 ```rust
 #[wasm_bindgen]
 pub fn render() {
-    let mut routes = HashMap::new();
-    routes.insert("guide", Msg::RoutePage(1));
-    routes.insert("changelog", Msg::RoutePage(2));
+    let routes = routes!{
+        "guide" => Msg::RoutePage(Page::Guide);
+        "changelog" => Msg::RoutePage(Page::Changelog);
+    };
+
 
     seed::run(Model::default(), update, view, "main", Some(routes));
 }
