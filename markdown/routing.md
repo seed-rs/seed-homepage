@@ -31,6 +31,12 @@ message.
 In order to trigger our route change through an event (eg clicking a link or pushing a button), our update function 
 includes the following logic:
 ```rust
+#[derive(Clone)]
+enum Msg {
+    ChangePage(Page),
+    RoutePage(Page),
+}
+
 fn update(msg: Msg, model: Model) -> Model {
     match msg {
         Msg::ChangePage(page) => {
@@ -55,7 +61,7 @@ Notice how we keep ChangePage and RoutePage separate in our example: RoutePage p
 the action associated with routing, while ChangePage updates our route history, then
 recursively calls RoutePage. If you were to attempt this in the same message, each
 navigation event would add a redundant route history entry, interfering with navigation. We call
-RoutePage from ChangePage, and in the route map, and call ChangePage from an event, like this:
+RoutePage from ChangePage, and in the route map. We call ChangePage from an event, like this:
 
 ```rust
 h2![ simple_ev("click", Msg::ChangePage(1)), "Guide" ]
