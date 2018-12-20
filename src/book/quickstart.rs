@@ -148,6 +148,7 @@ serde_json = &quot;1.0.33&quot;</code></pre>
 <a class="sourceLine" id="cb3-99" title="99">    <span class="co">// The final parameter is an optional routing map.</span></a>
 <a class="sourceLine" id="cb3-100" title="100">    <span class="pp">seed::</span>run(<span class="pp">Model::</span><span class="kw">default</span>(), update, view, <span class="st">&quot;main&quot;</span>, <span class="cn">None</span>);</a>
 <a class="sourceLine" id="cb3-101" title="101"><span class="op">}</span></a></code></pre></div>
+<p>For truly minimimal example, see <a href="https://github.com/David-OConnor/seed-quickstart/blob/master/src/lib.rs">lib.rs in the quickstart repo</a></p>
 <h2 id="building-and-running">Building and running</h2>
 <p>To build your app, create a <code>pkg</code> subdirectory, and run the following two commands:</p>
 <pre><code>cargo build --target wasm32-unknown-unknown</code></pre>

@@ -36,9 +36,9 @@ r#"
 <h3 id="features-to-add">Features to add</h3>
 <ul>
 <li>High-level fetch API</li>
-<li>Router</li>
 <li>Lifecycle hooks</li>
 <li>SVG support</li>
+<li>More flexible routing</li>
 <li>Virtual DOM optimization</li>
 <li>High-level CSS-grid/Flexbox API ?</li>
 </ul>

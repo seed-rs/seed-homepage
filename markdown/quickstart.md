@@ -118,7 +118,7 @@ enum Msg {
 }
 
 /// The sole source of updating the model; returns a fresh one.
-fn update(history: &mut History<Model, Msg>, msg: Msg, model: Model) -> Model {
+fn update(msg: Msg, model: Model) -> Model {
     match msg {
         Msg::Increment => Model {count: model.count + 1, ..model},
         Msg::Decrement => Model {count: model.count - 1, ..model},
@@ -184,6 +184,7 @@ pub fn render() {
     seed::run(Model::default(), update, view, "main", None);
 }
 ```
+For truly minimimal example, see [lib.rs in the quickstart repo](https://github.com/David-OConnor/seed-quickstart/blob/master/src/lib.rs)
 
 ## Building and running
 To build your app, create a `pkg` subdirectory, and run the following two commands:

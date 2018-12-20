@@ -79,24 +79,28 @@ impl Default for Model {
 enum Msg {
     ChangePage(Page),
     ChangeGuidePage(usize),
+
+    // todo temp?
+    RoutePage(Page)
 }
 
 /// The sole source of updating the model; returns a fresh one.
-fn update(history: &mut History<Model, Msg>, msg: Msg, model: Model) -> Model {
+fn update(msg: Msg, model: Model) -> Model {
     match msg {
         Msg::ChangePage(page) => {
-             // todo temp
-            let pagename = page.to_string();
-            history.history.push_state(&JsValue::from_str(&pagename), &pagename).unwrap();
-            Model {page, ..model}
+            seed::push_route(&page.clone().to_string());
+            update(Msg::RoutePage(page), model)
         },
         Msg::ChangeGuidePage(guide_page) => {
-            let pagename = "guide".to_string() + "/" + &guide_page.to_string();
-            history.history.push_state(&JsValue::from_str(&pagename), &pagename).unwrap();
-            history.push(&guide_page.to_string(), "MOOSE", msg.clone(), model.clone());
-
+            seed::push_route(&guide_page.to_string());
             Model {guide_page, ..model}
         },
+
+    // This is separate, because nagivating the route triggers state updates, which would
+    // trigger an additional push state.
+        Msg::RoutePage(page) => {
+            Model {page, ..model}
+        }
     }
 }
 
@@ -269,8 +273,8 @@ fn view(model: Model) -> El<Msg> {
 #[wasm_bindgen]
 pub fn render() {
     let mut route_map = HashMap::new();
-    route_map.insert("/guide", Msg::ChangePage(Page::Guide));
-    route_map.insert("/changelog", Msg::ChangePage(Page::Changelog));
+    route_map.insert("guide", Msg::RoutePage(Page::Guide));
+    route_map.insert("changelog", Msg::RoutePage(Page::Changelog));
 
     seed::run(Model::default(), update, view, "main", Some(route_map));
 }

@@ -255,14 +255,15 @@ __exports.__widl_f_set_autofocus_HTMLTextAreaElement = function(arg0, arg1) {
     __widl_f_set_autofocus_HTMLTextAreaElement_target.call(getObject(arg0), arg1 !== 0);
 };
 
-const __widl_f_push_state_History_target = typeof History === 'undefined' ? null : History.prototype.pushState || function() {
+const __widl_f_push_state_with_url_History_target = typeof History === 'undefined' ? null : History.prototype.pushState || function() {
     throw new Error(`wasm-bindgen: History.pushState does not exist`);
 };
 
-__exports.__widl_f_push_state_History = function(arg0, arg1, arg2, arg3, exnptr) {
+__exports.__widl_f_push_state_with_url_History = function(arg0, arg1, arg2, arg3, arg4, arg5, exnptr) {
     let varg2 = getStringFromWasm(arg2, arg3);
+    let varg4 = arg4 == 0 ? undefined : getStringFromWasm(arg4, arg5);
     try {
-        __widl_f_push_state_History_target.call(getObject(arg0), getObject(arg1), varg2);
+        __widl_f_push_state_with_url_History_target.call(getObject(arg0), getObject(arg1), varg2, varg4);
     } catch (e) {
         const view = getUint32Memory();
         view[exnptr / 4] = 1;
@@ -375,6 +376,10 @@ __exports.__widl_f_length_NodeList = function(arg0) {
     return __widl_f_length_NodeList_target.call(getObject(arg0));
 };
 
+__exports.__widl_instanceof_PopStateEvent = function(idx) {
+    return getObject(idx) instanceof PopStateEvent ? 1 : 0;
+};
+
 __exports.__widl_instanceof_Window = function(idx) {
     return getObject(idx) instanceof Window ? 1 : 0;
 };
@@ -485,7 +490,9 @@ __exports.__wbindgen_cb_drop = function(i) {
     return 0;
 };
 
-__exports.__wbindgen_closure_wrapper541 = function(a, b, _ignored) {
+__exports.__wbindgen_cb_forget = dropObject;
+
+__exports.__wbindgen_closure_wrapper521 = function(a, b, _ignored) {
     const f = wasm.__wbg_function_table.get(20);
     const d = wasm.__wbg_function_table.get(21);
     const cb = function(arg0) {

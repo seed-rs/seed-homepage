@@ -92,9 +92,9 @@ wasm-bindgen than with npm.
 
 ### Features to add
  - High-level fetch API
- - Router
  - Lifecycle hooks
  - SVG support
+ - More flexible routing
  - Virtual DOM optimization 
  - High-level CSS-grid/Flexbox API ?
  

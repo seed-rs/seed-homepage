@@ -1,18 +1,16 @@
 # Routing
-For now, the only supported routing feature is in setting up how to load the inintial
-page, based on the entry-point URL. As an example, let's say our site has three pages:
+Seed supports basic routing features: You can trigger state changes that update the address bar,
+ and can be nagivated to/from using forward and back buttons. This works for custom landing-page
+  routing as well, provided your server is configured to support this. (eg sub-paths will redirect to
+  the main path instead of throwing errors.)
+  
+  As an example, let's say our site has three pages:
 a home page, a guide, and a changelog, accessible by `http://seed-rs.org/`, `http://seed-rs.org/guide`,
 and `http://seed-rs.org/changelog` respectively. First, we need to set up our backend server so that
 all three of these endpoints point towards our app. We describe the page by a `page`
 field in our model, which is an integer: 0 for homepage, 1 for guide, or 2 for changelog.
-(An enum would work as well). Our update function includes this logic, triggered by
-clicking a link, or pushing a button:
-```rust
-match msg {
-        Msg::ChangePage(page) => {
-            Model {page, ..model}
-        },
-```
+(An enum would work as well). 
+
 To set up the initial routing, we pass a HashMap<&str, Msg> describing the possible routings
 as the last parameter of [Seed::run](https://docs.rs/seed/0.1.7/seed/fn.run.html):
 
@@ -20,11 +18,44 @@ as the last parameter of [Seed::run](https://docs.rs/seed/0.1.7/seed/fn.run.html
 #[wasm_bindgen]
 pub fn render() {
     let mut route_map = HashMap::new();
-    route_map.insert("/guide", Msg::ChangePage(1));
-    route_map.insert("/changelog", Msg::ChangePage(2));
+    route_map.insert("guide", Msg::RoutePage(1));
+    route_map.insert("changelog", Msg::RoutePage(2));
 
     seed::run(Model::default(), update, view, "main", Some(route_map));
 }
 ```
-Seed searches each of the route_map keys for a matching path name (url suffix). If it finds one,
-it updates the model based on its associated message. If not, no action will be taken. In our example, we assume the model initialized to page=0, for the homepage.
+Once this is configured, intial routing on page load will work as expected: The page will
+load with the default state, then immediately trigger the update prescribed by the RoutePage
+message.
+
+In order to trigger our route change through an event (eg clicking a link or pushing a button), our update function 
+includes the following logic:
+```rust
+match msg {
+    Msg::ChangePage(page) => {
+        seed::push_route(&page.to_string());
+        update(Msg::RoutePage(page), model)
+    },
+
+    // This is separate, because nagivating the route triggers state updates, which would
+    // trigger an additional push state.
+    Msg::RoutePage(page) => {
+        Model {page, ..model}
+    }
+}
+```
+[seed::push_route](https://docs.rs/seed/0.1.7/seed/fn.push_route.html) accepts a single parameter:
+a path string corresponding to what will be appended to the url. Currently, it must match one of the
+keys in the route map.
+
+When a page is loaded, or naviation occurs (eg back button), Seed searches each of the route_map keys for 
+a matching path name (url suffix). If it finds one,
+it updates the model based on its associated message. If not, no action will be taken. 
+In our example, we assume the model initialized to page=0, for the homepage.
+
+Notice how we keep ChangePage and RoutePage separate in our example: RoutePage performs
+the action associated with routing, while ChangePage updates our route history, then
+recursively calls RoutePage. If you were to attempt this in the same message, each
+navigation event would add a redundant route history entry, interfering with navigation.
+
+Dynamic routes are not yet supported.
