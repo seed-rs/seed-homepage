@@ -10,24 +10,28 @@ and `http://seed-rs.org/changelog` respectively. We describe the page by a `page
 field in our model, which is an integer: 0 for homepage, 1 for guide, or 2 for changelog.
 (An enum would work as well). 
 
-To set up the initial routing, we pass a [Routes struct](https://docs.rs/seed/0.1.10/seed/routing/struct.Routes.html)
- describing the possible routings
-as the last parameter of [Seed::run](https://docs.rs/seed/0.1.8/seed/fn.run.html). We create
-it using a macro. `Routes` is a thin wrapper for HashMap, but with a convenient
-literal syntax. You can use its `insert` method to add new key value pairs.
-example:
+To set up the initial routing, we pass a HashMap<String, Msg> describing the possible routings
+as the last parameter of [Seed::run](https://docs.rs/seed/0.1.10/seed/fn.run.html). We can
+create it using the `routes!` macro, which is for convenience: Rust doesn't include a
+HashMap literal syntax, and this macro automatically converts the keys to Strings, eg
+in the case of the &strs we use in the example below:
 ```rust
 #[wasm_bindgen]
 pub fn render() {
     let routes = routes!{
-        "guide" => Msg::RoutePage(Page::Guide);
-        "changelog" => Msg::RoutePage(Page::Changelog);
+        "guide" => Msg::RoutePage(Page::Guide),
+        "changelog" => Msg::RoutePage(Page::Changelog),
     };
 
     seed::run(Model::default(), update, view, "main", Some(routes));
 }
 ```
-To make landing-page routing work, configure your server so that all three of these path point towards the app...
+This syntax resembles that of the `attrs!` and `style!` macros, but uses commas
+for separation.
+(Note: In the latest version on Crates.io, the comma separation used in this macro must
+be semicolons; this will change next publish)
+
+To make landing-page routing work, configure your server so that all three of these path point towards the app,
 or that any (sub)path points towards it, instead of returning an error. Once this is configured, intial 
 routing on page load will work as expected: The page will load with the default state, then immediately 
 trigger the update prescribed by the RoutePage message.
