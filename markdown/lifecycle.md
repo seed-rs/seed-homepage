@@ -4,15 +4,15 @@ You can use lifecycle hooks, like those in React, to introduce side effects on D
 elements when an element is rendered for the first time, upates, or de-renders. We do
 this by passing one of the following structs to the element macro:
 
-- [dom_types::DidMount](https://docs.rs/seed/0.1.11/seed/dom_types/struct.DidMount.html)
-- [dom_types::DidUpdate](https://docs.rs/seed/0.1.11/seed/dom_types/struct.DidUpdate.html)
-- [dom_types::WillUnmount](https://docs.rs/seed/0.1.11/seed/dom_types/struct.WillUnmount.html)
+- [DidMount](https://docs.rs/seed/0.1.11/seed/dom_types/struct.DidMount.html)
+- [DidUpdate](https://docs.rs/seed/0.1.11/seed/dom_types/struct.DidUpdate.html)
+- [WillUnmount](https://docs.rs/seed/0.1.11/seed/dom_types/struct.WillUnmount.html)
 
 These are inspired by, and act similar to [functions of similar names](https://reactjs.org/docs/react-component.html#componentdidmount)
-in React. Each of these structs is a thin-wrapper for a closure that takes the
+in React. Each of these is a thin-wrapper for a closure that takes the
 [web_sys element](https://rustwasm.github.io/wasm-bindgen/api/web_sys/struct.Element.html)
-as its input, and has no output. We use them to perform side-effects (eg actions that don't change state), like setup and teardown 
-operations on the DOM elements (eg focusing).
+as its only parameter, and doesn't return anything. We use them to perform side-effects (eg actions that don't change state), like setup and teardown 
+operations on DOM elements.
 
 We create them using the following functions respectively, imported in the prelude:
 
@@ -20,8 +20,7 @@ We create them using the following functions respectively, imported in the prelu
 - [did_update](https://docs.rs/seed/0.1.11/seed/fn.did_update.html)
 - [will_unmount](https://docs.rs/seed/0.1.11/seed/fn.will_unmount.html)
 
-Each of these functions takes a single argument: A closure containing the actions to perform,
-and doesn't return anything.
+Each of these takes a single parameter: the closure described above.
 
 Example:
 ```rust
