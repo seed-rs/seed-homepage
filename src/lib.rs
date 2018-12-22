@@ -18,7 +18,7 @@ enum Page {
 }
 
 impl Page {
-    fn to_string(&self) -> String {
+    fn to_string(self) -> String {
         // Eg for url routing
         match self {
             Page::Guide => "guide".into(),
@@ -40,8 +40,6 @@ struct Model {
     guide_sections: Vec<GuideSection>,
 }
 
-use std::collections::HashMap;
-
 // Setup a default here, for initialization later.
 impl Default for Model {
     fn default() -> Self {
@@ -52,10 +50,11 @@ impl Default for Model {
             ("Structure", crate::book::structure::text()),
             ("Events", crate::book::events::text()),
             ("Components", crate::book::components::text()),
+            ("Lifecycle hooks", crate::book::lifecycle::text()),
             ("Routing", crate::book::routing::text()),
+            ("Misc features", crate::book::misc::text()),
             ("Release and debugging", crate::book::release_and_debugging::text()),
             ("Element Deep-dive", crate::book::element_deepdive::text()),
-            ("Misc features", crate::book::misc::text()),
             ("About", crate::book::about::text()),
         ];
 
@@ -156,7 +155,7 @@ fn title() -> El<Msg> {
     ]
 }
 
-fn guide(sections: Vec<GuideSection>, guide_page: usize) -> El<Msg> {
+fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
     let menu_item_style = style!{
         "display" => "flex";  // So we can vertically center
         "align-items" => "center";
@@ -208,13 +207,11 @@ fn guide(sections: Vec<GuideSection>, guide_page: usize) -> El<Msg> {
     ]
 }
 
-fn changelog_entry(version: &str, changes: Vec<&str>) -> El<Msg> {
+fn changelog_entry(version: &str, changes: &[&str]) -> El<Msg> {
     let changes: Vec<El<Msg>> = changes.iter().map(|c| li![ c ]).collect();
     div![
         h2![ version ],
-        ul![
-            changes
-        ]
+        ul![ changes ]
     ]
 }
 
@@ -242,7 +239,7 @@ fn footer() -> El<Msg> {
 fn view(model: Model) -> El<Msg> {
     let version = "0.1.6";
     let changelog_entries = vec![
-        changelog_entry("v0.1.0", vec![ "Initial release" ]),
+        changelog_entry("v0.1.0", &["Initial release"]),
     ];
 
     div![
@@ -259,7 +256,7 @@ fn view(model: Model) -> El<Msg> {
         ],
         section![ style!{"grid-row" => "3 / 4"; "grid-column" => "1 / 2"},
             match model.page {
-                Page::Guide => guide(model.guide_sections, model.guide_page),
+                Page::Guide => guide(&model.guide_sections, model.guide_page),
                 Page::Changelog => changelog(changelog_entries),
             }
         ],
@@ -272,7 +269,6 @@ fn view(model: Model) -> El<Msg> {
 
 #[wasm_bindgen]
 pub fn render() {
-    log!("RENDER FUN");
     let mut routes = routes!{
         "guide" => Msg::RoutePage(Page::Guide),
         "changelog" => Msg::RoutePage(Page::Changelog),

@@ -21,6 +21,7 @@ def main():
         "structure",
         "events",
         "components",
+        "lifecycle",
         "routing",
         "release_and_debugging",
         "element_deepdive",

@@ -23,7 +23,7 @@ Alternatively, create a new lib with Cargo: `cargo new --lib appname`. Here and 
 appname` should be replaced with the name of your app.
 
 If not using the quickstart repo, create an Html file with a body that contains this:
-  ```html
+```html
  <section id="main"></section>
 
 <script src='./pkg/appname.js'></script>
@@ -63,10 +63,6 @@ crate-type = ["cdylib"]
 seed = "^0.1.6"
 wasm-bindgen = "^0.2.29"
 web-sys = "^0.3.6"
-
-# For serialization, eg sending requests to a server. Otherwise, not required.
-serde = { version = "1.0.80", features = ['derive'] }
-serde_json = "1.0.33"
 ```
 
 ## A short example
@@ -76,7 +72,6 @@ Guide section below. Its structure follows [The Elm Architecture](https://guide.
 
 *lib.rs*:
 ```rust
-
 #[macro_use]
 extern crate seed;
 use seed::prelude::*;
