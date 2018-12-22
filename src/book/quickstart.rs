@@ -41,8 +41,7 @@ wasm-bindgen = &quot;^0.2.29&quot;
 web-sys = &quot;^0.3.6&quot;
 
 # For serialization, eg sending requests to a server. Otherwise, not required.
-serde = &quot;^1.0.80&quot;
-serde_derive = &quot;^1.0.80&quot;
+serde = { version = &quot;1.0.80&quot;, features = [&#39;derive&#39;] }
 serde_json = &quot;1.0.33&quot;</code></pre>
 <h2 id="a-short-example">A short example</h2>
 <p>Here's an example demonstrating structure and syntax; it can be found in working form under <code>examples/counter</code>. Descriptions of its parts are in the Guide section below. Its structure follows <a href="https://guide.elm-lang.org/architecture/">The Elm Architecture</a>.</p>

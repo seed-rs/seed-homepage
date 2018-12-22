@@ -33,11 +33,12 @@ a:hover {
 
 code { /* Eg inline code */
     background-color: #f3e0dc;
+    padding-left: 4px;
+    padding-right: 4px;
 }
 
 pre > code { /* This affects full code blocks only (not inline) */
     display: block;
-    padding: 20px;
     background-color: #f3e0dc;
 }
 
