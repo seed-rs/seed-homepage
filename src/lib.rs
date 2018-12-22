@@ -272,34 +272,18 @@ fn view(model: Model) -> El<Msg> {
 
 #[wasm_bindgen]
 pub fn render() {
+    log!("RENDER FUN");
     let mut routes = routes!{
         "guide" => Msg::RoutePage(Page::Guide),
         "changelog" => Msg::RoutePage(Page::Changelog),
-
-        "guide/0" => Msg::RouteGuidePage(0),
-        "guide/1" => Msg::RouteGuidePage(1),
-        "guide/2" => Msg::RouteGuidePage(2),
-        "guide/3" => Msg::RouteGuidePage(3),
-        "guide/4" => Msg::RouteGuidePage(4),
-        "guide/5" => Msg::RouteGuidePage(5),
-        "guide/6" => Msg::RouteGuidePage(6),
-        "guide/7" => Msg::RouteGuidePage(7),
-        "guide/8" => Msg::RouteGuidePage(8),
-        "guide/9" => Msg::RouteGuidePage(9),
-        "guide/10" => Msg::RouteGuidePage(10),
-        "guide/11" => Msg::RouteGuidePage(11),
-        "guide/12" => Msg::RouteGuidePage(12),
     };
 
-//    let nums: Vec<String> = (0..10).into_iter().map(|v| v.to_string()).collect();
-//    let nums: Vec<&str> = nums.iter().map(String::as_str).collect();
-
-
-//    let pages: Vec<String> = (0..10).into_iter().map(|v| (v.to_string())).collect();
-
-//    for guide_page in &pages {
-//        routes.insert(&("guide/".to_string() + guide_page), Msg::RouteGuidePage(guide_page.parse().unwrap()));
-//    }
+    for guide_page in 0..12 {
+        routes.insert(
+            "guide/".to_string() + &guide_page.to_string(),
+            Msg::RouteGuidePage(guide_page)
+        );
+    }
 
     seed::run(Model::default(), update, view, "main", Some(routes));
 }

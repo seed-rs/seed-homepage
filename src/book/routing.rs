@@ -14,7 +14,7 @@ r#"
 <a class="sourceLine" id="cb1-8" title="8">    <span class="pp">seed::</span>run(<span class="pp">Model::</span><span class="kw">default</span>(), update, view, <span class="st">&quot;main&quot;</span>, <span class="cn">Some</span>(routes));</a>
 <a class="sourceLine" id="cb1-9" title="9"><span class="op">}</span></a></code></pre></div>
 <p>This syntax resembles that of the <code>attrs!</code> and <code>style!</code> macros, but uses commas for separation. (Note: In the latest version on Crates.io, the comma separation used in this macro must be semicolons; this will change next publish)</p>
-<p>To make landing-page routing work, configure your server so that all three of these path point towards the app, or that any (sub)path points towards it, instead of returning an error. Once this is configured, intial routing on page load will work as expected: The page will load with the default state, then immediately trigger the update prescribed by the RoutePage message.</p>
+<p>To make landing-page routing work, configure your server so that all three of these path point towards the app, or that any (sub)path points towards it, instead of returning an error. The <code>serve.py</code> script included in the quickstart repo and examples is set up for this. Once this is configured, intial routing on page load will work as expected: The page will load with the default state, then immediately trigger the update prescribed by the RoutePage message.</p>
 <p>In order to trigger our route change through in-app naviation (eg clicking a link or pushing a button), include logic like this in the update function:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="kw">enum</span> Msg <span class="op">{</span></a>
@@ -44,6 +44,17 @@ r#"
 <p>When a page is loaded or browser naviation occurs (eg back button), Seed searches each of the route map keys for a matching path name (url suffix). If it finds one, it updates the model based on its associated message. If not, no action is taken. In our example, we assume the model initialized to page=0, for the homepage.</p>
 <p>Notice how we keep ChangePage and RoutePage separate in our example: RoutePage performs the action associated with routing, while ChangePage updates our route history, then recursively calls RoutePage. If you were to attempt this in the same message, each browser navigation event would add a redundant route history entry, interfering with navigation. We call RoutePage from ChangePage, and in the route map. We call ChangePage from an in-app navigation event, like this:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="pp">h2!</span><span class="op">[</span> simple_ev(<span class="st">&quot;click&quot;</span>, <span class="pp">Msg::</span>ChangePage(<span class="dv">1</span>)), <span class="st">&quot;Guide&quot;</span> <span class="op">]</span></a></code></pre></div>
-<p>Dynamic routes are not yet supported.</p>
+<p>Dynamic routes are not yet supported, but you may be able to populate the paths you need ahead of time in the route map:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">let</span> <span class="kw">mut</span> routes = <span class="pp">routes!</span><span class="op">{</span></a>
+<a class="sourceLine" id="cb4-2" title="2">    <span class="st">&quot;guide&quot;</span> =&gt; <span class="pp">Msg::</span>RoutePage(<span class="pp">Page::</span>Guide),</a>
+<a class="sourceLine" id="cb4-3" title="3">    <span class="st">&quot;changelog&quot;</span> =&gt; <span class="pp">Msg::</span>RoutePage(<span class="pp">Page::</span>Changelog),</a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="op">}</span>;</a>
+<a class="sourceLine" id="cb4-5" title="5"></a>
+<a class="sourceLine" id="cb4-6" title="6"><span class="kw">for</span> guide_page <span class="kw">in</span> <span class="dv">0</span>..<span class="dv">12</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-7" title="7">    routes.insert(</a>
+<a class="sourceLine" id="cb4-8" title="8">        <span class="st">&quot;guide/&quot;</span>.to_string() + &amp;guide_page.to_string(),</a>
+<a class="sourceLine" id="cb4-9" title="9">        <span class="pp">Msg::</span>RouteGuidePage(guide_page)</a>
+<a class="sourceLine" id="cb4-10" title="10">    );</a>
+<a class="sourceLine" id="cb4-11" title="11"><span class="op">}</span></a></code></pre></div>
 "#.into()
 }

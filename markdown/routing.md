@@ -32,7 +32,8 @@ for separation.
 be semicolons; this will change next publish)
 
 To make landing-page routing work, configure your server so that all three of these path point towards the app,
-or that any (sub)path points towards it, instead of returning an error. Once this is configured, intial 
+or that any (sub)path points towards it, instead of returning an error. The `serve.py` script
+included in the quickstart repo and examples is set up for this. Once this is configured, intial 
 routing on page load will work as expected: The page will load with the default state, then immediately 
 trigger the update prescribed by the RoutePage message.
 
@@ -83,4 +84,18 @@ RoutePage from ChangePage, and in the route map. We call ChangePage from an in-a
 h2![ simple_ev("click", Msg::ChangePage(1)), "Guide" ]
 ```
 
-Dynamic routes are not yet supported.
+Dynamic routes are not yet supported, but you may be able to populate the paths you
+need ahead of time in the route map:
+```rust
+let mut routes = routes!{
+    "guide" => Msg::RoutePage(Page::Guide),
+    "changelog" => Msg::RoutePage(Page::Changelog),
+};
+
+for guide_page in 0..12 {
+    routes.insert(
+        "guide/".to_string() + &guide_page.to_string(),
+        Msg::RouteGuidePage(guide_page)
+    );
+}
+```
