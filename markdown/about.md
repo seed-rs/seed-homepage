@@ -84,7 +84,6 @@ avoids the dependency glue-code associated with Redux and React Router.
 
 ### Features to add
 - High-level fetch API
-- Lifecycle hooks
 - Dynamic SVG creation and modification
 - More flexible routing
 - Virtual DOM optimization
