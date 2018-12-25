@@ -100,8 +100,8 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <a class="sourceLine" id="cb3-55" title="55">    <span class="pp">p!</span><span class="op">[</span> descrip <span class="op">]</span></a>
 <a class="sourceLine" id="cb3-56" title="56"><span class="op">}</span></a>
 <a class="sourceLine" id="cb3-57" title="57"></a>
-<a class="sourceLine" id="cb3-58" title="58"><span class="co">/// The top-level component we pass to the virtual dom. Must accept a ref to the model as its</span></a>
-<a class="sourceLine" id="cb3-59" title="59"><span class="co">/// only argument, and output a single El.</span></a>
+<a class="sourceLine" id="cb3-58" title="58"><span class="co">/// The top-level component we pass to the virtual dom. Must accept the model as its</span></a>
+<a class="sourceLine" id="cb3-59" title="59"><span class="co">/// only parameter, and output a single El.</span></a>
 <a class="sourceLine" id="cb3-60" title="60"><span class="kw">fn</span> view(model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-61" title="61">    <span class="kw">let</span> plural = <span class="kw">if</span> model.count == <span class="dv">1</span> <span class="op">{</span><span class="st">&quot;&quot;</span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span><span class="st">&quot;s&quot;</span><span class="op">}</span>;</a>
 <a class="sourceLine" id="cb3-62" title="62"></a>

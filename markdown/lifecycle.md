@@ -1,7 +1,7 @@
 # Lifecycle hooks
 
 You can use lifecycle hooks, like those in React, to introduce side effects on DOM
-elements when an element is rendered for the first time, upates, or de-renders. We do
+elements when an element is rendered, upates, or de-renders. We do
 this by passing one of the following structs to the element macro:
 
 - [DidMount](https://docs.rs/seed/0.1.11/seed/dom_types/struct.DidMount.html)
@@ -47,7 +47,7 @@ button![
 ]
 ```
 
-You can define the closure separately if you wish, either inside the view/component func:
+You can define the closure separately, either inside the view/component func:
 ```rust
 // You may have to specify type in the closure, as below.
 let autofocus = |el: &web_sys::Element| {
@@ -67,7 +67,7 @@ fn autofocus(el: &web_sys::Element) {
     html_el.focus().unwrap();
 }
 
-fn component() {
+fn component() -> El<Msg> {
     button![
         "Autofocuses on load",
         autofocus

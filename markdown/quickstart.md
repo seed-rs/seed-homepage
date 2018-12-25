@@ -129,8 +129,8 @@ fn success_level(clicks: i32) -> El<Msg> {
     p![ descrip ]
 }
 
-/// The top-level component we pass to the virtual dom. Must accept a ref to the model as its
-/// only argument, and output a single El.
+/// The top-level component we pass to the virtual dom. Must accept the model as its
+/// only parameter, and output a single El.
 fn view(model: Model) -> El<Msg> {
     let plural = if model.count == 1 {""} else {"s"};
 

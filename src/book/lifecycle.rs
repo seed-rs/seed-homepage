@@ -1,7 +1,7 @@
 pub fn text() -> String {
 r#"
 <h1 id="lifecycle-hooks">Lifecycle hooks</h1>
-<p>You can use lifecycle hooks, like those in React, to introduce side effects on DOM elements when an element is rendered for the first time, upates, or de-renders. We do this by passing one of the following structs to the element macro:</p>
+<p>You can use lifecycle hooks, like those in React, to introduce side effects on DOM elements when an element is rendered, upates, or de-renders. We do this by passing one of the following structs to the element macro:</p>
 <ul>
 <li><a href="https://docs.rs/seed/0.1.11/seed/dom_types/struct.DidMount.html">DidMount</a></li>
 <li><a href="https://docs.rs/seed/0.1.11/seed/dom_types/struct.DidUpdate.html">DidUpdate</a></li>
@@ -34,7 +34,7 @@ r#"
 <a class="sourceLine" id="cb2-5" title="5">        html_el.focus().unwrap();</a>
 <a class="sourceLine" id="cb2-6" title="6">    <span class="op">}</span>)</a>
 <a class="sourceLine" id="cb2-7" title="7"><span class="op">]</span></a></code></pre></div>
-<p>You can define the closure separately if you wish, either inside the view/component func:</p>
+<p>You can define the closure separately, either inside the view/component func:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="co">// You may have to specify type in the closure, as below.</span></a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="kw">let</span> autofocus = |el: &amp;<span class="pp">web_sys::</span>Element| <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-3" title="3">    <span class="kw">let</span> html_el = <span class="pp">seed::</span>to_html_el(&amp;el);</a>
@@ -51,7 +51,7 @@ r#"
 <a class="sourceLine" id="cb4-3" title="3">    html_el.focus().unwrap();</a>
 <a class="sourceLine" id="cb4-4" title="4"><span class="op">}</span></a>
 <a class="sourceLine" id="cb4-5" title="5"></a>
-<a class="sourceLine" id="cb4-6" title="6"><span class="kw">fn</span> component() <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-6" title="6"><span class="kw">fn</span> component() -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb4-7" title="7">    <span class="pp">button!</span><span class="op">[</span></a>
 <a class="sourceLine" id="cb4-8" title="8">        <span class="st">&quot;Autofocuses on load&quot;</span>,</a>
 <a class="sourceLine" id="cb4-9" title="9">        autofocus</a>

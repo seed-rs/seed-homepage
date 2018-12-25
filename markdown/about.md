@@ -24,7 +24,7 @@ them.
 The lack of resemblance to HTML be offputting, but the learning
 curve is shallow, and I think the macro syntax is close-enough to normal Rust that it's 
 easy to reason about how to build views, without compartmentalizing it into logic code and display code.
- This lack of separation in particlar is a controversial decision, but I think the benefits 
+This lack of separation in particular is a controversial decision, but I think the benefits 
 are worth it.
 
 

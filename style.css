@@ -39,6 +39,7 @@ code { /* Eg inline code */
 
 pre > code { /* This affects full code blocks only (not inline) */
     display: block;
+    padding: 14px;
     background-color: #f3e0dc;
 }
 
