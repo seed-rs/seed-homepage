@@ -3,12 +3,16 @@
 ## Setup
 This framework requires you to first install [Rust](https://www.rust-lang.org/tools/install).
 
- You'll need a recent version of Rust: `rustup update`
+You'll need a recent version of Rust: `rustup update`
 
 The wasm32-unknown-unknown target: `rustup target add wasm32-unknown-unknown`
 
 And wasm-bindgen: `cargo install wasm-bindgen-cli`
 
+If you run into errors while installing `wasm-bindgen`, you may need to install a C++
+build chain. On linux, run `sudo apt install build-essential`. On Windows, download and install
+[Visual Studio 2017](https://visualstudio.microsoft.com/downloads/); when asked in the installer,
+include the C++ workload.
 
 ## The theoretical minimum
 To start, clone [This quickstart repo](https://github.com/David-OConnor/seed-quickstart),
