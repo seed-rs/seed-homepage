@@ -6,7 +6,7 @@ r#"
 <p>You'll need a recent version of Rust: <code>rustup update</code></p>
 <p>The wasm32-unknown-unknown target: <code>rustup target add wasm32-unknown-unknown</code></p>
 <p>And wasm-bindgen: <code>cargo install wasm-bindgen-cli</code></p>
-<p>If you run into errors while installing <code>wasm-bindgen</code>, you may need to install a C++ build chain. On linux, run <code>sudo apt install build-essential</code>. On Windows, download and install <a href="https://visualstudio.microsoft.com/downloads/">Visual Studio 2017</a>; when asked in the installer, include the C++ workload.</p>
+<p>If you run into errors while installing <code>wasm-bindgen-cli</code>, you may need to install a C++ build chain. On linux, run <code>sudo apt install build-essential</code>. On Windows, download and install <a href="https://visualstudio.microsoft.com/downloads/">Visual Studio 2017</a>; when asked in the installer, include the C++ workload.</p>
 <h2 id="the-theoretical-minimum">The theoretical minimum</h2>
 <p>To start, clone <a href="https://github.com/David-OConnor/seed-quickstart">This quickstart repo</a>, run <code>build.sh</code> or <code>build.ps1</code> in a terminal, then start a dev server that supports WASM. For example, with <a href="https://www.python.org/downloads/">Python</a> installed, run <code>python serve.py</code>. (Linux users may need to run <code>python3 serve.py</code>.) Once you change your package name, you'll need to tweak the html file and build script, as described below.</p>
 <h2 id="a-little-deeper">A little deeper</h2>
@@ -151,7 +151,7 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <p>and</p>
 <pre><code>wasm-bindgen target/wasm32-unknown-unknown/debug/appname.wasm --no modules --out-dir ./pkg</code></pre>
 <p>where <code>appname</code> is replaced with your app's name. This compiles your code in the target folder, and populates the pkg folder with your WASM module, a Typescript definitions file, and a JS file used to link your module from HTML.</p>
-<p>You may wish to create a build script with these two lines. (<code>build.sh</code> for Linux; <code>build.ps1</code> for Windows). The quickstart repo includes these, but you'll still need to do the rename. You can then use <code>./build.sh</code> or <code>.\build.ps1</code> If you run into permission errors on <code>build.sh</code>, try this command to allow executing the file:<code>chmod +x build.sh</code>.</p>
+<p>You may wish to create a build script with these two lines. (<code>build.sh</code> for Linux; <code>build.ps1</code> for Windows). The quickstart repo includes these, but you'll still need to do the rename. You can then use <code>./build.sh</code> or <code>.\build.ps1</code> If you run into permission errors on <code>build.sh</code>, try this command to allow executing the file:<code>chmod +x build.sh</code>. If you run into persmission errors on <code>build.ps</code>, open Powershell as an administrator, and enter this command: <code>Set-ExecutionPolicy RemoteSigned</code>.</p>
 <p>For development, you can view your app using a shimmed Python dev server, as described above. (Set up <a href="https://github.com/David-OConnor/seed-quickstart/blob/master/serve.py">this mime-type shim</a> from the quickstart repo, and run <code>python serve.py</code>).</p>
 <p>In the future, the build script and commands above may be replaced by <a href="https://github.com/rustwasm/wasm-pack">wasm-pack</a>.</p>
 <h2 id="running-included-examples">Running included examples</h2>

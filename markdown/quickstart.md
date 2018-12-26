@@ -9,7 +9,7 @@ The wasm32-unknown-unknown target: `rustup target add wasm32-unknown-unknown`
 
 And wasm-bindgen: `cargo install wasm-bindgen-cli`
 
-If you run into errors while installing `wasm-bindgen`, you may need to install a C++
+If you run into errors while installing `wasm-bindgen-cli`, you may need to install a C++
 build chain. On linux, run `sudo apt install build-essential`. On Windows, download and install
 [Visual Studio 2017](https://visualstudio.microsoft.com/downloads/); when asked in the installer,
 include the C++ workload.
@@ -195,7 +195,8 @@ and a JS file used to link your module from HTML.
 You may wish to create a build script with these two lines. (`build.sh` for Linux; `build.ps1` for Windows).
 The quickstart repo includes these, but you'll still need to do the rename. You can then use
 `./build.sh` or `.\build.ps1` If you run into permission errors on `build.sh`, try this command
-to allow executing the file:`chmod +x build.sh`.
+to allow executing the file:`chmod +x build.sh`. If you run into persmission errors on `build.ps`,
+open Powershell as an administrator, and enter this command: `Set-ExecutionPolicy RemoteSigned`.
 
 For development, you can view your app using a shimmed Python dev server, as described above.
 (Set up [this mime-type shim](https://github.com/David-OConnor/seed-quickstart/blob/master/serve.py)
