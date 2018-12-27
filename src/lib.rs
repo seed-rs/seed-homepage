@@ -114,7 +114,7 @@ fn header(version: &str) -> El<Msg> {
         "cursor" => "pointer";
     };
 
-    div![ style!{"display" => "flex"; "justify-content" => "flex-end"; "background-color" => "#bc4639";},
+    header![ style!{"display" => "flex"; "justify-content" => "flex-end"},
         ul![
             a![ &link_style, "Guide", simple_ev("click", Msg::ChangePage(Page::Guide)) ],
             a![ &link_style, "Changelog", simple_ev("click", Msg::ChangePage(Page::Changelog)) ],
@@ -138,16 +138,16 @@ fn title() -> El<Msg> {
             },
         div![ style!{"grid-row" => "1/2"; "grid-column" => "1 / 4"},
             h1![ style!{"font-size" => "2em"},"Seed" ],
-            h2![ style!{"font-size" => "1.2em"}, "A Rust framework for creating web apps" ],
+            h2![ "A Rust framework for creating web apps" ],
         ],
         div![  style!{"grid-row" => "2/3"; "grid-column" => "1 / 2"},
-            h3![ "Expressive view syntax"]
+            h2![ "Expressive view syntax"]
         ],
         div![  style!{"grid-row" => "2/3"; "grid-column" => "2 / 3"},
-            h3![ "Compile-time error checking" ]
+            h2![ "Compile-time error checking" ]
         ],
         div![  style!{"grid-row" => "2/3"; "grid-column" => "3 / 4"},
-            h3![ "Clean architecture" ]
+            h2![ "Clean architecture" ]
         ],
 
     ]
@@ -170,10 +170,11 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
         .iter()
         .enumerate()
         .map(|(i, s)|
-        h4![ &menu_item_style.merge(
-            &style!{"background" => if i == guide_page {"#d4a59a"} else {"#bc4639"}}
-        ),
-            a![ simple_ev("click", Msg::ChangeGuidePage(i)), s.title ]
+        h4![
+            &menu_item_style,
+            &attrs!{"class" => if i == guide_page {"guide-menu-selected"} else {"guide-menu"}},
+            simple_ev("click", Msg::ChangeGuidePage(i)),
+            s.title
         ]
     ).collect();
 
@@ -195,9 +196,10 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
             menu_items
         ],
 
-        div![ style!{"display" => "flex"; "grid-column" => "2 / 3";
+        div![ attrs!{"class" => "guide"},
+            style!{"display" => "flex"; "grid-column" => "2 / 3";
 //                     "grid-row" => "1 / 2";
-                     "padding" => 80; "background-color" => "#d4a59a";},
+            "padding" => 80;},
             sections[guide_page].clone().element
         ]
     ]
@@ -212,20 +214,21 @@ fn changelog_entry(version: &str, changes: &[&str]) -> El<Msg> {
 }
 
 fn changelog(entries: Vec<El<Msg>>) -> El<Msg> {
-    div![ style!{
+    div![
+        attrs!{"class" => "guide"},
+        style!{
             "display" => "flex";
             "flex-direction" => "column";
             "align-items" => "center";
-            "background-color" => "#d4a59a";
             "padding" => 50;
             "color" => "black";
-    },
+        },
         entries
     ]
 }
 
 fn footer() -> El<Msg> {
-    div![ style!{"display" => "flex"; "justify-content" => "center"},
+    footer![ style!{"display" => "flex"; "justify-content" => "center"},
         h4![ "© 2019 David O'Connor"]
     ]
 }

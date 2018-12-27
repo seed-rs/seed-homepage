@@ -1,46 +1,72 @@
-body {
-    background-color: #5c2018;
-    /*font-family: 'Karla', sans-serif;*/
-    color: #f3e0dc;
+:root {
+    --color1: #687864;
+    --color2: #31708e;
+    --color3: #d9efdd;
+    --color4: #c4f4d7;
+    --color5: #eefcfe;
+    --color6: #e0eff9;
 }
-/*https://visme.co/blog/website-color-schemes/*/  #35
+
+header {
+    background-color: var(--color3);
+}
+
+body {
+    background-color: white;
+    font-family: 'Karla', sans-serif;
+    color: black;
+}
+/*https://visme.co/blog/website-color-schemes/*/
 /*  #4285f4   5c2018   bc4639   d4a59a    f3e0dc */
 
+.guide {
+    /*background-color: var(--color4);*/
+    background-color: var(--color6);
+}
+
+.guide-menu {
+    background-color: var(--color3);
+}
+
+.guide-menu:hover {
+    background-color: var(--color4);
+}
+
+.guide-menu-selected {
+    background-color: var(--color6);
+}
 
 /*  Looks like we need to set all of these for a... */
 a{
     color: black;
-    /*color: #4285f4;*/
     text-decoration: none;
 }
 
 a:link {
     color: #515294;
-    /*color: #4285f4;*/
     text-decoration: none;
 }
 
 a:visited {
     color: #515294;
-    /*color: #4285f4;*/
     text-decoration: none;
 }
 
 a:hover {
-    color: #4285f4;
+    color: #7c7dcc;
     text-decoration: underline;
 }
 
 code { /* Eg inline code */
-    background-color: #f3e0dc;
     padding-left: 4px;
     padding-right: 4px;
+    background-color: var(--color5);
 }
 
 pre > code { /* This affects full code blocks only (not inline) */
     display: block;
     padding: 14px;
-    background-color: #f3e0dc;
+    background-color: var(--color5);
 }
 
 div {
