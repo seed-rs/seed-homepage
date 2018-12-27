@@ -6,7 +6,7 @@ r#"
 <p>You'll need a recent version of Rust: <code>rustup update</code></p>
 <p>The wasm32-unknown-unknown target: <code>rustup target add wasm32-unknown-unknown</code></p>
 <p>And wasm-bindgen: <code>cargo install wasm-bindgen-cli</code></p>
-<p>If you run into errors while installing <code>wasm-bindgen-cli</code>, you may need to install a C++ build chain. On linux, run <code>sudo apt install build-essential</code>. On Windows, download and install <a href="https://visualstudio.microsoft.com/downloads/">Visual Studio 2017</a>; when asked in the installer, include the C++ workload.</p>
+<p>If you run into errors while installing <code>wasm-bindgen-cli</code>, you may need to install C++ build tools. On linux, run <code>sudo apt install build-essential</code>. On Windows, download and install <a href="https://visualstudio.microsoft.com/downloads/">Visual Studio 2017</a>; when asked in the installer, include the C++ workload.</p>
 <h2 id="the-theoretical-minimum">The theoretical minimum</h2>
 <p>To start, clone <a href="https://github.com/David-OConnor/seed-quickstart">This quickstart repo</a>, run <code>build.sh</code> or <code>build.ps1</code> in a terminal, then start a dev server that supports WASM. For example, with <a href="https://www.python.org/downloads/">Python</a> installed, run <code>python serve.py</code>. (Linux users may need to run <code>python3 serve.py</code>.) Once you change your package name, you'll need to tweak the html file and build script, as described below.</p>
 <h2 id="a-little-deeper">A little deeper</h2>

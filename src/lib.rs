@@ -86,12 +86,10 @@ enum Msg {
 fn update(msg: Msg, model: Model) -> Model {
     match msg {
         Msg::ChangePage(page) => {
-//            seed::push_route(&page.to_string(), Msg::RoutePage(page));
             seed::push_route(&page.to_string());
             update(Msg::RoutePage(page), model)
         },
         Msg::ChangeGuidePage(guide_page) => {
-//            seed::push_route(&format!("guide/{}", guide_page), Msg::RouteGuidePage(guide_page));
             seed::push_route(&format!("guide/{}", guide_page));
             update(Msg::RouteGuidePage(guide_page), model)
         },
@@ -164,7 +162,6 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
         "height" => 40;
         "margin-bottom" => 0;
         "width" => "100%";
-        "background-color" => "#bc4639";
         "color" => "black";
         "font-size" => "1.2em";
     };
@@ -173,10 +170,9 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
         .iter()
         .enumerate()
         .map(|(i, s)|
-            // todo currently a bug affecting this.
-//        h4![ &menu_item_style.merge(&style!{"background" => if i == guide_page {"#d4a59a"} else {"#bc4639"}}),
-        h4![ &menu_item_style,
-            // We use a link tag here to help with routing.
+        h4![ &menu_item_style.merge(
+            &style!{"background" => if i == guide_page {"#d4a59a"} else {"#bc4639"}}
+        ),
             a![ simple_ev("click", Msg::ChangeGuidePage(i)), s.title ]
         ]
     ).collect();

@@ -9,8 +9,8 @@ The wasm32-unknown-unknown target: `rustup target add wasm32-unknown-unknown`
 
 And wasm-bindgen: `cargo install wasm-bindgen-cli`
 
-If you run into errors while installing `wasm-bindgen-cli`, you may need to install a C++
-build chain. On linux, run `sudo apt install build-essential`. On Windows, download and install
+If you run into errors while installing `wasm-bindgen-cli`, you may need to install C++
+build tools. On linux, run `sudo apt install build-essential`. On Windows, download and install
 [Visual Studio 2017](https://visualstudio.microsoft.com/downloads/); when asked in the installer,
 include the C++ workload.
 
