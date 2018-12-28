@@ -28,7 +28,7 @@ appname` should be replaced with the name of your app.
 
 If not using the quickstart repo, create an Html file with a body that contains this:
 ```html
- <section id="main"></section>
+<section id="main"></section>
 
 <script src='./pkg/appname.js'></script>
 

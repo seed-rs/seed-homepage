@@ -14,7 +14,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         urlparts = urllib.parse.urlparse(self.path)
         request_file_path = urlparts.path.strip('/')
         if not os.path.exists(request_file_path):
-            self.path = 'index.html'
+            # self.path = '/'
+            pass
+
+        print(self.path, "PATH")
 
         return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
