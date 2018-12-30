@@ -1,7 +1,13 @@
 pub fn text() -> String {
 r#"
 <h1 id="http-requests-fetch-and-updating-state">Http requests (fetch), and updating state</h1>
-<p>We use the <a href="https://docs.rs/seed/0.1.12/seed/fetch/fn.fetch.html">seed::fetch</a> function to make HTTP requests in the browser, wrapping the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>. <code>fetch</code> takes 5 parameters: - The <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods">request method</a>: a <a href="https://docs.rs/seed/0.1.12/seed/fetch/enum.Method.html">seed::Method</a> - The url, an <code>&amp;str</code> - An optional <a href="https://docs.rs/seed/0.1.12/seed/fetch/struct.RequestOps.html">seed::RequstOps</a>, where you can set things like headers, payload, and credentials. - A callback that performs actions once the request is complete. It accepts a <a href="https://docs.rs/wasm-bindgen/0.2.29/wasm_bindgen/">JsValue</a>, and returns nothing.</p>
+<p>We use the <a href="https://docs.rs/seed/0.1.12/seed/fetch/fn.fetch.html">seed::fetch</a> function to make HTTP requests in the browser, wrapping the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>. <code>fetch</code> takes 3 parameters:</p>
+<ul>
+<li>The <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods">request method</a>: a <a href="https://docs.rs/seed/0.1.12/seed/fetch/enum.Method.html">seed::Method</a></li>
+<li>The url, an <code>&amp;str</code></li>
+<li>An optional <a href="https://docs.rs/seed/0.1.12/seed/fetch/struct.RequestOps.html">seed::RequstOps</a>, where you can set things like headers, payload, and credentials.</li>
+<li>A callback that performs actions once the request is complete. It accepts a <a href="https://docs.rs/wasm-bindgen/0.2.29/wasm_bindgen/">JsValue</a>, and returns nothing.</li>
+</ul>
 <p>The convenience functions <a href="https://docs.rs/seed/0.1.12/seed/fetch/fn.get.html">seed::get</a> and <a href="https://docs.rs/seed/0.1.12/seed/fetch/fn.post.html">seed::post</a> are also available; these are the same as <code>fetch</code>, but ommit the method parameter.</p>
 <p>Example, where we update the state on initial app load:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">,</span> <span class="bu">Debug</span><span class="at">,</span> Serialize<span class="at">,</span> Deserialize<span class="at">)]</span></a>

@@ -50,7 +50,7 @@ impl Default for Model {
             ("Structure", crate::book::structure::text()),
             ("Events", crate::book::events::text()),
             ("Components", crate::book::components::text()),
-            ("Https requests / fetch", crate::book::fetch::text()),
+            ("Http requests", crate::book::fetch::text()),
             ("Lifecycle hooks", crate::book::lifecycle::text()),
             ("Routing", crate::book::routing::text()),
             ("Misc features", crate::book::misc::text()),

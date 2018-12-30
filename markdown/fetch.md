@@ -2,7 +2,8 @@
 
 We use the [seed::fetch](https://docs.rs/seed/0.1.12/seed/fetch/fn.fetch.html) function
 to make HTTP requests in the browser, wrapping the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
-`fetch` takes 5 parameters: 
+`fetch` takes 3 parameters: 
+
 - The [request method](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods): a
 [seed::Method](https://docs.rs/seed/0.1.12/seed/fetch/enum.Method.html)
 - The url, an `&str`
