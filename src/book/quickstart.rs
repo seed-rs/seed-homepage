@@ -30,7 +30,7 @@ r#"
 <p><code>Cargo.toml</code>, which is a file created by Cargo that describes your app, needs <code>wasm-bindgen</code>, <code>web-sys</code>, and <code>seed</code> as depdendencies, and crate-type of <code>"cdylib"</code>. The version in the quickstart repo has these set up already. Example:</p>
 <pre class="toml"><code>[package]
 name = &quot;appname&quot;
-version = &quot;0.1.13&quot;
+version = &quot;0.1.0&quot;
 authors = [&quot;Your Name &lt;email@address.com&gt;&quot;]
 edition = &quot;2018&quot;
 
@@ -38,9 +38,9 @@ edition = &quot;2018&quot;
 crate-type = [&quot;cdylib&quot;]
 
 [dependencies]
-seed = &quot;^0.1.132&quot;
-wasm-bindgen = &quot;^0.1.139&quot;
-web-sys = &quot;^0.1.13&quot;</code></pre>
+seed = &quot;^0.1.12&quot;
+wasm-bindgen = &quot;^0.2.29&quot;
+web-sys = &quot;^0.3.6&quot;</code></pre>
 <h2 id="a-short-example">A short example</h2>
 <p>Here's an example demonstrating structure and syntax; it can be found in working form under <code>examples/counter</code>. Descriptions of its parts are in the Guide section below. Its structure follows <a href="https://guide.elm-lang.org/architecture/">The Elm Architecture</a>.</p>
 <p><em>lib.rs</em>:</p>
@@ -155,6 +155,6 @@ web-sys = &quot;^0.1.13&quot;</code></pre>
 <p>For development, you can view your app using a shimmed Python dev server, as described above. (Set up <a href="https://github.com/David-OConnor/seed-quickstart/blob/master/serve.py">this mime-type shim</a> from the quickstart repo, and run <code>python serve.py</code>).</p>
 <p>In the future, the build script and commands above may be replaced by <a href="https://github.com/rustwasm/wasm-pack">wasm-pack</a>.</p>
 <h2 id="running-included-examples">Running included examples</h2>
-<p>To run an example located in the <a href="https://github.com/David-OConnor/seed/tree/master/examples">examples folder</a>, navigate to that folder in a terminal, run the build script for your system (<code>build.sh</code> or <code>build.ps1</code>), then start a dev server as described above. Note that if you copy an example to a separate folder, you'll need to edit its <code>Cargo.toml</code> to point to the package on <a href="https://crates.io">crates.io</a> instead of locally: Ie replace <code>seed = { path = "../../"</code> with <code>seed = "^0.1.13"</code>, and in the build script, remove the leading <code>../../</code> on the second line.</p>
+<p>To run an example located in the <a href="https://github.com/David-OConnor/seed/tree/master/examples">examples folder</a>, navigate to that folder in a terminal, run the build script for your system (<code>build.sh</code> or <code>build.ps1</code>), then start a dev server as described above. Note that if you copy an example to a separate folder, you'll need to edit its <code>Cargo.toml</code> to point to the package on <a href="https://crates.io">crates.io</a> instead of locally: Ie replace <code>seed = { path = "../../"</code> with <code>seed = "^0.1.8"</code>, and in the build script, remove the leading <code>../../</code> on the second line.</p>
 "#.into()
 }

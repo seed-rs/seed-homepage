@@ -1,14 +1,14 @@
 pub fn text() -> String {
 r#"
 <h1 id="http-requests-fetch-and-updating-state">Http requests (fetch), and updating state</h1>
-<p>We use the <a href="https://docs.rs/seed/0.1.132/seed/fetch/fn.fetch.html">seed::fetch</a> function to make HTTP requests in the browser, wrapping the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>. <code>fetch</code> takes 3 parameters:</p>
+<p>We use the <a href="https://docs.rs/seed/0.2.0/seed/fetch/fn.fetch.html">seed::fetch</a> function to make HTTP requests in the browser, wrapping the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>. <code>fetch</code> takes 3 parameters:</p>
 <ul>
-<li>The <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods">request method</a>: a <a href="https://docs.rs/seed/0.1.132/seed/fetch/enum.Method.html">seed::Method</a></li>
+<li>The <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods">request method</a>: a <a href="https://docs.rs/seed/0.2.0/seed/fetch/enum.Method.html">seed::Method</a></li>
 <li>The url, an <code>&amp;str</code></li>
-<li>An optional <a href="https://docs.rs/seed/0.1.132/seed/fetch/struct.RequestOpts.html">seed::RequstOpts</a> struct, where you can set things like headers, payload, and credentials.</li>
-<li>A callback that performs actions once the request is complete. It accepts a <a href="https://docs.rs/wasm-bindgen/0.1.139/wasm_bindgen/">JsValue</a>, and returns nothing.</li>
+<li>An optional <a href="https://docs.rs/seed/0.2.0/seed/fetch/struct.RequestOpts.html">seed::RequstOpts</a> struct, where you can set things like headers, payload, and credentials.</li>
+<li>A callback that performs actions once the request is complete. It accepts a <a href="https://docs.rs/wasm-bindgen/0.2.29/wasm_bindgen/">JsValue</a>, and returns nothing.</li>
 </ul>
-<p>The convenience functions <a href="https://docs.rs/seed/0.1.132/seed/fetch/fn.get.html">seed::get</a> and <a href="https://docs.rs/seed/0.1.132/seed/fetch/fn.post.html">seed::post</a> are also available; these are the same as <code>fetch</code>, but ommit the method parameter. Additionally, <code>seed::post</code> uses a non-serialized payload as a second parameter: This is any Rust struct which implements <code>serde::Serialize</code>. It overrides the payload defined in <code>RequestOpts</code>.</p>
+<p>The convenience functions <a href="https://docs.rs/seed/0.2.0/seed/fetch/fn.get.html">seed::get</a> and <a href="https://docs.rs/seed/0.2.0/seed/fetch/fn.post.html">seed::post</a> are also available; these are the same as <code>fetch</code>, but ommit the method parameter. Additionally, <code>seed::post</code> uses a non-serialized payload as a second parameter: This is any Rust struct which implements <code>serde::Serialize</code>. It overrides the payload defined in <code>RequestOpts</code>.</p>
 <p>Example, where we update the state on initial app load:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">use</span> <span class="pp">serde::</span><span class="op">{</span>Serialize, Deserialize<span class="op">}</span>;</a>
 <a class="sourceLine" id="cb1-2" title="2"></a>
