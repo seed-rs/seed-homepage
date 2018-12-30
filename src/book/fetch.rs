@@ -80,48 +80,48 @@ r#"
 <h2 id="updating-state">Updating state</h2>
 <p>To update the model outside of the element-based event system, we call <code>update_state</code> on our state var, which is the first parameter in our view func. A consequence of this is that we must pass state to any components that need to update state in this way. This may require calling <code>state.clone()</code>, to use it in multiple places. Note that we also need to prepend our closures with <code>move</code>, as above, any time <code>state</code> is used in one.</p>
 <p>Example showing POST, and headers:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">use</span> serde_json;</a>
-<a class="sourceLine" id="cb3-2" title="2"></a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="co">// ...</span></a>
-<a class="sourceLine" id="cb3-4" title="4"></a>
-<a class="sourceLine" id="cb3-5" title="5"><span class="at">#[</span>derive<span class="at">(</span>Serialize<span class="at">,</span> Deserialize<span class="at">)]</span></a>
-<a class="sourceLine" id="cb3-6" title="6"><span class="kw">struct</span> Message <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-7" title="7">    <span class="kw">pub</span> name: <span class="dt">String</span>,</a>
-<a class="sourceLine" id="cb3-8" title="8">    <span class="kw">pub</span> email: <span class="dt">String</span>,</a>
-<a class="sourceLine" id="cb3-9" title="9">    <span class="kw">pub</span> message: <span class="dt">String</span>,</a>
-<a class="sourceLine" id="cb3-10" title="10"><span class="op">}</span></a>
-<a class="sourceLine" id="cb3-11" title="11"></a>
-<a class="sourceLine" id="cb3-12" title="12"><span class="kw">fn</span> post_data() <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-13" title="13">    <span class="kw">let</span> message = Message <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-14" title="14">        name: <span class="st">&quot;Mark Watney&quot;</span>.into(),</a>
-<a class="sourceLine" id="cb3-15" title="15">        email: <span class="st">&quot;mark@crypt.kk&quot;</span>.into(),</a>
-<a class="sourceLine" id="cb3-16" title="16">        message: <span class="st">&quot;I wanna be like Iron Man&quot;</span>.into(),</a>
-<a class="sourceLine" id="cb3-17" title="17">    <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb3-18" title="18">    </a>
-<a class="sourceLine" id="cb3-19" title="19">    <span class="kw">let</span> <span class="kw">mut</span> opts = <span class="pp">seed::RequestOpts::</span>new();</a>
-<a class="sourceLine" id="cb3-20" title="20">    opts.headers.insert(<span class="st">&quot;Content-Type&quot;</span>.into(), <span class="st">&quot;application/json&quot;</span>.into());</a>
-<a class="sourceLine" id="cb3-21" title="21">    </a>
-<a class="sourceLine" id="cb3-22" title="22">    <span class="co">// We can handle the server&#39;s response in the callback, as in the Get example.</span></a>
-<a class="sourceLine" id="cb3-23" title="23">    <span class="kw">let</span> callback = <span class="kw">move</span> |json: JsValue| <span class="op">{}</span>;</a>
-<a class="sourceLine" id="cb3-24" title="24">    <span class="pp">seed::</span>post(url, message, <span class="cn">Some</span>(opts), <span class="dt">Box</span>::new(callback));</a>
-<a class="sourceLine" id="cb3-25" title="25"><span class="op">}</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="at">#[</span>derive<span class="at">(</span>Serialize<span class="at">,</span> Deserialize<span class="at">)]</span></a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw">struct</span> Message <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-3" title="3">    <span class="kw">pub</span> name: <span class="dt">String</span>,</a>
+<a class="sourceLine" id="cb3-4" title="4">    <span class="kw">pub</span> email: <span class="dt">String</span>,</a>
+<a class="sourceLine" id="cb3-5" title="5">    <span class="kw">pub</span> message: <span class="dt">String</span>,</a>
+<a class="sourceLine" id="cb3-6" title="6"><span class="op">}</span></a>
+<a class="sourceLine" id="cb3-7" title="7"></a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="kw">fn</span> post_data() <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-9" title="9">    <span class="kw">let</span> message = Message <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-10" title="10">        name: <span class="st">&quot;Mark Watney&quot;</span>.into(),</a>
+<a class="sourceLine" id="cb3-11" title="11">        email: <span class="st">&quot;mark@crypt.kk&quot;</span>.into(),</a>
+<a class="sourceLine" id="cb3-12" title="12">        message: <span class="st">&quot;I wanna be like Iron Man&quot;</span>.into(),</a>
+<a class="sourceLine" id="cb3-13" title="13">    <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb3-14" title="14">    </a>
+<a class="sourceLine" id="cb3-15" title="15">    <span class="kw">let</span> <span class="kw">mut</span> opts = <span class="pp">seed::RequestOpts::</span>new();</a>
+<a class="sourceLine" id="cb3-16" title="16">    opts.headers.insert(<span class="st">&quot;Content-Type&quot;</span>.into(), <span class="st">&quot;application/json&quot;</span>.into());</a>
+<a class="sourceLine" id="cb3-17" title="17">    </a>
+<a class="sourceLine" id="cb3-18" title="18">    <span class="co">// We can handle the server&#39;s response in the callback, as in the Get example.</span></a>
+<a class="sourceLine" id="cb3-19" title="19">    <span class="kw">let</span> callback = <span class="kw">move</span> |json: JsValue| <span class="op">{}</span>;</a>
+<a class="sourceLine" id="cb3-20" title="20">    <span class="pp">seed::</span>post(url, message, <span class="cn">Some</span>(opts), <span class="dt">Box</span>::new(callback));</a>
+<a class="sourceLine" id="cb3-21" title="21"><span class="op">}</span></a></code></pre></div>
 <p>Note how we pass the struct we wish to serialize (the payload) as the second parameter to <code>post</code>; serialization happens out of sight. If a payload is included in <code>RequestOpts</code>, it's replaced by this. Alternatively, we could use <code>fetch</code>, and pass an arbitrary payload <code>String</code> in <code>opts</code>. Here's an example, also demonstrating use of the <code>hashmap_string!</code> macro for brevity: a HashMap literal, which converts both key and value to Strings (eg we avoid repetitive <code>insert</code>, and <code>into()</code> as in above):</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">fn</span> post_data() <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-2" title="2">    <span class="kw">let</span> message = Message <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-3" title="3">        name: <span class="st">&quot;Mark Watney&quot;</span>.into(),</a>
-<a class="sourceLine" id="cb4-4" title="4">        email: <span class="st">&quot;mark@crypt.kk&quot;</span>.into(),</a>
-<a class="sourceLine" id="cb4-5" title="5">        message: <span class="st">&quot;I wanna be like Iron Man&quot;</span>.into(),</a>
-<a class="sourceLine" id="cb4-6" title="6">    <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb4-7" title="7">    </a>
-<a class="sourceLine" id="cb4-8" title="8">    <span class="kw">let</span> <span class="kw">mut</span> opts = <span class="pp">seed::RequestOpts::</span>new();</a>
-<a class="sourceLine" id="cb4-9" title="9">    opts.headers = <span class="pp">hashmap_string!</span><span class="op">{</span></a>
-<a class="sourceLine" id="cb4-10" title="10">        <span class="st">&quot;Content-Type&quot;</span> =&gt; <span class="st">&quot;application/json&quot;</span>,</a>
-<a class="sourceLine" id="cb4-11" title="11">    <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb4-12" title="12">    opts.payload = <span class="cn">Some</span>(<span class="pp">serde_json::</span>to_string(&amp;message).unwrap());</a>
-<a class="sourceLine" id="cb4-13" title="13">    </a>
-<a class="sourceLine" id="cb4-14" title="14">    <span class="kw">let</span> callback = <span class="kw">move</span> |json: JsValue| <span class="op">{}</span>;</a>
-<a class="sourceLine" id="cb4-15" title="15">    <span class="pp">seed::</span>fetch(<span class="pp">seed::Method::</span>Post, url, <span class="cn">Some</span>(opts), <span class="dt">Box</span>::new(callback));</a>
-<a class="sourceLine" id="cb4-16" title="16"><span class="op">}</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">use</span> serde_json;</a>
+<a class="sourceLine" id="cb4-2" title="2"></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="co">// ...</span></a>
+<a class="sourceLine" id="cb4-4" title="4"></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="kw">fn</span> post_data() <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-6" title="6">    <span class="kw">let</span> message = Message <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-7" title="7">        name: <span class="st">&quot;Mark Watney&quot;</span>.into(),</a>
+<a class="sourceLine" id="cb4-8" title="8">        email: <span class="st">&quot;mark@crypt.kk&quot;</span>.into(),</a>
+<a class="sourceLine" id="cb4-9" title="9">        message: <span class="st">&quot;I wanna be like Iron Man&quot;</span>.into(),</a>
+<a class="sourceLine" id="cb4-10" title="10">    <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb4-11" title="11">    </a>
+<a class="sourceLine" id="cb4-12" title="12">    <span class="kw">let</span> <span class="kw">mut</span> opts = <span class="pp">seed::RequestOpts::</span>new();</a>
+<a class="sourceLine" id="cb4-13" title="13">    opts.headers = <span class="pp">hashmap_string!</span><span class="op">{</span></a>
+<a class="sourceLine" id="cb4-14" title="14">        <span class="st">&quot;Content-Type&quot;</span> =&gt; <span class="st">&quot;application/json&quot;</span>,</a>
+<a class="sourceLine" id="cb4-15" title="15">    <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb4-16" title="16">    opts.payload = <span class="cn">Some</span>(<span class="pp">serde_json::</span>to_string(&amp;message).unwrap());</a>
+<a class="sourceLine" id="cb4-17" title="17">    </a>
+<a class="sourceLine" id="cb4-18" title="18">    <span class="kw">let</span> callback = <span class="kw">move</span> |json: JsValue| <span class="op">{}</span>;</a>
+<a class="sourceLine" id="cb4-19" title="19">    <span class="pp">seed::</span>fetch(<span class="pp">seed::Method::</span>Post, url, <span class="cn">Some</span>(opts), <span class="dt">Box</span>::new(callback));</a>
+<a class="sourceLine" id="cb4-20" title="20"><span class="op">}</span></a></code></pre></div>
 <p>See the <a href="https://github.com/David-OConnor/seed/tree/master/examples/server_interaction">server_interaction example</a> for a full example.</p>
 "#.into()
 }

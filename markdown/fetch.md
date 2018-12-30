@@ -110,10 +110,6 @@ to prepend our closures with `move`, as above, any time `state` is used in one.
 
 Example showing POST, and headers:
 ```rust
-use serde_json;
-
-// ...
-
 #[derive(Serialize, Deserialize)]
 struct Message {
     pub name: String,
@@ -144,6 +140,10 @@ of the `hashmap_string!` macro for brevity: a HashMap literal, which converts
 both key and value to Strings (eg we avoid repetitive `insert`, and `into()` as in above):
 
 ```rust
+use serde_json;
+
+// ...
+
 fn post_data() {
     let message = Message {
         name: "Mark Watney".into(),
