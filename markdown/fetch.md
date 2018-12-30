@@ -44,11 +44,11 @@ fn update(msg: Msg, model: Model) -> Model {
     }
 }
 
-fn get_data(app: seed::App<Msg, Model>) {
+fn get_data(state: seed::App<Msg, Model>) {
     let url = "https://api.github.com/repos/david-oconnor/seed/branches/master";
     let callback = move |json: JsValue| {
         let data: Branch = json.into_serde().unwrap();
-        app.update(Msg::Replace(data));
+        state.update(Msg::Replace(data));
     };
     seed::get(url, None, Box::new(callback));
 }

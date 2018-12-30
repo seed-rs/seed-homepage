@@ -67,7 +67,7 @@ Compared with React, you may appreciate the consistency of how to write apps:
 There's no distinction between logic and display code; no restrictions on comments;
 no distinction between components and normal functions. The API is
 flexible, and avoids OOP boilerplate. Its integrated routing and message system
-avoids the dependency glue-code associated with Redux and React Router.
+avoids the dependency glue-code associated with Redux and React-Router.
 
 
 ### Shoutouts

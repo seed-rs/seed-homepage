@@ -34,11 +34,11 @@ r#"
 <a class="sourceLine" id="cb1-22" title="22">    <span class="op">}</span></a>
 <a class="sourceLine" id="cb1-23" title="23"><span class="op">}</span></a>
 <a class="sourceLine" id="cb1-24" title="24"></a>
-<a class="sourceLine" id="cb1-25" title="25"><span class="kw">fn</span> get_data(app: <span class="pp">seed::</span>App&lt;Msg, Model&gt;) <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-25" title="25"><span class="kw">fn</span> get_data(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;) <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-26" title="26">    <span class="kw">let</span> url = <span class="st">&quot;https://api.github.com/repos/david-oconnor/seed/branches/master&quot;</span>;</a>
 <a class="sourceLine" id="cb1-27" title="27">    <span class="kw">let</span> callback = <span class="kw">move</span> |json: JsValue| <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-28" title="28">        <span class="kw">let</span> data: Branch = json.into_serde().unwrap();</a>
-<a class="sourceLine" id="cb1-29" title="29">        app.update(<span class="pp">Msg::</span>Replace(data));</a>
+<a class="sourceLine" id="cb1-29" title="29">        state.update(<span class="pp">Msg::</span>Replace(data));</a>
 <a class="sourceLine" id="cb1-30" title="30">    <span class="op">}</span>;</a>
 <a class="sourceLine" id="cb1-31" title="31">    <span class="pp">seed::</span>get(url, <span class="cn">None</span>, <span class="dt">Box</span>::new(callback));</a>
 <a class="sourceLine" id="cb1-32" title="32"><span class="op">}</span></a>
