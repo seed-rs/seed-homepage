@@ -218,13 +218,15 @@ fn changelog(entries: Vec<El<Msg>>) -> El<Msg> {
     div![
         attrs!{"class" => "guide"},
         style!{
-            "display" => "flex";
-            "flex-direction" => "column";
-            "align-items" => "flex-start";
+            "display" => "grid";
+            "grid-template-columns" => "1fr 2fr 1fr";
+
             "padding" => 50;
             "color" => "black";
         },
-        entries
+        div![ style!{"grid-column" => "2 / 3"},
+            entries
+        ]
     ]
 }
 
@@ -255,19 +257,19 @@ fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
             "flex-direction" => "column";
         },
 
-        section![ style!{"grid-row" => "1 / 2"; "grid-column" => "1 / 2"},
+        section![
             header(version)
         ],
-        section![ style!{"grid-row" => "2 / 3"; "grid-column" => "1 / 2"},
+        section![
             title()
         ],
-        section![ style!{"grid-row" => "3 / 4"; "grid-column" => "1 / 2"},
+        section![
             match model.page {
                 Page::Guide => guide(&model.guide_sections, model.guide_page),
                 Page::Changelog => changelog(changelog_entries),
             }
         ],
-        section![ style!{"grid-row" => "4 / 5"; "grid-column" => "1 / 2"},
+        section![
             footer()
         ]
     ]
