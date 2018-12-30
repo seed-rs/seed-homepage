@@ -30,26 +30,24 @@ r#"
 <a class="sourceLine" id="cb1-18" title="18"></a>
 <a class="sourceLine" id="cb1-19" title="19"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-20" title="20">    <span class="kw">match</span> msg <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-21" title="21">        <span class="pp">Msg::</span>Replace(data) =&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-22" title="22">            Model <span class="op">{</span>data<span class="op">}</span></a>
-<a class="sourceLine" id="cb1-23" title="23">        <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb1-24" title="24">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb1-25" title="25"><span class="op">}</span></a>
-<a class="sourceLine" id="cb1-26" title="26"></a>
-<a class="sourceLine" id="cb1-27" title="27"><span class="kw">fn</span> get_data(app: <span class="pp">seed::</span>App&lt;Msg, Model&gt;) <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-28" title="28">    <span class="kw">let</span> url = <span class="st">&quot;https://api.github.com/repos/david-oconnor/seed/branches/master&quot;</span>;</a>
-<a class="sourceLine" id="cb1-29" title="29">    <span class="kw">let</span> callback = <span class="kw">move</span> |json: JsValue| <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-30" title="30">        <span class="kw">let</span> data: Branch = json.into_serde().unwrap();</a>
-<a class="sourceLine" id="cb1-31" title="31">        app.update(<span class="pp">Msg::</span>Replace(data));</a>
-<a class="sourceLine" id="cb1-32" title="32">    <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb1-33" title="33">    <span class="pp">seed::</span>get(url, <span class="cn">None</span>, <span class="dt">Box</span>::new(callback));</a>
-<a class="sourceLine" id="cb1-34" title="34"><span class="op">}</span></a>
-<a class="sourceLine" id="cb1-35" title="35"></a>
-<a class="sourceLine" id="cb1-36" title="36"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-37" title="37">    <span class="pp">div!</span><span class="op">[</span> <span class="pp">format!</span>(<span class="st">&quot;name: {}, sha: {}&quot;</span>, model.data.name, model.data.commit.sha),</a>
-<a class="sourceLine" id="cb1-38" title="38">        did_mount(<span class="kw">move</span> |_| get_data(state.clone()))</a>
-<a class="sourceLine" id="cb1-39" title="39">     <span class="op">]</span></a>
-<a class="sourceLine" id="cb1-40" title="40"><span class="op">}</span></a></code></pre></div>
+<a class="sourceLine" id="cb1-21" title="21">        <span class="pp">Msg::</span>Replace(data) =&gt; Model <span class="op">{</span>data<span class="op">}</span>,</a>
+<a class="sourceLine" id="cb1-22" title="22">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb1-23" title="23"><span class="op">}</span></a>
+<a class="sourceLine" id="cb1-24" title="24"></a>
+<a class="sourceLine" id="cb1-25" title="25"><span class="kw">fn</span> get_data(app: <span class="pp">seed::</span>App&lt;Msg, Model&gt;) <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-26" title="26">    <span class="kw">let</span> url = <span class="st">&quot;https://api.github.com/repos/david-oconnor/seed/branches/master&quot;</span>;</a>
+<a class="sourceLine" id="cb1-27" title="27">    <span class="kw">let</span> callback = <span class="kw">move</span> |json: JsValue| <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-28" title="28">        <span class="kw">let</span> data: Branch = json.into_serde().unwrap();</a>
+<a class="sourceLine" id="cb1-29" title="29">        app.update(<span class="pp">Msg::</span>Replace(data));</a>
+<a class="sourceLine" id="cb1-30" title="30">    <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb1-31" title="31">    <span class="pp">seed::</span>get(url, <span class="cn">None</span>, <span class="dt">Box</span>::new(callback));</a>
+<a class="sourceLine" id="cb1-32" title="32"><span class="op">}</span></a>
+<a class="sourceLine" id="cb1-33" title="33"></a>
+<a class="sourceLine" id="cb1-34" title="34"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-35" title="35">    <span class="pp">div!</span><span class="op">[</span> <span class="pp">format!</span>(<span class="st">&quot;name: {}, sha: {}&quot;</span>, model.data.name, model.data.commit.sha),</a>
+<a class="sourceLine" id="cb1-36" title="36">        did_mount(<span class="kw">move</span> |_| get_data(state.clone()))</a>
+<a class="sourceLine" id="cb1-37" title="37">     <span class="op">]</span></a>
+<a class="sourceLine" id="cb1-38" title="38"><span class="op">}</span></a></code></pre></div>
 <p>When the top-level element is rendered for the first time (<code>did_mount</code>), we make a <code>get</code> request by passing the url, options like headers (In this example, we don't use any), and a callback to be executed once the data's received. In this case, we update our state by sending a message which contains the data to <code>state.update</code>.</p>
 <p>We've set up nested structs that have fields matching the names of the JSON fields of the response, which Serde deserializes the response into. Note that even though more data than what's contained in our Branch struct is included in the response, Serde automatically applies only the info matching our struct's fields. In order to update our state outside of a normal event, we used <code>did_mount</code>. If we wish to trigger this update from a normal event instead of on load, we can do something like this:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
@@ -103,11 +101,11 @@ r#"
 <a class="sourceLine" id="cb3-19" title="19">    <span class="kw">let</span> <span class="kw">mut</span> opts = <span class="pp">seed::RequestOpts::</span>new();</a>
 <a class="sourceLine" id="cb3-20" title="20">    opts.headers.insert(<span class="st">&quot;Content-Type&quot;</span>.into(), <span class="st">&quot;application/json&quot;</span>.into());</a>
 <a class="sourceLine" id="cb3-21" title="21">    </a>
-<a class="sourceLine" id="cb3-22" title="22">    <span class="co">// We can handle the serve response in the callback.</span></a>
+<a class="sourceLine" id="cb3-22" title="22">    <span class="co">// We can handle the server&#39;s response in the callback, as in the Get example.</span></a>
 <a class="sourceLine" id="cb3-23" title="23">    <span class="kw">let</span> callback = <span class="kw">move</span> |json: JsValue| <span class="op">{}</span>;</a>
 <a class="sourceLine" id="cb3-24" title="24">    <span class="pp">seed::</span>post(url, message, <span class="cn">Some</span>(opts), <span class="dt">Box</span>::new(callback));</a>
 <a class="sourceLine" id="cb3-25" title="25"><span class="op">}</span></a></code></pre></div>
-<p>Note how we pass the struct we wish to serialize (payload) as json as the second parameter to <code>post</code>; serialization happens out of sight. Any payload included in <code>RequestOpts</code> is replaced by this. Alternatively, we could use <code>fetch</code>, and pass an arbitrary payload in <code>opts</code>, as a string. Here's an example, also demonstrating use of the <code>hashmap_string!</code> for brevity, which is a HashMap literal, which converts both key and value to Strings (eg we can avoid repetitive <code>insert</code>, and <code>into()</code> as in above):</p>
+<p>Note how we pass the struct we wish to serialize (the payload) as the second parameter to <code>post</code>; serialization happens out of sight. If a payload is included in <code>RequestOpts</code>, it's replaced by this. Alternatively, we could use <code>fetch</code>, and pass an arbitrary payload <code>String</code> in <code>opts</code>. Here's an example, also demonstrating use of the <code>hashmap_string!</code> macro for brevity: a HashMap literal, which converts both key and value to Strings (eg we avoid repetitive <code>insert</code>, and <code>into()</code> as in above):</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">fn</span> post_data() <span class="op">{</span></a>
 <a class="sourceLine" id="cb4-2" title="2">    <span class="kw">let</span> message = Message <span class="op">{</span></a>
 <a class="sourceLine" id="cb4-3" title="3">        name: <span class="st">&quot;Mark Watney&quot;</span>.into(),</a>

@@ -40,9 +40,7 @@ enum Msg {
 
 fn update(msg: Msg, model: Model) -> Model {
     match msg {
-        Msg::Replace(data) => {
-            Model {data}
-        },
+        Msg::Replace(data) => Model {data},
     }
 }
 
@@ -133,17 +131,17 @@ fn post_data() {
     let mut opts = seed::RequestOpts::new();
     opts.headers.insert("Content-Type".into(), "application/json".into());
     
-    // We can handle the serve response in the callback.
+    // We can handle the server's response in the callback, as in the Get example.
     let callback = move |json: JsValue| {};
     seed::post(url, message, Some(opts), Box::new(callback));
 }
 ```
-Note how we pass the struct we wish to serialize (payload) as json as the second parameter to `post`;
-serialization happens out of sight. Any payload included in `RequestOpts` is replaced by this.
-Alternatively, we could use `fetch`, and pass an arbitrary payload in `opts`, as a string. 
+Note how we pass the struct we wish to serialize (the payload) as the second parameter to `post`;
+serialization happens out of sight. If a payload is included in `RequestOpts`, it's replaced by this.
+Alternatively, we could use `fetch`, and pass an arbitrary payload `String` in `opts`. 
 Here's an example, also demonstrating use 
-of the `hashmap_string!` for brevity, which is a HashMap literal, which converts
-both key and value to Strings (eg we can avoid repetitive `insert`, and `into()` as in above):
+of the `hashmap_string!` macro for brevity: a HashMap literal, which converts
+both key and value to Strings (eg we avoid repetitive `insert`, and `into()` as in above):
 
 ```rust
 fn post_data() {
