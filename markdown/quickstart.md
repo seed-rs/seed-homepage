@@ -64,7 +64,7 @@ edition = "2018"
 crate-type = ["cdylib"]
 
 [dependencies]
-seed = "^0.1.6"
+seed = "^0.1.12"
 wasm-bindgen = "^0.2.29"
 web-sys = "^0.3.6"
 ```

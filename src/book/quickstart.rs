@@ -38,7 +38,7 @@ edition = &quot;2018&quot;
 crate-type = [&quot;cdylib&quot;]
 
 [dependencies]
-seed = &quot;^0.1.6&quot;
+seed = &quot;^0.1.12&quot;
 wasm-bindgen = &quot;^0.2.29&quot;
 web-sys = &quot;^0.3.6&quot;</code></pre>
 <h2 id="a-short-example">A short example</h2>
