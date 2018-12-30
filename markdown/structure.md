@@ -281,7 +281,7 @@ attributes.add("class", "truckloads");
 
 Example of the style tag, and how you can use pattern-matching in views:
 ```rust
-fn view(model: Model) -> El<Msg> {
+fn view(app: seed::App<Msg, Model>, model: Model) -> El<Msg> {
     div![ style!{
         "display" => "grid";
         "grid-template-columns" => "auto";

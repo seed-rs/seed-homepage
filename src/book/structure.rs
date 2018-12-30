@@ -169,7 +169,7 @@ r#"
 <div class="sourceCode" id="cb13"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">let</span> <span class="kw">mut</span> attributes = <span class="pp">attrs!</span><span class="op">{}</span>;</a>
 <a class="sourceLine" id="cb13-2" title="2">attributes.add(<span class="st">&quot;class&quot;</span>, <span class="st">&quot;truckloads&quot;</span>);</a></code></pre></div>
 <p>Example of the style tag, and how you can use pattern-matching in views:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb14-1" title="1"><span class="kw">fn</span> view(model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
+<div class="sourceCode" id="cb14"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb14-1" title="1"><span class="kw">fn</span> view(app: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb14-2" title="2">    <span class="pp">div!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span></a>
 <a class="sourceLine" id="cb14-3" title="3">        <span class="st">&quot;display&quot;</span> =&gt; <span class="st">&quot;grid&quot;</span>;</a>
 <a class="sourceLine" id="cb14-4" title="4">        <span class="st">&quot;grid-template-columns&quot;</span> =&gt; <span class="st">&quot;auto&quot;</span>;</a>

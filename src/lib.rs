@@ -50,6 +50,7 @@ impl Default for Model {
             ("Structure", crate::book::structure::text()),
             ("Events", crate::book::events::text()),
             ("Components", crate::book::components::text()),
+            ("Https requests / fetch", crate::book::components::fetch()),
             ("Lifecycle hooks", crate::book::lifecycle::text()),
             ("Routing", crate::book::routing::text()),
             ("Misc features", crate::book::misc::text()),
@@ -235,7 +236,7 @@ fn footer() -> El<Msg> {
 
 
 
-fn view(model: Model) -> El<Msg> {
+fn view(app: seed::App<Msg, Model>, model: Model) -> El<Msg> {
     let version = "0.1.6";
     let changelog_entries = vec![
         changelog_entry("v0.1.0", &["Initial release"]),

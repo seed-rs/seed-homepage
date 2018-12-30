@@ -83,14 +83,15 @@ avoids the dependency glue-code associated with Redux and React Router.
 - Tim Robinson, for being very helpful on the [Rust Gitter](https://gitter.im/rust-lang/rust).
 
 ### Features to add
-- High-level fetch API
+- Improve fetch API
 - Dynamic SVG creation and modification
 - More flexible routing
 - Virtual DOM optimization
 - High-level CSS-grid/Flexbox API ?
  
 ### Bugs to fix
- - Text renders above children instead of below
+- Unable to set Content-Type header on fetch requests.
+- Text renders above children instead of below
  
 ## Reference
 - [wasm-bindgen guide](https://rustwasm.github.io/wasm-bindgen/introduction.html)

@@ -57,7 +57,7 @@ it normally as html. Note that it does not support syntax highlighting. You can 
 
 Example:
 ```rust
-fn view(model: Model) -> El<Msg> {
+fn view(app: seed::App<Msg, Model>, model: Model) -> El<Msg> {
 
     let markdown = 
 "

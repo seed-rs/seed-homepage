@@ -33,7 +33,7 @@ r#"
 </ul>
 <h3 id="features-to-add">Features to add</h3>
 <ul>
-<li>High-level fetch API</li>
+<li>Improve fetch API</li>
 <li>Dynamic SVG creation and modification</li>
 <li>More flexible routing</li>
 <li>Virtual DOM optimization</li>
@@ -41,6 +41,7 @@ r#"
 </ul>
 <h3 id="bugs-to-fix">Bugs to fix</h3>
 <ul>
+<li>Unable to set Content-Type header on fetch requests.</li>
 <li>Text renders above children instead of below</li>
 </ul>
 <h2 id="reference">Reference</h2>

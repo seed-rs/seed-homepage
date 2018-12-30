@@ -33,7 +33,7 @@ r#"
 <h2 id="display-markdown-and-raw-html">Display markdown and raw HTML</h2>
 <p>Seed supports creating elements from markdown text, using <a href="https://github.com/raphlinus/pulldown-cmark">pulldown-cmark</a> internally. Use the <a href="https://docs.rs/seed/0.1.6/seed/dom_types/struct.El.html#method.from_markdown">El::from_markdown()</a> method to create an element that accepts a markdown &amp;str as its only parameter, and displays it normally as html. Note that it does not support syntax highlighting. You can render raw HTML with <code>El::from_html(html)</code>, where <code>html</code> is a &amp;str of HTML.</p>
 <p>Example:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">fn</span> view(model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">fn</span> view(app: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb2-2" title="2"></a>
 <a class="sourceLine" id="cb2-3" title="3">    <span class="kw">let</span> markdown = </a>
 <a class="sourceLine" id="cb2-4" title="4"><span class="st">&quot;</span></a>

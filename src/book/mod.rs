@@ -6,6 +6,7 @@ pub mod prereqs;
 pub mod structure;
 pub mod events;
 pub mod components;
+pub mod fetch;
 pub mod lifecycle;
 pub mod routing;
 pub mod misc;
