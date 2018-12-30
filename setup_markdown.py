@@ -12,7 +12,7 @@ import re
 # ./pandoc --list-highlight-styles
 # pygments tango espresso zenburn kate monochrome breezedark haddock
 STYLE = "tango"
-VERSION = "0.1.10"
+VERSION = "0.1.13"
 
 def main():
     filenames = [
@@ -47,7 +47,8 @@ def main():
 
         body = m.groups(0)[0]
 
-        body = re.sub(r'0\.1\.(d{1,2}?)', VERSION, body)
+        # Update all instances of the version, so we don't have to in Markdown.
+        body = re.sub(r'0\.\d\.(\d{1,2}?)', VERSION, body)
 
         # Create a new rust file
         with open(f'./src/book/{filename}.rs', 'w', encoding="utf8") as f:

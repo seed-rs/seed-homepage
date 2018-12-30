@@ -36,12 +36,12 @@ r#"
 <li>Improve fetch API</li>
 <li>Dynamic SVG creation and modification</li>
 <li>More flexible routing</li>
+<li>Add data-struct integration for Rust servers. (Eg to avoid [de]serializing if Rust on front and backend)</li>
 <li>Virtual DOM optimization</li>
 <li>High-level CSS-grid/Flexbox API ?</li>
 </ul>
 <h3 id="bugs-to-fix">Bugs to fix</h3>
 <ul>
-<li>Unable to set Content-Type header on fetch requests.</li>
 <li>Text renders above children instead of below</li>
 </ul>
 <h2 id="reference">Reference</h2>

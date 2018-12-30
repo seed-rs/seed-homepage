@@ -30,7 +30,7 @@ r#"
 <p><code>Cargo.toml</code>, which is a file created by Cargo that describes your app, needs <code>wasm-bindgen</code>, <code>web-sys</code>, and <code>seed</code> as depdendencies, and crate-type of <code>"cdylib"</code>. The version in the quickstart repo has these set up already. Example:</p>
 <pre class="toml"><code>[package]
 name = &quot;appname&quot;
-version = &quot;0.1.0&quot;
+version = &quot;0.1.13&quot;
 authors = [&quot;Your Name &lt;email@address.com&gt;&quot;]
 edition = &quot;2018&quot;
 
@@ -38,9 +38,9 @@ edition = &quot;2018&quot;
 crate-type = [&quot;cdylib&quot;]
 
 [dependencies]
-seed = &quot;^0.1.12&quot;
-wasm-bindgen = &quot;^0.2.29&quot;
-web-sys = &quot;^0.3.6&quot;</code></pre>
+seed = &quot;^0.1.132&quot;
+wasm-bindgen = &quot;^0.1.139&quot;
+web-sys = &quot;^0.1.13&quot;</code></pre>
 <h2 id="a-short-example">A short example</h2>
 <p>Here's an example demonstrating structure and syntax; it can be found in working form under <code>examples/counter</code>. Descriptions of its parts are in the Guide section below. Its structure follows <a href="https://guide.elm-lang.org/architecture/">The Elm Architecture</a>.</p>
 <p><em>lib.rs</em>:</p>
@@ -93,17 +93,17 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <a class="sourceLine" id="cb3-47" title="47"><span class="co">/// A simple component.</span></a>
 <a class="sourceLine" id="cb3-48" title="48"><span class="kw">fn</span> success_level(clicks: <span class="dt">i32</span>) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-49" title="49">    <span class="kw">let</span> descrip = <span class="kw">match</span> clicks <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-50" title="50">        <span class="dv">0</span> ... <span class="dv">3</span> =&gt; <span class="st">&quot;Not very many 🙁&quot;</span>,</a>
-<a class="sourceLine" id="cb3-51" title="51">        <span class="dv">4</span> ... <span class="dv">7</span> =&gt; <span class="st">&quot;An OK amount 😐&quot;</span>,</a>
-<a class="sourceLine" id="cb3-52" title="52">        <span class="dv">8</span> ... <span class="dv">999</span> =&gt; <span class="st">&quot;Good job! 🙂&quot;</span>,</a>
-<a class="sourceLine" id="cb3-53" title="53">        _ =&gt; <span class="st">&quot;You broke it 🙃&quot;</span></a>
+<a class="sourceLine" id="cb3-50" title="50">        <span class="dv">0</span> ... <span class="dv">5</span> =&gt; <span class="st">&quot;Not very many 🙁&quot;</span>,</a>
+<a class="sourceLine" id="cb3-51" title="51">        <span class="dv">6</span> ... <span class="dv">9</span> =&gt; <span class="st">&quot;I got my first real six-string 😐&quot;</span>,</a>
+<a class="sourceLine" id="cb3-52" title="52">        <span class="dv">10</span> ... <span class="dv">11</span> =&gt; <span class="st">&quot;Spinal Tap 🙂&quot;</span>,</a>
+<a class="sourceLine" id="cb3-53" title="53">        _ =&gt; <span class="st">&quot;Double pendulum 🙃&quot;</span></a>
 <a class="sourceLine" id="cb3-54" title="54">    <span class="op">}</span>;</a>
 <a class="sourceLine" id="cb3-55" title="55">    <span class="pp">p!</span><span class="op">[</span> descrip <span class="op">]</span></a>
 <a class="sourceLine" id="cb3-56" title="56"><span class="op">}</span></a>
 <a class="sourceLine" id="cb3-57" title="57"></a>
 <a class="sourceLine" id="cb3-58" title="58"><span class="co">/// The top-level component we pass to the virtual dom. Must accept the model as its</span></a>
 <a class="sourceLine" id="cb3-59" title="59"><span class="co">/// only parameter, and output a single El.</span></a>
-<a class="sourceLine" id="cb3-60" title="60"><span class="kw">fn</span> view(app: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-60" title="60"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-61" title="61">    <span class="kw">let</span> plural = <span class="kw">if</span> model.count == <span class="dv">1</span> <span class="op">{</span><span class="st">&quot;&quot;</span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span><span class="st">&quot;s&quot;</span><span class="op">}</span>;</a>
 <a class="sourceLine" id="cb3-62" title="62"></a>
 <a class="sourceLine" id="cb3-63" title="63">    <span class="co">// Attrs, Style, Events, and children may be defined separately.</span></a>
@@ -155,6 +155,6 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <p>For development, you can view your app using a shimmed Python dev server, as described above. (Set up <a href="https://github.com/David-OConnor/seed-quickstart/blob/master/serve.py">this mime-type shim</a> from the quickstart repo, and run <code>python serve.py</code>).</p>
 <p>In the future, the build script and commands above may be replaced by <a href="https://github.com/rustwasm/wasm-pack">wasm-pack</a>.</p>
 <h2 id="running-included-examples">Running included examples</h2>
-<p>To run an example located in the <a href="https://github.com/David-OConnor/seed/tree/master/examples">examples folder</a>, navigate to that folder in a terminal, run the build script for your system (<code>build.sh</code> or <code>build.ps1</code>), then start a dev server as described above. Note that if you copy an example to a separate folder, you'll need to edit its <code>Cargo.toml</code> to point to the package on <a href="https://crates.io">crates.io</a> instead of locally: Ie replace <code>seed = { path = "../../"</code> with <code>seed = "^0.1.8"</code>, and in the build script, remove the leading <code>../../</code> on the second line.</p>
+<p>To run an example located in the <a href="https://github.com/David-OConnor/seed/tree/master/examples">examples folder</a>, navigate to that folder in a terminal, run the build script for your system (<code>build.sh</code> or <code>build.ps1</code>), then start a dev server as described above. Note that if you copy an example to a separate folder, you'll need to edit its <code>Cargo.toml</code> to point to the package on <a href="https://crates.io">crates.io</a> instead of locally: Ie replace <code>seed = { path = "../../"</code> with <code>seed = "^0.1.13"</code>, and in the build script, remove the leading <code>../../</code> on the second line.</p>
 "#.into()
 }

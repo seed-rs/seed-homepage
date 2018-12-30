@@ -236,9 +236,16 @@ fn footer() -> El<Msg> {
 
 
 
-fn view(app: seed::App<Msg, Model>, model: Model) -> El<Msg> {
-    let version = "0.1.6";
+fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
+    let version = "0.1.12";
     let changelog_entries = vec![
+        changelog_entry("v0.2.0", &[
+            "Added high-level fetch api",
+            "Added routing",
+            "Added element lifecycles (did_mount, did_update, will_unmount)",
+            "Added support for updating state outside events",
+            "Added server_interaction, and homepage (this site) examples"
+        ]),
         changelog_entry("v0.1.0", &["Initial release"]),
     ];
 
