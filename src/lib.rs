@@ -220,7 +220,7 @@ fn changelog(entries: Vec<El<Msg>>) -> El<Msg> {
         style!{
             "display" => "flex";
             "flex-direction" => "column";
-            "align-items" => "center";
+            "align-items" => "flex-start";
             "padding" => 50;
             "color" => "black";
         },
