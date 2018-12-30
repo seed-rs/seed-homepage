@@ -49,7 +49,8 @@ r#"
 <a class="sourceLine" id="cb1-37" title="37">        did_mount(<span class="kw">move</span> |_| get_data(app.clone()))</a>
 <a class="sourceLine" id="cb1-38" title="38">     <span class="op">]</span></a>
 <a class="sourceLine" id="cb1-39" title="39"><span class="op">}</span></a></code></pre></div>
-<p>Note that even though more data than what's contained in our Branch structure is included in at the url, Serde automatically applies only the info matching our struct's fields. In order to update our state outside of a normal event, we use did_mount. We could also do so from a normal event:</p>
+<p>When the top-level element is rendered for the first time (<code>did_mount</code>), we make a <code>get</code> request by passing the url, options like headers (In this example, we don't use any), and a callback to be executed once the data's received. In this case, we update our state by sending a message which contains the data to <code>app.update_dom</code>.</p>
+<p>Note that even though more data than what's contained in our Branch struct is included in the response, Serde automatically applies only the info matching our struct's fields. In order to update our state outside of a normal event, we use did_mount. We could also do so from a normal event:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="kw">enum</span> Msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb2-3" title="3">    Replace(Branch),</a>
@@ -60,18 +61,23 @@ r#"
 <a class="sourceLine" id="cb2-8" title="8">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb2-9" title="9">        <span class="pp">Msg::</span>Replace(data) =&gt; Model <span class="op">{</span>data<span class="op">}</span>,</a>
 <a class="sourceLine" id="cb2-10" title="10">        <span class="pp">Msg::</span>GetData(app) =&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb2-11" title="11">            get_data(app);</a>
-<a class="sourceLine" id="cb2-12" title="12">            model</a>
-<a class="sourceLine" id="cb2-13" title="13">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb2-14" title="14">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb2-15" title="15"><span class="op">}</span></a>
-<a class="sourceLine" id="cb2-16" title="16"></a>
-<a class="sourceLine" id="cb2-17" title="17"><span class="kw">fn</span> view(app: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb2-18" title="18">    <span class="pp">div!</span><span class="op">[</span></a>
-<a class="sourceLine" id="cb2-19" title="19">        <span class="pp">div!</span><span class="op">[</span> <span class="pp">format!</span>(<span class="st">&quot;Hello World. name: {}, sha: {}&quot;</span>, model.data.name, model.data.commit.sha) <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb2-20" title="20">        <span class="pp">button!</span><span class="op">[</span> raw_ev(<span class="st">&quot;click&quot;</span>, <span class="kw">move</span> |_| <span class="pp">Msg::</span>GetData(app.clone())), <span class="st">&quot;Update state from the internet&quot;</span><span class="op">]</span></a>
-<a class="sourceLine" id="cb2-21" title="21">    <span class="op">]</span></a>
-<a class="sourceLine" id="cb2-22" title="22"><span class="op">}</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-11" title="11">            <span class="kw">let</span> url = <span class="st">&quot;https://api.github.com/repos/david-oconnor/seed/branches/master&quot;</span>;</a>
+<a class="sourceLine" id="cb2-12" title="12">            <span class="kw">let</span> callback = <span class="kw">move</span> |json: JsValue| <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-13" title="13">                <span class="kw">let</span> data: Branch = json.into_serde().unwrap();</a>
+<a class="sourceLine" id="cb2-14" title="14">                app.update_dom(<span class="pp">Msg::</span>Replace(data));</a>
+<a class="sourceLine" id="cb2-15" title="15">            <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb2-16" title="16">            <span class="pp">seed::</span>get(url, <span class="cn">None</span>, <span class="dt">Box</span>::new(callback));</a>
+<a class="sourceLine" id="cb2-17" title="17">            model</a>
+<a class="sourceLine" id="cb2-18" title="18">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb2-19" title="19">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb2-20" title="20"><span class="op">}</span></a>
+<a class="sourceLine" id="cb2-21" title="21"></a>
+<a class="sourceLine" id="cb2-22" title="22"><span class="kw">fn</span> view(app: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-23" title="23">    <span class="pp">div!</span><span class="op">[</span></a>
+<a class="sourceLine" id="cb2-24" title="24">        <span class="pp">div!</span><span class="op">[</span> <span class="pp">format!</span>(<span class="st">&quot;Hello World. name: {}, sha: {}&quot;</span>, model.data.name, model.data.commit.sha) <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb2-25" title="25">        <span class="pp">button!</span><span class="op">[</span> raw_ev(<span class="st">&quot;click&quot;</span>, <span class="kw">move</span> |_| <span class="pp">Msg::</span>GetData(app.clone())), <span class="st">&quot;Update state from the internet&quot;</span><span class="op">]</span></a>
+<a class="sourceLine" id="cb2-26" title="26">    <span class="op">]</span></a>
+<a class="sourceLine" id="cb2-27" title="27"><span class="op">}</span></a></code></pre></div>
 <h2 id="updating-state">Updating state</h2>
 <p>To update the model outside of the element-based event system, we call <code>update_state</code> on our app var, which is the first parameter in our view func. A consequence of this is that we must pass app to any components that need to update state in this way. This may require calling <code>app.clone()</code>, to use it in multiple places. Note that we also need to prepend our closures with <code>move</code>, as above, any time <code>app</code> is used in one.</p>
 <p>This is the only use for the app var.</p>

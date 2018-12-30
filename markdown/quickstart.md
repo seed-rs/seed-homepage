@@ -177,7 +177,7 @@ pub fn render() {
     seed::run(Model::default(), update, view, "main", None);
 }
 ```
-For truly minimimal example, see [lib.rs in the quickstart repo](https://github.com/David-OConnor/seed-quickstart/blob/master/src/lib.rs)
+For a truly minimimal example, see [lib.rs in the quickstart repo](https://github.com/David-OConnor/seed-quickstart/blob/master/src/lib.rs)
 
 ## Building and running
 To build your app, create a `pkg` subdirectory, and run the following two commands:
@@ -195,7 +195,7 @@ and a JS file used to link your module from HTML.
 You may wish to create a build script with these two lines. (`build.sh` for Linux; `build.ps1` for Windows).
 The quickstart repo includes these, but you'll still need to do the rename. You can then use
 `./build.sh` or `.\build.ps1` If you run into permission errors on `build.sh`, try this command
-to allow executing the file:`chmod +x build.sh`. If you run into persmission errors on `build.ps`,
+to allow executing the file:`chmod +x build.sh`. If you run into persmission errors on `build.ps1`,
 open Powershell as an administrator, and enter this command: `Set-ExecutionPolicy RemoteSigned`.
 
 For development, you can view your app using a shimmed Python dev server, as described above.

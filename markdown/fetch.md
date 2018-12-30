@@ -59,8 +59,13 @@ fn view(app: seed::App<Msg, Model>, model: Model) -> El<Msg> {
      ]
 }
 ```
-Note that even though more data than what's contained in our Branch structure is included
-in at the url, Serde automatically applies only the info matching our struct's fields.
+When the top-level element is rendered for the first time (`did_mount`), we make
+a `get` request by passing the url, options like headers (In this example, we don't use any),
+and a callback to be executed once the data's received. In this case, we update our
+state by sending a message which contains the data to `app.update_dom`.
+
+Note that even though more data than what's contained in our Branch struct is included
+in the response, Serde automatically applies only the info matching our struct's fields.
 In order to update our state outside of a normal event, we use did_mount. We could also
 do so from a normal event:
 
@@ -75,7 +80,12 @@ fn update(msg: Msg, model: Model) -> Model {
     match msg {
         Msg::Replace(data) => Model {data},
         Msg::GetData(app) => {
-            get_data(app);
+            let url = "https://api.github.com/repos/david-oconnor/seed/branches/master";
+            let callback = move |json: JsValue| {
+                let data: Branch = json.into_serde().unwrap();
+                app.update_dom(Msg::Replace(data));
+            };
+            seed::get(url, None, Box::new(callback));
             model
         }
     }
