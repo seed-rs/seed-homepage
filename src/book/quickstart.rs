@@ -2,7 +2,7 @@ pub fn text() -> String {
 r#"
 <h1 id="quickstart">Quickstart</h1>
 <h2 id="setup">Setup</h2>
-<p>This framework requires you to first install <a href="https://www.rust-lang.org/tools/install">Rust</a>.</p>
+<p>This framework requires you to install <a href="https://www.rust-lang.org/tools/install">Rust</a>.</p>
 <p>You'll need a recent version of Rust: <code>rustup update</code></p>
 <p>The wasm32-unknown-unknown target: <code>rustup target add wasm32-unknown-unknown</code></p>
 <p>And wasm-bindgen: <code>cargo install wasm-bindgen-cli</code></p>

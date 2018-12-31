@@ -1,75 +1,77 @@
 pub fn text() -> String {
 r#"
 <h1 id="element-creation-macros-under-the-hood">Element-creation macros, under the hood</h1>
-<p>The following code returns an <code>El</code> representing a few DOM elements displayed in a flexbox layout:</p>
+<p>For a better understanding of how views are created, reference the <a href="https://docs.rs/seed/0.2.0/seed/dom_types/struct.El.html">El API docs page</a>. The following code returns an <code>El</code> representing a few nested DOM elements displayed in a flexbox layout:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1">    <span class="pp">div!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;display&quot;</span> =&gt; <span class="st">&quot;flex&quot;</span>; <span class="st">&quot;flex-direction&quot;</span> =&gt; <span class="st">&quot;column&quot;</span><span class="op">}</span>,</a>
 <a class="sourceLine" id="cb1-2" title="2">        <span class="pp">h3!</span><span class="op">[</span> <span class="st">&quot;Some things&quot;</span> <span class="op">]</span>,</a>
 <a class="sourceLine" id="cb1-3" title="3">        <span class="pp">button!</span><span class="op">[</span> <span class="st">&quot;Click me!&quot;</span> <span class="op">]</span></a>
 <a class="sourceLine" id="cb1-4" title="4">    <span class="op">]</span></a></code></pre></div>
-<p>The only magic parts of this are the macros used to simplify syntax for creating these things: text are <a href="https://doc.rust-lang.org/book/ch06-01-defining-an-enum.html#the-option-enum-and-its-advantages-over-null-values">Options</a> of Rust borrowed Strings; <code>Listeners</code> are stored in Vecs; children are elements and/or Vecs of; <code>Attr</code>s and <code>Style</code> are thinly-wrapped HashMaps. They can be created independently, and passed to the macros separately. The following code is equivalent; it uses constructors from the El struct. Note that <code>El</code> type is imported with the Prelude.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1">    <span class="kw">use</span> <span class="pp">seed::dom_types::</span><span class="op">{</span>El, Attrs, Style, Tag<span class="op">}</span>;</a>
-<a class="sourceLine" id="cb2-2" title="2">    </a>
-<a class="sourceLine" id="cb2-3" title="3"></a>
-<a class="sourceLine" id="cb2-4" title="4">    <span class="kw">let</span> <span class="kw">mut</span> heading = <span class="pp">El::</span>empty();</a>
-<a class="sourceLine" id="cb2-5" title="5">    heading.set_text(<span class="st">&quot;Some things&quot;</span>)</a>
-<a class="sourceLine" id="cb2-6" title="6">    </a>
-<a class="sourceLine" id="cb2-7" title="7">    <span class="kw">let</span> <span class="kw">mut</span> button = <span class="pp">El::</span>empty(<span class="pp">Tag::</span>Button);</a>
-<a class="sourceLine" id="cb2-8" title="8">    button.set_text(<span class="st">&quot;Click me!&quot;</span>);</a>
-<a class="sourceLine" id="cb2-9" title="9">    <span class="kw">let</span> children = <span class="pp">vec!</span><span class="op">[</span>heading, button<span class="op">]</span>;</a>
-<a class="sourceLine" id="cb2-10" title="10">    </a>
-<a class="sourceLine" id="cb2-11" title="11">    <span class="kw">let</span> <span class="kw">mut</span> elements = <span class="pp">El::</span>empty(<span class="pp">Tag::</span>Div);</a>
-<a class="sourceLine" id="cb2-12" title="12">    elements.add_style(<span class="st">&quot;display&quot;</span>, <span class="st">&quot;flex&quot;</span>);</a>
-<a class="sourceLine" id="cb2-13" title="13">    elements.add_style(<span class="st">&quot;flex-direction&quot;</span>, <span class="st">&quot;column&quot;</span>);</a>
-<a class="sourceLine" id="cb2-14" title="14">    elements.children = children;</a>
-<a class="sourceLine" id="cb2-15" title="15">    </a>
-<a class="sourceLine" id="cb2-16" title="16">    elements</a></code></pre></div>
-<p>The following equivalent example shows creating the required structs without constructors, to demonstrate that the macros and constructors above represent normal Rust structs, and provides insight into what abstractions they perform. (<a href="https://docs.rs/seed/0.2.0/seed/dom_types/struct.El.html">El docs page</a>)</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="co">// We don&#39;t provide an example of a Listener: These are</span></a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="co">// more complicated to show using literals. We don&#39;t use style or attrs here, due to the lack</span></a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="co">// of HashMap literal syntax.</span></a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="kw">use</span> <span class="pp">seed::dom_types::</span><span class="op">{</span>El, Attrs, Style, Tag<span class="op">}</span>;</a>
-<a class="sourceLine" id="cb3-5" title="5"></a>
-<a class="sourceLine" id="cb3-6" title="6">El <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-7" title="7">    tag: <span class="pp">Tag::</span>Div,</a>
-<a class="sourceLine" id="cb3-8" title="8">    attrs: Attrs <span class="op">{</span> vals: <span class="pp">HashMap::</span>new() <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb3-9" title="9">    style: Style <span class="op">{</span> vals: style <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb3-10" title="10">    events: Events <span class="op">{</span> vals: <span class="dt">Vec</span>::new() <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb3-11" title="11">    text: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-12" title="12">    children: <span class="pp">vec!</span><span class="op">[</span></a>
-<a class="sourceLine" id="cb3-13" title="13">        El <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-14" title="14">            tag: <span class="pp">Tag::</span>H2,</a>
-<a class="sourceLine" id="cb3-15" title="15">            attrs: Attrs <span class="op">{</span> vals: <span class="pp">HashMap::</span>new() <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb3-16" title="16">            style: Style <span class="op">{</span> vals: <span class="pp">HashMap::</span>new() <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb3-17" title="17">            listeners: <span class="dt">Vec</span>::new();</a>
-<a class="sourceLine" id="cb3-18" title="18">            text: <span class="cn">Some</span>(<span class="dt">String</span>::from(<span class="st">&quot;Some Things&quot;</span>)),</a>
-<a class="sourceLine" id="cb3-19" title="19">            children: <span class="dt">Vec</span>::new()</a>
-<a class="sourceLine" id="cb3-20" title="20">            id: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-21" title="21">            next_level: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-22" title="22">            el_ws: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-23" title="23">            raw_html: <span class="cn">false</span>,</a>
-<a class="sourceLine" id="cb3-24" title="24">            namespace: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-25" title="25">            did_mount: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-26" title="26">            did_update: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-27" title="27">            will_unmount: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-28" title="28">        <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb3-29" title="29">        El <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-30" title="30">            tag: <span class="pp">Tag::</span>button,</a>
-<a class="sourceLine" id="cb3-31" title="31">            attrs: Attrs <span class="op">{</span> vals: <span class="pp">HashMap::</span>new() <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb3-32" title="32">            style: Style <span class="op">{</span> vals: <span class="pp">HashMap::</span>new() <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb3-33" title="33">            listeners: <span class="dt">Vec</span>::new();</a>
-<a class="sourceLine" id="cb3-34" title="34">            text: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-35" title="35">            children: <span class="dt">Vec</span>::new(),</a>
-<a class="sourceLine" id="cb3-36" title="36">            id: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-37" title="37">            next_level: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-38" title="38">            el_ws: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-39" title="39">            raw_html: <span class="cn">false</span>,</a>
-<a class="sourceLine" id="cb3-40" title="40">            namespace: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-41" title="41">            did_mount: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-42" title="42">            did_update: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-43" title="43">            will_unmount: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-44" title="44">        <span class="op">}</span> </a>
-<a class="sourceLine" id="cb3-45" title="45">    <span class="op">]</span></a>
-<a class="sourceLine" id="cb3-46" title="46"><span class="op">}</span></a></code></pre></div>
+<p>This declarative syntax is created using macros, which constrct <code>El</code>s from the arguments passed: The macros know how to use arguments based solely on their type. If a String or &amp;str is passed, it's stored as the El's <code>text</code> field. <code>Attrs</code> and <code>Style</code> structs are stored as the <code>attrs</code> and <code>style</code> fields respectively. <code>Listeners</code>, and Vecs of them are stored as the <code>listeners</code> field. The same principle applies to <code>Els</code>, for the <code>children</code> field. <code>DidMount</code>, <code>DidUpdate</code>, and <code>WillUnmount</code> are also detected appropriately, and passed into appropriate fields.</p>
+<p>Here's an another way to construct the same nested <code>El</code> as above, using constructors instead of macros. Reference the docs page for a full list of modifier methods. These provide conveniet syntax over manually editing fields. (In most cases, you won't edit <code>El</code>s at all; you'll create them declaratively using macros.)</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">use</span> <span class="pp">seed::dom_types::</span><span class="op">{</span>El, Attrs, Style, Tag<span class="op">}</span>;</a>
+<a class="sourceLine" id="cb2-2" title="2"></a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="kw">let</span> <span class="kw">mut</span> heading = <span class="pp">El::</span>empty();</a>
+<a class="sourceLine" id="cb2-4" title="4">heading.set_text(<span class="st">&quot;Some things&quot;</span>)</a>
+<a class="sourceLine" id="cb2-5" title="5"></a>
+<a class="sourceLine" id="cb2-6" title="6"><span class="kw">let</span> <span class="kw">mut</span> button = <span class="pp">El::</span>empty(<span class="pp">Tag::</span>Button);</a>
+<a class="sourceLine" id="cb2-7" title="7">button.set_text(<span class="st">&quot;Click me!&quot;</span>);</a>
+<a class="sourceLine" id="cb2-8" title="8"></a>
+<a class="sourceLine" id="cb2-9" title="9"><span class="kw">let</span> <span class="kw">mut</span> elements = <span class="pp">El::</span>empty(<span class="pp">Tag::</span>Div);</a>
+<a class="sourceLine" id="cb2-10" title="10">elements.add_style(<span class="st">&quot;display&quot;</span>, <span class="st">&quot;flex&quot;</span>);</a>
+<a class="sourceLine" id="cb2-11" title="11">elements.add_style(<span class="st">&quot;flex-direction&quot;</span>, <span class="st">&quot;column&quot;</span>);</a>
+<a class="sourceLine" id="cb2-12" title="12">elements.children = <span class="pp">vec!</span><span class="op">[</span>heading, button<span class="op">]</span>;</a>
+<a class="sourceLine" id="cb2-13" title="13"></a>
+<a class="sourceLine" id="cb2-14" title="14">elements</a></code></pre></div>
+<p>The following equivalent example shows creating the required structs without constructors, to demonstrate that the macros and constructors above represent normal Rust structs, and provides insight into what abstractions they perform.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="co">// We don&#39;t provide an example of a Listener: These are more complicated to </span></a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw">use</span> <span class="pp">seed::dom_types::</span><span class="op">{</span>El, Attrs, Style, Tag<span class="op">}</span>;</a>
+<a class="sourceLine" id="cb3-3" title="3"></a>
+<a class="sourceLine" id="cb3-4" title="4">El <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-5" title="5">    tag: <span class="pp">Tag::</span>Div,</a>
+<a class="sourceLine" id="cb3-6" title="6">    attrs: Attrs <span class="op">{</span> vals: <span class="pp">HashMap::</span>new() <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb3-7" title="7">    style: Style <span class="op">{</span> </a>
+<a class="sourceLine" id="cb3-8" title="8">        vals: <span class="pp">hashmap_string!</span><span class="op">{</span></a>
+<a class="sourceLine" id="cb3-9" title="9">            <span class="st">&quot;display&quot;</span> =&gt; <span class="st">&quot;flex&quot;</span>,</a>
+<a class="sourceLine" id="cb3-10" title="10">            <span class="st">&quot;flex-direction&quot;</span> =&gt; <span class="st">&quot;column&quot;</span></a>
+<a class="sourceLine" id="cb3-11" title="11">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb3-12" title="12">    <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb3-13" title="13">    events: Events <span class="op">{</span> vals: <span class="dt">Vec</span>::new() <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb3-14" title="14">    text: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-15" title="15">    children: <span class="pp">vec!</span><span class="op">[</span></a>
+<a class="sourceLine" id="cb3-16" title="16">        El <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-17" title="17">            tag: <span class="pp">Tag::</span>H3,</a>
+<a class="sourceLine" id="cb3-18" title="18">            attrs: Attrs <span class="op">{</span> vals: <span class="pp">HashMap::</span>new() <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb3-19" title="19">            style: Style <span class="op">{</span> vals: <span class="pp">HashMap::</span>new() <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb3-20" title="20">            listeners: <span class="dt">Vec</span>::new();</a>
+<a class="sourceLine" id="cb3-21" title="21">            text: <span class="cn">Some</span>(<span class="dt">String</span>::from(<span class="st">&quot;Some things&quot;</span>)),</a>
+<a class="sourceLine" id="cb3-22" title="22">            children: <span class="dt">Vec</span>::new()</a>
+<a class="sourceLine" id="cb3-23" title="23">            id: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-24" title="24">            next_level: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-25" title="25">            el_ws: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-26" title="26">            raw_html: <span class="cn">false</span>,</a>
+<a class="sourceLine" id="cb3-27" title="27">            namespace: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-28" title="28">            did_mount: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-29" title="29">            did_update: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-30" title="30">            will_unmount: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-31" title="31">        <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb3-32" title="32">        El <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-33" title="33">            tag: <span class="pp">Tag::</span>button,</a>
+<a class="sourceLine" id="cb3-34" title="34">            attrs: Attrs <span class="op">{</span> vals: <span class="pp">HashMap::</span>new() <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb3-35" title="35">            style: Style <span class="op">{</span> vals: <span class="pp">HashMap::</span>new() <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb3-36" title="36">            listeners: <span class="dt">Vec</span>::new();</a>
+<a class="sourceLine" id="cb3-37" title="37">            text: <span class="cn">Some</span>(<span class="dt">String</span>::from(<span class="st">&quot;Click me!&quot;</span>)),</a>
+<a class="sourceLine" id="cb3-38" title="38">            children: <span class="dt">Vec</span>::new(),</a>
+<a class="sourceLine" id="cb3-39" title="39">            id: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-40" title="40">            next_level: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-41" title="41">            el_ws: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-42" title="42">            raw_html: <span class="cn">false</span>,</a>
+<a class="sourceLine" id="cb3-43" title="43">            namespace: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-44" title="44">            did_mount: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-45" title="45">            did_update: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-46" title="46">            will_unmount: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-47" title="47">        <span class="op">}</span> </a>
+<a class="sourceLine" id="cb3-48" title="48">    <span class="op">]</span></a>
+<a class="sourceLine" id="cb3-49" title="49"><span class="op">}</span></a></code></pre></div>
 <p>For most uses, the first example (using macros) will be the easiest to read and write. You can mix in constructors in components as needed, depending on your code structure. It's evident that struct literals are too verbose, due to the auxillary fields.</p>
 "#.into()
 }

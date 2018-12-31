@@ -1,5 +1,7 @@
 # Element-creation macros, under the hood
-The following code returns an `El` representing a few DOM elements displayed
+For a better understanding of how views are created, reference the
+[El API docs page](https://docs.rs/seed/0.2.0/seed/dom_types/struct.El.html).
+The following code returns an `El` representing a few nested DOM elements displayed
 in a flexbox layout:
 ```rust
     div![ style!{"display" => "flex"; "flex-direction" => "column"},
@@ -8,55 +10,61 @@ in a flexbox layout:
     ]
 ```
 
-The only magic parts of this are the macros used to simplify syntax for creating these
-things: text are [Options](https://doc.rust-lang.org/book/ch06-01-defining-an-enum.html#the-option-enum-and-its-advantages-over-null-values)
- of Rust borrowed Strings; `Listeners` are stored in Vecs; children are elements and/or Vecs of;
-`Attr`s and `Style` are thinly-wrapped HashMaps. They can be created independently, and
-passed to the macros separately. The following code is equivalent; it uses constructors
-from the El struct. Note that `El` type is imported with the Prelude.
+This declarative syntax is created using macros, which constrct `El`s from the arguments passed:
+ The macros know how to use arguments based solely on their type.
+If a String or &str is passed, it's stored as the El's `text` field.
+`Attrs` and `Style` structs are stored as the `attrs` and `style` fields respectively.
+`Listeners`, and Vecs of them are stored as the `listeners` field. The same principle applies
+to `Els`, for the `children` field. `DidMount`, `DidUpdate`, and `WillUnmount` are also detected
+appropriately, and passed into appropriate fields.
 
+Here's an another way to construct the same nested `El` as above, using constructors
+instead of macros. Reference the docs page for a full list of modifier methods. These
+provide conveniet syntax over manually editing fields. (In most cases, you won't
+edit `El`s at all; you'll create them declaratively using macros.)
 ```rust
-    use seed::dom_types::{El, Attrs, Style, Tag};
-    
+use seed::dom_types::{El, Attrs, Style, Tag};
 
-    let mut heading = El::empty();
-    heading.set_text("Some things")
-    
-    let mut button = El::empty(Tag::Button);
-    button.set_text("Click me!");
-    let children = vec![heading, button];
-    
-    let mut elements = El::empty(Tag::Div);
-    elements.add_style("display", "flex");
-    elements.add_style("flex-direction", "column");
-    elements.children = children;
-    
-    elements
+let mut heading = El::empty();
+heading.set_text("Some things")
+
+let mut button = El::empty(Tag::Button);
+button.set_text("Click me!");
+
+let mut elements = El::empty(Tag::Div);
+elements.add_style("display", "flex");
+elements.add_style("flex-direction", "column");
+elements.children = vec![heading, button];
+
+elements
 ```
 
 The following equivalent example shows creating the required structs without constructors,
 to demonstrate that the macros and constructors above represent normal Rust structs,
-and provides insight into what abstractions they perform. ([El docs page](https://docs.rs/seed/0.2.0/seed/dom_types/struct.El.html))
+and provides insight into what abstractions they perform.
 
 ```rust
-// We don't provide an example of a Listener: These are
-// more complicated to show using literals. We don't use style or attrs here, due to the lack
-// of HashMap literal syntax.
+// We don't provide an example of a Listener: These are more complicated to 
 use seed::dom_types::{El, Attrs, Style, Tag};
 
 El {
     tag: Tag::Div,
     attrs: Attrs { vals: HashMap::new() },
-    style: Style { vals: style },
+    style: Style { 
+        vals: hashmap_string!{
+            "display" => "flex",
+            "flex-direction" => "column"
+        }
+    },
     events: Events { vals: Vec::new() },
     text: None,
     children: vec![
         El {
-            tag: Tag::H2,
+            tag: Tag::H3,
             attrs: Attrs { vals: HashMap::new() },
             style: Style { vals: HashMap::new() },
             listeners: Vec::new();
-            text: Some(String::from("Some Things")),
+            text: Some(String::from("Some things")),
             children: Vec::new()
             id: None,
             next_level: None,
@@ -72,7 +80,7 @@ El {
             attrs: Attrs { vals: HashMap::new() },
             style: Style { vals: HashMap::new() },
             listeners: Vec::new();
-            text: None,
+            text: Some(String::from("Click me!")),
             children: Vec::new(),
             id: None,
             next_level: None,

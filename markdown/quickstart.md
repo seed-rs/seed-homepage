@@ -1,7 +1,7 @@
 # Quickstart
 
 ## Setup
-This framework requires you to first install [Rust](https://www.rust-lang.org/tools/install).
+This framework requires you to install [Rust](https://www.rust-lang.org/tools/install).
 
 You'll need a recent version of Rust: `rustup update`
 
