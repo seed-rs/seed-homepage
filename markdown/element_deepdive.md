@@ -39,14 +39,10 @@ to demonstrate that the macros and constructors above represent normal Rust stru
 and provides insight into what abstractions they perform. ([El docs page](https://docs.rs/seed/0.2.0/seed/dom_types/struct.El.html))
 
 ```rust
-// We didn't provide an example of a Listener/style: These are
-// more complicated to show using literals.
+// We don't provide an example of a Listener: These are
+// more complicated to show using literals. We don't use style or attrs here, due to the lack
+// of HashMap literal syntax.
 use seed::dom_types::{El, Attrs, Style, Tag};
-
-// Rust has no built-in HashMap literal syntax.
-let mut style = HashMap::new();
-style.insert("display", "flex");  
-style.insert("flex-direction", "column");  
 
 El {
     tag: Tag::Div,
