@@ -12,7 +12,8 @@ import re
 # ./pandoc --list-highlight-styles
 # pygments tango espresso zenburn kate monochrome breezedark haddock
 STYLE = "tango"
-VERSION = "0.2.0"
+VERSION = "0.2.1"
+
 
 def main():
     filenames = [
@@ -60,6 +61,7 @@ def main():
 
         # Clean up the temporary HTML files
         os.remove(f'./src/book/{filename}.html')
+
 
 if __name__ == "__main__":
     main()

@@ -6,7 +6,6 @@ mod book;
 #[macro_use]
 extern crate seed;
 use seed::prelude::*;
-use wasm_bindgen::prelude::*;
 
 
 // Model
@@ -55,7 +54,7 @@ impl Default for Model {
             ("Routing", crate::book::routing::text()),
             ("Misc features", crate::book::misc::text()),
             ("Release and debugging", crate::book::release_and_debugging::text()),
-            ("Element Deep-dive", crate::book::element_deepdive::text()),
+            ("Element deep-dive", crate::book::element_deepdive::text()),
             ("About", crate::book::about::text()),
         ];
 
@@ -290,5 +289,5 @@ pub fn render() {
         );
     }
 
-    seed::run(Model::default(), update, view, "main", Some(routes));
+    seed::run(Model::default(), update, view, "main", Some(routes), None);
 }

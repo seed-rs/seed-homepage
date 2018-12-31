@@ -47,102 +47,101 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="at">#[</span>macro_use<span class="at">]</span></a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="kw">extern</span> <span class="kw">crate</span> seed;</a>
 <a class="sourceLine" id="cb3-3" title="3"><span class="kw">use</span> <span class="pp">seed::prelude::</span>*;</a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="kw">use</span> <span class="pp">wasm_bindgen::prelude::</span>*;</a>
+<a class="sourceLine" id="cb3-4" title="4"></a>
 <a class="sourceLine" id="cb3-5" title="5"></a>
-<a class="sourceLine" id="cb3-6" title="6"></a>
-<a class="sourceLine" id="cb3-7" title="7"><span class="co">// Model</span></a>
-<a class="sourceLine" id="cb3-8" title="8"></a>
-<a class="sourceLine" id="cb3-9" title="9"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
-<a class="sourceLine" id="cb3-10" title="10"><span class="kw">struct</span> Model <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-11" title="11">    count: <span class="dt">i32</span>,</a>
-<a class="sourceLine" id="cb3-12" title="12">    what_we_count: <span class="dt">String</span></a>
-<a class="sourceLine" id="cb3-13" title="13"><span class="op">}</span></a>
-<a class="sourceLine" id="cb3-14" title="14"></a>
-<a class="sourceLine" id="cb3-15" title="15"><span class="co">// Setup a default here, for initialization later.</span></a>
-<a class="sourceLine" id="cb3-16" title="16"><span class="kw">impl</span> <span class="bu">Default</span> <span class="kw">for</span> Model <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-17" title="17">    <span class="kw">fn</span> default() -&gt; <span class="kw">Self</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-18" title="18">        <span class="kw">Self</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-19" title="19">            count: <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb3-20" title="20">            what_we_count: <span class="st">&quot;click&quot;</span>.into()</a>
-<a class="sourceLine" id="cb3-21" title="21">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-22" title="22">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-23" title="23"><span class="op">}</span></a>
+<a class="sourceLine" id="cb3-6" title="6"><span class="co">// Model</span></a>
+<a class="sourceLine" id="cb3-7" title="7"></a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
+<a class="sourceLine" id="cb3-9" title="9"><span class="kw">struct</span> Model <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-10" title="10">    count: <span class="dt">i32</span>,</a>
+<a class="sourceLine" id="cb3-11" title="11">    what_we_count: <span class="dt">String</span></a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="op">}</span></a>
+<a class="sourceLine" id="cb3-13" title="13"></a>
+<a class="sourceLine" id="cb3-14" title="14"><span class="co">// Setup a default here, for initialization later.</span></a>
+<a class="sourceLine" id="cb3-15" title="15"><span class="kw">impl</span> <span class="bu">Default</span> <span class="kw">for</span> Model <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-16" title="16">    <span class="kw">fn</span> default() -&gt; <span class="kw">Self</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-17" title="17">        <span class="kw">Self</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-18" title="18">            count: <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb3-19" title="19">            what_we_count: <span class="st">&quot;click&quot;</span>.into()</a>
+<a class="sourceLine" id="cb3-20" title="20">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb3-21" title="21">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb3-22" title="22"><span class="op">}</span></a>
+<a class="sourceLine" id="cb3-23" title="23"></a>
 <a class="sourceLine" id="cb3-24" title="24"></a>
-<a class="sourceLine" id="cb3-25" title="25"></a>
-<a class="sourceLine" id="cb3-26" title="26"><span class="co">// Update</span></a>
-<a class="sourceLine" id="cb3-27" title="27"></a>
-<a class="sourceLine" id="cb3-28" title="28"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
-<a class="sourceLine" id="cb3-29" title="29"><span class="kw">enum</span> Msg <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-30" title="30">    Increment,</a>
-<a class="sourceLine" id="cb3-31" title="31">    Decrement,</a>
-<a class="sourceLine" id="cb3-32" title="32">    ChangeWWC(<span class="dt">String</span>),</a>
-<a class="sourceLine" id="cb3-33" title="33"><span class="op">}</span></a>
-<a class="sourceLine" id="cb3-34" title="34"></a>
-<a class="sourceLine" id="cb3-35" title="35"><span class="co">/// The sole source of updating the model; returns a fresh one.</span></a>
-<a class="sourceLine" id="cb3-36" title="36"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-37" title="37">    <span class="kw">match</span> msg <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-38" title="38">        <span class="pp">Msg::</span>Increment =&gt; Model <span class="op">{</span>count: model.count + <span class="dv">1</span>, ..model<span class="op">}</span>,</a>
-<a class="sourceLine" id="cb3-39" title="39">        <span class="pp">Msg::</span>Decrement =&gt; Model <span class="op">{</span>count: model.count - <span class="dv">1</span>, ..model<span class="op">}</span>,</a>
-<a class="sourceLine" id="cb3-40" title="40">        <span class="pp">Msg::</span>ChangeWWC(what_we_count) =&gt; Model <span class="op">{</span>what_we_count, ..model <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-41" title="41">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-42" title="42"><span class="op">}</span></a>
+<a class="sourceLine" id="cb3-25" title="25"><span class="co">// Update</span></a>
+<a class="sourceLine" id="cb3-26" title="26"></a>
+<a class="sourceLine" id="cb3-27" title="27"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
+<a class="sourceLine" id="cb3-28" title="28"><span class="kw">enum</span> Msg <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-29" title="29">    Increment,</a>
+<a class="sourceLine" id="cb3-30" title="30">    Decrement,</a>
+<a class="sourceLine" id="cb3-31" title="31">    ChangeWWC(<span class="dt">String</span>),</a>
+<a class="sourceLine" id="cb3-32" title="32"><span class="op">}</span></a>
+<a class="sourceLine" id="cb3-33" title="33"></a>
+<a class="sourceLine" id="cb3-34" title="34"><span class="co">/// The sole source of updating the model; returns a fresh one.</span></a>
+<a class="sourceLine" id="cb3-35" title="35"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-36" title="36">    <span class="kw">match</span> msg <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-37" title="37">        <span class="pp">Msg::</span>Increment =&gt; Model <span class="op">{</span>count: model.count + <span class="dv">1</span>, ..model<span class="op">}</span>,</a>
+<a class="sourceLine" id="cb3-38" title="38">        <span class="pp">Msg::</span>Decrement =&gt; Model <span class="op">{</span>count: model.count - <span class="dv">1</span>, ..model<span class="op">}</span>,</a>
+<a class="sourceLine" id="cb3-39" title="39">        <span class="pp">Msg::</span>ChangeWWC(what_we_count) =&gt; Model <span class="op">{</span>what_we_count, ..model <span class="op">}</span></a>
+<a class="sourceLine" id="cb3-40" title="40">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb3-41" title="41"><span class="op">}</span></a>
+<a class="sourceLine" id="cb3-42" title="42"></a>
 <a class="sourceLine" id="cb3-43" title="43"></a>
-<a class="sourceLine" id="cb3-44" title="44"></a>
-<a class="sourceLine" id="cb3-45" title="45"><span class="co">// View</span></a>
-<a class="sourceLine" id="cb3-46" title="46"></a>
-<a class="sourceLine" id="cb3-47" title="47"><span class="co">/// A simple component.</span></a>
-<a class="sourceLine" id="cb3-48" title="48"><span class="kw">fn</span> success_level(clicks: <span class="dt">i32</span>) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-49" title="49">    <span class="kw">let</span> descrip = <span class="kw">match</span> clicks <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-50" title="50">        <span class="dv">0</span> ... <span class="dv">5</span> =&gt; <span class="st">&quot;Not very many 🙁&quot;</span>,</a>
-<a class="sourceLine" id="cb3-51" title="51">        <span class="dv">6</span> ... <span class="dv">9</span> =&gt; <span class="st">&quot;I got my first real six-string 😐&quot;</span>,</a>
-<a class="sourceLine" id="cb3-52" title="52">        <span class="dv">10</span> ... <span class="dv">11</span> =&gt; <span class="st">&quot;Spinal Tap 🙂&quot;</span>,</a>
-<a class="sourceLine" id="cb3-53" title="53">        _ =&gt; <span class="st">&quot;Double pendulum 🙃&quot;</span></a>
-<a class="sourceLine" id="cb3-54" title="54">    <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb3-55" title="55">    <span class="pp">p!</span><span class="op">[</span> descrip <span class="op">]</span></a>
-<a class="sourceLine" id="cb3-56" title="56"><span class="op">}</span></a>
-<a class="sourceLine" id="cb3-57" title="57"></a>
-<a class="sourceLine" id="cb3-58" title="58"><span class="co">/// The top-level component we pass to the virtual dom.</span></a>
-<a class="sourceLine" id="cb3-59" title="59"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-60" title="60">    <span class="kw">let</span> plural = <span class="kw">if</span> model.count == <span class="dv">1</span> <span class="op">{</span><span class="st">&quot;&quot;</span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span><span class="st">&quot;s&quot;</span><span class="op">}</span>;</a>
-<a class="sourceLine" id="cb3-61" title="61"></a>
-<a class="sourceLine" id="cb3-62" title="62">    <span class="co">// Attrs, Style, Events, and children may be defined separately.</span></a>
-<a class="sourceLine" id="cb3-63" title="63">    <span class="kw">let</span> outer_style = <span class="pp">style!</span><span class="op">{</span></a>
-<a class="sourceLine" id="cb3-64" title="64">            <span class="st">&quot;display&quot;</span> =&gt; <span class="st">&quot;flex&quot;</span>;</a>
-<a class="sourceLine" id="cb3-65" title="65">            <span class="st">&quot;flex-direction&quot;</span> =&gt; <span class="st">&quot;column&quot;</span>;</a>
-<a class="sourceLine" id="cb3-66" title="66">            <span class="st">&quot;text-align&quot;</span> =&gt; <span class="st">&quot;center&quot;</span></a>
-<a class="sourceLine" id="cb3-67" title="67">    <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb3-68" title="68"></a>
-<a class="sourceLine" id="cb3-69" title="69">     <span class="pp">div!</span><span class="op">[</span> outer_style,</a>
-<a class="sourceLine" id="cb3-70" title="70">        <span class="pp">h1!</span><span class="op">[</span> <span class="st">&quot;The Grand Total&quot;</span> <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb3-71" title="71">        <span class="pp">div!</span><span class="op">[</span></a>
-<a class="sourceLine" id="cb3-72" title="72">            <span class="pp">style!</span><span class="op">{</span></a>
-<a class="sourceLine" id="cb3-73" title="73">                <span class="co">// Example of conditional logic in a style.</span></a>
-<a class="sourceLine" id="cb3-74" title="74">                <span class="st">&quot;color&quot;</span> =&gt; <span class="kw">if</span> model.count &gt; <span class="dv">4</span> <span class="op">{</span><span class="st">&quot;purple&quot;</span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span><span class="st">&quot;gray&quot;</span><span class="op">}</span>;</a>
-<a class="sourceLine" id="cb3-75" title="75">                <span class="co">// When passing numerical values to style!, &quot;px&quot; is implied.</span></a>
-<a class="sourceLine" id="cb3-76" title="76">                <span class="st">&quot;border&quot;</span> =&gt; <span class="st">&quot;2px solid #004422&quot;</span>; <span class="st">&quot;padding&quot;</span> =&gt; <span class="dv">20</span></a>
-<a class="sourceLine" id="cb3-77" title="77">            <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb3-78" title="78">            <span class="co">// We can use normal Rust code and comments in the view.</span></a>
-<a class="sourceLine" id="cb3-79" title="79">            <span class="pp">h3!</span><span class="op">[</span> <span class="pp">format!</span>(<span class="st">&quot;{} {}{} so far&quot;</span>, model.count, model.what_we_count, plural) <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb3-80" title="80">            <span class="pp">button!</span><span class="op">[</span> simple_ev(<span class="st">&quot;click&quot;</span>, <span class="pp">Msg::</span>Increment), <span class="st">&quot;+&quot;</span> <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb3-81" title="81">            <span class="pp">button!</span><span class="op">[</span> simple_ev(<span class="st">&quot;click&quot;</span>, <span class="pp">Msg::</span>Decrement), <span class="st">&quot;-&quot;</span> <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb3-82" title="82"></a>
-<a class="sourceLine" id="cb3-83" title="83">            <span class="co">// Optionally-displaying an element</span></a>
-<a class="sourceLine" id="cb3-84" title="84">            <span class="kw">if</span> model.count &gt;= <span class="dv">10</span> <span class="op">{</span> <span class="pp">h2!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;padding&quot;</span> =&gt; <span class="dv">50</span><span class="op">}</span>, <span class="st">&quot;Nice!&quot;</span> <span class="op">]</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> <span class="pp">seed::</span>empty() <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-85" title="85"></a>
-<a class="sourceLine" id="cb3-86" title="86">            <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb3-87" title="87">        success_level(model.count),  <span class="co">// Incorporating a separate component</span></a>
-<a class="sourceLine" id="cb3-88" title="88"></a>
-<a class="sourceLine" id="cb3-89" title="89">        <span class="pp">h3!</span><span class="op">[</span> <span class="st">&quot;What precisely is it we&#39;re counting?&quot;</span> <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb3-90" title="90">        <span class="pp">input!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="st">&quot;value&quot;</span> =&gt; model.what_we_count<span class="op">}</span>, input_ev(<span class="st">&quot;input&quot;</span>, <span class="pp">Msg::</span>ChangeWWC) <span class="op">]</span></a>
-<a class="sourceLine" id="cb3-91" title="91">    <span class="op">]</span></a>
-<a class="sourceLine" id="cb3-92" title="92"><span class="op">}</span></a>
+<a class="sourceLine" id="cb3-44" title="44"><span class="co">// View</span></a>
+<a class="sourceLine" id="cb3-45" title="45"></a>
+<a class="sourceLine" id="cb3-46" title="46"><span class="co">/// A simple component.</span></a>
+<a class="sourceLine" id="cb3-47" title="47"><span class="kw">fn</span> success_level(clicks: <span class="dt">i32</span>) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-48" title="48">    <span class="kw">let</span> descrip = <span class="kw">match</span> clicks <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-49" title="49">        <span class="dv">0</span> ... <span class="dv">5</span> =&gt; <span class="st">&quot;Not very many 🙁&quot;</span>,</a>
+<a class="sourceLine" id="cb3-50" title="50">        <span class="dv">6</span> ... <span class="dv">9</span> =&gt; <span class="st">&quot;I got my first real six-string 😐&quot;</span>,</a>
+<a class="sourceLine" id="cb3-51" title="51">        <span class="dv">10</span> ... <span class="dv">11</span> =&gt; <span class="st">&quot;Spinal Tap 🙂&quot;</span>,</a>
+<a class="sourceLine" id="cb3-52" title="52">        _ =&gt; <span class="st">&quot;Double pendulum 🙃&quot;</span></a>
+<a class="sourceLine" id="cb3-53" title="53">    <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb3-54" title="54">    <span class="pp">p!</span><span class="op">[</span> descrip <span class="op">]</span></a>
+<a class="sourceLine" id="cb3-55" title="55"><span class="op">}</span></a>
+<a class="sourceLine" id="cb3-56" title="56"></a>
+<a class="sourceLine" id="cb3-57" title="57"><span class="co">/// The top-level component we pass to the virtual dom.</span></a>
+<a class="sourceLine" id="cb3-58" title="58"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-59" title="59">    <span class="kw">let</span> plural = <span class="kw">if</span> model.count == <span class="dv">1</span> <span class="op">{</span><span class="st">&quot;&quot;</span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span><span class="st">&quot;s&quot;</span><span class="op">}</span>;</a>
+<a class="sourceLine" id="cb3-60" title="60"></a>
+<a class="sourceLine" id="cb3-61" title="61">    <span class="co">// Attrs, Style, Events, and children may be defined separately.</span></a>
+<a class="sourceLine" id="cb3-62" title="62">    <span class="kw">let</span> outer_style = <span class="pp">style!</span><span class="op">{</span></a>
+<a class="sourceLine" id="cb3-63" title="63">            <span class="st">&quot;display&quot;</span> =&gt; <span class="st">&quot;flex&quot;</span>;</a>
+<a class="sourceLine" id="cb3-64" title="64">            <span class="st">&quot;flex-direction&quot;</span> =&gt; <span class="st">&quot;column&quot;</span>;</a>
+<a class="sourceLine" id="cb3-65" title="65">            <span class="st">&quot;text-align&quot;</span> =&gt; <span class="st">&quot;center&quot;</span></a>
+<a class="sourceLine" id="cb3-66" title="66">    <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb3-67" title="67"></a>
+<a class="sourceLine" id="cb3-68" title="68">     <span class="pp">div!</span><span class="op">[</span> outer_style,</a>
+<a class="sourceLine" id="cb3-69" title="69">        <span class="pp">h1!</span><span class="op">[</span> <span class="st">&quot;The Grand Total&quot;</span> <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb3-70" title="70">        <span class="pp">div!</span><span class="op">[</span></a>
+<a class="sourceLine" id="cb3-71" title="71">            <span class="pp">style!</span><span class="op">{</span></a>
+<a class="sourceLine" id="cb3-72" title="72">                <span class="co">// Example of conditional logic in a style.</span></a>
+<a class="sourceLine" id="cb3-73" title="73">                <span class="st">&quot;color&quot;</span> =&gt; <span class="kw">if</span> model.count &gt; <span class="dv">4</span> <span class="op">{</span><span class="st">&quot;purple&quot;</span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span><span class="st">&quot;gray&quot;</span><span class="op">}</span>;</a>
+<a class="sourceLine" id="cb3-74" title="74">                <span class="co">// When passing numerical values to style!, &quot;px&quot; is implied.</span></a>
+<a class="sourceLine" id="cb3-75" title="75">                <span class="st">&quot;border&quot;</span> =&gt; <span class="st">&quot;2px solid #004422&quot;</span>; <span class="st">&quot;padding&quot;</span> =&gt; <span class="dv">20</span></a>
+<a class="sourceLine" id="cb3-76" title="76">            <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb3-77" title="77">            <span class="co">// We can use normal Rust code and comments in the view.</span></a>
+<a class="sourceLine" id="cb3-78" title="78">            <span class="pp">h3!</span><span class="op">[</span> <span class="pp">format!</span>(<span class="st">&quot;{} {}{} so far&quot;</span>, model.count, model.what_we_count, plural) <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb3-79" title="79">            <span class="pp">button!</span><span class="op">[</span> simple_ev(<span class="st">&quot;click&quot;</span>, <span class="pp">Msg::</span>Increment), <span class="st">&quot;+&quot;</span> <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb3-80" title="80">            <span class="pp">button!</span><span class="op">[</span> simple_ev(<span class="st">&quot;click&quot;</span>, <span class="pp">Msg::</span>Decrement), <span class="st">&quot;-&quot;</span> <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb3-81" title="81"></a>
+<a class="sourceLine" id="cb3-82" title="82">            <span class="co">// Optionally-displaying an element</span></a>
+<a class="sourceLine" id="cb3-83" title="83">            <span class="kw">if</span> model.count &gt;= <span class="dv">10</span> <span class="op">{</span> <span class="pp">h2!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;padding&quot;</span> =&gt; <span class="dv">50</span><span class="op">}</span>, <span class="st">&quot;Nice!&quot;</span> <span class="op">]</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> <span class="pp">seed::</span>empty() <span class="op">}</span></a>
+<a class="sourceLine" id="cb3-84" title="84"></a>
+<a class="sourceLine" id="cb3-85" title="85">            <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb3-86" title="86">        success_level(model.count),  <span class="co">// Incorporating a separate component</span></a>
+<a class="sourceLine" id="cb3-87" title="87"></a>
+<a class="sourceLine" id="cb3-88" title="88">        <span class="pp">h3!</span><span class="op">[</span> <span class="st">&quot;What precisely is it we&#39;re counting?&quot;</span> <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb3-89" title="89">        <span class="pp">input!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="st">&quot;value&quot;</span> =&gt; model.what_we_count<span class="op">}</span>, input_ev(<span class="st">&quot;input&quot;</span>, <span class="pp">Msg::</span>ChangeWWC) <span class="op">]</span></a>
+<a class="sourceLine" id="cb3-90" title="90">    <span class="op">]</span></a>
+<a class="sourceLine" id="cb3-91" title="91"><span class="op">}</span></a>
+<a class="sourceLine" id="cb3-92" title="92"></a>
 <a class="sourceLine" id="cb3-93" title="93"></a>
-<a class="sourceLine" id="cb3-94" title="94"></a>
-<a class="sourceLine" id="cb3-95" title="95"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
-<a class="sourceLine" id="cb3-96" title="96"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-97" title="97">    <span class="co">// The final parameter is an optional routing map.</span></a>
-<a class="sourceLine" id="cb3-98" title="98">    <span class="pp">seed::</span>run(<span class="pp">Model::</span><span class="kw">default</span>(), update, view, <span class="st">&quot;main&quot;</span>, <span class="cn">None</span>);</a>
-<a class="sourceLine" id="cb3-99" title="99"><span class="op">}</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-94" title="94"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
+<a class="sourceLine" id="cb3-95" title="95"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-96" title="96">    <span class="co">// The final parameter is an optional routing map.</span></a>
+<a class="sourceLine" id="cb3-97" title="97">    <span class="pp">seed::</span>run(<span class="pp">Model::</span><span class="kw">default</span>(), update, view, <span class="st">&quot;main&quot;</span>, <span class="cn">None</span>);</a>
+<a class="sourceLine" id="cb3-98" title="98"><span class="op">}</span></a></code></pre></div>
 <p>For a truly minimimal example, see <a href="https://github.com/David-OConnor/seed-quickstart/blob/master/src/lib.rs">lib.rs in the quickstart repo</a></p>
 <h2 id="building-and-running">Building and running</h2>
 <p>To build your app, create a <code>pkg</code> subdirectory, and run the following two commands:</p>

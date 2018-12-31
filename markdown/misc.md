@@ -5,20 +5,22 @@ To output to the web browser's console (ie `console.log()` in JS), use `web_sys:
 or the `log` macro that wraps it, which is imported in the seed prelude: 
 `log!("On the shoulders of", 5, "giants".to_string())`
 
-## Querying servers using fetch
-To send and receive data with a server, use `wasm-bindgen`'s `web-sys` fetch methods,
-[described here](https://rustwasm.github.io/wasm-bindgen/examples/fetch.html).
+## Custom tags
+Seed generally retricts the element tags allowed by using Enums for the tags, and
+a predefined set of element-creation macros. If you wish to use a custom tag, you can
+use using `Tag::Custom` (`El` and `Tag` are
+exposed in the prelude), either with the `El::empty` constructor, or using the `custom!`
+element-construction macro, where we pass our custom tag as an argument:
+```rust
+let mut custom_el = El::empty(Tag::Custom("mytag".to_string()));
+custom_el.set_text("Words");
 
-Use the [Serde](https://serde.rs/) crate to serialize and deserialize data, eg
-when sending and receiving data from a REST-etc. It supports most popular formats,
-including `JSON`, `YAML`, and `XML`.
-
-(Example, and with our integration)
-
-Check out the `server_interaction` examples for an example of how to send and receive
-data from the server in JSON.
-
-Seed will implement a high-level fetch API in the future, wrapping web-sys's.
+custom![ Tag::Custom("anothertag".into())
+    custom_el,
+]
+```
+An example is provided as part of the [window_events](https://github.com/David-OConnor/seed/tree/master/examples/todomvc)
+example.
 
 ## Local storage
 You can store page state locally using web_sys's [Storage struct](https://rustwasm.github.io/wasm-bindgen/api/web_sys/struct.Storage.html)

@@ -55,7 +55,7 @@ This decision will not appeal to everyone, but I think it integrates more natura
 the language.
 
 
-## Why build a frontend app in Rust over Elm, or Javascript-based frameworks?
+## Why build a frontend in Rust over Elm, or Javascript-based frameworks?
 You may prefer writing in Rust, and using packages from Cargo vice npm. Getting started with
 this framework will in most cases be easier, and require less config and setup overhead than
 with JS frameworks. You may appreciate Rust's compile-time error-checking, and built-in testing.

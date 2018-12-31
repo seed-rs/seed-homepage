@@ -11,7 +11,7 @@ and `http://seed-rs.org/changelog` respectively. We describe the page by a `page
 field in our model, which is an integer: 0 for homepage, 1 for guide, or 2 for changelog.
 (An enum would work as well). 
 
-To set up the initial routing, we pass a HashMap<String, Msg> describing the possible routings
+To set up the initial routing, we pass a `HashMap<String, Msg>` describing the possible routings
 as the last parameter of [Seed::run](https://docs.rs/seed/0.1.10/seed/fn.run.html). We can
 create it using the `routes!` macro, which is for convenience: Rust doesn't include a
 HashMap literal syntax, and this macro automatically converts the keys to Strings, eg
@@ -29,8 +29,6 @@ pub fn render() {
 ```
 This syntax resembles that of the `attrs!` and `style!` macros, but uses commas
 for separation.
-(Note: In the latest version on Crates.io, the comma separation used in this macro must
-be semicolons; this will change next publish)
 
 To make landing-page routing work, configure your server so that all three of these path point towards the app,
 or that any (sub)path points towards it, instead of returning an error. The `serve.py` script

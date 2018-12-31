@@ -3,16 +3,16 @@ r#"
 <h1 id="lifecycle-hooks">Lifecycle hooks</h1>
 <p>You can use lifecycle hooks, like those in React, to introduce side effects on DOM elements when an element is rendered, upates, or de-renders. We do this by passing one of the following structs to the element macro:</p>
 <ul>
-<li><a href="https://docs.rs/seed/0.2.0/seed/dom_types/struct.DidMount.html">DidMount</a></li>
-<li><a href="https://docs.rs/seed/0.2.0/seed/dom_types/struct.DidUpdate.html">DidUpdate</a></li>
-<li><a href="https://docs.rs/seed/0.2.0/seed/dom_types/struct.WillUnmount.html">WillUnmount</a></li>
+<li><a href="https://docs.rs/seed/0.2.1/seed/dom_types/struct.DidMount.html">DidMount</a></li>
+<li><a href="https://docs.rs/seed/0.2.1/seed/dom_types/struct.DidUpdate.html">DidUpdate</a></li>
+<li><a href="https://docs.rs/seed/0.2.1/seed/dom_types/struct.WillUnmount.html">WillUnmount</a></li>
 </ul>
 <p>These are inspired by, and act similar to <a href="https://reactjs.org/docs/react-component.html#componentdidmount">functions of similar names</a> in React. Each of these is a thin-wrapper for a closure that takes a ref to the associated <a href="https://rustwasm.github.io/wasm-bindgen/api/web_sys/struct.Element.html">web_sys element</a> as its only parameter, and doesn't return anything. We use them to perform side-effects (eg actions that don't change state), like setup and teardown operations on DOM elements.</p>
 <p>We create them using the following functions respectively, imported in the prelude:</p>
 <ul>
-<li><a href="https://docs.rs/seed/0.2.0/seed/dom_types/fn.did_mount.html">did_mount</a></li>
-<li><a href="https://docs.rs/seed/0.2.0/seed/dom_types/fn.did_update.html">did_update</a></li>
-<li><a href="https://docs.rs/seed/0.2.0/seed/dom_types/fn.will_unmount.html">will_unmount</a></li>
+<li><a href="https://docs.rs/seed/0.2.1/seed/dom_types/fn.did_mount.html">did_mount</a></li>
+<li><a href="https://docs.rs/seed/0.2.1/seed/dom_types/fn.did_update.html">did_update</a></li>
+<li><a href="https://docs.rs/seed/0.2.1/seed/dom_types/fn.will_unmount.html">will_unmount</a></li>
 </ul>
 <p>Each of these takes a single parameter: the closure described above.</p>
 <p>Example:</p>

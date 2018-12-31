@@ -1,7 +1,7 @@
 # Events
 Events are created by passing a a [Listener](https://docs.rs/seed/0.1.6/seed/dom_types/struct.Listener.html),
-or vec of Listeners, created using the following four functions exposed in the prelude: `simple_ev`,
-`input_ev`, `keyboard_ev`, and `raw_ev`. The first is demonstrated in the example in the quickstart section,
+or vec of Listeners, created using the following functions exposed in the prelude: `simple_ev`,
+`input_ev`, `keyboard_ev`, `mouse_ev`, and `raw_ev`. The first is demonstrated in the example in the quickstart section,
 and all are demonstrated in the todomvc example.
 
 `simple_ev` takes two arguments: an event trigger (eg "click", "contextmenu" etc), and an instance
@@ -30,7 +30,8 @@ input_ev("input", Msg::NewWords)
 ```
 
 `keyboard_ev` returns a [web_sys::KeyboardEvent](https://rustwasm.github.io/wasm-bindgen/api/web_sys/struct.KeyboardEvent.html),
-which exposes several getter methods like `key_code` and `key`.
+which exposes several getter methods like `key_code` and `key`. `mouse_ev` works in a similar
+way.
 Example:
 ```rust
 enum Msg {
@@ -82,7 +83,8 @@ Msg::KeyPress(event) => {
 }
 ```
 Seed also provides `to_textarea` and `to_select` functions, which you'd use as
-`to_input`. It provides `to_html_el`, which is useful for changing settings like `focus`.
+`to_input`. It provides `to_html_el`, which is useful for changing settings like `focus`,
+and `to_mouse_event`, which you'd use like `to_kbevent`.
 
 This extra step is caused by a conflict between Rust's type system, and the way DOM events
 are handled. For example, you may wish to pull text from an input field by reading the event target's
@@ -142,3 +144,46 @@ is based on the trigger, and avoids the use of manually creating a `Vec` to stor
 
 The [todomvc example](https://github.com/David-OConnor/seed/tree/master/examples/todomvc) has a number of event-handling examples, including use of raw_ev, 
 where it handles text input triggered by a key press, and uses prevent_default().
+
+## Window events
+We handle events triggered by the overall window specially, since it doesn't fit directly
+into our virtual DOM. The final argument passed to `seed::run` is an Option of a function
+that accepts a `Model`, and returns a `Vec<dom_types::Listener>`. We use it to control
+which listeners are attached to the window based on the model. Excerpt from the
+[window_events](https://github.com/David-OConnor/seed/blob/master/examples/window_events/src/lib.rs)
+example:
+```rust
+#[derive(Clone)]
+enum Msg {
+    ToggleWatching,
+    UpdateCoords(web_sys::MouseEvent),
+    KeyPressed(web_sys::KeyboardEvent),
+}
+
+fn update(msg: Msg, model: Model) -> Model {
+    match msg {
+        Msg::ToggleWatching => Model {watching: !model.watching, ..model},
+        Msg::UpdateCoords(ev) => Model {coords: (ev.screen_x(), ev.screen_y()), ..model},
+        Msg::KeyPressed(key) => Model {last_keycode: key.key_code(), ..model}
+    }
+}
+
+fn window_events(model: Model) -> Vec<seed::Listener<Msg>> {
+    let mut result = Vec::new();
+    if model.watching {
+        result.push(mouse_ev("mousemove", |ev| Msg::UpdateCoords(ev)));
+        result.push(keyboard_ev("keydown", |ev| Msg::KeyPressed(ev)));
+    }
+    result
+}
+
+
+#[wasm_bindgen]
+pub fn render() {
+    seed::run(Model::default(), update, view, "main", None, Some(window_events));
+}
+```
+If `model.watching` is true, the window listens for keyboard and mouse events, then
+updates the model accordingly. If not, it doesn't listen. There's currently a bug
+where window listeners won't work until the first (non-window-listener) update
+is triggered.

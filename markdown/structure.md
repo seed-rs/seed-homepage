@@ -250,6 +250,25 @@ If you don't want this behavior, use a `String` or`&str`. Eg: `h2![ style!{"font
 once created, a `Style` instance holds all its values as `Strings`; eg that `16` above will be stored
 as `"16px"`; keep this in mind if editing a style that you made outside an element macro.
 
+We can set multiple values for an attribute using `Attribute.add_multiple`. This
+is useful for setting multiple classes. Note that we must set this up outside of
+the view macro, since it involves modifying a variable:
+```rust
+let mut attributes = attrs!{};
+attributes.add_multiple("class", vec!["A-modicum-of", "hardly-any"]);
+
+div![ attributes ]
+```
+
+The `class!` and `id!` convenience macros allow settings
+attributes as a list of classes, or a single id, if no other attributes are required.
+Do not mix and match these with each other, or with attrs!; all but the last-passed
+will be thrown out.
+```rust
+    span![ class!["calculus", "chemistry", "literature"] ],
+    span![ id!("unique-element") ],
+```
+
 Styles and Attrs can be passed as refs as well, which is useful if you need to pass
 the same one more than once:
 ```rust
