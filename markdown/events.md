@@ -164,9 +164,11 @@ fn update(msg: Msg, model: Model) -> Model {
     match msg {
         Msg::ToggleWatching => Model {watching: !model.watching, ..model},
         Msg::UpdateCoords(ev) => Model {coords: (ev.screen_x(), ev.screen_y()), ..model},
-        Msg::KeyPressed(key) => Model {last_keycode: key.key_code(), ..model}
+        Msg::KeyPressed(ev) => Model {last_keycode: ev.key_code(), ..model}
     }
 }
+
+// ...
 
 fn window_events(model: Model) -> Vec<seed::Listener<Msg>> {
     let mut result = Vec::new();

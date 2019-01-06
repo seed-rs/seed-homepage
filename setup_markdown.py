@@ -28,6 +28,7 @@ def main():
         "release_and_debugging",
         "element_deepdive",
         "misc",
+        "server_integration",
         "about",
     ]
     

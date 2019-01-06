@@ -86,7 +86,6 @@ avoids the dependency glue-code associated with Redux and React-Router.
 - Improve fetch API
 - Dynamic SVG creation and modification
 - More flexible routing
-- Add data-struct integration for Rust servers. (Eg to avoid [de]serializing if Rust on front and backend)
 - Virtual DOM optimization
 - High-level CSS-grid/Flexbox API ?
  

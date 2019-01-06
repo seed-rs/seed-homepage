@@ -55,6 +55,7 @@ impl Default for Model {
             ("Misc features", crate::book::misc::text()),
             ("Release and debugging", crate::book::release_and_debugging::text()),
             ("Element deep-dive", crate::book::element_deepdive::text()),
+            ("Server integration", crate::book::server_integration::text()),
             ("About", crate::book::about::text()),
         ];
 

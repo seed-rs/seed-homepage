@@ -10,11 +10,15 @@ to make HTTP requests in the browser, wrapping the [Fetch API](https://developer
 - An optional [seed::RequstOpts](https://docs.rs/seed/0.1.12/seed/fetch/struct.RequestOpts.html) struct, where you
 can set things like headers, payload, and credentials.
 - A callback that performs actions once the request is complete. It accepts
-a [JsValue](https://docs.rs/wasm-bindgen/0.2.29/wasm_bindgen/), and returns nothing.
+a [web_sys::Request](https://docs.rs/wasm-bindgen/0.2.29/wasm_bindgen/), and returns nothing.
+
+If you wish to parse JSON from the response, use `seed::fetch_json` instead. Its signature
+is the same as above, except the callback accepts a `JsValue` instead of a `Request`.
 
 The convenience functions [seed::get](https://docs.rs/seed/0.1.12/seed/fetch/fn.get.html) and
 [seed::post](https://docs.rs/seed/0.1.12/seed/fetch/fn.post.html) are also available;
-these are the same as `fetch`, but ommit the method parameter. Additionally, `seed::post`
+these are the same as `fetch`, but ommit the method parameter. Same for `seed::get_json` and `seed::post_json`. 
+Additionally, `seed::post` and `seed::post_json`
 uses a non-serialized payload as a second parameter: This is any Rust struct which implements
 `serde::Serialize`. It overrides the payload defined in `RequestOpts`.
 
@@ -50,7 +54,8 @@ fn get_data(state: seed::App<Msg, Model>) {
         let data: Branch = json.into_serde().unwrap();
         state.update(Msg::Replace(data));
     };
-    seed::get(url, None, Box::new(callback));
+
+    seed::get_json(url, None, Box::new(callback));
 }
 
 fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
@@ -110,34 +115,45 @@ to prepend our closures with `move`, as above, any time `state` is used in one.
 
 Example showing POST, and headers:
 ```rust
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize)]
 struct Message {
     pub name: String,
     pub email: String,
     pub message: String,
 }
 
+#[derive(Deserialize, Debug)]
+struct ServerResponse {
+    pub success: bool,
+}
+
 fn post_data() {
+    let url = "https://infinitea.herokuapp.com/api/contact";
+
     let message = Message {
         name: "Mark Watney".into(),
         email: "mark@crypt.kk".into(),
         message: "I wanna be like Iron Man".into(),
     };
-    
+
     let mut opts = seed::RequestOpts::new();
     opts.headers.insert("Content-Type".into(), "application/json".into());
-    
-    // We can handle the server's response in the callback, as in the Get example.
-    let callback = move |json: JsValue| {};
-    seed::post(url, message, Some(opts), Box::new(callback));
+
+    let callback = |json: JsValue| {
+        let result: ServerResponse = json.into_serde().unwrap();
+        log!(format!("Response: {:?}", result));
+    };
+
+    seed::post_json(url, message, Some(opts), Box::new(callback));
 }
 ```
-Note how we pass the struct we wish to serialize (the payload) as the second parameter to `post`;
+Note how we pass the struct we wish to serialize (the payload) as the second parameter to `post_json`;
 serialization happens out of sight. If a payload is included in `RequestOpts`, it's replaced by this.
 Alternatively, we could use `fetch`, and pass an arbitrary payload `String` in `opts`. 
 Here's an example, also demonstrating use 
 of the `hashmap_string!` macro for brevity: a HashMap literal, which converts
-both key and value to Strings (eg we avoid repetitive `insert`, and `into()` as in above):
+both key and value to Strings (eg we avoid repetitive `insert`, and `into()` as in above). It also
+demonstrates using a callback that acts on a Response, instead of Json:
 
 ```rust
 use serde_json;
@@ -157,8 +173,33 @@ fn post_data() {
     };
     opts.payload = Some(serde_json::to_string(&message).unwrap());
     
-    let callback = move |json: JsValue| {};
+    let callback = move |resp: web_sys::Response|
+        log!(resp.status());
+    };
     seed::fetch(seed::Method::Post, url, Some(opts), Box::new(callback));
+}
+```
+
+Here's an example of using set_interval to update the state once every second. It uses
+`seed::set_interval`:
+```rust
+fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {  
+    div![
+        did_mount(move |_| {
+            let state2 = state.clone();
+
+            let callback = move || {
+                state2.update(Msg::Increment);
+            };
+
+            seed::set_interval(Box::new(callback), 1000);
+        }),
+        
+        button![
+            simple_ev("click", Msg::Increment),
+            format!("Hello, World × {}", model.val)
+        ]
+    ]
 }
 ```
 
