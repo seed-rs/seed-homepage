@@ -86,24 +86,26 @@ r#"
 <a class="sourceLine" id="cb9-9" title="9">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb9-10" title="10">        <span class="pp">Msg::</span>ToggleWatching =&gt; Model <span class="op">{</span>watching: !model.watching, ..model<span class="op">}</span>,</a>
 <a class="sourceLine" id="cb9-11" title="11">        <span class="pp">Msg::</span>UpdateCoords(ev) =&gt; Model <span class="op">{</span>coords: (ev.screen_x(), ev.screen_y()), ..model<span class="op">}</span>,</a>
-<a class="sourceLine" id="cb9-12" title="12">        <span class="pp">Msg::</span>KeyPressed(key) =&gt; Model <span class="op">{</span>last_keycode: key.key_code(), ..model<span class="op">}</span></a>
+<a class="sourceLine" id="cb9-12" title="12">        <span class="pp">Msg::</span>KeyPressed(ev) =&gt; Model <span class="op">{</span>last_keycode: ev.key_code(), ..model<span class="op">}</span></a>
 <a class="sourceLine" id="cb9-13" title="13">    <span class="op">}</span></a>
 <a class="sourceLine" id="cb9-14" title="14"><span class="op">}</span></a>
 <a class="sourceLine" id="cb9-15" title="15"></a>
-<a class="sourceLine" id="cb9-16" title="16"><span class="kw">fn</span> window_events(model: Model) -&gt; <span class="dt">Vec</span>&lt;<span class="pp">seed::</span>Listener&lt;Msg&gt;&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb9-17" title="17">    <span class="kw">let</span> <span class="kw">mut</span> result = <span class="dt">Vec</span>::new();</a>
-<a class="sourceLine" id="cb9-18" title="18">    <span class="kw">if</span> model.watching <span class="op">{</span></a>
-<a class="sourceLine" id="cb9-19" title="19">        result.push(mouse_ev(<span class="st">&quot;mousemove&quot;</span>, |ev| <span class="pp">Msg::</span>UpdateCoords(ev)));</a>
-<a class="sourceLine" id="cb9-20" title="20">        result.push(keyboard_ev(<span class="st">&quot;keydown&quot;</span>, |ev| <span class="pp">Msg::</span>KeyPressed(ev)));</a>
-<a class="sourceLine" id="cb9-21" title="21">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb9-22" title="22">    result</a>
-<a class="sourceLine" id="cb9-23" title="23"><span class="op">}</span></a>
-<a class="sourceLine" id="cb9-24" title="24"></a>
-<a class="sourceLine" id="cb9-25" title="25"></a>
-<a class="sourceLine" id="cb9-26" title="26"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
-<a class="sourceLine" id="cb9-27" title="27"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
-<a class="sourceLine" id="cb9-28" title="28">    <span class="pp">seed::</span>run(<span class="pp">Model::</span><span class="kw">default</span>(), update, view, <span class="st">&quot;main&quot;</span>, <span class="cn">None</span>, <span class="cn">Some</span>(window_events));</a>
-<a class="sourceLine" id="cb9-29" title="29"><span class="op">}</span></a></code></pre></div>
+<a class="sourceLine" id="cb9-16" title="16"><span class="co">// ...</span></a>
+<a class="sourceLine" id="cb9-17" title="17"></a>
+<a class="sourceLine" id="cb9-18" title="18"><span class="kw">fn</span> window_events(model: Model) -&gt; <span class="dt">Vec</span>&lt;<span class="pp">seed::</span>Listener&lt;Msg&gt;&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb9-19" title="19">    <span class="kw">let</span> <span class="kw">mut</span> result = <span class="dt">Vec</span>::new();</a>
+<a class="sourceLine" id="cb9-20" title="20">    <span class="kw">if</span> model.watching <span class="op">{</span></a>
+<a class="sourceLine" id="cb9-21" title="21">        result.push(mouse_ev(<span class="st">&quot;mousemove&quot;</span>, |ev| <span class="pp">Msg::</span>UpdateCoords(ev)));</a>
+<a class="sourceLine" id="cb9-22" title="22">        result.push(keyboard_ev(<span class="st">&quot;keydown&quot;</span>, |ev| <span class="pp">Msg::</span>KeyPressed(ev)));</a>
+<a class="sourceLine" id="cb9-23" title="23">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb9-24" title="24">    result</a>
+<a class="sourceLine" id="cb9-25" title="25"><span class="op">}</span></a>
+<a class="sourceLine" id="cb9-26" title="26"></a>
+<a class="sourceLine" id="cb9-27" title="27"></a>
+<a class="sourceLine" id="cb9-28" title="28"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
+<a class="sourceLine" id="cb9-29" title="29"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
+<a class="sourceLine" id="cb9-30" title="30">    <span class="pp">seed::</span>run(<span class="pp">Model::</span><span class="kw">default</span>(), update, view, <span class="st">&quot;main&quot;</span>, <span class="cn">None</span>, <span class="cn">Some</span>(window_events));</a>
+<a class="sourceLine" id="cb9-31" title="31"><span class="op">}</span></a></code></pre></div>
 <p>If <code>model.watching</code> is true, the window listens for keyboard and mouse events, then updates the model accordingly. If not, it doesn't listen. There's currently a bug where window listeners won't work until the first (non-window-listener) update is triggered.</p>
 "#.into()
 }

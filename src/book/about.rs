@@ -36,7 +36,6 @@ r#"
 <li>Improve fetch API</li>
 <li>Dynamic SVG creation and modification</li>
 <li>More flexible routing</li>
-<li>Add data-struct integration for Rust servers. (Eg to avoid [de]serializing if Rust on front and backend)</li>
 <li>Virtual DOM optimization</li>
 <li>High-level CSS-grid/Flexbox API ?</li>
 </ul>
