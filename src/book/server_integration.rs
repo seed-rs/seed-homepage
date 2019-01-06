@@ -1,15 +1,23 @@
 pub fn text() -> String {
 r#"
 <h1 id="integration-with-rust-backend-servers">Integration with Rust (backend) servers</h1>
-<p>If pairing Seed with a Rust backend server, we can simplify passing data between server and frontend by using a layout similar to that in the <a href="https://github.com/David-OConnor/seed/tree/master/examples/server_interaction">server_integration example</a> Here, we demonstrate using a single struct for both client and server, with <a href="https://rocket.rs/">Rocket</a> as the sersver. It doesn't simplify things much in this simple example, but is useful for reducing duplication in more complicated programs. For example, we can use use the same struct which represents a database item on a server in Seed, without redefining or changing it.</p>
-<p>Highlights from the example: - We set up the frontend and backend as independent crates, with the frontend folder inside the backend one. Alternatively, we could set them up at the same nest level. - We place the shared data structures in a barebones third crate called <code>shared</code>. We can't access data on the backend crate due to it being incompatible with the <code>wasm32-unknown-unknown</code> target. We can't do the reverse due to being unable to import <code>"cdylib"</code> crates. - With <code>Rocket</code>, we must use the nightly toolchain for the backend. - We set the server and client to use different ports - The Rocket server is set up with CORS, to accept requests from localhost only. - We are unable to share a workspace between backend and frontend due to incompatible compile targets.</p>
+<p>If pairing Seed with a Rust backend server, we can simplify passing data between server and frontend by using a layout similar to that in the <a href="https://github.com/David-OConnor/seed/tree/master/examples/server_interaction">server_integration example</a> Here, we demonstrate using a single struct for both frontend and server, with <a href="https://rocket.rs/">Rocket</a>. as the server. This is useful for reducing duplication of data structures, and allows <code>Serde</code> to elegantly handle [de]serialization. For example, we can use use the same struct which represents a database item on a server in Seed, without redefining or changing it.</p>
+<p>Highlights from the example:</p>
+<ul>
+<li>We set up the frontend and backend as independent crates, with the frontend folder inside the backend one. Alternatively, we could set them up at the same nest level.</li>
+<li>We place the shared data structures in a barebones third crate called <code>shared</code>. We can't access data on the backend crate due to it being incompatible with the <code>wasm32-unknown-unknown</code> target. We can't do the reverse due to being unable to import <code>"cdylib"</code> crates.</li>
+<li>With <code>Rocket</code>, we must use the nightly toolchain for the backend.</li>
+<li>We set the server and client to use different ports</li>
+<li>The Rocket server is set up with CORS, to accept requests from localhost only.</li>
+<li>We are unable to share a workspace between backend and frontend due to incompatible compile targets.</li>
+</ul>
 <p>To run the example, navigate to the server_integration example, and run <code>cargo +nightly run</code>. In a different terminal, navigate to its <code>frontend</code> subdirectory, and run a build script and dev server as you would normally for a seed app.</p>
 <p>Folder structure:</p>
 <pre><code>backend: Our server crate, in this case Rocket
  └── frontend: A normal seed crate
  └── shared: Contains data structures shared between frontend and backend
  </code></pre>
-<p>Backend Cargo.toml. A normal <code>Rocket</code> one, with the <code>shared</code> dependency, and CORS support:</p>
+<p>Backend Cargo.toml. A normal <code>Rocket</code> one, with a relative-path <code>shared</code> dependency, and CORS support:</p>
 <pre class="toml"><code>[package]
 name = &quot;backend&quot;
 version = &quot;0.1.0&quot;
@@ -19,31 +27,22 @@ edition = &quot;2018&quot;
 [dependencies]
 rocket = &quot;^0.4.0-rc.1&quot;
 serde_json = &quot;^1.0.33&quot;
-
 rocket_cors = &quot;^0.4.0&quot;
-
 shared = { path = &quot;shared&quot; }</code></pre>
-<p>Frontend Cargo.toml. The only difference from a normal Seed crate is relative path for a <code>shared</code> dependency.</p>
+<p>Frontend Cargo.toml. The only difference from a normal Seed crate is the <code>shared</code> dependency. Note that we don't need to import <code>Serde</code> directly, in this case.</p>
 <pre class="toml"><code>[package]
 name = &quot;frontend&quot;
 version = &quot;0.1.0&quot;
 authors = [&quot;Your Name &lt;email@address.com&gt;&quot;]
 edition = &quot;2018&quot;
 
-
 [lib]
 crate-type = [&quot;cdylib&quot;]
-
 
 [dependencies]
 seed = &quot;^0.2.1&quot;
 wasm-bindgen = &quot;^0.2.29&quot;
 web-sys = &quot;^0.3.6&quot;
-
-# For serialization, eg sending requests to a server. Otherwise, not required.
-serde = { version = &quot;^1.0.80&quot;, features = [&#39;derive&#39;] }
-serde_json = &quot;^1.0.33&quot;
-
 shared = { path = &quot;../shared&quot;}</code></pre>
 <p>Shared Cargo.toml:</p>
 <pre class="toml"><code>[package]
