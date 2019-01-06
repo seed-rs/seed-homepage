@@ -9,6 +9,7 @@ pub mod components;
 pub mod fetch;
 pub mod lifecycle;
 pub mod routing;
+pub mod server_integration;
 pub mod misc;
 pub mod release_and_debugging;
 pub mod element_deepdive;
