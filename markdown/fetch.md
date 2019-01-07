@@ -1,29 +1,13 @@
 # Http requests (fetch), and updating state
 
-We use the [seed::fetch](https://docs.rs/seed/0.1.12/seed/fetch/fn.fetch.html) function
+We use the [seed::Request](https://docs.rs/seed/0.1.12/seed/fetch/struct.Request.html) struct
 to make HTTP requests in the browser, wrapping the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
-`fetch` takes 3 parameters: 
+To use this, we need to include `futures = "^0.1.20"` in `Cargo.toml`.
 
-- The [request method](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods): a
-[seed::Method](https://docs.rs/seed/0.1.12/seed/fetch/enum.Method.html)
-- The url, an `&str`
-- An optional [seed::RequstOpts](https://docs.rs/seed/0.1.12/seed/fetch/struct.RequestOpts.html) struct, where you
-can set things like headers, payload, and credentials.
-- A callback that performs actions once the request is complete. It accepts
-a [web_sys::Request](https://docs.rs/wasm-bindgen/0.2.29/wasm_bindgen/), and returns nothing.
-
-If you wish to parse JSON from the response, use `seed::fetch_json` instead. Its signature
-is the same as above, except the callback accepts a `JsValue` instead of a `Request`.
-
-The convenience functions [seed::get](https://docs.rs/seed/0.1.12/seed/fetch/fn.get.html) and
-[seed::post](https://docs.rs/seed/0.1.12/seed/fetch/fn.post.html) are also available;
-these are the same as `fetch`, but ommit the method parameter. Same for `seed::get_json` and `seed::post_json`. 
-Additionally, `seed::post` and `seed::post_json`
-uses a non-serialized payload as a second parameter: This is any Rust struct which implements
-`serde::Serialize`. It overrides the payload defined in `RequestOpts`.
-
-Example, where we update the state on initial app load:
+Example, where we update the state on initial load:
 ```rust
+use seed::{Request, Method, spawn_local}
+use futures::Future;
 use serde::{Serialize, Deserialize};
 
 #[derive(Clone, Serialize, Deserialize)]
@@ -48,53 +32,52 @@ fn update(msg: Msg, model: Model) -> Model {
     }
 }
 
-fn get_data(state: seed::App<Msg, Model>) {
+fn get_data(state: seed::App<Msg, Model>) -> impl Future<Item = (), Error = JsValue> {
     let url = "https://api.github.com/repos/david-oconnor/seed/branches/master";
-    let callback = move |json: JsValue| {
-        let data: Branch = json.into_serde().unwrap();
-        state.update(Msg::Replace(data));
-    };
 
-    seed::get_json(url, None, Box::new(callback));
+    Request::new(url)
+        .method(Method::Get)
+        .fetch_json()
+        .map(move |json| {
+            state.update(Msg::Replace(json));
+        })
 }
 
 fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
     div![ format!("name: {}, sha: {}", model.data.name, model.data.commit.sha),
-        did_mount(move |_| get_data(state.clone()))
+        did_mount(move |_| spawn_local(get_data(state.clone())))
      ]
 }
 ```
 When the top-level element is rendered for the first time (`did_mount`), we make
 a `get` request by passing the url, options like headers (In this example, we don't use any),
 and a callback to be executed once the data's received. In this case, we update our
-state by sending a message which contains the data to `state.update`.
+state by sending a message which contains the data to `state.update`. Note the signature
+of our get_data func, and that we always wrap calls to `seed::Request` with `seed::spawn_local`.
 
 We've set up nested structs that have fields matching the names of the JSON fields of
-the response, which Serde deserializes the response into. Note that even though more data than 
+the response, which `Serde` deserializes the response into, through the `fetch_json` method of
+ `Request`. Note that even though more data than 
 what's contained in our Branch struct is included
 in the response, Serde automatically applies only the info matching our struct's fields.
-In order to update our state outside of a normal event, we used `did_mount`. If we wish to trigger
-this update from a normal event instead of on load, we can do something like this:
+In order to update our state outside of a normal event, we used `did_mount`. 
 
+If we wish to trigger
+this update from a normal event instead of on load, we can do something like this:
 ```rust
 #[derive(Clone)]
 enum Msg {
     Replace(Branch),
-    GetData(seed::App<Msg, Model>)
+    GetData(seed::App<Msg, Model>),
 }
 
 fn update(msg: Msg, model: Model) -> Model {
     match msg {
         Msg::Replace(data) => Model {data},
-        Msg::GetData(app) => {
-            let url = "https://api.github.com/repos/david-oconnor/seed/branches/master";
-            let callback = move |json: JsValue| {
-                let data: Branch = json.into_serde().unwrap();
-                app.update(Msg::Replace(data));
-            };
-            seed::get(url, None, Box::new(callback));
+        Msg::GetData(state) => {
+            spawn_local(get_data(state));
             model
-        }
+        },
     }
 }
 
@@ -105,13 +88,6 @@ fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
     ]
 }
 ```
-
-## Updating state
-To update the model outside of the element-based event system, we call `update_state` on
-our state var, which is the first parameter in our view func. A consequence of this is
-that we must pass state to any components that need to update state in this way. This
-may require calling `state.clone()`, to use it in multiple places. Note that we also need
-to prepend our closures with `move`, as above, any time `state` is used in one.
 
 Example showing POST, and headers:
 ```rust
@@ -127,7 +103,7 @@ struct ServerResponse {
     pub success: bool,
 }
 
-fn post_data() {
+fn send() -> impl Future<Item = (), Error = JsValue> {
     let url = "https://infinitea.herokuapp.com/api/contact";
 
     let message = Message {
@@ -136,49 +112,26 @@ fn post_data() {
         message: "I wanna be like Iron Man".into(),
     };
 
-    let mut opts = seed::RequestOpts::new();
-    opts.headers.insert("Content-Type".into(), "application/json".into());
-
-    let callback = |json: JsValue| {
-        let result: ServerResponse = json.into_serde().unwrap();
-        log!(format!("Response: {:?}", result));
-    };
-
-    seed::post_json(url, message, Some(opts), Box::new(callback));
+    Request::new(url)
+        .method(Method::Post)
+        .header("Content-Type", "application/json")
+        .body_json(&message)
+        .fetch_json()
+        .map(|result: ServerResponse| {
+            log!(format!("Response: {:?}", result));
+        })
 }
 ```
-Note how we pass the struct we wish to serialize (the payload) as the second parameter to `post_json`;
-serialization happens out of sight. If a payload is included in `RequestOpts`, it's replaced by this.
-Alternatively, we could use `fetch`, and pass an arbitrary payload `String` in `opts`. 
-Here's an example, also demonstrating use 
-of the `hashmap_string!` macro for brevity: a HashMap literal, which converts
-both key and value to Strings (eg we avoid repetitive `insert`, and `into()` as in above). It also
-demonstrates using a callback that acts on a Response, instead of Json:
+Note how we pass a ref to the struct we wish to serialize (the payload) to the `.body_json()` method;
+serialization happens out of sight. 
 
-```rust
-use serde_json;
 
-// ...
-
-fn post_data() {
-    let message = Message {
-        name: "Mark Watney".into(),
-        email: "mark@crypt.kk".into(),
-        message: "I wanna be like Iron Man".into(),
-    };
-    
-    let mut opts = seed::RequestOpts::new();
-    opts.headers = hashmap_string!{
-        "Content-Type" => "application/json",
-    };
-    opts.payload = Some(serde_json::to_string(&message).unwrap());
-    
-    let callback = move |resp: web_sys::Response|
-        log!(resp.status());
-    };
-    seed::fetch(seed::Method::Post, url, Some(opts), Box::new(callback));
-}
-```
+## Updating state
+To update the model outside of the element-based event system, we call `update_state` on
+our state var, which is the first parameter in our view func. A consequence of this is
+that we must pass state to any components that need to update state in this way. This
+may require calling `state.clone()`, to use it in multiple places. Note that we also need
+to prepend our closures with `move`, as above, any time `state` is used in one.
 
 Here's an example of using set_interval to update the state once every second. It uses
 `seed::set_interval`:
@@ -205,3 +158,5 @@ fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
 
 See the [server_interaction example](https://github.com/David-OConnor/seed/tree/master/examples/server_interaction)
 for a full example.
+
+Props to Pauan for writing the Fetch module.

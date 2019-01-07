@@ -1,7 +1,8 @@
 # Integration with Rust (backend) servers
 
 If pairing Seed with a Rust backend server, we can simplify passing data between
-server and frontend by using a layout similar to that in the [server_integration example](https://github.com/David-OConnor/seed/tree/master/examples/server_interaction)
+server and frontend using a layout like that in the 
+[server_integration example](https://github.com/David-OConnor/seed/tree/master/examples/server_integration)
 Here, we demonstrate using a single struct for both frontend and server, with [Rocket](https://rocket.rs/).
 as the server. This is useful for reducing duplication of data structures, and allows
 `Serde` to elegantly handle [de]serialization.
@@ -28,12 +29,13 @@ as you would normally for a seed app.
 Folder structure:
 ```
 backend: Our server crate, in this case Rocket
- └── frontend: A normal seed crate
+ └── frontend: A normal Seed crate
  └── shared: Contains data structures shared between frontend and backend
  
 ```
 
-Backend Cargo.toml. A normal `Rocket` one, with a relative-path `shared` dependency, and CORS support:
+Backend Cargo.toml. A normal `Rocket` one, with a relative-path `shared` dependency, and CORS support.
+Notice how we don't use workspaces:
 ```toml
 [package]
 name = "backend"
@@ -47,6 +49,7 @@ serde_json = "^1.0.33"
 rocket_cors = "^0.4.0"
 shared = { path = "shared" }
 ```
+
 Frontend Cargo.toml. The only difference from a normal Seed crate is the `shared` dependency.
 Note that we don't need to import `Serde` directly, in this case.
 ```toml
@@ -60,6 +63,7 @@ edition = "2018"
 crate-type = ["cdylib"]
 
 [dependencies]
+futures = "^0.1.20"
 seed = "^0.2.1"
 wasm-bindgen = "^0.2.29"
 web-sys = "^0.3.6"
@@ -91,10 +95,10 @@ pub struct Data {
 
 In the frontend and backend, we import `shared`, and use these structures normally:
 
-backend:
+Backend:
+```rust
 use shared::Data;
 
-```rust
 #[get("/data", format = "application/json")]
 fn data_api() -> String {
     let data = Data {
@@ -106,26 +110,25 @@ fn data_api() -> String {
 }
 ```
 
-frontend:
+Frontend, showing how you might use the same data Struct as part of the model, and
+update it from the backend:
 ```rust
 use shared::Data;
-
-
-// Model
 
 #[derive(Clone)]
 struct Model {
     pub data: Data,
 }
 
-fn get_data(state: seed::App<Msg, Model>) {
+fn get_data(state: seed::App<Msg, Model>) -> impl Future<Item = (), Error = JsValue>  {
     let url = "http://localhost:8001/data";
-    let callback = move |json: JsValue| {
-        let data: Data = json.into_serde().unwrap();
-        state.update(Msg::Replace(data));
-    };
 
-    seed::get(url, None, Box::new(callback));
+        seed::Request::new(url)
+        .method(seed::Method::Get)
+        .fetch_json()
+        .map(move |json| {
+            state.update(Msg::Replace(json));
+        })
 }
 
 #[derive(Clone)]
@@ -137,7 +140,7 @@ enum Msg {
 fn update(msg: Msg, model: Model) -> Model {
     match msg {
         Msg::GetData(state) => {
-            get_data(state);
+            seed::spawn_local(get_data(state));
             model
         },
         Msg::Replace(data) => Model {data}

@@ -1,7 +1,7 @@
 pub fn text() -> String {
 r#"
 <h1 id="components">Components</h1>
-<p>The analog of components in frameworks like React are normal Rust functions that that return <a href="https://docs.rs/seed/0.2.1/seed/dom_types/struct.El.html">El</a>s. These functions take parameters that are not treated in a way equivalent to attributes on native DOM elements; they just provide a way to organize your code. In practice, they're used in a way similar to components in React.</p>
+<p>The analog of components in frameworks like React are normal Rust functions that that return <a href="https://docs.rs/seed/0.2.2/seed/dom_types/struct.El.html">El</a>s. These functions take parameters that are not treated in a way equivalent to attributes on native DOM elements; they just provide a way to organize your code. In practice, they're used in a way similar to components in React.</p>
 <p>For example, you could organize one of the examples in the Structure section of the guide like this:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1">    <span class="kw">fn</span> text_display(text: &amp;<span class="dt">str</span>) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-2" title="2">        <span class="pp">h3!</span><span class="op">[</span> text <span class="op">]</span></a>
@@ -46,7 +46,7 @@ r#"
 <a class="sourceLine" id="cb3-15" title="15">    <span class="op">]</span></a>
 <a class="sourceLine" id="cb3-16" title="16"><span class="op">}</span></a></code></pre></div>
 <h2 id="dummy-elements">Dummy elements</h2>
-<p>When performing ternary operations inside an element macro, all branches must return an <code>El</code> (Or <code>Vec</code> of <code>El</code>s) to satisfy Rust's type system. Seed provides the <a href="https://docs.rs/seed/0.2.1/seed/fn.empty.html">empty</a> function, which creates an element that will not be rendered:</p>
+<p>When performing ternary operations inside an element macro, all branches must return an <code>El</code> (Or <code>Vec</code> of <code>El</code>s) to satisfy Rust's type system. Seed provides the <a href="https://docs.rs/seed/0.2.2/seed/fn.empty.html">empty</a> function, which creates an element that will not be rendered:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="pp">div!</span><span class="op">[</span></a>
 <a class="sourceLine" id="cb4-2" title="2">    <span class="kw">if</span> model.count &gt;= <span class="dv">10</span> <span class="op">{</span> <span class="pp">h2!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;padding&quot;</span> =&gt; <span class="dv">50</span><span class="op">}</span>, <span class="st">&quot;Nice!&quot;</span> <span class="op">]</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> <span class="pp">seed::</span>empty() <span class="op">}</span></a>
 <a class="sourceLine" id="cb4-3" title="3"><span class="op">]</span></a></code></pre></div>
