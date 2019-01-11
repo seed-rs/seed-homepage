@@ -105,7 +105,7 @@ fn update(msg: Msg, model: Model) -> Model {
 
 // View
 
-fn header(version: &str) -> El<Msg> {
+fn header(_version: &str) -> El<Msg> {
     let link_style = style!{
         "margin-left" => 20;
         "margin-right" => 20;
@@ -182,16 +182,12 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
     div![ style! {
         "display" => "grid";
         "grid-template-columns" => "200px auto";
-//        "grid-template-rows" => "1fr";
         "color" => "black";
         "grid-auto-rows" => "1fr";
         "align-items" => "start";
-
-//        "padding" => 20;
     },
         div![ style!{"display" => "flex"; "flex-direction" => "column";
                      "grid-column" => "1 / 2";
-//                      "grid-row" => "1 / 2";
                       "justify-content" => "flex-start";
                      "padding" => 10;},
             menu_items
@@ -199,22 +195,48 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
 
         div![ attrs!{"class" => "guide"},
             style!{"display" => "flex"; "grid-column" => "2 / 3";
-//                     "grid-row" => "1 / 2";
             "padding" => 80;},
             sections[guide_page].clone().element
         ]
     ]
 }
 
-fn changelog_entry(version: &str, changes: &[&str]) -> El<Msg> {
-    let changes: Vec<El<Msg>> = changes.iter().map(|c| li![ c ]).collect();
-    div![
-        h2![ version ],
-        ul![ changes ]
-    ]
-}
+fn changelog() -> El<Msg> {
+    let mut entries = El::from_markdown(
+"
+## V0.2.3
+- Fixed a bug where initially-empty text won't update
+- Added more tests
 
-fn changelog(entries: Vec<El<Msg>>) -> El<Msg> {
+## V0.2.2
+- Overhaul of fetch module
+- Added server-integration example
+
+## V0.2.1
+- Added support for custom tags
+- Added `class!` and `id!` convenience macros for setting style
+
+## v0.2.0
+
+- Added high-level fetch api
+- Added routing
+- Added element lifecycles (did_mount, did_update, will_unmount)
+- Added support for updating state outside events
+- Added server_interaction, and homepage (this site) examples
+
+## v0.1.0
+
+- Initial release
+
+"
+    );
+    entries.style = style!{
+        "grid-column" => "2 / 3";
+        "display" => "flex";
+        "flex-direction" => "column";
+//        "align-content" => "center";
+     };
+
     div![
         attrs!{"class" => "guide"},
         style!{
@@ -224,9 +246,7 @@ fn changelog(entries: Vec<El<Msg>>) -> El<Msg> {
             "padding" => 50;
             "color" => "black";
         },
-        div![ style!{"grid-column" => "2 / 3"},
-            entries
-        ]
+        entries
     ]
 }
 
@@ -238,18 +258,8 @@ fn footer() -> El<Msg> {
 
 
 
-fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
+fn view(_state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
     let version = "0.1.12";
-    let changelog_entries = vec![
-        changelog_entry("v0.2.0", &[
-            "Added high-level fetch api",
-            "Added routing",
-            "Added element lifecycles (did_mount, did_update, will_unmount)",
-            "Added support for updating state outside events",
-            "Added server_interaction, and homepage (this site) examples"
-        ]),
-        changelog_entry("v0.1.0", &["Initial release"]),
-    ];
 
     div![
         style!{
@@ -266,7 +276,7 @@ fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
         section![
             match model.page {
                 Page::Guide => guide(&model.guide_sections, model.guide_page),
-                Page::Changelog => changelog(changelog_entries),
+                Page::Changelog => changelog(),
             }
         ],
         section![

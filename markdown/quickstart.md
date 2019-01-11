@@ -171,8 +171,7 @@ fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
 
 #[wasm_bindgen]
 pub fn render() {
-    // The final parameter is an optional routing map.
-    seed::run(Model::default(), update, view, "main", None);
+    seed::run(Model::default(), update, view, "main", None, None);
 }
 ```
 For a truly minimimal example, see [lib.rs in the quickstart repo](https://github.com/David-OConnor/seed-quickstart/blob/master/src/lib.rs)
@@ -201,6 +200,8 @@ For development, you can view your app using a shimmed Python dev server, as des
 from the quickstart repo, and run `python serve.py`).
 
 In the future, the build script and commands above may be replaced by [wasm-pack](https://github.com/rustwasm/wasm-pack).
+You may use it now if you wish, but may run into issues running the examples, enabling no-modules mode,
+and syntax-highlighting in the compile logs.
 
 ## Running included examples
 To run an example located in the [examples folder](https://github.com/David-OConnor/seed/tree/master/examples),

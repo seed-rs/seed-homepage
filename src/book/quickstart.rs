@@ -139,9 +139,8 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <a class="sourceLine" id="cb3-93" title="93"></a>
 <a class="sourceLine" id="cb3-94" title="94"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
 <a class="sourceLine" id="cb3-95" title="95"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-96" title="96">    <span class="co">// The final parameter is an optional routing map.</span></a>
-<a class="sourceLine" id="cb3-97" title="97">    <span class="pp">seed::</span>run(<span class="pp">Model::</span><span class="kw">default</span>(), update, view, <span class="st">&quot;main&quot;</span>, <span class="cn">None</span>);</a>
-<a class="sourceLine" id="cb3-98" title="98"><span class="op">}</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-96" title="96">    <span class="pp">seed::</span>run(<span class="pp">Model::</span><span class="kw">default</span>(), update, view, <span class="st">&quot;main&quot;</span>, <span class="cn">None</span>, <span class="cn">None</span>);</a>
+<a class="sourceLine" id="cb3-97" title="97"><span class="op">}</span></a></code></pre></div>
 <p>For a truly minimimal example, see <a href="https://github.com/David-OConnor/seed-quickstart/blob/master/src/lib.rs">lib.rs in the quickstart repo</a></p>
 <h2 id="building-and-running">Building and running</h2>
 <p>To build your app, create a <code>pkg</code> subdirectory, and run the following two commands:</p>
@@ -151,7 +150,7 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <p>where <code>appname</code> is replaced with your app's name. This compiles your code in the target folder, and populates the pkg folder with your WASM module, a Typescript definitions file, and a JS file used to link your module from HTML.</p>
 <p>You may wish to create a build script with these two lines. (<code>build.sh</code> for Linux; <code>build.ps1</code> for Windows). The quickstart repo includes these, but you'll still need to do the rename. You can then use <code>./build.sh</code> or <code>.\build.ps1</code> If you run into permission errors on <code>build.sh</code>, try this command to allow executing the file:<code>chmod +x build.sh</code>. If you run into persmission errors on <code>build.ps1</code>, open Powershell as an administrator, and enter this command: <code>Set-ExecutionPolicy RemoteSigned</code>.</p>
 <p>For development, you can view your app using a shimmed Python dev server, as described above. (Set up <a href="https://github.com/David-OConnor/seed-quickstart/blob/master/serve.py">this mime-type shim</a> from the quickstart repo, and run <code>python serve.py</code>).</p>
-<p>In the future, the build script and commands above may be replaced by <a href="https://github.com/rustwasm/wasm-pack">wasm-pack</a>.</p>
+<p>In the future, the build script and commands above may be replaced by <a href="https://github.com/rustwasm/wasm-pack">wasm-pack</a>. You may use it now if you wish, but may run into issues running the examples, enabling no-modules mode, and syntax-highlighting in the compile logs.</p>
 <h2 id="running-included-examples">Running included examples</h2>
 <p>To run an example located in the <a href="https://github.com/David-OConnor/seed/tree/master/examples">examples folder</a>, navigate to that folder in a terminal, run the build script for your system (<code>build.sh</code> or <code>build.ps1</code>), then start a dev server as described above. Note that if you copy an example to a separate folder, you'll need to edit its <code>Cargo.toml</code> to point to the package on <a href="https://crates.io">crates.io</a> instead of locally: Ie replace <code>seed = { path = "../../"</code> with <code>seed = "^0.1.8"</code>, and in the build script, remove the leading <code>../../</code> on the second line.</p>
 "#.into()

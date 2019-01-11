@@ -1,7 +1,7 @@
 pub fn text() -> String {
 r#"
 <h1 id="integration-with-rust-backend-servers">Integration with Rust (backend) servers</h1>
-<p>If pairing Seed with a Rust backend server, we can simplify passing data between server and frontend using a layout like that in the <a href="https://github.com/David-OConnor/seed/tree/master/examples/server_integration">server_integration example</a> Here, we demonstrate using a single struct for both frontend and server, with <a href="https://rocket.rs/">Rocket</a>. as the server. This is useful for reducing duplication of data structures, and allows <code>Serde</code> to elegantly handle [de]serialization. For example, we can use use the same struct which represents a database item on a server in Seed, without redefining or changing it.</p>
+<p>If pairing Seed with a Rust backend server, we can simplify passing data between server and frontend using a layout like that in the <a href="https://github.com/David-OConnor/seed/tree/master/examples/server_integration">server_integration example</a> Here, we demonstrate using a single struct for both frontend and server, with <a href="https://rocket.rs/">Rocket</a>. as the server. This is useful for reducing duplication of data structures, and allows <code>Serde</code> to elegantly handle [de]serialization. For example, we can use use the same struct which represents a database item on a server in Seed, without redefining or changing it. This includes keeping the same methods on both server and client.</p>
 <p>Highlights from the example:</p>
 <ul>
 <li>We set up the frontend and backend as independent crates, with the frontend folder inside the backend one. Alternatively, we could set them up at the same nest level.</li>

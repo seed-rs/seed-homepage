@@ -83,13 +83,13 @@ avoids the dependency glue-code associated with Redux and React-Router.
 - Tim Robinson, for being very helpful on the [Rust Gitter](https://gitter.im/rust-lang/rust).
 
 ### Features to add
-- Improve fetch API
 - Dynamic SVG creation and modification
 - More flexible routing
 - Virtual DOM optimization
 - High-level CSS-grid/Flexbox API ?
  
 ### Bugs to fix
+- Animations broken
 - Text renders above children instead of below
  
 ## Reference
@@ -100,4 +100,5 @@ avoids the dependency glue-code associated with Redux and React-Router.
 - [Rust standard library api](https://doc.rust-lang.org/std/)
 - [Seed's API docs](https://docs.rs/seed)
 - [Learn Rust](https://www.rust-lang.org/learn)
+- [Testing in Headless Browsers](https://rustwasm.github.io/wasm-bindgen/wasm-bindgen-test/browsers.html)
 

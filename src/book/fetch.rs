@@ -101,7 +101,7 @@ r#"
 <a class="sourceLine" id="cb3-28" title="28">            <span class="pp">log!</span>(<span class="pp">format!</span>(<span class="st">&quot;Response: {:?}&quot;</span>, result));</a>
 <a class="sourceLine" id="cb3-29" title="29">        <span class="op">}</span>)</a>
 <a class="sourceLine" id="cb3-30" title="30"><span class="op">}</span></a></code></pre></div>
-<p>Note how we pass a ref to the struct we wish to serialize (the payload) to the <code>.body_json()</code> method; serialization happens out of sight.</p>
+<p>Note how we pass a ref to the struct we wish to serialize (the payload) to the <code>.body_json()</code> method; serialization happens out of sight. Reference the <code>Request</code> API docs (linked above) for a full list of methods available to configure the request, and links to the <code>MDN</code> docs describing them. (eg: <code>credentials</code>, <code>mode</code>, <code>integrity</code>)</p>
 <h2 id="updating-state">Updating state</h2>
 <p>To update the model outside of the element-based event system, we call <code>update_state</code> on our state var, which is the first parameter in our view func. A consequence of this is that we must pass state to any components that need to update state in this way. This may require calling <code>state.clone()</code>, to use it in multiple places. Note that we also need to prepend our closures with <code>move</code>, as above, any time <code>state</code> is used in one.</p>
 <p>Here's an example of using set_interval to update the state once every second. It uses <code>seed::set_interval</code>:</p>

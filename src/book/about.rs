@@ -33,7 +33,6 @@ r#"
 </ul>
 <h3 id="features-to-add">Features to add</h3>
 <ul>
-<li>Improve fetch API</li>
 <li>Dynamic SVG creation and modification</li>
 <li>More flexible routing</li>
 <li>Virtual DOM optimization</li>
@@ -41,6 +40,7 @@ r#"
 </ul>
 <h3 id="bugs-to-fix">Bugs to fix</h3>
 <ul>
+<li>Animations broken</li>
 <li>Text renders above children instead of below</li>
 </ul>
 <h2 id="reference">Reference</h2>
@@ -52,6 +52,7 @@ r#"
 <li><a href="https://doc.rust-lang.org/std/">Rust standard library api</a></li>
 <li><a href="https://docs.rs/seed">Seed's API docs</a></li>
 <li><a href="https://www.rust-lang.org/learn">Learn Rust</a></li>
+<li><a href="https://rustwasm.github.io/wasm-bindgen/wasm-bindgen-test/browsers.html">Testing in Headless Browsers</a></li>
 </ul>
 "#.into()
 }

@@ -123,7 +123,9 @@ fn send() -> impl Future<Item = (), Error = JsValue> {
 }
 ```
 Note how we pass a ref to the struct we wish to serialize (the payload) to the `.body_json()` method;
-serialization happens out of sight. 
+serialization happens out of sight. Reference the `Request` API docs (linked above) for a full
+list of methods available to configure the request, and links to the `MDN` docs describing
+them. (eg: `credentials`, `mode`, `integrity`)
 
 
 ## Updating state

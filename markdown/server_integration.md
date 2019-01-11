@@ -7,7 +7,8 @@ Here, we demonstrate using a single struct for both frontend and server, with [R
 as the server. This is useful for reducing duplication of data structures, and allows
 `Serde` to elegantly handle [de]serialization.
 For example, we can use use the same struct which represents a 
-database item on a server in Seed, without redefining or changing it.
+database item on a server in Seed, without redefining or changing it. This includes
+keeping the same methods on both server and client.
 
 Highlights from the example:
 

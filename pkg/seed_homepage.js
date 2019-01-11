@@ -317,6 +317,14 @@ __exports.__widl_f_append_child_Node = function(arg0, arg1, exnptr) {
     }
 };
 
+const __widl_f_has_child_nodes_Node_target = typeof Node === 'undefined' ? null : Node.prototype.hasChildNodes || function() {
+    throw new Error(`wasm-bindgen: Node.hasChildNodes does not exist`);
+};
+
+__exports.__widl_f_has_child_nodes_Node = function(arg0) {
+    return __widl_f_has_child_nodes_Node_target.call(getObject(arg0));
+};
+
 const __widl_f_remove_child_Node_target = typeof Node === 'undefined' ? null : Node.prototype.removeChild || function() {
     throw new Error(`wasm-bindgen: Node.removeChild does not exist`);
 };
@@ -486,7 +494,7 @@ __exports.__wbindgen_cb_drop = function(i) {
     return 0;
 };
 
-__exports.__wbindgen_closure_wrapper591 = function(a, b, _ignored) {
+__exports.__wbindgen_closure_wrapper576 = function(a, b, _ignored) {
     const f = wasm.__wbg_function_table.get(18);
     const d = wasm.__wbg_function_table.get(19);
     const cb = function(arg0) {
