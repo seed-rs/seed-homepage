@@ -208,7 +208,7 @@ fn changelog() -> El<Msg> {
 - Fixed a bug where initially-empty text won't update
 - Added more tests
 - Exposed web_sys Document and Window in top level of Seed create, with .expect
-- Modified build scripts to keep the wasm output named fixed at 'package', simplifying example/quickstart renames
+- Modified build scripts to keep the wasm output name fixed at 'package', simplifying example/quickstart renames
 - Tests now work in Windows due to update in wasm-pack
 
 ## V0.2.2
