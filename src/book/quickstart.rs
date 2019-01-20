@@ -14,19 +14,19 @@ r#"
 <p>If not using the quickstart repo, create an Html file with a body that contains this:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">&lt;section</span><span class="ot"> id=</span><span class="st">&quot;main&quot;</span><span class="kw">&gt;&lt;/section&gt;</span></a>
 <a class="sourceLine" id="cb1-2" title="2"></a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&#39;./pkg/appname.js&#39;</span><span class="kw">&gt;&lt;/script&gt;</span></a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&#39;./pkg/package.js&#39;</span><span class="kw">&gt;&lt;/script&gt;</span></a>
 <a class="sourceLine" id="cb1-4" title="4"></a>
 <a class="sourceLine" id="cb1-5" title="5"><span class="kw">&lt;script&gt;</span></a>
 <a class="sourceLine" id="cb1-6" title="6">    <span class="kw">const</span> <span class="op">{</span> render <span class="op">}</span> <span class="op">=</span> wasm_bindgen<span class="op">;</span></a>
 <a class="sourceLine" id="cb1-7" title="7">    <span class="kw">function</span> <span class="at">run</span>() <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-8" title="8">        <span class="at">render</span>()<span class="op">;</span></a>
 <a class="sourceLine" id="cb1-9" title="9">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb1-10" title="10">    <span class="at">wasm_bindgen</span>(<span class="st">&#39;./pkg/appname_bg.wasm&#39;</span>)</a>
+<a class="sourceLine" id="cb1-10" title="10">    <span class="at">wasm_bindgen</span>(<span class="st">&#39;./pkg/package_bg.wasm&#39;</span>)</a>
 <a class="sourceLine" id="cb1-11" title="11">        .<span class="at">then</span>(run)</a>
 <a class="sourceLine" id="cb1-12" title="12">        .<span class="at">catch</span>(<span class="va">console</span>.<span class="at">error</span>)<span class="op">;</span></a>
 <a class="sourceLine" id="cb1-13" title="13"><span class="kw">&lt;/script&gt;</span></a></code></pre></div>
 <p>The first line above is an empty element with id: It's where your app will render. The subsequent ones load your app's wasm modules.</p>
-<p>The quickstart repo includes this file, but you will need to rename the two occurances of <code>appname</code>. (If your project name has a hyphen, use an underscore instead here) You will eventually need to modify this file to change the page's title, add a description, favicon, stylesheet etc.</p>
+<p>The quickstart repo includes this file. You will eventually need to modify it to change the page's title, add a description, favicon, stylesheet etc.</p>
 <p><code>Cargo.toml</code>, which is a file created by Cargo that describes your app, needs <code>wasm-bindgen</code>, <code>web-sys</code>, and <code>seed</code> as depdendencies, and crate-type of <code>"cdylib"</code>. The version in the quickstart repo has these set up already. Example:</p>
 <pre class="toml"><code>[package]
 name = &quot;appname&quot;
@@ -146,7 +146,7 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <p>To build your app, create a <code>pkg</code> subdirectory, and run the following two commands:</p>
 <pre><code>cargo build --target wasm32-unknown-unknown</code></pre>
 <p>and</p>
-<pre><code>wasm-bindgen target/wasm32-unknown-unknown/debug/appname.wasm --no modules --out-dir ./pkg</code></pre>
+<pre><code>wasm-bindgen target/wasm32-unknown-unknown/debug/appname.wasm --no modules --out-dir ./pkg --out-name package</code></pre>
 <p>where <code>appname</code> is replaced with your app's name. This compiles your code in the target folder, and populates the pkg folder with your WASM module, a Typescript definitions file, and a JS file used to link your module from HTML.</p>
 <p>You may wish to create a build script with these two lines. (<code>build.sh</code> for Linux; <code>build.ps1</code> for Windows). The quickstart repo includes these, but you'll still need to do the rename. You can then use <code>./build.sh</code> or <code>.\build.ps1</code> If you run into permission errors on <code>build.sh</code>, try this command to allow executing the file:<code>chmod +x build.sh</code>. If you run into persmission errors on <code>build.ps1</code>, open Powershell as an administrator, and enter this command: <code>Set-ExecutionPolicy RemoteSigned</code>.</p>
 <p>For development, you can view your app using a shimmed Python dev server, as described above. (Set up <a href="https://github.com/David-OConnor/seed-quickstart/blob/master/serve.py">this mime-type shim</a> from the quickstart repo, and run <code>python serve.py</code>).</p>

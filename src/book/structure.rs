@@ -1,7 +1,7 @@
 pub fn text() -> String {
 r#"
 <h1 id="app-structure">App structure</h1>
-<h3 id="model">Model</h3>
+<h2 id="model">Model</h2>
 <p>Each app must contain a model <a href="https://doc.rust-lang.org/book/ch05-00-structs.html">struct</a>, which contains the app's state. It must derive <code>Clone</code>, and should contain <a href="https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html">owned data</a>. References with a static <a href="https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html">lifetime</a> work, but may be more difficult to work with. Example:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="kw">struct</span> Model <span class="op">{</span></a>
@@ -37,7 +37,7 @@ r#"
 <a class="sourceLine" id="cb2-15" title="15">    form_data: FormData,</a>
 <a class="sourceLine" id="cb2-16" title="16">    misc: Misc</a>
 <a class="sourceLine" id="cb2-17" title="17"><span class="op">}</span></a></code></pre></div>
-<h3 id="update">Update</h3>
+<h2 id="update">Update</h2>
 <p>The Message is an <a href="https://doc.rust-lang.org/book/ch06-00-enums.html">enum</a> which categorizes each type of interaction with the app. Its fields may hold a value, or not. We've abbreviated it as <code>Msg</code> here for brevity. If you're not familiar with enums, think of one as a set of options; in other languages, you might use an integer, or string for this, but an enum is explicitly limited in which values it can take. Example:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="kw">enum</span> Msg <span class="op">{</span></a>
@@ -126,20 +126,20 @@ r#"
 <a class="sourceLine" id="cb8-4" title="4">        <span class="pp">Msg::</span>B =&gt; do_other_things(update(<span class="pp">Msg::</span>A, model)),</a>
 <a class="sourceLine" id="cb8-5" title="5">    <span class="op">}</span></a>
 <a class="sourceLine" id="cb8-6" title="6"><span class="op">}</span></a></code></pre></div>
-<h3 id="view">View</h3>
+<h2 id="view">View</h2>
 <p>Visual layout (ie HTML/DOM elements) is described declaratively in Rust, and uses <a href="https://doc.rust-lang.org/book/appendix-04-macros.html">macros</a> to simplify syntax.</p>
 <p>The view's defined bya function that's passed to <code>seed::run</code>. This takes a <code>Seed::app&lt;Msg, Model&gt;</code>, and Model as parameters, and outputs an <code>El</code>, representing the top-level element. It may composed into sub-functions, which can be thought of like components in other frameworks. The first parameter, which we will call <code>state</code> in our examples, is used for updating state outside of the message system, and will not be used in these examples.</p>
 <p>Example:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb9-2" title="2">    <span class="pp">div!</span><span class="op">[</span> <span class="st">&quot;Let there be light&quot;</span> <span class="op">]</span></a>
 <a class="sourceLine" id="cb9-3" title="3"><span class="op">}</span></a></code></pre></div>
-<h3 id="elements-attributes-styles">Elements, attributes, styles</h3>
+<h2 id="elements-attributes-styles">Elements, attributes, styles</h2>
 <p>Elements are created using macros, named by the lowercase name of each element, and imported into the global namespace. Eg <code>div!</code> above. We use this code to import them:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb10-1" title="1"><span class="at">#[</span>macro_use<span class="at">]</span></a>
 <a class="sourceLine" id="cb10-2" title="2"><span class="kw">extern</span> <span class="kw">crate</span> seed;</a></code></pre></div>
-<p>These macros accept any combination of the following parameters: - One <a href="https://docs.rs/seed/0.2.2/seed/dom_types/struct.Attrs.html">Attrs</a> struct - One <a href="https://docs.rs/seed/0.2.2/seed/dom_types/struct.Style.html">Style</a> struct - One or more <a href="https://docs.rs/seed/0.2.2/seed/dom_types/struct.Listener.html">Listener</a> structs, which handle events - One or more <code>Vec</code>s of <code>Listener</code> structs - One <code>String</code> or <code>&amp;str</code> representing a node text - One or more <a href="https://docs.rs/seed/0.2.2/seed/dom_types/struct.El.html">El</a> structs, representing a child - One or more Vecs of <code>El</code> structs, representing multiple children</p>
+<p>These macros accept any combination of the following parameters: - One <a href="https://docs.rs/seed/0.2.3/seed/dom_types/struct.Attrs.html">Attrs</a> struct - One <a href="https://docs.rs/seed/0.2.3/seed/dom_types/struct.Style.html">Style</a> struct - One or more <a href="https://docs.rs/seed/0.2.3/seed/dom_types/struct.Listener.html">Listener</a> structs, which handle events - One or more <code>Vec</code>s of <code>Listener</code> structs - One <code>String</code> or <code>&amp;str</code> representing a node text - One or more <a href="https://docs.rs/seed/0.2.3/seed/dom_types/struct.El.html">El</a> structs, representing a child - One or more Vecs of <code>El</code> structs, representing multiple children</p>
 <p>The parameters can be passed in any order; the compiler knows how to handle them based on their types. Children are rendered in the order passed.</p>
-<p>Views are described using <a href="https://docs.rs/seed/0.2.2/seed/dom_types/struct.El.html">El</a> structs, defined in the <a href="https://docs.rs/seed/0.2.2/seed/dom_types/index.html">seed::dom_types</a> module.</p>
+<p>Views are described using <a href="https://docs.rs/seed/0.2.3/seed/dom_types/struct.El.html">El</a> structs, defined in the <a href="https://docs.rs/seed/0.2.3/seed/dom_types/index.html">seed::dom_types</a> module.</p>
 <p><code>Attrs</code> and <code>Style</code> are thinly-wrapped hashmaps created with their own macros: <code>attrs!{}</code> and <code>style!{}</code> respectively.</p>
 <p>Example:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
@@ -221,7 +221,7 @@ r#"
 <a class="sourceLine" id="cb18-7" title="7">    <span class="op">]</span></a>
 <a class="sourceLine" id="cb18-8" title="8"><span class="op">}</span></a></code></pre></div>
 <p>Overall: we leverage of Rust's strict type system to flexibly-create the view using normal Rust code.</p>
-<h3 id="initializing">Initializing</h3>
+<h2 id="initializing">Initializing</h2>
 <p>To start yoru app, call the <code>seed::run</code> function, which takes the following parameters: - The initial instance of your model - Your update function - Your view function - The id of the element you wish to mount it to - Optionally, a HashMap of routings, used to initialize your state based on url (See the Routing section) - Optionally, a function describing events on the <code>Window</code>. (See <code>Events</code> section of this guide)</p>
 <p>This must be wrapped in a function named <code>render</code>, with the #[wasm_bindgen] invocation above. (More correctly, its name must match the func in this line in your html file):</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb19-1" title="1"><span class="kw">function</span> <span class="at">run</span>() <span class="op">{</span></a>
@@ -230,7 +230,7 @@ r#"
 <p>Example:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb20-1" title="1"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
 <a class="sourceLine" id="cb20-2" title="2"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
-<a class="sourceLine" id="cb20-3" title="3">    <span class="pp">seed::</span>run(<span class="pp">Model::</span><span class="kw">default</span>(), update, view, <span class="st">&quot;main&quot;</span>, <span class="cn">None</span>);</a>
+<a class="sourceLine" id="cb20-3" title="3">    <span class="pp">seed::</span>run(<span class="pp">Model::</span><span class="kw">default</span>(), update, view, <span class="st">&quot;main&quot;</span>, <span class="cn">None</span>, <span class="cn">None</span>);</a>
 <a class="sourceLine" id="cb20-4" title="4"><span class="op">}</span></a></code></pre></div>
 <p>This will render your app to the element holding the id you passed; in the case of this example, “main”. The only part of the web page Seed will interact with is that element, so you can use other HTML not part of Seed, or other JS code/frameworks in the same document.</p>
 "#.into()

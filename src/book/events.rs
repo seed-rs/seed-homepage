@@ -1,7 +1,7 @@
 pub fn text() -> String {
 r#"
 <h1 id="events">Events</h1>
-<p>Events are created by passing a a <a href="https://docs.rs/seed/0.2.2/seed/dom_types/struct.Listener.html">Listener</a>, or vec of Listeners, created using the following functions exposed in the prelude: <code>simple_ev</code>, <code>input_ev</code>, <code>keyboard_ev</code>, <code>mouse_ev</code>, and <code>raw_ev</code>. The first is demonstrated in the example in the quickstart section, and all are demonstrated in the todomvc example.</p>
+<p>Events are created by passing a a <a href="https://docs.rs/seed/0.2.3/seed/dom_types/struct.Listener.html">Listener</a>, or vec of Listeners, created using the following functions exposed in the prelude: <code>simple_ev</code>, <code>input_ev</code>, <code>keyboard_ev</code>, <code>mouse_ev</code>, and <code>raw_ev</code>. The first is demonstrated in the example in the quickstart section, and all are demonstrated in the todomvc example.</p>
 <p><code>simple_ev</code> takes two arguments: an event trigger (eg “click”, “contextmenu” etc), and an instance of your <code>Msg</code> enum. (eg Msg::Increment). The other three event-creation-funcs take a trigger, and a <a href="https://doc.rust-lang.org/book/ch13-01-closures.html">closure</a> (An anonymous function, similar to an arrow func in JS) that returns a Msg enum.</p>
 <p><code>simple_ev</code> does not pass any information about the event, only that it fired. Example:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">enum</span> Msg <span class="op">{</span></a>

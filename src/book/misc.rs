@@ -34,7 +34,7 @@ r#"
 <a class="sourceLine" id="cb2-17" title="17"><span class="kw">let</span> loaded_serialized = storage.get_item(<span class="st">&quot;my-data&quot;</span>).unwrap().unwrap();</a>
 <a class="sourceLine" id="cb2-18" title="18"><span class="kw">let</span> data = <span class="pp">serde_json::</span>from_str(&amp;loaded_serialized).unwrap();</a></code></pre></div>
 <h2 id="display-markdown-and-raw-html">Display markdown and raw HTML</h2>
-<p>Seed supports creating elements from markdown text, using <a href="https://github.com/raphlinus/pulldown-cmark">pulldown-cmark</a> internally. Use the <a href="https://docs.rs/seed/0.2.2/seed/dom_types/struct.El.html#method.from_markdown">El::from_markdown()</a> method to create an element that accepts a markdown &amp;str as its only parameter, and displays it normally as html. Note that it does not support syntax highlighting. You can render raw HTML with <code>El::from_html(html)</code>, where <code>html</code> is a &amp;str of HTML.</p>
+<p>Seed supports creating elements from markdown text, using <a href="https://github.com/raphlinus/pulldown-cmark">pulldown-cmark</a> internally. Use the <a href="https://docs.rs/seed/0.2.3/seed/dom_types/struct.El.html#method.from_markdown">El::from_markdown()</a> method to create an element that accepts a markdown &amp;str as its only parameter, and displays it normally as html. Note that it does not support syntax highlighting. You can render raw HTML with <code>El::from_html(html)</code>, where <code>html</code> is a &amp;str of HTML.</p>
 <p>Example:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">fn</span> view(app: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-2" title="2"></a>
@@ -60,8 +60,17 @@ r#"
 <a class="sourceLine" id="cb3-22" title="22">        <span class="pp">El::</span>from_markdown(markdown) </a>
 <a class="sourceLine" id="cb3-23" title="23">        <span class="pp">El::</span>from_html(html) </a>
 <a class="sourceLine" id="cb3-24" title="24">    <span class="op">]</span></a>
-<a class="sourceLine" id="cb3-25" title="25"><span class="op">}</span></a>
-<a class="sourceLine" id="cb3-26" title="26"></a>
-<a class="sourceLine" id="cb3-27" title="27"></a></code></pre></div>
+<a class="sourceLine" id="cb3-25" title="25"><span class="op">}</span></a></code></pre></div>
+<h2 id="some-convenience-functions">Some convenience functions</h2>
+<p>You can use <code>seed::document</code> and <code>seed::window</code> to access the <code>web_sys</code> document and window functions. Example:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-2" title="2">    <span class="pp">button!</span><span class="op">[</span> </a>
+<a class="sourceLine" id="cb4-3" title="3">        simple_ev(<span class="st">&quot;click&quot;</span>, <span class="pp">Msg::</span>Increment), </a>
+<a class="sourceLine" id="cb4-4" title="4">        <span class="pp">format!</span>(<span class="st">&quot;Hello, World × {}&quot;</span>, model.val),</a>
+<a class="sourceLine" id="cb4-5" title="5">        did_mount(|_| <span class="op">{</span></a>
+<a class="sourceLine" id="cb4-6" title="6">            <span class="pp">seed::</span>document().set_title(<span class="st">&quot;New title&quot;</span>)</a>
+<a class="sourceLine" id="cb4-7" title="7">        <span class="op">}</span>)</a>
+<a class="sourceLine" id="cb4-8" title="8">    <span class="op">]</span></a>
+<a class="sourceLine" id="cb4-9" title="9"><span class="op">}</span></a></code></pre></div>
 "#.into()
 }
