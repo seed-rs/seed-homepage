@@ -30,22 +30,21 @@ If not using the quickstart repo, create an Html file with a body that contains 
 ```html
 <section id="main"></section>
 
-<script src='./pkg/appname.js'></script>
+<script src='./pkg/package.js'></script>
 
 <script>
     const { render } = wasm_bindgen;
     function run() {
         render();
     }
-    wasm_bindgen('./pkg/appname_bg.wasm')
+    wasm_bindgen('./pkg/package_bg.wasm')
         .then(run)
         .catch(console.error);
 </script>
 ```
 The first line above is an empty element with id: It's where your app will render. The subsequent ones load your app's wasm modules.
 
-The quickstart repo includes this file, but you will need to rename the two 
-occurances of `appname`. (If your project name has a hyphen, use an underscore instead here) You will eventually need to modify this file to 
+The quickstart repo includes this file. You will eventually need to modify it to 
 change the page's title, add a description, favicon, stylesheet etc.
 
 `Cargo.toml`, which is a file created by Cargo that describes your app, needs `wasm-bindgen`, `web-sys`, and `
@@ -183,7 +182,7 @@ cargo build --target wasm32-unknown-unknown
 ```
 and 
 ```
-wasm-bindgen target/wasm32-unknown-unknown/debug/appname.wasm --no modules --out-dir ./pkg
+wasm-bindgen target/wasm32-unknown-unknown/debug/appname.wasm --no modules --out-dir ./pkg --out-name package
 ```
 where `appname` is replaced with your app's name. This compiles your code in the target
 folder, and populates the pkg folder with your WASM module, a Typescript definitions file,

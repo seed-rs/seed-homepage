@@ -41,7 +41,7 @@ of Seed apps mimicks that of The Elm Architecture.
 
 ## There are already several Rust/WASM frameworks; why add another?
 
- I'm distinguising Seed through clear examples and documentation, and using `wasm-bindgen`/`web-sys` internally. I started this
+ I'm distinguishing Seed through clear examples and documentation, and using `wasm-bindgen`/`web-sys` internally. I started this
 project after being unable to get existing frameworks working
 due to lack of documented examples, and inconsistency between documentation and 
 published versions. My intent is for anyone who's proficient in a frontend

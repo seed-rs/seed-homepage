@@ -1,6 +1,6 @@
 # App structure
 
-### Model
+## Model
 Each app must contain a model [struct]( https://doc.rust-lang.org/book/ch05-00-structs.html), 
 which contains the app’s state. It must derive `Clone`, and should contain 
 [owned data](https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html). References
@@ -55,7 +55,7 @@ struct Model {
 }
 ```
 
-### Update
+## Update
 The Message is an [enum]( https://doc.rust-lang.org/book/ch06-00-enums.html) which 
 categorizes each type of interaction with the app. Its fields may hold a value, or not. 
 We’ve abbreviated it as `Msg` here for brevity. If you're not familiar with enums,
@@ -190,7 +190,7 @@ fn update(fn update(msg: Msg, model: Model) -> Model {
 }
 ```
 
-### View
+## View
  Visual layout (ie HTML/DOM elements) is described declaratively in Rust, and uses 
 [macros]( https://doc.rust-lang.org/book/appendix-04-macros.html) to simplify syntax.
 
@@ -204,7 +204,7 @@ fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
 }
 ```
 
-### Elements, attributes, styles
+## Elements, attributes, styles
 Elements are created using macros, named by the lowercase name of
 each element, and imported into the global namespace. Eg `div!` above. We use this code to import them:
 ```rust
@@ -354,7 +354,7 @@ Overall: we leverage of Rust's strict type system to flexibly-create the view
 using normal Rust code.
 
 
-### Initializing
+## Initializing
 To start yoru app, call the `seed::run` function, which takes the following parameters:
 - The initial instance of your model
 - Your update function
@@ -375,7 +375,7 @@ Example:
 ```rust
 #[wasm_bindgen]
 pub fn render() {
-    seed::run(Model::default(), update, view, "main", None);
+    seed::run(Model::default(), update, view, "main", None, None);
 }
 ```
 

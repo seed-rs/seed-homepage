@@ -85,6 +85,19 @@ and just [learn to code](https://play.rust-lang.org/).
     ]
 }
 
+```
 
-
+## Some convenience functions
+You can use `seed::document` and `seed::window` to access the `web_sys` document
+and window functions. Example:
+```rust
+fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
+    button![ 
+        simple_ev("click", Msg::Increment), 
+        format!("Hello, World × {}", model.val),
+        did_mount(|_| {
+            seed::document().set_title("New title")
+        })
+    ]
+}
 ```
