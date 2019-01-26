@@ -29,7 +29,7 @@ appname` should be replaced with the name of your app.
 
 If not using the quickstart repo, create an Html file with a body that contains this:
 ```html
-<section id="main"></section>
+<section id="app"></section>
 
 <script src='./pkg/package.js'></script>
 
@@ -133,7 +133,7 @@ fn success_level(clicks: i32) -> El<Msg> {
 }
 
 /// The top-level component we pass to the virtual dom.
-fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
+fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
     let plural = if model.count == 1 {""} else {"s"};
 
     // Attrs, Style, Events, and children may be defined separately.

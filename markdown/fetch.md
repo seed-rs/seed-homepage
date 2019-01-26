@@ -82,7 +82,7 @@ fn update(msg: Msg, model: Model) -> Update<Model> {
     }
 }
 
-fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
+fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
     div![
         div![ format!("Hello World. name: {}, sha: {}", model.data.name, model.data.commit.sha) ],
         button![ raw_ev("click", move |_| Msg::GetData(state.clone())), "Update from the internet"]
@@ -139,7 +139,7 @@ to prepend our closures with `move`, as above, any time `state` is used in one.
 Here's an example of using set_interval to update the state once every second. It uses
 `seed::set_interval`:
 ```rust
-fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {  
+fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {  
     div![
         did_mount(move |_| {
             let state2 = state.clone();

@@ -209,7 +209,7 @@ as parameters, and outputs an `El`, representing the top-level element. It may c
 
 Example:
 ```rust
-fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
+fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
     div![ "Let there be light" ]
 }
 ```
@@ -242,7 +242,7 @@ respectively.
 
 Example:
 ```rust
-fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
+fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
     let things = vec![ h4![ "thing1" ], h4![ "thing2" ] ];
 
     div![ attrs!{"class" => "hardly-any"}, 
@@ -324,7 +324,7 @@ attributes.add("class", "truckloads");
 
 Example of the style tag, and how you can use pattern-matching in views:
 ```rust
-fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
+fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
     div![ style!{
         "display" => "grid";
         "grid-template-columns" => "auto";
