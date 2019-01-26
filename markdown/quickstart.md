@@ -12,10 +12,11 @@ And wasm-bindgen: `cargo install wasm-bindgen-cli`
 If you run into errors while installing `wasm-bindgen-cli`, you may need to install C++
 build tools. On linux, run `sudo apt install build-essential`. On Windows, download and install
 [Visual Studio 2017](https://visualstudio.microsoft.com/downloads/); when asked in the installer,
+[Visual Studio 2017](https://visualstudio.microsoft.com/downloads/); when asked in the installer,
 include the C++ workload.
 
 ## The theoretical minimum
-To start, clone [This quickstart repo](https://github.com/David-OConnor/seed-quickstart),
+To start, clone [The quickstart repo](https://github.com/David-OConnor/seed-quickstart),
 run `build.sh` or `build.ps1` in a terminal, then start a dev server that supports WASM.
 For example, with [Python](https://www.python.org/downloads/) installed, run `python serve.py`.
 (Linux users may need to run `python3 serve.py`.)
@@ -109,11 +110,11 @@ enum Msg {
 }
 
 /// The sole source of updating the model; returns a fresh one.
-fn update(msg: Msg, model: Model) -> Model {
+fn update(msg: Msg, model: Model) -> Update<Model> {
     match msg {
-        Msg::Increment => Model {count: model.count + 1, ..model},
-        Msg::Decrement => Model {count: model.count - 1, ..model},
-        Msg::ChangeWWC(what_we_count) => Model {what_we_count, ..model }
+        Msg::Increment => Render(Model {count: model.count + 1, ..model}),
+        Msg::Decrement => Render(Model {count: model.count - 1, ..model}),
+        Msg::ChangeWWC(what_we_count) => Render(Model {what_we_count, ..model })
     }
 }
 
@@ -170,7 +171,9 @@ fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
 
 #[wasm_bindgen]
 pub fn render() {
-    seed::run(Model::default(), update, view, "main", None, None);
+    seed::App::build(Model::default(), update, view)
+        .finish()
+        .run();
 }
 ```
 For a truly minimimal example, see [lib.rs in the quickstart repo](https://github.com/David-OConnor/seed-quickstart/blob/master/src/lib.rs)

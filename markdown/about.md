@@ -84,13 +84,11 @@ avoids the dependency glue-code associated with Redux and React-Router.
 
 ### Features to add
 - Dynamic SVG creation and modification
-- More flexible routing
+- Websocket API
+- Better recursive updating
 - Virtual DOM optimization
 - High-level CSS-grid/Flexbox API ?
  
-### Bugs to fix
-- Animations broken
-- Text renders above children instead of below
  
 ## Reference
 - [wasm-bindgen guide](https://rustwasm.github.io/wasm-bindgen/introduction.html)

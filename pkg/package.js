@@ -100,6 +100,10 @@ __exports.__widl_f_get_element_by_id_Document = function(arg0, arg1, arg2) {
 
 };
 
+__exports.__widl_instanceof_Element = function(idx) {
+    return getObject(idx) instanceof Element ? 1 : 0;
+};
+
 __exports.__widl_f_remove_attribute_Element = function(arg0, arg1, arg2, exnptr) {
     let varg1 = getStringFromWasm(arg1, arg2);
     try {
@@ -244,10 +248,6 @@ __exports.__widl_f_append_child_Node = function(arg0, arg1, exnptr) {
     }
 };
 
-__exports.__widl_f_has_child_nodes_Node = function(arg0) {
-    return getObject(arg0).hasChildNodes();
-};
-
 __exports.__widl_f_remove_child_Node = function(arg0, arg1, exnptr) {
     try {
         return addHeapObject(getObject(arg0).removeChild(getObject(arg1)));
@@ -259,28 +259,9 @@ __exports.__widl_f_remove_child_Node = function(arg0, arg1, exnptr) {
     }
 };
 
-__exports.__widl_f_node_type_Node = function(arg0) {
-    return getObject(arg0).nodeType;
-};
-
-__exports.__widl_f_child_nodes_Node = function(arg0) {
-    return addHeapObject(getObject(arg0).childNodes);
-};
-
 __exports.__widl_f_set_text_content_Node = function(arg0, arg1, arg2) {
     let varg1 = arg1 == 0 ? undefined : getStringFromWasm(arg1, arg2);
     getObject(arg0).textContent = varg1;
-};
-
-__exports.__widl_f_item_NodeList = function(arg0, arg1) {
-
-    const val = getObject(arg0).item(arg1);
-    return isLikeNone(val) ? 0 : addHeapObject(val);
-
-};
-
-__exports.__widl_f_length_NodeList = function(arg0) {
-    return getObject(arg0).length;
 };
 
 __exports.__widl_instanceof_Window = function(idx) {
@@ -429,9 +410,9 @@ __exports.__wbindgen_cb_drop = function(i) {
     return 0;
 };
 
-__exports.__wbindgen_closure_wrapper591 = function(a, b, _ignored) {
-    const f = wasm.__wbg_function_table.get(21);
-    const d = wasm.__wbg_function_table.get(22);
+__exports.__wbindgen_closure_wrapper1205 = function(a, b, _ignored) {
+    const f = wasm.__wbg_function_table.get(30);
+    const d = wasm.__wbg_function_table.get(31);
     const cb = function(arg0) {
         this.cnt++;
         let a = this.a;

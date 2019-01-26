@@ -77,35 +77,33 @@ impl Default for Model {
 
 #[derive(Clone)]
 enum Msg {
-    ChangePage(Page),
-    ChangeGuidePage(usize),
+    ChangePage(seed::App<Msg, Model>, Page),
+    ChangeGuidePage(seed::App<Msg, Model>, usize),
     RoutePage(Page),
     RouteGuidePage(usize),
 }
 
 /// The sole source of updating the model; returns a fresh one.
-fn update(msg: Msg, model: Model) -> Model {
+fn update(msg: Msg, model: Model) -> Update<Model> {
     match msg {
-        Msg::ChangePage(page) => {
-            seed::push_route(&page.to_string());
-            update(Msg::RoutePage(page), model)
+        Msg::ChangePage(state, page) => {
+            Render(seed::push_route(state, &page.to_string(), Msg::RoutePage(page)))
         },
-        Msg::ChangeGuidePage(guide_page) => {
-            seed::push_route(&format!("guide/{}", guide_page));
-            update(Msg::RouteGuidePage(guide_page), model)
+        Msg::ChangeGuidePage(state, guide_page) => {
+            Render(seed::push_route(state, &format!("guide/{}", guide_page), Msg::RouteGuidePage(guide_page)))
         },
 
         // This is separate, because nagivating the route triggers state updates, which would
         // trigger an additional push state.
-        Msg::RoutePage(page) => Model {page, ..model},
-        Msg::RouteGuidePage(guide_page) => Model {guide_page, page: Page::Guide, ..model},
+        Msg::RoutePage(page) => Render(Model {page, ..model}),
+        Msg::RouteGuidePage(guide_page) => Render(Model {guide_page, page: Page::Guide, ..model}),
     }
 }
 
 
 // View
 
-fn header(_version: &str) -> El<Msg> {
+fn header(state: seed::App<Msg, Model>, _version: &str) -> El<Msg> {
     let link_style = style!{
         "margin-left" => 20;
         "margin-right" => 20;
@@ -117,8 +115,8 @@ fn header(_version: &str) -> El<Msg> {
 
     header![ style!{"display" => "flex"; "justify-content" => "flex-end"},
         ul![
-            a![ &link_style, "Guide", simple_ev("click", Msg::ChangePage(Page::Guide)) ],
-            a![ &link_style, "Changelog", simple_ev("click", Msg::ChangePage(Page::Changelog)) ],
+            a![ &link_style, "Guide", simple_ev("click", Msg::ChangePage(state.clone(), Page::Guide)) ],
+            a![ &link_style, "Changelog", simple_ev("click", Msg::ChangePage(state, Page::Changelog)) ],
             a![ &link_style, "Repo", attrs!{"href" => "https://github.com/David-OConnor/seed"} ],
             a![ &link_style, "Quickstart repo", attrs!{"href" => "https://github.com/David-OConnor/seed-quickstart"} ],
             a![ &link_style, "Crate", attrs!{"href" => "https://crates.io/crates/seed"} ],
@@ -135,7 +133,6 @@ fn title() -> El<Msg> {
             "grid-template-columns" => "1fr 1fr 1fr";
             "text-align" => "center";
             "align-items" => "center";
-//            "justify-items" => "center";
             },
         div![ style!{"grid-row" => "1/2"; "grid-column" => "1 / 4"},
             h1![ style!{"font-size" => "2em"},"Seed" ],
@@ -154,7 +151,7 @@ fn title() -> El<Msg> {
     ]
 }
 
-fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
+fn guide(state: seed::App<Msg, Model>, sections: &[GuideSection], guide_page: usize) -> El<Msg> {
     let menu_item_style = style!{
         "display" => "flex";  // So we can vertically center
         "align-items" => "center";
@@ -174,7 +171,7 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
         h4![
             &menu_item_style,
             &attrs!{"class" => if i == guide_page {"guide-menu-selected"} else {"guide-menu"}},
-            simple_ev("click", Msg::ChangeGuidePage(i)),
+            simple_ev("click", Msg::ChangeGuidePage(state.clone(), i)),
             s.title
         ]
     ).collect();
@@ -204,6 +201,15 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
 fn changelog() -> El<Msg> {
     let mut entries = El::from_markdown(
 "
+## v0.3.0
+- Changed render func to use a new pattern (Breaking)
+- Default mount point added: \"app\" for element id
+- View func now takes a ref to the model instead of the model itself
+- Routing refactored; now works dynamically
+- Update function now returns an enum that returns Render or Skip,
+to allow conditional rendering (Breaking)
+-Elements can now store more than 1 text node.
+
 ## V0.2.3
 - Fixed a bug where initially-empty text won't update
 - Added more tests
@@ -261,8 +267,19 @@ fn footer() -> El<Msg> {
 
 
 
-fn view(_state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
-    let version = "0.1.12";
+fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
+    let version = "0.2.23";
+
+
+        let mut r = state.clone().data.routes.borrow_mut().clone();
+//    let mut inner = r.take().expect("Problem taking contents of routes");
+
+//    r.insert("MOOSE IS LOOSE".to_string(), message);
+//    r.insert(String::from("/") + path, message);
+
+//    r.replace(inner);
+    log!(format!("{:?}", r.keys()));
+
 
     div![
         style!{
@@ -271,14 +288,14 @@ fn view(_state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
         },
 
         section![
-            header(version)
+            header(state.clone(), version)
         ],
         section![
             title()
         ],
         section![
             match model.page {
-                Page::Guide => guide(&model.guide_sections, model.guide_page),
+                Page::Guide => guide(state, &model.guide_sections, model.guide_page),
                 Page::Changelog => changelog(),
             }
         ],
@@ -303,5 +320,19 @@ pub fn render() {
         );
     }
 
-    seed::run(Model::default(), update, view, "main", Some(routes), None);
+//    let mut routes2 = HashMap::new();
+//    routes2.insert(("guide"), Msg::RoutePage(Page::Guide));
+//    routes2.insert(("changelog"), Msg::RoutePage(Page::Changelog));
+//    routes2.insert(("guide", u32), Msg::RouteGuidePage(page));
+
+//    enum Routes3 {
+//        Guide,
+//        ChangeLog,
+//        GuidePage(guide_page)
+//    }
+
+    seed::App::build(Model::default(), update, view)
+        .routes(routes)
+        .finish()
+        .run();
 }

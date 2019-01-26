@@ -72,17 +72,20 @@ enum Msg {
 ```
  
 The update [function]( https://doc.rust-lang.org/book/ch03-03-how-functions-work.html) 
-you pass to `seed::run` describes how the state should change, upon
+you pass to `seed::App::build(` describes how the state should change, upon
 receiving each type of message. It's the only place where the model is changed. It accepts a message, 
-and model as parameters, and returns a model. This function signature cannot be changed.
+and model as parameters, and returns an `Update` enum: This, and its variants are imported in the prelude, 
+and has variants of 
+`Render` and `Skip`. Each wrap a model. Render triggers a rendering update, and will be used in 
+most cases. `Skip` updates the model without triggering a render, and is useful in animations.
 Note that it doesn’t update the model in place: It returns a new one.
 
 Example:
 ```rust
 fn update(msg: Msg, model: Model) -> Model {
     match msg {
-        Msg::Increment => Model {count: model.count + 1, ..model},
-        Msg::SetCount(count) => Model {count, ..model},
+        Msg::Increment => Render(Model {count: model.count + 1, ..model}),
+        Msg::SetCount(count) => Render(Model {count, ..model}),
     }
 }
 ```
@@ -97,13 +100,13 @@ it straightforward, this becomes important with more complex updates.
  side-effects (ie other things that happen other than updating the model) don't require special 
  handling. Example, from the todomvc example:
 ```rust
-fn update(msg: Msg, model: Model) -> Model {
+fn update(msg: Msg, model: Model) -> Update<Model> {
     match msg {
         Msg::ClearCompleted => {
             let todos = model.todos.into_iter()
                 .filter(|t| !t.completed)
                 .collect();
-            Model {todos, ..model}
+            Render(Model {todos, ..model})
         },
         Msg::Destroy(posit) => {
             let todos = model.todos.into_iter()
@@ -111,7 +114,7 @@ fn update(msg: Msg, model: Model) -> Model {
                 .filter(|(i, t)| i != &posit)
                 .map(|(i, t)| t)
                 .collect();
-            Model {todos, ..model}
+            Render(Model {todos, ..model})
         },
         Msg::Toggle(posit) => {
             let mut todos = model.todos;
@@ -119,14 +122,14 @@ fn update(msg: Msg, model: Model) -> Model {
             todo.completed = !todo.completed;
             todos.insert(posit, todo);
 
-            Model {todos, ..model}
+            Render(Model {todos, ..model})
         },
         Msg::ToggleAll => {
             let completed = model.active_count() != 0;
             let todos = model.todos.into_iter()
                 .map(|t| Todo {completed, ..t})
                 .collect();
-            Model {todos, ..model}
+            Render(Model {todos, ..model})
         }
     }
 }
@@ -139,7 +142,7 @@ show helpful methods for functional iterator manipulation.
 
 Alternatively, we could write the same update function like this:
 ```rust
-fn update(msg: Msg, model: Model) -> Model {
+fn update(msg: Msg, model: Model) -> Update<Model> {
     let mut model = model;
     match msg {
         Msg::ClearCompleted => {
@@ -157,12 +160,12 @@ fn update(msg: Msg, model: Model) -> Model {
                 todo.completed = completed;
         }
     };
-    model
+    Render(model)
 }
 ```
 
 This approach, where we mutate the model directly, is much more concise when
-handling collections. How-to: Reassign `model` as mutable at the start of `update`. 
+handling collections. We only need to involve `Render(Model...)` once, at the end. How-to: Reassign `model` as mutable at the start of `update`. 
 Return `model` at the end. Mutate it during the match legs.
 
 As with the model, only one update function is passed to the app, but it may be split into 
@@ -172,20 +175,27 @@ You can perform updates recursively, ie have one update trigger another. For exa
 here's a non-recursive approach, where functions do_things() and do_other_things() each
 act on an Model, and output a Model:
 ```rust
-fn update(fn update(msg: Msg, model: Model) -> Model {
+fn update(fn update(msg: Msg, model: Model) -> Update<Model> {
     match msg {
-        Msg::A => do_things(model),
-        Msg::B => do_other_things(do_things(model)),
+        Msg::A => Render(do_things(model)),
+        Msg::B => Render(do_other_things(do_things(model))),
     }
 }
 ```
 
-Here's a recursive equivalent:
+ 
+Here's a recursive equivalent. Currently verbose due to not returning the model
+directly.
 ```rust
-fn update(fn update(msg: Msg, model: Model) -> Model {
+fn update(fn update(msg: Msg, model: Model) -> Update<Model> {
     match msg {
-        Msg::A => do_things(model),
-        Msg::B => do_other_things(update(Msg::A, model)),
+        Msg::A => Render(do_things(model)),
+        Msg::B => {
+            match update(Msg::A, model) {
+                Render(m) => Render(do_other_things(m))
+                Skip(m) => Render(do_other_things(m))
+            }
+        },
     }
 }
 ```
@@ -355,13 +365,18 @@ using normal Rust code.
 
 
 ## Initializing
-To start yoru app, call the `seed::run` function, which takes the following parameters:
+To start your app, call the `seed::App::build` method, which takes the following parameters:
 - The initial instance of your model
 - Your update function
 - Your view function
-- The id of the element you wish to mount it to
-- Optionally, a HashMap of routings, used to initialize your state based on url (See the Routing section)
-- Optionally, a function describing events on the `Window`. (See `Events` section of this guide)
+
+You can can chain the following optional methods:
+- `.mount("element-id")` to mount in an element that has an id other than `app`
+- `.routes(routse) to set a HashMap of landing-page routings, used to initialize your 
+state based on url (See the `Routing` section)
+- `.window_events(window_events)`, to set a function describing events on the `Window`. (See the `Events` section)
+
+And must must complete with these methods: `.finish().run()`.
 
 This must be wrapped in a function named `render`, with the #[wasm_bindgen] invocation above.
  (More correctly, its name must match the func in this line in your html file):
@@ -371,12 +386,18 @@ function run() {
 }
 ```
 
-Example:
+Example, with optional methods:
 ```rust
 #[wasm_bindgen]
 pub fn render() {
-    seed::run(Model::default(), update, view, "main", None, None);
+    seed::App::build(Model::default(), update, view)
+        .mount("main")
+        .routes(routes)
+        .window_events(window_events)
+        .finish()
+        .run();
 }
+
 ```
 
 This will render your app to the element holding the id you passed; in the case of this example,

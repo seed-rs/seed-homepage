@@ -2,7 +2,8 @@
 
 We use the [seed::Request](https://docs.rs/seed/0.1.12/seed/fetch/struct.Request.html) struct
 to make HTTP requests in the browser, wrapping the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
-To use this, we need to include `futures = "^0.1.20"` in `Cargo.toml`.
+To use this, we need to include `futures = "^0.1.20"` in `Cargo.toml`. The [Fetch module](https://docs.rs/seed/0.2.3/seed/fetch/index.html)
+is standalone: It can be used with any wasm-bindgen program.
 
 Example, where we update the state on initial load:
 ```rust
@@ -26,9 +27,9 @@ enum Msg {
     Replace(Branch),
 }
 
-fn update(msg: Msg, model: Model) -> Model {
+fn update(msg: Msg, model: Model) -> Update<Model> {
     match msg {
-        Msg::Replace(data) => Model {data},
+        Render(Msg::Replace(data) => Model {data}),
     }
 }
 
@@ -71,12 +72,12 @@ enum Msg {
     GetData(seed::App<Msg, Model>),
 }
 
-fn update(msg: Msg, model: Model) -> Model {
+fn update(msg: Msg, model: Model) -> Update<Model> {
     match msg {
-        Msg::Replace(data) => Model {data},
+        Msg::Replace(data) => Render(Model {data}),
         Msg::GetData(state) => {
             spawn_local(get_data(state));
-            model
+            Render(model)
         },
     }
 }
@@ -155,6 +156,26 @@ fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
             format!("Hello, World × {}", model.val)
         ]
     ]
+}
+```
+
+'seed::run' returns an instance of `seed::App`, which we can use to updated state from the `render` function. Example
+of how you might use this, from `flosse`:
+```rust
+pub fn render() {
+    let app = seed::run(Model::default(), update, view, "app", None, None);
+    open_websockets(app);
+}
+
+fn open_websockets(state: seed::App<Msg, Model>) {
+
+  // setup websockets ...
+
+  let on_message = Box::new(move|ev: MessageEvent| {
+    let txt = ev.data().as_string().unwrap();
+    let json: JsonMsg = serde_json::from_str(&text).unwrap();
+    state.update(Msg::Json(json));
+  });
 }
 ```
 

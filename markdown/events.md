@@ -147,8 +147,7 @@ where it handles text input triggered by a key press, and uses prevent_default()
 
 ## Window events
 We handle events triggered by the overall window specially, since it doesn't fit directly
-into our virtual DOM. The final argument passed to `seed::run` is an Option of a function
-that accepts a `Model`, and returns a `Vec<dom_types::Listener>`. We use it to control
+into our virtual DOM. We pass to `Seed::App::build::window_events()` a functionthat accepts a `Model`, and returns a `Vec<dom_types::Listener>`. We use it to control
 which listeners are attached to the window based on the model. Excerpt from the
 [window_events](https://github.com/David-OConnor/seed/blob/master/examples/window_events/src/lib.rs)
 example:
@@ -160,11 +159,11 @@ enum Msg {
     KeyPressed(web_sys::KeyboardEvent),
 }
 
-fn update(msg: Msg, model: Model) -> Model {
+fn update(msg: Msg, model: Model) -> Update<Model> {
     match msg {
-        Msg::ToggleWatching => Model {watching: !model.watching, ..model},
-        Msg::UpdateCoords(ev) => Model {coords: (ev.screen_x(), ev.screen_y()), ..model},
-        Msg::KeyPressed(ev) => Model {last_keycode: ev.key_code(), ..model}
+        Msg::ToggleWatching => Render(Model {watching: !model.watching, ..model}),
+        Msg::UpdateCoords(ev) => Render(Model {coords: (ev.screen_x(), ev.screen_y()), ..model}),
+        Msg::KeyPressed(ev) => Render(Model {last_keycode: ev.key_code(), ..model})
     }
 }
 
@@ -182,7 +181,10 @@ fn window_events(model: Model) -> Vec<seed::Listener<Msg>> {
 
 #[wasm_bindgen]
 pub fn render() {
-    seed::run(Model::default(), update, view, "main", None, Some(window_events));
+    seed::App::build(Model::default(), update, view)
+        .window_events(window_events)
+        .finish()
+        .run();
 }
 ```
 If `model.watching` is true, the window listens for keyboard and mouse events, then
