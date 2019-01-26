@@ -100,13 +100,13 @@ serde = { version = &quot;^1.0.80&quot;, features = [&#39;derive&#39;] }</code><
 <a class="sourceLine" id="cb7-22" title="22">    Replace(Data),</a>
 <a class="sourceLine" id="cb7-23" title="23"><span class="op">}</span></a>
 <a class="sourceLine" id="cb7-24" title="24"></a>
-<a class="sourceLine" id="cb7-25" title="25"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
+<a class="sourceLine" id="cb7-25" title="25"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Model&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb7-26" title="26">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb7-27" title="27">        <span class="pp">Msg::</span>GetData(state) =&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb7-28" title="28">            <span class="pp">seed::</span>spawn_local(get_data(state));</a>
-<a class="sourceLine" id="cb7-29" title="29">            model</a>
+<a class="sourceLine" id="cb7-29" title="29">            Render(model)</a>
 <a class="sourceLine" id="cb7-30" title="30">        <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb7-31" title="31">        <span class="pp">Msg::</span>Replace(data) =&gt; Model <span class="op">{</span>data<span class="op">}</span></a>
+<a class="sourceLine" id="cb7-31" title="31">        <span class="pp">Msg::</span>Replace(data) =&gt; Render(Model <span class="op">{</span>data<span class="op">}</span>)</a>
 <a class="sourceLine" id="cb7-32" title="32">    <span class="op">}</span></a>
 <a class="sourceLine" id="cb7-33" title="33"><span class="op">}</span></a></code></pre></div>
 "#.into()

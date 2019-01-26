@@ -1,7 +1,7 @@
 pub fn text() -> String {
 r#"
 <h1 id="element-creation-macros-under-the-hood">Element-creation macros, under the hood</h1>
-<p>For a better understanding of how views are created, reference the <a href="https://docs.rs/seed/0.2.3/seed/dom_types/struct.El.html">El API docs page</a>. The following code returns an <code>El</code> representing a few nested DOM elements displayed in a flexbox layout:</p>
+<p>For a better understanding of how views are created, reference the <a href="https://docs.rs/seed/0.2.4/seed/dom_types/struct.El.html">El API docs page</a>. The following code returns an <code>El</code> representing a few nested DOM elements displayed in a flexbox layout:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1">    <span class="pp">div!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;display&quot;</span> =&gt; <span class="st">&quot;flex&quot;</span>; <span class="st">&quot;flex-direction&quot;</span> =&gt; <span class="st">&quot;column&quot;</span><span class="op">}</span>,</a>
 <a class="sourceLine" id="cb1-2" title="2">        <span class="pp">h3!</span><span class="op">[</span> <span class="st">&quot;Some things&quot;</span> <span class="op">]</span>,</a>
 <a class="sourceLine" id="cb1-3" title="3">        <span class="pp">button!</span><span class="op">[</span> <span class="st">&quot;Click me!&quot;</span> <span class="op">]</span></a>
@@ -49,29 +49,31 @@ r#"
 <a class="sourceLine" id="cb3-24" title="24">            next_level: <span class="cn">None</span>,</a>
 <a class="sourceLine" id="cb3-25" title="25">            el_ws: <span class="cn">None</span>,</a>
 <a class="sourceLine" id="cb3-26" title="26">            raw_html: <span class="cn">false</span>,</a>
-<a class="sourceLine" id="cb3-27" title="27">            namespace: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-28" title="28">            did_mount: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-29" title="29">            did_update: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-30" title="30">            will_unmount: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-31" title="31">        <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb3-32" title="32">        El <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-33" title="33">            tag: <span class="pp">Tag::</span>button,</a>
-<a class="sourceLine" id="cb3-34" title="34">            attrs: Attrs <span class="op">{</span> vals: <span class="pp">HashMap::</span>new() <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb3-35" title="35">            style: Style <span class="op">{</span> vals: <span class="pp">HashMap::</span>new() <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb3-36" title="36">            listeners: <span class="dt">Vec</span>::new();</a>
-<a class="sourceLine" id="cb3-37" title="37">            text: <span class="cn">Some</span>(<span class="dt">String</span>::from(<span class="st">&quot;Click me!&quot;</span>)),</a>
-<a class="sourceLine" id="cb3-38" title="38">            children: <span class="dt">Vec</span>::new(),</a>
-<a class="sourceLine" id="cb3-39" title="39">            id: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-40" title="40">            next_level: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-41" title="41">            el_ws: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-42" title="42">            raw_html: <span class="cn">false</span>,</a>
-<a class="sourceLine" id="cb3-43" title="43">            namespace: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-44" title="44">            did_mount: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-45" title="45">            did_update: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-46" title="46">            will_unmount: <span class="cn">None</span>,</a>
-<a class="sourceLine" id="cb3-47" title="47">        <span class="op">}</span> </a>
-<a class="sourceLine" id="cb3-48" title="48">    <span class="op">]</span></a>
-<a class="sourceLine" id="cb3-49" title="49"><span class="op">}</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-27" title="27">            text_node: <span class="cn">false</span>,</a>
+<a class="sourceLine" id="cb3-28" title="28">            namespace: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-29" title="29">            did_mount: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-30" title="30">            did_update: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-31" title="31">            will_unmount: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-32" title="32">        <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb3-33" title="33">        El <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-34" title="34">            tag: <span class="pp">Tag::</span>button,</a>
+<a class="sourceLine" id="cb3-35" title="35">            attrs: Attrs <span class="op">{</span> vals: <span class="pp">HashMap::</span>new() <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb3-36" title="36">            style: Style <span class="op">{</span> vals: <span class="pp">HashMap::</span>new() <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb3-37" title="37">            listeners: <span class="dt">Vec</span>::new();</a>
+<a class="sourceLine" id="cb3-38" title="38">            text: <span class="cn">Some</span>(<span class="dt">String</span>::from(<span class="st">&quot;Click me!&quot;</span>)),</a>
+<a class="sourceLine" id="cb3-39" title="39">            children: <span class="dt">Vec</span>::new(),</a>
+<a class="sourceLine" id="cb3-40" title="40">            id: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-41" title="41">            next_level: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-42" title="42">            el_ws: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-43" title="43">            raw_html: <span class="cn">false</span>,</a>
+<a class="sourceLine" id="cb3-44" title="44">            text_node: <span class="cn">false</span>,</a>
+<a class="sourceLine" id="cb3-45" title="45">            namespace: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-46" title="46">            did_mount: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-47" title="47">            did_update: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-48" title="48">            will_unmount: <span class="cn">None</span>,</a>
+<a class="sourceLine" id="cb3-49" title="49">        <span class="op">}</span> </a>
+<a class="sourceLine" id="cb3-50" title="50">    <span class="op">]</span></a>
+<a class="sourceLine" id="cb3-51" title="51"><span class="op">}</span></a></code></pre></div>
 <p>For most uses, the first example (using macros) will be the easiest to read and write. You can mix in constructors in components as needed, depending on your code structure. It's evident that struct literals are too verbose, due to the auxillary fields.</p>
 "#.into()
 }

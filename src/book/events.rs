@@ -1,7 +1,7 @@
 pub fn text() -> String {
 r#"
 <h1 id="events">Events</h1>
-<p>Events are created by passing a a <a href="https://docs.rs/seed/0.2.3/seed/dom_types/struct.Listener.html">Listener</a>, or vec of Listeners, created using the following functions exposed in the prelude: <code>simple_ev</code>, <code>input_ev</code>, <code>keyboard_ev</code>, <code>mouse_ev</code>, and <code>raw_ev</code>. The first is demonstrated in the example in the quickstart section, and all are demonstrated in the todomvc example.</p>
+<p>Events are created by passing a a <a href="https://docs.rs/seed/0.2.4/seed/dom_types/struct.Listener.html">Listener</a>, or vec of Listeners, created using the following functions exposed in the prelude: <code>simple_ev</code>, <code>input_ev</code>, <code>keyboard_ev</code>, <code>mouse_ev</code>, and <code>raw_ev</code>. The first is demonstrated in the example in the quickstart section, and all are demonstrated in the todomvc example.</p>
 <p><code>simple_ev</code> takes two arguments: an event trigger (eg “click”, “contextmenu” etc), and an instance of your <code>Msg</code> enum. (eg Msg::Increment). The other three event-creation-funcs take a trigger, and a <a href="https://doc.rust-lang.org/book/ch13-01-closures.html">closure</a> (An anonymous function, similar to an arrow func in JS) that returns a Msg enum.</p>
 <p><code>simple_ev</code> does not pass any information about the event, only that it fired. Example:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">enum</span> Msg <span class="op">{</span></a>
@@ -74,7 +74,7 @@ r#"
 <p>Event syntax may be improved later with the addition of a single macro that infers what the type of event is based on the trigger, and avoids the use of manually creating a <code>Vec</code> to store the <code>Listener</code>s. For examples of all of the above (except raw_ev), check out the <a href="https://github.com/David-OConnor/seed/tree/master/examples/todomvc">todomvc example</a>.</p>
 <p>The <a href="https://github.com/David-OConnor/seed/tree/master/examples/todomvc">todomvc example</a> has a number of event-handling examples, including use of raw_ev, where it handles text input triggered by a key press, and uses prevent_default().</p>
 <h2 id="window-events">Window events</h2>
-<p>We handle events triggered by the overall window specially, since it doesn't fit directly into our virtual DOM. The final argument passed to <code>seed::run</code> is an Option of a function that accepts a <code>Model</code>, and returns a <code>Vec&lt;dom_types::Listener&gt;</code>. We use it to control which listeners are attached to the window based on the model. Excerpt from the <a href="https://github.com/David-OConnor/seed/blob/master/examples/window_events/src/lib.rs">window_events</a> example:</p>
+<p>We handle events triggered by the overall window specially, since it doesn't fit directly into our virtual DOM. We pass to <code>Seed::App::build::window_events()</code> a functionthat accepts a <code>Model</code>, and returns a <code>Vec&lt;dom_types::Listener&gt;</code>. We use it to control which listeners are attached to the window based on the model. Excerpt from the <a href="https://github.com/David-OConnor/seed/blob/master/examples/window_events/src/lib.rs">window_events</a> example:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb9-1" title="1"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
 <a class="sourceLine" id="cb9-2" title="2"><span class="kw">enum</span> Msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb9-3" title="3">    ToggleWatching,</a>
@@ -82,11 +82,11 @@ r#"
 <a class="sourceLine" id="cb9-5" title="5">    KeyPressed(<span class="pp">web_sys::</span>KeyboardEvent),</a>
 <a class="sourceLine" id="cb9-6" title="6"><span class="op">}</span></a>
 <a class="sourceLine" id="cb9-7" title="7"></a>
-<a class="sourceLine" id="cb9-8" title="8"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
+<a class="sourceLine" id="cb9-8" title="8"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Model&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb9-9" title="9">    <span class="kw">match</span> msg <span class="op">{</span></a>
-<a class="sourceLine" id="cb9-10" title="10">        <span class="pp">Msg::</span>ToggleWatching =&gt; Model <span class="op">{</span>watching: !model.watching, ..model<span class="op">}</span>,</a>
-<a class="sourceLine" id="cb9-11" title="11">        <span class="pp">Msg::</span>UpdateCoords(ev) =&gt; Model <span class="op">{</span>coords: (ev.screen_x(), ev.screen_y()), ..model<span class="op">}</span>,</a>
-<a class="sourceLine" id="cb9-12" title="12">        <span class="pp">Msg::</span>KeyPressed(ev) =&gt; Model <span class="op">{</span>last_keycode: ev.key_code(), ..model<span class="op">}</span></a>
+<a class="sourceLine" id="cb9-10" title="10">        <span class="pp">Msg::</span>ToggleWatching =&gt; Render(Model <span class="op">{</span>watching: !model.watching, ..model<span class="op">}</span>),</a>
+<a class="sourceLine" id="cb9-11" title="11">        <span class="pp">Msg::</span>UpdateCoords(ev) =&gt; Render(Model <span class="op">{</span>coords: (ev.screen_x(), ev.screen_y()), ..model<span class="op">}</span>),</a>
+<a class="sourceLine" id="cb9-12" title="12">        <span class="pp">Msg::</span>KeyPressed(ev) =&gt; Render(Model <span class="op">{</span>last_keycode: ev.key_code(), ..model<span class="op">}</span>)</a>
 <a class="sourceLine" id="cb9-13" title="13">    <span class="op">}</span></a>
 <a class="sourceLine" id="cb9-14" title="14"><span class="op">}</span></a>
 <a class="sourceLine" id="cb9-15" title="15"></a>
@@ -104,8 +104,11 @@ r#"
 <a class="sourceLine" id="cb9-27" title="27"></a>
 <a class="sourceLine" id="cb9-28" title="28"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
 <a class="sourceLine" id="cb9-29" title="29"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
-<a class="sourceLine" id="cb9-30" title="30">    <span class="pp">seed::</span>run(<span class="pp">Model::</span><span class="kw">default</span>(), update, view, <span class="st">&quot;main&quot;</span>, <span class="cn">None</span>, <span class="cn">Some</span>(window_events));</a>
-<a class="sourceLine" id="cb9-31" title="31"><span class="op">}</span></a></code></pre></div>
+<a class="sourceLine" id="cb9-30" title="30">    <span class="pp">seed::App::</span>build(<span class="pp">Model::</span><span class="kw">default</span>(), update, view)</a>
+<a class="sourceLine" id="cb9-31" title="31">        .window_events(window_events)</a>
+<a class="sourceLine" id="cb9-32" title="32">        .finish()</a>
+<a class="sourceLine" id="cb9-33" title="33">        .run();</a>
+<a class="sourceLine" id="cb9-34" title="34"><span class="op">}</span></a></code></pre></div>
 <p>If <code>model.watching</code> is true, the window listens for keyboard and mouse events, then updates the model accordingly. If not, it doesn't listen. There's currently a bug where window listeners won't work until the first (non-window-listener) update is triggered.</p>
 "#.into()
 }

@@ -34,14 +34,10 @@ r#"
 <h3 id="features-to-add">Features to add</h3>
 <ul>
 <li>Dynamic SVG creation and modification</li>
-<li>More flexible routing</li>
+<li>Websocket API</li>
+<li>Better recursive updating</li>
 <li>Virtual DOM optimization</li>
 <li>High-level CSS-grid/Flexbox API ?</li>
-</ul>
-<h3 id="bugs-to-fix">Bugs to fix</h3>
-<ul>
-<li>Animations broken</li>
-<li>Text renders above children instead of below</li>
 </ul>
 <h2 id="reference">Reference</h2>
 <ul>

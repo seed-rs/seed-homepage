@@ -6,13 +6,13 @@ r#"
 <p>You'll need a recent version of Rust: <code>rustup update</code></p>
 <p>The wasm32-unknown-unknown target: <code>rustup target add wasm32-unknown-unknown</code></p>
 <p>And wasm-bindgen: <code>cargo install wasm-bindgen-cli</code></p>
-<p>If you run into errors while installing <code>wasm-bindgen-cli</code>, you may need to install C++ build tools. On linux, run <code>sudo apt install build-essential</code>. On Windows, download and install <a href="https://visualstudio.microsoft.com/downloads/">Visual Studio 2017</a>; when asked in the installer, include the C++ workload.</p>
+<p>If you run into errors while installing <code>wasm-bindgen-cli</code>, you may need to install C++ build tools. On linux, run <code>sudo apt install build-essential</code>. On Windows, download and install <a href="https://visualstudio.microsoft.com/downloads/">Visual Studio 2017</a>; when asked in the installer, <a href="https://visualstudio.microsoft.com/downloads/">Visual Studio 2017</a>; when asked in the installer, include the C++ workload.</p>
 <h2 id="the-theoretical-minimum">The theoretical minimum</h2>
-<p>To start, clone <a href="https://github.com/David-OConnor/seed-quickstart">This quickstart repo</a>, run <code>build.sh</code> or <code>build.ps1</code> in a terminal, then start a dev server that supports WASM. For example, with <a href="https://www.python.org/downloads/">Python</a> installed, run <code>python serve.py</code>. (Linux users may need to run <code>python3 serve.py</code>.) Once you change your package name, you'll need to tweak the html file and build script, as described below.</p>
+<p>To start, clone <a href="https://github.com/David-OConnor/seed-quickstart">The quickstart repo</a>, run <code>build.sh</code> or <code>build.ps1</code> in a terminal, then start a dev server that supports WASM. For example, with <a href="https://www.python.org/downloads/">Python</a> installed, run <code>python serve.py</code>. (Linux users may need to run <code>python3 serve.py</code>.) Once you change your package name, you'll need to tweak the html file and build script, as described below.</p>
 <h2 id="a-little-deeper">A little deeper</h2>
 <p>Alternatively, create a new lib with Cargo: <code>cargo new --lib appname</code>. Here and everywhere it appears in this guide, <code>appname</code> should be replaced with the name of your app.</p>
 <p>If not using the quickstart repo, create an Html file with a body that contains this:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">&lt;section</span><span class="ot"> id=</span><span class="st">&quot;main&quot;</span><span class="kw">&gt;&lt;/section&gt;</span></a>
+<div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">&lt;section</span><span class="ot"> id=</span><span class="st">&quot;app&quot;</span><span class="kw">&gt;&lt;/section&gt;</span></a>
 <a class="sourceLine" id="cb1-2" title="2"></a>
 <a class="sourceLine" id="cb1-3" title="3"><span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&#39;./pkg/package.js&#39;</span><span class="kw">&gt;&lt;/script&gt;</span></a>
 <a class="sourceLine" id="cb1-4" title="4"></a>
@@ -38,8 +38,8 @@ edition = &quot;2018&quot;
 crate-type = [&quot;cdylib&quot;]
 
 [dependencies]
-seed = &quot;^0.1.12&quot;
-wasm-bindgen = &quot;^0.2.29&quot;
+seed = &quot;^0.2.4&quot;
+wasm-bindgen = &quot;^0.2.33&quot;
 web-sys = &quot;^0.3.6&quot;</code></pre>
 <h2 id="a-short-example">A short example</h2>
 <p>Here's an example demonstrating structure and syntax; it can be found in working form under <code>examples/counter</code>. Descriptions of its parts are in the Guide section below. Its structure follows <a href="https://guide.elm-lang.org/architecture/">The Elm Architecture</a>.</p>
@@ -78,11 +78,11 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <a class="sourceLine" id="cb3-32" title="32"><span class="op">}</span></a>
 <a class="sourceLine" id="cb3-33" title="33"></a>
 <a class="sourceLine" id="cb3-34" title="34"><span class="co">/// The sole source of updating the model; returns a fresh one.</span></a>
-<a class="sourceLine" id="cb3-35" title="35"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-35" title="35"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Model&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-36" title="36">    <span class="kw">match</span> msg <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-37" title="37">        <span class="pp">Msg::</span>Increment =&gt; Model <span class="op">{</span>count: model.count + <span class="dv">1</span>, ..model<span class="op">}</span>,</a>
-<a class="sourceLine" id="cb3-38" title="38">        <span class="pp">Msg::</span>Decrement =&gt; Model <span class="op">{</span>count: model.count - <span class="dv">1</span>, ..model<span class="op">}</span>,</a>
-<a class="sourceLine" id="cb3-39" title="39">        <span class="pp">Msg::</span>ChangeWWC(what_we_count) =&gt; Model <span class="op">{</span>what_we_count, ..model <span class="op">}</span></a>
+<a class="sourceLine" id="cb3-37" title="37">        <span class="pp">Msg::</span>Increment =&gt; Render(Model <span class="op">{</span>count: model.count + <span class="dv">1</span>, ..model<span class="op">}</span>),</a>
+<a class="sourceLine" id="cb3-38" title="38">        <span class="pp">Msg::</span>Decrement =&gt; Render(Model <span class="op">{</span>count: model.count - <span class="dv">1</span>, ..model<span class="op">}</span>),</a>
+<a class="sourceLine" id="cb3-39" title="39">        <span class="pp">Msg::</span>ChangeWWC(what_we_count) =&gt; Render(Model <span class="op">{</span>what_we_count, ..model <span class="op">}</span>)</a>
 <a class="sourceLine" id="cb3-40" title="40">    <span class="op">}</span></a>
 <a class="sourceLine" id="cb3-41" title="41"><span class="op">}</span></a>
 <a class="sourceLine" id="cb3-42" title="42"></a>
@@ -101,7 +101,7 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <a class="sourceLine" id="cb3-55" title="55"><span class="op">}</span></a>
 <a class="sourceLine" id="cb3-56" title="56"></a>
 <a class="sourceLine" id="cb3-57" title="57"><span class="co">/// The top-level component we pass to the virtual dom.</span></a>
-<a class="sourceLine" id="cb3-58" title="58"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-58" title="58"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: &amp;Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-59" title="59">    <span class="kw">let</span> plural = <span class="kw">if</span> model.count == <span class="dv">1</span> <span class="op">{</span><span class="st">&quot;&quot;</span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span><span class="st">&quot;s&quot;</span><span class="op">}</span>;</a>
 <a class="sourceLine" id="cb3-60" title="60"></a>
 <a class="sourceLine" id="cb3-61" title="61">    <span class="co">// Attrs, Style, Events, and children may be defined separately.</span></a>
@@ -139,8 +139,10 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <a class="sourceLine" id="cb3-93" title="93"></a>
 <a class="sourceLine" id="cb3-94" title="94"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
 <a class="sourceLine" id="cb3-95" title="95"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-96" title="96">    <span class="pp">seed::</span>run(<span class="pp">Model::</span><span class="kw">default</span>(), update, view, <span class="st">&quot;main&quot;</span>, <span class="cn">None</span>, <span class="cn">None</span>);</a>
-<a class="sourceLine" id="cb3-97" title="97"><span class="op">}</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-96" title="96">    <span class="pp">seed::App::</span>build(<span class="pp">Model::</span><span class="kw">default</span>(), update, view)</a>
+<a class="sourceLine" id="cb3-97" title="97">        .finish()</a>
+<a class="sourceLine" id="cb3-98" title="98">        .run();</a>
+<a class="sourceLine" id="cb3-99" title="99"><span class="op">}</span></a></code></pre></div>
 <p>For a truly minimimal example, see <a href="https://github.com/David-OConnor/seed-quickstart/blob/master/src/lib.rs">lib.rs in the quickstart repo</a></p>
 <h2 id="building-and-running">Building and running</h2>
 <p>To build your app, create a <code>pkg</code> subdirectory, and run the following two commands:</p>
@@ -152,6 +154,6 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <p>For development, you can view your app using a shimmed Python dev server, as described above. (Set up <a href="https://github.com/David-OConnor/seed-quickstart/blob/master/serve.py">this mime-type shim</a> from the quickstart repo, and run <code>python serve.py</code>).</p>
 <p>In the future, the build script and commands above may be replaced by <a href="https://github.com/rustwasm/wasm-pack">wasm-pack</a>. You may use it now if you wish, but may run into issues running the examples, enabling no-modules mode, and syntax-highlighting in the compile logs.</p>
 <h2 id="running-included-examples">Running included examples</h2>
-<p>To run an example located in the <a href="https://github.com/David-OConnor/seed/tree/master/examples">examples folder</a>, navigate to that folder in a terminal, run the build script for your system (<code>build.sh</code> or <code>build.ps1</code>), then start a dev server as described above. Note that if you copy an example to a separate folder, you'll need to edit its <code>Cargo.toml</code> to point to the package on <a href="https://crates.io">crates.io</a> instead of locally: Ie replace <code>seed = { path = "../../"</code> with <code>seed = "^0.1.8"</code>, and in the build script, remove the leading <code>../../</code> on the second line.</p>
+<p>To run an example located in the <a href="https://github.com/David-OConnor/seed/tree/master/examples">examples folder</a>, navigate to that folder in a terminal, run the build script for your system (<code>build.sh</code> or <code>build.ps1</code>), then start a dev server as described above. Note that if you copy an example to a separate folder, you'll need to edit its <code>Cargo.toml</code> to point to the package on <a href="https://crates.io">crates.io</a> instead of locally: Ie replace <code>seed = { path = "../../"</code> with <code>seed = "^0.2.4"</code>, and in the build script, remove the leading <code>../../</code> on the second line.</p>
 "#.into()
 }

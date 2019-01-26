@@ -1,7 +1,7 @@
 pub fn text() -> String {
 r#"
 <h1 id="http-requests-fetch-and-updating-state">Http requests (fetch), and updating state</h1>
-<p>We use the <a href="https://docs.rs/seed/0.2.3/seed/fetch/struct.Request.html">seed::Request</a> struct to make HTTP requests in the browser, wrapping the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>. To use this, we need to include <code>futures = "^0.1.20"</code> in <code>Cargo.toml</code>.</p>
+<p>We use the <a href="https://docs.rs/seed/0.2.4/seed/fetch/struct.Request.html">seed::Request</a> struct to make HTTP requests in the browser, wrapping the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>. To use this, we need to include <code>futures = "^0.1.20"</code> in <code>Cargo.toml</code>. The <a href="https://docs.rs/seed/0.2.4/seed/fetch/index.html">Fetch module</a> is standalone: It can be used with any wasm-bindgen program.</p>
 <p>Example, where we update the state on initial load:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">use</span> <span class="pp">seed::</span><span class="op">{</span>Request, Method, spawn_local<span class="op">}</span></a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="kw">use</span> <span class="pp">futures::</span>Future;</a>
@@ -23,9 +23,9 @@ r#"
 <a class="sourceLine" id="cb1-18" title="18">    Replace(Branch),</a>
 <a class="sourceLine" id="cb1-19" title="19"><span class="op">}</span></a>
 <a class="sourceLine" id="cb1-20" title="20"></a>
-<a class="sourceLine" id="cb1-21" title="21"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-21" title="21"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Model&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-22" title="22">    <span class="kw">match</span> msg <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-23" title="23">        <span class="pp">Msg::</span>Replace(data) =&gt; Model <span class="op">{</span>data<span class="op">}</span>,</a>
+<a class="sourceLine" id="cb1-23" title="23">        Render(<span class="pp">Msg::</span>Replace(data) =&gt; Model <span class="op">{</span>data<span class="op">}</span>),</a>
 <a class="sourceLine" id="cb1-24" title="24">    <span class="op">}</span></a>
 <a class="sourceLine" id="cb1-25" title="25"><span class="op">}</span></a>
 <a class="sourceLine" id="cb1-26" title="26"></a>
@@ -54,17 +54,17 @@ r#"
 <a class="sourceLine" id="cb2-4" title="4">    GetData(<span class="pp">seed::</span>App&lt;Msg, Model&gt;),</a>
 <a class="sourceLine" id="cb2-5" title="5"><span class="op">}</span></a>
 <a class="sourceLine" id="cb2-6" title="6"></a>
-<a class="sourceLine" id="cb2-7" title="7"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-7" title="7"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Model&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb2-8" title="8">    <span class="kw">match</span> msg <span class="op">{</span></a>
-<a class="sourceLine" id="cb2-9" title="9">        <span class="pp">Msg::</span>Replace(data) =&gt; Model <span class="op">{</span>data<span class="op">}</span>,</a>
+<a class="sourceLine" id="cb2-9" title="9">        <span class="pp">Msg::</span>Replace(data) =&gt; Render(Model <span class="op">{</span>data<span class="op">}</span>),</a>
 <a class="sourceLine" id="cb2-10" title="10">        <span class="pp">Msg::</span>GetData(state) =&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb2-11" title="11">            spawn_local(get_data(state));</a>
-<a class="sourceLine" id="cb2-12" title="12">            model</a>
+<a class="sourceLine" id="cb2-12" title="12">            Render(model)</a>
 <a class="sourceLine" id="cb2-13" title="13">        <span class="op">}</span>,</a>
 <a class="sourceLine" id="cb2-14" title="14">    <span class="op">}</span></a>
 <a class="sourceLine" id="cb2-15" title="15"><span class="op">}</span></a>
 <a class="sourceLine" id="cb2-16" title="16"></a>
-<a class="sourceLine" id="cb2-17" title="17"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-17" title="17"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: &amp;Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb2-18" title="18">    <span class="pp">div!</span><span class="op">[</span></a>
 <a class="sourceLine" id="cb2-19" title="19">        <span class="pp">div!</span><span class="op">[</span> <span class="pp">format!</span>(<span class="st">&quot;Hello World. name: {}, sha: {}&quot;</span>, model.data.name, model.data.commit.sha) <span class="op">]</span>,</a>
 <a class="sourceLine" id="cb2-20" title="20">        <span class="pp">button!</span><span class="op">[</span> raw_ev(<span class="st">&quot;click&quot;</span>, <span class="kw">move</span> |_| <span class="pp">Msg::</span>GetData(state.clone())), <span class="st">&quot;Update from the internet&quot;</span><span class="op">]</span></a>
@@ -105,7 +105,7 @@ r#"
 <h2 id="updating-state">Updating state</h2>
 <p>To update the model outside of the element-based event system, we call <code>update_state</code> on our state var, which is the first parameter in our view func. A consequence of this is that we must pass state to any components that need to update state in this way. This may require calling <code>state.clone()</code>, to use it in multiple places. Note that we also need to prepend our closures with <code>move</code>, as above, any time <code>state</code> is used in one.</p>
 <p>Here's an example of using set_interval to update the state once every second. It uses <code>seed::set_interval</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span>  </a>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: &amp;Model) -&gt; El&lt;Msg&gt; <span class="op">{</span>  </a>
 <a class="sourceLine" id="cb4-2" title="2">    <span class="pp">div!</span><span class="op">[</span></a>
 <a class="sourceLine" id="cb4-3" title="3">        did_mount(<span class="kw">move</span> |_| <span class="op">{</span></a>
 <a class="sourceLine" id="cb4-4" title="4">            <span class="kw">let</span> state2 = state.clone();</a>
@@ -123,6 +123,22 @@ r#"
 <a class="sourceLine" id="cb4-16" title="16">        <span class="op">]</span></a>
 <a class="sourceLine" id="cb4-17" title="17">    <span class="op">]</span></a>
 <a class="sourceLine" id="cb4-18" title="18"><span class="op">}</span></a></code></pre></div>
+<p>‘seed::run' returns an instance of <code>seed::App</code>, which we can use to updated state from the <code>render</code> function. Example of how you might use this, from <code>flosse</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-2" title="2">    <span class="kw">let</span> app = <span class="pp">seed::</span>run(<span class="pp">Model::</span><span class="kw">default</span>(), update, view, <span class="st">&quot;app&quot;</span>, <span class="cn">None</span>, <span class="cn">None</span>);</a>
+<a class="sourceLine" id="cb5-3" title="3">    open_websockets(app);</a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="op">}</span></a>
+<a class="sourceLine" id="cb5-5" title="5"></a>
+<a class="sourceLine" id="cb5-6" title="6"><span class="kw">fn</span> open_websockets(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;) <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-7" title="7"></a>
+<a class="sourceLine" id="cb5-8" title="8">  <span class="co">// setup websockets ...</span></a>
+<a class="sourceLine" id="cb5-9" title="9"></a>
+<a class="sourceLine" id="cb5-10" title="10">  <span class="kw">let</span> on_message = <span class="dt">Box</span>::new(<span class="kw">move</span>|ev: MessageEvent| <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-11" title="11">    <span class="kw">let</span> txt = ev.data().as_string().unwrap();</a>
+<a class="sourceLine" id="cb5-12" title="12">    <span class="kw">let</span> json: JsonMsg = <span class="pp">serde_json::</span>from_str(&amp;text).unwrap();</a>
+<a class="sourceLine" id="cb5-13" title="13">    state.update(<span class="pp">Msg::</span>Json(json));</a>
+<a class="sourceLine" id="cb5-14" title="14">  <span class="op">}</span>);</a>
+<a class="sourceLine" id="cb5-15" title="15"><span class="op">}</span></a></code></pre></div>
 <p>See the <a href="https://github.com/David-OConnor/seed/tree/master/examples/server_interaction">server_interaction example</a> for a full example.</p>
 <p>Props to Pauan for writing the Fetch module.</p>
 "#.into()
