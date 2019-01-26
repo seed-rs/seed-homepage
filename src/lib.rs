@@ -201,7 +201,7 @@ fn guide(state: seed::App<Msg, Model>, sections: &[GuideSection], guide_page: us
 fn changelog() -> El<Msg> {
     let mut entries = El::from_markdown(
 "
-## v0.3.0
+## v0.2.4
 - Changed render func to use a new pattern (Breaking)
 - Default mount point added: \"app\" for element id
 - View func now takes a ref to the model instead of the model itself
