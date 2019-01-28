@@ -336,6 +336,7 @@ pub fn render() {
 //    }
 
     // todo change routes macro
+    let mut routes4 = HashMap::new();
     routes4.insert(vec!["guide".into()], Msg::RoutePage(Page::Guide));
     routes4.insert(vec!["changelog".into()], Msg::RoutePage(Page::Changelog));
     routes4.insert(vec!["guide".into(), r"\d+".into()], |page| Msg::RouteGuidePage(page));
