@@ -245,8 +245,8 @@ to allow conditional rendering (Breaking)
     );
     entries.style = style!{
         "grid-column" => "2 / 3";
-        "display" => "flex";
-        "flex-direction" => "column";
+//        "display" => "flex";
+//        "flex-direction" => "column";
      };
 
     div![
