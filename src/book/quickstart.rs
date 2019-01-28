@@ -122,8 +122,8 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <a class="sourceLine" id="cb3-76" title="76">            <span class="op">}</span>,</a>
 <a class="sourceLine" id="cb3-77" title="77">            <span class="co">// We can use normal Rust code and comments in the view.</span></a>
 <a class="sourceLine" id="cb3-78" title="78">            <span class="pp">h3!</span><span class="op">[</span> <span class="pp">format!</span>(<span class="st">&quot;{} {}{} so far&quot;</span>, model.count, model.what_we_count, plural) <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb3-79" title="79">            <span class="pp">button!</span><span class="op">[</span> simple_ev(<span class="st">&quot;click&quot;</span>, <span class="pp">Msg::</span>Increment), <span class="st">&quot;+&quot;</span> <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb3-80" title="80">            <span class="pp">button!</span><span class="op">[</span> simple_ev(<span class="st">&quot;click&quot;</span>, <span class="pp">Msg::</span>Decrement), <span class="st">&quot;-&quot;</span> <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb3-79" title="79">            <span class="pp">button!</span><span class="op">[</span> simple_ev(<span class="pp">Ev::</span>Click, <span class="pp">Msg::</span>Increment), <span class="st">&quot;+&quot;</span> <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb3-80" title="80">            <span class="pp">button!</span><span class="op">[</span> simple_ev(<span class="pp">Ev::</span>Click, <span class="pp">Msg::</span>Decrement), <span class="st">&quot;-&quot;</span> <span class="op">]</span>,</a>
 <a class="sourceLine" id="cb3-81" title="81"></a>
 <a class="sourceLine" id="cb3-82" title="82">            <span class="co">// Optionally-displaying an element</span></a>
 <a class="sourceLine" id="cb3-83" title="83">            <span class="kw">if</span> model.count &gt;= <span class="dv">10</span> <span class="op">{</span> <span class="pp">h2!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;padding&quot;</span> =&gt; <span class="dv">50</span><span class="op">}</span>, <span class="st">&quot;Nice!&quot;</span> <span class="op">]</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> <span class="pp">seed::</span>empty() <span class="op">}</span></a>
@@ -132,7 +132,7 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <a class="sourceLine" id="cb3-86" title="86">        success_level(model.count),  <span class="co">// Incorporating a separate component</span></a>
 <a class="sourceLine" id="cb3-87" title="87"></a>
 <a class="sourceLine" id="cb3-88" title="88">        <span class="pp">h3!</span><span class="op">[</span> <span class="st">&quot;What precisely is it we&#39;re counting?&quot;</span> <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb3-89" title="89">        <span class="pp">input!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="st">&quot;value&quot;</span> =&gt; model.what_we_count<span class="op">}</span>, input_ev(<span class="st">&quot;input&quot;</span>, <span class="pp">Msg::</span>ChangeWWC) <span class="op">]</span></a>
+<a class="sourceLine" id="cb3-89" title="89">        <span class="pp">input!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="pp">At::</span>Value =&gt; model.what_we_count<span class="op">}</span>, input_ev(<span class="pp">Ev::</span>Input, <span class="pp">Msg::</span>ChangeWWC) <span class="op">]</span></a>
 <a class="sourceLine" id="cb3-90" title="90">    <span class="op">]</span></a>
 <a class="sourceLine" id="cb3-91" title="91"><span class="op">}</span></a>
 <a class="sourceLine" id="cb3-92" title="92"></a>

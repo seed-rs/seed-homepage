@@ -2,19 +2,19 @@ pub fn text() -> String {
 r#"
 <h1 id="events">Events</h1>
 <p>Events are created by passing a a <a href="https://docs.rs/seed/0.2.4/seed/dom_types/struct.Listener.html">Listener</a>, or vec of Listeners, created using the following functions exposed in the prelude: <code>simple_ev</code>, <code>input_ev</code>, <code>keyboard_ev</code>, <code>mouse_ev</code>, and <code>raw_ev</code>. The first is demonstrated in the example in the quickstart section, and all are demonstrated in the todomvc example.</p>
-<p><code>simple_ev</code> takes two arguments: an event trigger (eg “click”, “contextmenu” etc), and an instance of your <code>Msg</code> enum. (eg Msg::Increment). The other three event-creation-funcs take a trigger, and a <a href="https://doc.rust-lang.org/book/ch13-01-closures.html">closure</a> (An anonymous function, similar to an arrow func in JS) that returns a Msg enum.</p>
+<p><code>simple_ev</code> takes two arguments: an event trigger, which can be a <code>Seed::Ev</code> (imported in the prelude), an <code>&amp;str</code>, or a <code>String</code>, (eg <code>Ev::Click</code>, “click”, “contextmenu” etc), and an instance of your <code>Msg</code> enum. (eg Msg::Increment). The other three event-creation-funcs take a trigger, and a <a href="https://doc.rust-lang.org/book/ch13-01-closures.html">closure</a> (An anonymous function, similar to an arrow func in JS) that returns a Msg enum.</p>
 <p><code>simple_ev</code> does not pass any information about the event, only that it fired. Example:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">enum</span> Msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-2" title="2">    ClickClick</a>
 <a class="sourceLine" id="cb1-3" title="3"><span class="op">}</span></a>
 <a class="sourceLine" id="cb1-4" title="4"><span class="co">// ...</span></a>
-<a class="sourceLine" id="cb1-5" title="5">simple_ev(<span class="st">&quot;dblclick&quot;</span>, <span class="pp">Msg::</span>ClickClick)`</a></code></pre></div>
+<a class="sourceLine" id="cb1-5" title="5">simple_ev(<span class="pp">Ev::</span>DblClick, <span class="pp">Msg::</span>ClickClick)`</a></code></pre></div>
 <p><code>input_ev</code> passes the event target's value field, eg what a user typed in an input field. Example:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">enum</span> Msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb2-2" title="2">    NewWords(<span class="dt">String</span>)</a>
 <a class="sourceLine" id="cb2-3" title="3"><span class="op">}</span></a>
 <a class="sourceLine" id="cb2-4" title="4"><span class="co">// ...</span></a>
-<a class="sourceLine" id="cb2-5" title="5">input_ev(<span class="st">&quot;input&quot;</span>, <span class="pp">Msg::</span>NewWords)</a></code></pre></div>
+<a class="sourceLine" id="cb2-5" title="5">input_ev(<span class="pp">Ev::</span>Input, <span class="pp">Msg::</span>NewWords)</a></code></pre></div>
 <p><code>keyboard_ev</code> returns a <a href="https://rustwasm.github.io/wasm-bindgen/api/web_sys/struct.KeyboardEvent.html">web_sys::KeyboardEvent</a>, which exposes several getter methods like <code>key_code</code> and <code>key</code>. <code>mouse_ev</code> works in a similar way. Example:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">enum</span> Msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-2" title="2">    PutTheHammerDown(<span class="pp">web_sys::</span>KeyboardEvent)</a>
@@ -39,7 +39,7 @@ r#"
 <a class="sourceLine" id="cb5-8" title="8">    </a>
 <a class="sourceLine" id="cb5-9" title="9">    <span class="co">// ...</span></a>
 <a class="sourceLine" id="cb5-10" title="10">    <span class="co">// In view</span></a>
-<a class="sourceLine" id="cb5-11" title="11">    raw_ev(<span class="st">&quot;input&quot;</span>, <span class="pp">Msg::</span>KeyPress),</a>
+<a class="sourceLine" id="cb5-11" title="11">    raw_ev(<span class="pp">Ev::</span>Input, <span class="pp">Msg::</span>KeyPress),</a>
 <a class="sourceLine" id="cb5-12" title="12"><span class="op">}</span></a></code></pre></div>
 <p>Seed also provides <code>to_textarea</code> and <code>to_select</code> functions, which you'd use as <code>to_input</code>. It provides <code>to_html_el</code>, which is useful for changing settings like <code>focus</code>, and <code>to_mouse_event</code>, which you'd use like <code>to_kbevent</code>.</p>
 <p>This extra step is caused by a conflict between Rust's type system, and the way DOM events are handled. For example, you may wish to pull text from an input field by reading the event target's value field. However, not all targets contain value; it may have to be represented as an <code>HtmlInputElement</code>. (See <a href="https://rustwasm.github.io/wasm-bindgen/api/web_sys/struct.EventTarget.html">the web-sys ref</a>, and <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget">Mdn ref</a>; there's no value field)) Another example: If we wish to read the key_code of an event, we must first cast it as a KeyboardEvent; pure Events (web_sys and DOM) do not contain this field.</p>
@@ -69,7 +69,7 @@ r#"
 <a class="sourceLine" id="cb7-10" title="10"><span class="co">// ... In view</span></a>
 <a class="sourceLine" id="cb7-11" title="11">keyboard_ev(<span class="st">&quot;keydown&quot;</span>, |ev| KeyDown(ev.key_code()))</a></code></pre></div>
 <p>You can pass more than one variable to the <code>Msg</code> enum via the closure, as long as it's set up appropriate in <code>Msg</code>'s definition. Note that if you pass a value to the enum other than what's between ||, you may receive an error about lifetimes. This is corrected by making the closure a move type. Eg:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb8-1" title="1">keyboard_ev(<span class="st">&quot;keydown&quot;</span>, <span class="kw">move</span> |ev| <span class="pp">Msg::</span>EditKeyDown(id, ev.key_code()))</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb8-1" title="1">keyboard_ev(<span class="pp">Ev::</span>KeyDown, <span class="kw">move</span> |ev| <span class="pp">Msg::</span>EditKeyDown(id, ev.key_code()))</a></code></pre></div>
 <p>Where <code>id</code> is a value defined earlier.</p>
 <p>Event syntax may be improved later with the addition of a single macro that infers what the type of event is based on the trigger, and avoids the use of manually creating a <code>Vec</code> to store the <code>Listener</code>s. For examples of all of the above (except raw_ev), check out the <a href="https://github.com/David-OConnor/seed/tree/master/examples/todomvc">todomvc example</a>.</p>
 <p>The <a href="https://github.com/David-OConnor/seed/tree/master/examples/todomvc">todomvc example</a> has a number of event-handling examples, including use of raw_ev, where it handles text input triggered by a key press, and uses prevent_default().</p>

@@ -84,7 +84,7 @@ browser navigation event would add a redundant route history entry, interfering 
 calls RoutePage from ChangePage. We call ChangePage from an in-app navigation event, like this:
 
 ```rust
-h2![ simple_ev("click", Msg::ChangePage(state, 1)), "Guide" ]
+h2![ simple_ev(Ev::Click, Msg::ChangePage(state, 1)), "Guide" ]
 ```
 
 Dynamic landing-page routes are not yet supported, but you may be able to populate the paths you

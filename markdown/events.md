@@ -4,7 +4,8 @@ or vec of Listeners, created using the following functions exposed in the prelud
 `input_ev`, `keyboard_ev`, `mouse_ev`, and `raw_ev`. The first is demonstrated in the example in the quickstart section,
 and all are demonstrated in the todomvc example.
 
-`simple_ev` takes two arguments: an event trigger (eg "click", "contextmenu" etc), and an instance
+`simple_ev` takes two arguments: an event trigger, which can be a `Seed::Ev` (imported in the prelude), an `&str`, or a 
+ `String`, (eg `Ev::Click`, "click", "contextmenu" etc), and an instance
 of your `Msg` enum. (eg Msg::Increment). The other three event-creation-funcs
 take a trigger, and a [closure](https://doc.rust-lang.org/book/ch13-01-closures.html) (An anonymous function,
 similar to an arrow func in JS) that returns a Msg enum.
@@ -16,7 +17,7 @@ enum Msg {
     ClickClick
 }
 // ...
-simple_ev("dblclick", Msg::ClickClick)`
+simple_ev(Ev::DblClick, Msg::ClickClick)`
 ```
 
 `input_ev` passes the event target's value field, eg what a user typed in an input field.
@@ -26,7 +27,7 @@ enum Msg {
     NewWords(String)
 }
 // ...
-input_ev("input", Msg::NewWords)
+input_ev(Ev::Input, Msg::NewWords)
 ```
 
 `keyboard_ev` returns a [web_sys::KeyboardEvent](https://rustwasm.github.io/wasm-bindgen/api/web_sys/struct.KeyboardEvent.html),
@@ -79,7 +80,7 @@ Msg::KeyPress(event) => {
     
     // ...
     // In view
-    raw_ev("input", Msg::KeyPress),
+    raw_ev(Ev::Input, Msg::KeyPress),
 }
 ```
 Seed also provides `to_textarea` and `to_select` functions, which you'd use as
@@ -134,7 +135,7 @@ as it's set up appropriate in `Msg`'s definition. Note that if you pass a value 
 other than what's between ||, you may receive an error about lifetimes. This is corrected by
 making the closure a move type. Eg:
 ```rust
-keyboard_ev("keydown", move |ev| Msg::EditKeyDown(id, ev.key_code()))
+keyboard_ev(Ev::KeyDown, move |ev| Msg::EditKeyDown(id, ev.key_code()))
 ```
 Where `id` is a value defined earlier.
 

@@ -115,12 +115,12 @@ fn header(state: seed::App<Msg, Model>, _version: &str) -> El<Msg> {
 
     header![ style!{"display" => "flex"; "justify-content" => "flex-end"},
         ul![
-            a![ &link_style, "Guide", simple_ev("click", Msg::ChangePage(state.clone(), Page::Guide)) ],
-            a![ &link_style, "Changelog", simple_ev("click", Msg::ChangePage(state, Page::Changelog)) ],
-            a![ &link_style, "Repo", attrs!{"href" => "https://github.com/David-OConnor/seed"} ],
-            a![ &link_style, "Quickstart repo", attrs!{"href" => "https://github.com/David-OConnor/seed-quickstart"} ],
-            a![ &link_style, "Crate", attrs!{"href" => "https://crates.io/crates/seed"} ],
-            a![ &link_style, "API docs", attrs!{"href" => "https://docs.rs/seed"} ]
+            a![ &link_style, "Guide", simple_ev(Ev::Click, Msg::ChangePage(state.clone(), Page::Guide)) ],
+            a![ &link_style, "Changelog", simple_ev(Ev::Click, Msg::ChangePage(state, Page::Changelog)) ],
+            a![ &link_style, "Repo", attrs!{At::Href => "https://github.com/David-OConnor/seed"} ],
+            a![ &link_style, "Quickstart repo", attrs!{At::Href => "https://github.com/David-OConnor/seed-quickstart"} ],
+            a![ &link_style, "Crate", attrs!{At::Href => "https://crates.io/crates/seed"} ],
+            a![ &link_style, "API docs", attrs!{At::Href => "https://docs.rs/seed"} ]
         ]
     ]
 }
@@ -170,8 +170,8 @@ fn guide(state: seed::App<Msg, Model>, sections: &[GuideSection], guide_page: us
         .map(|(i, s)|
         h4![
             &menu_item_style,
-            &attrs!{"class" => if i == guide_page {"guide-menu-selected"} else {"guide-menu"}},
-            simple_ev("click", Msg::ChangeGuidePage(state.clone(), i)),
+            class![if i == guide_page {"guide-menu-selected"} else {"guide-menu"}],
+            simple_ev(Ev::Click, Msg::ChangeGuidePage(state.clone(), i)),
             s.title
         ]
     ).collect();
@@ -190,7 +190,8 @@ fn guide(state: seed::App<Msg, Model>, sections: &[GuideSection], guide_page: us
             menu_items
         ],
 
-        div![ attrs!{"class" => "guide"},
+        div![
+            class!["guide"],
             style!{"display" => "flex"; "grid-column" => "2 / 3";
             "padding" => 80;},
             sections[guide_page].clone().element
@@ -201,6 +202,9 @@ fn guide(state: seed::App<Msg, Model>, sections: &[GuideSection], guide_page: us
 fn changelog() -> El<Msg> {
     let mut entries = El::from_markdown(
 "
+## v0.2.5
+- Attributes and Events now can use At and Ev enums
+
 ## v0.2.4
 - Changed render func to use a new pattern (Breaking)
 - Default mount point added: \"app\" for element id
@@ -247,7 +251,7 @@ to allow conditional rendering (Breaking)
      };
 
     div![
-        attrs!{"class" => "guide"},
+        class!["guide"],
         style!{
             "display" => "grid";
             "grid-template-columns" => "1fr 2fr 1fr";
@@ -330,6 +334,11 @@ pub fn render() {
 //        ChangeLog,
 //        GuidePage(guide_page)
 //    }
+
+    // todo change routes macro
+    routes4.insert(vec!["guide".into()], Msg::RoutePage(Page::Guide));
+    routes4.insert(vec!["changelog".into()], Msg::RoutePage(Page::Changelog));
+    routes4.insert(vec!["guide".into(), r"\d+".into()], |page| Msg::RouteGuidePage(page));
 
     seed::App::build(Model::default(), update, view)
         .routes(routes)

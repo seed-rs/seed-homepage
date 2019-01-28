@@ -40,7 +40,7 @@ r#"
 <a class="sourceLine" id="cb1-35" title="35">        <span class="op">}</span>)</a>
 <a class="sourceLine" id="cb1-36" title="36"><span class="op">}</span></a>
 <a class="sourceLine" id="cb1-37" title="37"></a>
-<a class="sourceLine" id="cb1-38" title="38"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-38" title="38"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: &amp;Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-39" title="39">    <span class="pp">div!</span><span class="op">[</span> <span class="pp">format!</span>(<span class="st">&quot;name: {}, sha: {}&quot;</span>, model.data.name, model.data.commit.sha),</a>
 <a class="sourceLine" id="cb1-40" title="40">        did_mount(<span class="kw">move</span> |_| spawn_local(get_data(state.clone())))</a>
 <a class="sourceLine" id="cb1-41" title="41">     <span class="op">]</span></a>
@@ -67,7 +67,7 @@ r#"
 <a class="sourceLine" id="cb2-17" title="17"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: &amp;Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb2-18" title="18">    <span class="pp">div!</span><span class="op">[</span></a>
 <a class="sourceLine" id="cb2-19" title="19">        <span class="pp">div!</span><span class="op">[</span> <span class="pp">format!</span>(<span class="st">&quot;Hello World. name: {}, sha: {}&quot;</span>, model.data.name, model.data.commit.sha) <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb2-20" title="20">        <span class="pp">button!</span><span class="op">[</span> raw_ev(<span class="st">&quot;click&quot;</span>, <span class="kw">move</span> |_| <span class="pp">Msg::</span>GetData(state.clone())), <span class="st">&quot;Update from the internet&quot;</span><span class="op">]</span></a>
+<a class="sourceLine" id="cb2-20" title="20">        <span class="pp">button!</span><span class="op">[</span> raw_ev(<span class="pp">Ev::</span>Click, <span class="kw">move</span> |_| <span class="pp">Msg::</span>GetData(state.clone())), <span class="st">&quot;Update from the internet&quot;</span><span class="op">]</span></a>
 <a class="sourceLine" id="cb2-21" title="21">    <span class="op">]</span></a>
 <a class="sourceLine" id="cb2-22" title="22"><span class="op">}</span></a></code></pre></div>
 <p>Example showing POST, and headers:</p>
@@ -118,7 +118,7 @@ r#"
 <a class="sourceLine" id="cb4-11" title="11">        <span class="op">}</span>),</a>
 <a class="sourceLine" id="cb4-12" title="12">        </a>
 <a class="sourceLine" id="cb4-13" title="13">        <span class="pp">button!</span><span class="op">[</span></a>
-<a class="sourceLine" id="cb4-14" title="14">            simple_ev(<span class="st">&quot;click&quot;</span>, <span class="pp">Msg::</span>Increment),</a>
+<a class="sourceLine" id="cb4-14" title="14">            simple_ev(<span class="pp">Ev::</span>Click, <span class="pp">Msg::</span>Increment),</a>
 <a class="sourceLine" id="cb4-15" title="15">            <span class="pp">format!</span>(<span class="st">&quot;Hello, World × {}&quot;</span>, model.val)</a>
 <a class="sourceLine" id="cb4-16" title="16">        <span class="op">]</span></a>
 <a class="sourceLine" id="cb4-17" title="17">    <span class="op">]</span></a>

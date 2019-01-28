@@ -44,7 +44,7 @@ fn get_data(state: seed::App<Msg, Model>) -> impl Future<Item = (), Error = JsVa
         })
 }
 
-fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
+fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
     div![ format!("name: {}, sha: {}", model.data.name, model.data.commit.sha),
         did_mount(move |_| spawn_local(get_data(state.clone())))
      ]
@@ -85,7 +85,7 @@ fn update(msg: Msg, model: Model) -> Update<Model> {
 fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
     div![
         div![ format!("Hello World. name: {}, sha: {}", model.data.name, model.data.commit.sha) ],
-        button![ raw_ev("click", move |_| Msg::GetData(state.clone())), "Update from the internet"]
+        button![ raw_ev(Ev::Click, move |_| Msg::GetData(state.clone())), "Update from the internet"]
     ]
 }
 ```
@@ -152,7 +152,7 @@ fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
         }),
         
         button![
-            simple_ev("click", Msg::Increment),
+            simple_ev(Ev::Click, Msg::Increment),
             format!("Hello, World × {}", model.val)
         ]
     ]

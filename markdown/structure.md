@@ -245,7 +245,7 @@ Example:
 fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
     let things = vec![ h4![ "thing1" ], h4![ "thing2" ] ];
 
-    div![ attrs!{"class" => "hardly-any"}, 
+    div![ attrs!{At::Class => "hardly-any"}, 
         things,
         h4![ "thing3?" ]
     ]
@@ -254,8 +254,8 @@ fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
 Note that you can create any of the above items inside an element macro, or create it separately,
 and pass it in.
 
-Values passed to `attrs`, and `style` macros can be owned `Strings`, `&str`s, or when applicable, numerical and 
-boolean values. Eg: `input![ attrs!{"disabled" => false]` and `input![ attrs!{"disabled" => "false"]` 
+Keeys passed to `attrs` can be `Seed::At`s,  `String`s, `&str`s. Values passed to `attrs`, and `style` macros can be owned `Strings`, `&str`s, or when applicable, numerical and 
+boolean values. Eg: `input![ attrs!{At::Disabled => false]` and `input![ attrs!{"disabled" => "false"]` 
 are equivalent. If a numerical value is used in a `Style`, 'px' will be automatically appended.
 If you don't want this behavior, use a `String` or`&str`. Eg: `h2![ style!{"font-size" => 16} ]` , or
 `h2![ style!{"font-size" => "1.5em"} ]` for specifying font size in pixels or em respectively. Note that
@@ -268,11 +268,16 @@ the view macro, since it involves modifying a variable:
 ```rust
 fn a_component() -> El<Msg> {
     let mut attributes = attrs!{};
-    attributes.add_multiple("class", vec!["A-modicum-of", "hardly-any"]);
+    attributes.add_multiple(At::Class, vec!["A-modicum-of", "hardly-any"]);
 
     div![ attributes ]
 }
 ```
+
+Seed validates attributes [against this list](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes);
+The `At` enum includes only these values, and `&strs` passed are converted into `At`s. If you
+wish to use a custom attribute, use `At::Custom(name)`, where `name` is a `String` of your
+attribute's name.
 
 The `class!` and `id!` convenience macros allow settings
 attributes as a list of classes, or a single id, if no other attributes are required.
@@ -309,8 +314,8 @@ Setting an InputElement's `checked`, or `autofocus` property is done through nor
 ```rust
 fn a_component() -> El<Msg> {
     // ...
-    input![ attrs!{"type" => "checkbox"; "checked" => true} ]
-    input![ attrs!{"autofocus" => true} ]
+    input![ attrs!{At::Typed => "checkbox"; At::Checked => true} ]
+    input![ attrs!{At::Autofocus => true} ]
     // ...
 }
 ```
@@ -319,7 +324,7 @@ To change Attrs or Styles you've created, edit their .vals HashMap. To add
 a new part to them, use their .add method:
 ```rust
 let mut attributes = attrs!{};
-attributes.add("class", "truckloads");
+attributes.add(At::Class, "truckloads");
 ```
 
 Example of the style tag, and how you can use pattern-matching in views:
