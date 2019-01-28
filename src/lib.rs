@@ -247,7 +247,6 @@ to allow conditional rendering (Breaking)
         "grid-column" => "2 / 3";
         "display" => "flex";
         "flex-direction" => "column";
-//        "align-content" => "center";
      };
 
     div![
@@ -287,10 +286,8 @@ fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
 
     div![
         style!{
-            "display" => "grid";
-            "grid-template-columns" => "1fr 1fr 1fr"
-//            "display" => "flex";
-//            "flex-direction" => "column";
+            "display" => "flex";
+            "flex-direction" => "column";
         },
 
         section![
