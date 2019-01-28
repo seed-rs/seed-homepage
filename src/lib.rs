@@ -336,10 +336,10 @@ pub fn render() {
 //    }
 
     // todo change routes macro
-    let mut routes4 = HashMap::new();
-    routes4.insert(vec!["guide".into()], |_| Msg::RoutePage(Page::Guide));
-    routes4.insert(vec!["changelog".into()], |_| Msg::RoutePage(Page::Changelog));
-    routes4.insert(vec!["guide".into(), r"\d+".into()], |page| Msg::RouteGuidePage(page));
+//    let mut routes4 = HashMap::new();
+//    routes4.insert(vec!["guide".into()], |_| Msg::RoutePage(Page::Guide));
+//    routes4.insert(vec!["changelog".into()], |_| Msg::RoutePage(Page::Changelog));
+//    routes4.insert(vec!["guide".into(), r"\d+".into()], |page| Msg::RouteGuidePage(page));
 
     seed::App::build(Model::default(), update, view)
         .routes(routes)
