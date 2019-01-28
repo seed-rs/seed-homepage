@@ -247,7 +247,7 @@ to allow conditional rendering (Breaking)
         "grid-column" => "2 / 3";
         "display" => "flex";
         "flex-direction" => "column";
-//        "align-content" => "center";
+        "align-content" => "center";
      };
 
     div![
