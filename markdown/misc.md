@@ -101,3 +101,9 @@ fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
     ]
 }
 ```
+
+## Input elements are controlled
+`input`, `textarea`, and `select` elements are always controlled, in the vein of React.
+This means that even if there's no event associated with user input to these fields, their
+value will always stay in sync with the model, which may mean ignoring text input if
+not set up with a `Ev::Input` event.

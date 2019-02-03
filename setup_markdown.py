@@ -12,7 +12,7 @@ import re
 # ./pandoc --list-highlight-styles
 # pygments tango espresso zenburn kate monochrome breezedark haddock
 STYLE = "tango"
-VERSION = "0.2.4"
+VERSION = "0.2.5"
 
 
 def main():

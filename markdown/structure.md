@@ -277,7 +277,8 @@ fn a_component() -> El<Msg> {
 Seed validates attributes [against this list](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes);
 The `At` enum includes only these values, and `&strs` passed are converted into `At`s. If you
 wish to use a custom attribute, use `At::Custom(name)`, where `name` is a `String` of your
-attribute's name.
+attribute's name. In `attrs!` when using `&str`s, inserting an unrecognized attribute
+will do the same.
 
 The `class!` and `id!` convenience macros allow settings
 attributes as a list of classes, or a single id, if no other attributes are required.

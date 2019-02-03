@@ -13,9 +13,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         urlparts = urllib.parse.urlparse(self.path)
         request_file_path = urlparts.path.strip('/')
+        print(self.path, "SP")
+        print(request_file_path, "RFP")
         if not os.path.exists(request_file_path):
             self.path = '/'
-            # pass
 
         print(self.path, "PATH")
 

@@ -178,6 +178,34 @@ __exports.__widl_f_set_checked_HTMLInputElement = function(arg0, arg1) {
     getObject(arg0).checked = arg1 !== 0;
 };
 
+let cachedTextEncoder = new TextEncoder('utf-8');
+
+let WASM_VECTOR_LEN = 0;
+
+function passStringToWasm(arg) {
+
+    const buf = cachedTextEncoder.encode(arg);
+    const ptr = wasm.__wbindgen_malloc(buf.length);
+    getUint8Memory().set(buf, ptr);
+    WASM_VECTOR_LEN = buf.length;
+    return ptr;
+}
+
+__exports.__widl_f_value_HTMLInputElement = function(ret, arg0) {
+
+    const retptr = passStringToWasm(getObject(arg0).value);
+    const retlen = WASM_VECTOR_LEN;
+    const mem = getUint32Memory();
+    mem[ret / 4] = retptr;
+    mem[ret / 4 + 1] = retlen;
+
+};
+
+__exports.__widl_f_set_value_HTMLInputElement = function(arg0, arg1, arg2) {
+    let varg1 = getStringFromWasm(arg1, arg2);
+    getObject(arg0).value = varg1;
+};
+
 __exports.__widl_instanceof_HTMLSelectElement = function(idx) {
     return getObject(idx) instanceof HTMLSelectElement ? 1 : 0;
 };
@@ -186,12 +214,42 @@ __exports.__widl_f_set_autofocus_HTMLSelectElement = function(arg0, arg1) {
     getObject(arg0).autofocus = arg1 !== 0;
 };
 
+__exports.__widl_f_value_HTMLSelectElement = function(ret, arg0) {
+
+    const retptr = passStringToWasm(getObject(arg0).value);
+    const retlen = WASM_VECTOR_LEN;
+    const mem = getUint32Memory();
+    mem[ret / 4] = retptr;
+    mem[ret / 4 + 1] = retlen;
+
+};
+
+__exports.__widl_f_set_value_HTMLSelectElement = function(arg0, arg1, arg2) {
+    let varg1 = getStringFromWasm(arg1, arg2);
+    getObject(arg0).value = varg1;
+};
+
 __exports.__widl_instanceof_HTMLTextAreaElement = function(idx) {
     return getObject(idx) instanceof HTMLTextAreaElement ? 1 : 0;
 };
 
 __exports.__widl_f_set_autofocus_HTMLTextAreaElement = function(arg0, arg1) {
     getObject(arg0).autofocus = arg1 !== 0;
+};
+
+__exports.__widl_f_value_HTMLTextAreaElement = function(ret, arg0) {
+
+    const retptr = passStringToWasm(getObject(arg0).value);
+    const retlen = WASM_VECTOR_LEN;
+    const mem = getUint32Memory();
+    mem[ret / 4] = retptr;
+    mem[ret / 4 + 1] = retlen;
+
+};
+
+__exports.__widl_f_set_value_HTMLTextAreaElement = function(arg0, arg1, arg2) {
+    let varg1 = getStringFromWasm(arg1, arg2);
+    getObject(arg0).value = varg1;
 };
 
 __exports.__widl_f_push_state_with_url_History = function(arg0, arg1, arg2, arg3, arg4, arg5, exnptr) {
@@ -207,19 +265,6 @@ __exports.__widl_f_push_state_with_url_History = function(arg0, arg1, arg2, arg3
     }
 };
 
-let cachedTextEncoder = new TextEncoder('utf-8');
-
-let WASM_VECTOR_LEN = 0;
-
-function passStringToWasm(arg) {
-
-    const buf = cachedTextEncoder.encode(arg);
-    const ptr = wasm.__wbindgen_malloc(buf.length);
-    getUint8Memory().set(buf, ptr);
-    WASM_VECTOR_LEN = buf.length;
-    return ptr;
-}
-
 __exports.__widl_f_pathname_Location = function(ret, arg0, exnptr) {
     try {
 
@@ -229,6 +274,64 @@ __exports.__widl_f_pathname_Location = function(ret, arg0, exnptr) {
         mem[ret / 4] = retptr;
         mem[ret / 4 + 1] = retlen;
 
+    } catch (e) {
+        const view = getUint32Memory();
+        view[exnptr / 4] = 1;
+        view[exnptr / 4 + 1] = addHeapObject(e);
+
+    }
+};
+
+__exports.__widl_f_search_Location = function(ret, arg0, exnptr) {
+    try {
+
+        const retptr = passStringToWasm(getObject(arg0).search);
+        const retlen = WASM_VECTOR_LEN;
+        const mem = getUint32Memory();
+        mem[ret / 4] = retptr;
+        mem[ret / 4 + 1] = retlen;
+
+    } catch (e) {
+        const view = getUint32Memory();
+        view[exnptr / 4] = 1;
+        view[exnptr / 4 + 1] = addHeapObject(e);
+
+    }
+};
+
+__exports.__widl_f_set_search_Location = function(arg0, arg1, arg2, exnptr) {
+    let varg1 = getStringFromWasm(arg1, arg2);
+    try {
+        getObject(arg0).search = varg1;
+    } catch (e) {
+        const view = getUint32Memory();
+        view[exnptr / 4] = 1;
+        view[exnptr / 4 + 1] = addHeapObject(e);
+
+    }
+};
+
+__exports.__widl_f_hash_Location = function(ret, arg0, exnptr) {
+    try {
+
+        const retptr = passStringToWasm(getObject(arg0).hash);
+        const retlen = WASM_VECTOR_LEN;
+        const mem = getUint32Memory();
+        mem[ret / 4] = retptr;
+        mem[ret / 4 + 1] = retlen;
+
+    } catch (e) {
+        const view = getUint32Memory();
+        view[exnptr / 4] = 1;
+        view[exnptr / 4 + 1] = addHeapObject(e);
+
+    }
+};
+
+__exports.__widl_f_set_hash_Location = function(arg0, arg1, arg2, exnptr) {
+    let varg1 = getStringFromWasm(arg1, arg2);
+    try {
+        getObject(arg0).hash = varg1;
     } catch (e) {
         const view = getUint32Memory();
         view[exnptr / 4] = 1;
@@ -262,6 +365,14 @@ __exports.__widl_f_remove_child_Node = function(arg0, arg1, exnptr) {
 __exports.__widl_f_set_text_content_Node = function(arg0, arg1, arg2) {
     let varg1 = arg1 == 0 ? undefined : getStringFromWasm(arg1, arg2);
     getObject(arg0).textContent = varg1;
+};
+
+__exports.__widl_instanceof_PopStateEvent = function(idx) {
+    return getObject(idx) instanceof PopStateEvent ? 1 : 0;
+};
+
+__exports.__widl_f_state_PopStateEvent = function(arg0) {
+    return addHeapObject(getObject(arg0).state);
 };
 
 __exports.__widl_instanceof_Window = function(idx) {
@@ -324,6 +435,14 @@ __exports.__wbindgen_object_drop_ref = function(i) { dropObject(i); };
 
 __exports.__wbindgen_string_new = function(p, l) {
     return addHeapObject(getStringFromWasm(p, l));
+};
+
+__exports.__wbindgen_string_get = function(i, len_ptr) {
+    let obj = getObject(i);
+    if (typeof(obj) !== 'string') return 0;
+    const ptr = passStringToWasm(obj);
+    getUint32Memory()[len_ptr / 4] = WASM_VECTOR_LEN;
+    return ptr;
 };
 
 __exports.__wbindgen_debug_string = function(i, len_ptr) {
@@ -410,9 +529,13 @@ __exports.__wbindgen_cb_drop = function(i) {
     return 0;
 };
 
-__exports.__wbindgen_closure_wrapper1255 = function(a, b, _ignored) {
-    const f = wasm.__wbg_function_table.get(30);
-    const d = wasm.__wbg_function_table.get(31);
+__exports.__wbindgen_json_parse = function(ptr, len) {
+    return addHeapObject(JSON.parse(getStringFromWasm(ptr, len)));
+};
+
+__exports.__wbindgen_closure_wrapper1389 = function(a, b, _ignored) {
+    const f = wasm.__wbg_function_table.get(44);
+    const d = wasm.__wbg_function_table.get(45);
     const cb = function(arg0) {
         this.cnt++;
         let a = this.a;

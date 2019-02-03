@@ -1,37 +1,64 @@
 # Routing
-Seed includes routing: You can trigger state changes that update the address bar,
+Seed includes flexible routing, inspired by 
+[React-Reason](https://github.com/reasonml/reason-react/blob/master/docs/router.md): 
+You can trigger state changes that update the address bar,
  and can be nagivated to/from using forward and back buttons. This works for landing-page
-routing as well, provided your server is configured to support. For an example of routes in use,
+routing as well, provided your server is configured to support. For an examples,
 see the [homepage](https://github.com/David-OConnor/seed/tree/master/examples/homepage) or
 [todomvc](https://github.com/David-OConnor/seed/tree/master/examples/todomvc) examples.
   
-As an example, let's say our site has three pages:
-a home page, a guide, and a changelog, accessible by `http://seed-rs.org/`, `http://seed-rs.org/guide`,
-and `http://seed-rs.org/changelog` respectively. We describe the page by a `page`
-field in our model, which is an integer: 0 for homepage, 1 for guide, or 2 for changelog.
-(An enum would work as well). 
+Let's say our site the following pages:
+a guide, which can have subpages, and a changelog, accessible by `http://seed-rs.org/changelog`,
+`http://seed-rs.org/guide`, and `http://seed-rs.org/guide/3' (where 3 is the page we want) respectively. 
+We describe the page by a `page`
+field in our model, which is an integer: 0 for guide, 1 for changelog, and an additional
+number for the guide page. (An enum would be cleaner, but we don't wish to complicate this example). 
 
-To set up the initial routing, we pass a `HashMap<String, Msg>` describing the possible routings
-as the last parameter of [Seed::run](https://docs.rs/seed/0.1.10/seed/fn.run.html). We can
-create it using the `routes!` macro, which is for convenience: Rust doesn't include a
-HashMap literal syntax, and this macro automatically converts the keys to Strings, eg
-in the case of the &strs we use in the example below:
+To set up the initial routing, we pass a `Routes` function describing how to handle
+routing, to `App::build`'s `routes` method.(https://docs.rs/seed/0.1.10/seed/fn.run.html).
 ```rust
+fn routes(url: seed::Url) -> Msg {
+    if url.path.len() == 0 {
+        return Msg::ChangeVisibility(Visible::All)
+    }
+
+    match url.path[0].as_ref() {
+        "guide" => {
+            // Determine if we're at the main guide page, or a subpage
+            match url.path.get(1).as_ref() {
+                Some(page) => Msg::ChangeGuidePage(page.parse::<usize>().unwrap()),
+                None => Msg::ChangePage(0)
+            }
+        },
+        "changelog" => Msg::ChangePage(1),
+        _ => Msg::ChangePage(0),
+    }
+}
+
 #[wasm_bindgen]
 pub fn render() {
-    let routes = routes!{
-        "guide" => Msg::RoutePage(Page::Guide),
-        "changelog" => Msg::RoutePage(Page::Changelog),
-    };
-
     seed::App::build(Model::default(), update, view)
         .routes(routes)
         .finish()
         .run();
 }
 ```
-This syntax resembles that of the `attrs!` and `style!` macros, but uses commas
-for separation.
+the [Url struct](https://docs.rs/seed/0.2.4/seed/routing/struct.Url.html)
+which routes has the following fields, which describe the route:
+```rust
+pub struct Url {
+    pub path: Vec<String>,
+    pub hash: Option<String>,
+    pub search: Option<String>,
+    pub title: Option<String>,
+}
+```
+`path` contains the path heirarchy from top to bottom. For example, the `changelog` page above's path
+is `vec![String::from("changelog")]`, representing `/changelog/`, and guide page 3's is 
+`vec![String::from("guide"), 3.to_string()]`, representing `/guide/3/`.
+The other three properties aren't as common; `hash` describes text after a `#`; `search` describes
+text after a `?`, but before `#`, and title is unimplemented in current web browsers, but may
+find use in the future.
 
 To make landing-page routing work, configure your server so that all three of these paths point towards the app,
 or that any (sub)path points towards it, instead of returning an error. The `serve.py` script
@@ -44,61 +71,67 @@ logic like this in the update function:
 ```rust
 #[derive(Clone)]
 enum Msg {
-    ChangePage(seed::App<Msg, Model>, u32),
     RoutePage(u32),
+    RouteGuidePage(u32),
+    ChangePage(u32),
+    ChangeGuidePage(u32),
 }
 
 fn update(msg: Msg, model: Model) -> Model {
     match msg {
-        Msg::ChangePage(state, page) => {
-            // An enum, with a to_string() method might be a more elegant way
-            // to store page state.
-            let page_name = match page {
-                0 => "",
-                1 => "guide",
-                2 => "changelog"
-            };
-            Render(seed::push_route(state, page_name, Msg::RoutePage(page)))
+        Msg::RoutePage(page) => {
+            seed::push_route(
+                seed::Url::new(vec![&page.to_string()])
+            );
+            update(Msg::ChangePage(page), model)
         },
-        // This is separate, because in-app naviation needs to call push_route,
-        // but we don't want to call it from browser navigation. (eg back button)
-        Msg::RoutePage(page) => Model {page, ..model},
+        Msg::RouteGuidePage(guide_page) => {
+            seed::push_route(
+                seed::Url::new(vec!["guide", &guide_page.to_string()])
+            );
+            update(Msg::ChangeGuidePage(guide_page), model)
+        },
+        // This is separate, because nagivating the route triggers state updates, which would
+        // trigger an additional push state.
+        Msg::ChangePage(page) => Render(Model {page, ..model}),
+        Msg::ChangeGuidePage(guide_page) => Render(Model {guide_page, page: Page::Guide, ..model}),
+    }
 }
 ```
-[seed::push_route](https://docs.rs/seed/0.1.8/seed/fn.push_route.html) accepts three single parameters:
-a `seed::App`, a path &str corresponding to what will be appended to the url, and the message that handles
-the state change. It sets up the routing, updates the model with the message you pass, and returns this
- updated model. In practice, these page_name, message combos will match your landing page routing config,
-but they doesn't have to. You can push whatever you'd like dynamically. These will work for page navigation
-and url display, but won't work for landing pages unless included in `.routes(routes)` described above.
 
-When a page is loaded or browser naviation occurs (eg back button), Seed searches each of the route map keys for 
-a matching path name (url suffix). If it finds one,
-it updates the model based on its associated message. If not, no action is taken. 
-In our example, we assume the model initialized to page=0, for the homepage.
+Notice how the `Route` messages above call 
+[seed::push_route](https://docs.rs/seed/0.1.8/seed/fn.push_route.html), 
+and the `Change` ones 
+call the state, are called in the `routes` function, and are recursively called in the
+`Route` messages. `seed::Url::new` is a method for creating the `Url` struct above. It
+creates a new Url from a `Vec` of `&strs`, converts them to the `Vec<String>` found in `Url`,
+and makes the rest of the fields `None`. If you wish to define one of these fields, there are additional
+methods you can chain together, eg: `seed::url::New(vec!["myurl"]).hash("textafterhash")`
 
-Notice how we keep ChangePage and RoutePage separate in our example: RoutePage performs
-the action associated with routing, while ChangePage updates our route history, then
-recursively calls RoutePage. If you were to attempt this in the same message, each
-browser navigation event would add a redundant route history entry, interfering with navigation. `seed::push_route`
-calls RoutePage from ChangePage. We call ChangePage from an in-app navigation event, like this:
+`push_route` accepts a single parameter: a `Url` struct.
+
+When a page is loaded or browser naviation occurs (eg back button), Seed uses the `routes`
+func you provided to determine what message to call. 
+
+Notice how we keep ChangePage and RoutePage separate in our example. Do not
+call `push_route` from one of these messages, or you'll end up with recusions/unwanted behavior:
+ `ChangePage` in our example performs
+the action associated with routing, while `RoutePage` updates our route history, then
+recursively calls `ChangePage`. If you were to attempt this in the same message, each
+browser navigation event would add a redundant route history entry, interfering with navigation. `
+
+We call `RoutePage` from an in-app navigation event, like this:
 
 ```rust
-h2![ simple_ev(Ev::Click, Msg::ChangePage(state, 1)), "Guide" ]
+h2![ simple_ev(Ev::Click, Msg::RoutePage), "Guide" ]
 ```
 
-Dynamic landing-page routes are not yet supported, but you may be able to populate the paths you
-need ahead of time in the route map:
-```rust
-let mut routes = routes!{
-    "guide" => Msg::RoutePage(Page::Guide),
-    "changelog" => Msg::RoutePage(Page::Changelog),
-};
+Or can call it programatically using lifecycle hooks:
 
-for guide_page in 0..12 {
-    routes.insert(
-        "guide/".to_string() + &guide_page.to_string(),
-        Msg::RouteGuidePage(guide_page)
-    );
-}
+```rust
+    did_mount(move |_| {
+        if model.logged_in {
+            state.update(Msg::RoutePage(Page::Main))
+        }
+    })
 ```
