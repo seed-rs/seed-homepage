@@ -72,7 +72,8 @@ web-sys = "^0.3.6"
 
 ## A short example
 Here's an example demonstrating structure and syntax; it can be found in working form
-under `examples/counter`. Descriptions of its parts are in the
+in the [counter example](https://github.com/David-OConnor/seed/tree/master/examples/counter) 
+Descriptions of its parts are in the
 Guide section below. Its structure follows [The Elm Architecture](https://guide.elm-lang.org/architecture/).
 
 *lib.rs*:

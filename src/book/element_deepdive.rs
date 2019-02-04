@@ -1,7 +1,7 @@
 pub fn text() -> String {
 r#"
 <h1 id="element-creation-macros-under-the-hood">Element-creation macros, under the hood</h1>
-<p>For a better understanding of how views are created, reference the <a href="https://docs.rs/seed/0.2.5/seed/dom_types/struct.El.html">El API docs page</a>. The following code returns an <code>El</code> representing a few nested DOM elements displayed in a flexbox layout:</p>
+<p>For a better understanding of how views are created, reference the <a href="https://docs.rs/seed/0.2.6/seed/dom_types/struct.El.html">El API docs page</a>. The following code returns an <code>El</code> representing a few nested DOM elements displayed in a flexbox layout:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1">    <span class="pp">div!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;display&quot;</span> =&gt; <span class="st">&quot;flex&quot;</span>; <span class="st">&quot;flex-direction&quot;</span> =&gt; <span class="st">&quot;column&quot;</span><span class="op">}</span>,</a>
 <a class="sourceLine" id="cb1-2" title="2">        <span class="pp">h3!</span><span class="op">[</span> <span class="st">&quot;Some things&quot;</span> <span class="op">]</span>,</a>
 <a class="sourceLine" id="cb1-3" title="3">        <span class="pp">button!</span><span class="op">[</span> <span class="st">&quot;Click me!&quot;</span> <span class="op">]</span></a>

@@ -207,6 +207,10 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
 fn changelog() -> El<Msg> {
     let mut entries = El::from_markdown(
 "
+## v0.2.6
+- Fixed a bug where children would render out-of-order
+- Improved vdom diffing logic
+
 ## v0.2.5
 - Attributes and Events now can use `At` and `Ev` enums
 - Routing overhauled; modelled after react-reason. Cleaner syntax, and more flexible.
@@ -305,8 +309,8 @@ fn view(_state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
     ]
 }
 
-fn routes(url: seed::Url) -> Msg {
-    if url.path.len() == 0 {
+fn routes(url: &seed::Url) -> Msg {
+    if url.path.is_empty() {
         return Msg::ChangePage(Page::Guide)
     }
 

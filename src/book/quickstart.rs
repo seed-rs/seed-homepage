@@ -42,7 +42,7 @@ seed = &quot;^0.2.4&quot;
 wasm-bindgen = &quot;^0.2.33&quot;
 web-sys = &quot;^0.3.6&quot;</code></pre>
 <h2 id="a-short-example">A short example</h2>
-<p>Here's an example demonstrating structure and syntax; it can be found in working form under <code>examples/counter</code>. Descriptions of its parts are in the Guide section below. Its structure follows <a href="https://guide.elm-lang.org/architecture/">The Elm Architecture</a>.</p>
+<p>Here's an example demonstrating structure and syntax; it can be found in working form in the <a href="https://github.com/David-OConnor/seed/tree/master/examples/counter">counter example</a> Descriptions of its parts are in the Guide section below. Its structure follows <a href="https://guide.elm-lang.org/architecture/">The Elm Architecture</a>.</p>
 <p><em>lib.rs</em>:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="at">#[</span>macro_use<span class="at">]</span></a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="kw">extern</span> <span class="kw">crate</span> seed;</a>

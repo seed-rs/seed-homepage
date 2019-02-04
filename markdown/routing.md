@@ -18,8 +18,8 @@ To set up the initial routing, we pass a `routes` function describing how to han
 routing, to [App::build](https://docs.rs/seed/0.2.5/seed/struct.App.html#method.build)'s 
 `routes` method.
 ```rust
-fn routes(url: seed::Url) -> Msg {
-    if url.path.len() == 0 {
+fn routes(url: &seed::Url) -> Msg {
+    if url.path.is_empty() {
         return Msg::ChangePage(0)
     }
 
@@ -104,7 +104,7 @@ methods you can chain together, eg:
 seed::push_route(
     seed::url::New(vec!["myurl"])
         .hash("textafterhash")
-        .search("textaftersearch")
+        .search("textafterquestionmark")
 )
 ```
 

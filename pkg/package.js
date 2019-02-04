@@ -362,6 +362,17 @@ __exports.__widl_f_remove_child_Node = function(arg0, arg1, exnptr) {
     }
 };
 
+__exports.__widl_f_replace_child_Node = function(arg0, arg1, arg2, exnptr) {
+    try {
+        return addHeapObject(getObject(arg0).replaceChild(getObject(arg1), getObject(arg2)));
+    } catch (e) {
+        const view = getUint32Memory();
+        view[exnptr / 4] = 1;
+        view[exnptr / 4 + 1] = addHeapObject(e);
+
+    }
+};
+
 __exports.__widl_f_set_text_content_Node = function(arg0, arg1, arg2) {
     let varg1 = arg1 == 0 ? undefined : getStringFromWasm(arg1, arg2);
     getObject(arg0).textContent = varg1;
@@ -533,9 +544,9 @@ __exports.__wbindgen_json_parse = function(ptr, len) {
     return addHeapObject(JSON.parse(getStringFromWasm(ptr, len)));
 };
 
-__exports.__wbindgen_closure_wrapper1359 = function(a, b, _ignored) {
-    const f = wasm.__wbg_function_table.get(45);
-    const d = wasm.__wbg_function_table.get(46);
+__exports.__wbindgen_closure_wrapper1361 = function(a, b, _ignored) {
+    const f = wasm.__wbg_function_table.get(21);
+    const d = wasm.__wbg_function_table.get(22);
     const cb = function(arg0) {
         this.cnt++;
         let a = this.a;
