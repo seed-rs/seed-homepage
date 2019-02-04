@@ -35,7 +35,6 @@ r#"
 <ul>
 <li>Dynamic SVG creation and modification</li>
 <li>Websocket API</li>
-<li>Better recursive updating</li>
 <li>Virtual DOM optimization</li>
 <li>High-level CSS-grid/Flexbox API ?</li>
 </ul>

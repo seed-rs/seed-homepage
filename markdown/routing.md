@@ -9,17 +9,17 @@ see the [homepage](https://github.com/David-OConnor/seed/tree/master/examples/ho
   
 Let's say our site the following pages:
 a guide, which can have subpages, and a changelog, accessible by `http://seed-rs.org/changelog`,
-`http://seed-rs.org/guide`, and `http://seed-rs.org/guide/3' (where 3 is the page we want) respectively. 
+`http://seed-rs.org/guide`, and `http://seed-rs.org/guide/3 (where 3 is the page we want) respectively. 
 We describe the page by a `page`
 field in our model, which is an integer: 0 for guide, 1 for changelog, and an additional
-number for the guide page. (An enum would be cleaner, but we don't wish to complicate this example). 
+number for the guide page. (An enum would be cleaner, but we don't wish to complicate this example).
 
 To set up the initial routing, we pass a `Routes` function describing how to handle
 routing, to `App::build`'s `routes` method.(https://docs.rs/seed/0.1.10/seed/fn.run.html).
 ```rust
 fn routes(url: seed::Url) -> Msg {
     if url.path.len() == 0 {
-        return Msg::ChangeVisibility(Visible::All)
+        return Msg::ChangePage(0)
     }
 
     match url.path[0].as_ref() {
@@ -80,15 +80,11 @@ enum Msg {
 fn update(msg: Msg, model: Model) -> Model {
     match msg {
         Msg::RoutePage(page) => {
-            seed::push_route(
-                seed::Url::new(vec![&page.to_string()])
-            );
+            seed::push_path(vec![page]);
             update(Msg::ChangePage(page), model)
         },
         Msg::RouteGuidePage(guide_page) => {
-            seed::push_route(
-                seed::Url::new(vec!["guide", &guide_page.to_string()])
-            );
+            seed::push_path(vec!["guide", guide_page]);
             update(Msg::ChangeGuidePage(guide_page), model)
         },
         // This is separate, because nagivating the route triggers state updates, which would
@@ -99,39 +95,48 @@ fn update(msg: Msg, model: Model) -> Model {
 }
 ```
 
-Notice how the `Route` messages above call 
-[seed::push_route](https://docs.rs/seed/0.1.8/seed/fn.push_route.html), 
-and the `Change` ones 
-call the state, are called in the `routes` function, and are recursively called in the
-`Route` messages. `seed::Url::new` is a method for creating the `Url` struct above. It
-creates a new Url from a `Vec` of `&strs`, converts them to the `Vec<String>` found in `Url`,
+Notice how the `Route` messages above call [seed::push_path](https://docs.rs/seed/0.1.8/seed/fn.push_path.html), 
+and the `Change` messages are called in the `routes` function, and are recursively called in the
+update function. `push_path` is a convenience function for 
+[seed::push_route](https://docs.rs/seed/0.1.8/seed/fn.push_route.html).
+`push_route` accepts a single parameter: a `Url` struct, which you can create with
+ `seed::Url::new` .  It
+accepts the path as a `Vec` of items that implement `ToString` (eg `String`, `&str`, numbers),
 and makes the rest of the fields `None`. If you wish to define one of these fields, there are additional
-methods you can chain together, eg: `seed::url::New(vec!["myurl"]).hash("textafterhash")`
+methods you can chain together, eg: 
 
-`push_route` accepts a single parameter: a `Url` struct.
+```rust
+seed::push_route(
+    seed::url::New(vec!["myurl"])
+        .hash("textafterhash")
+        .search("textaftersearch")
+)
+```
 
+`push_path` doesn't support `hash`, `search`, or `title`, but has cleaner syntax; it takes the path,
+as described above, as its only parameter. 
 When a page is loaded or browser naviation occurs (eg back button), Seed uses the `routes`
-func you provided to determine what message to call. 
+func you provided to determine which message to call. 
 
 Notice how we keep ChangePage and RoutePage separate in our example. Do not
-call `push_route` from one of these messages, or you'll end up with recusions/unwanted behavior:
+call `push_path` or `push_route` from one of these messages, or you'll end up with recusions/unwanted behavior:
  `ChangePage` in our example performs
 the action associated with routing, while `RoutePage` updates our route history, then
 recursively calls `ChangePage`. If you were to attempt this in the same message, each
 browser navigation event would add a redundant route history entry, interfering with navigation. `
 
-We call `RoutePage` from an in-app navigation event, like this:
+We call routing messages from in-app navigation events, like this:
 
 ```rust
 h2![ simple_ev(Ev::Click, Msg::RoutePage), "Guide" ]
 ```
 
-Or can call it programatically using lifecycle hooks:
+Or programatically using lifecycle hooks:
 
 ```rust
     did_mount(move |_| {
         if model.logged_in {
-            state.update(Msg::RoutePage(Page::Main))
+            state.update(Msg::RoutePage(Page::Home))
         }
     })
 ```

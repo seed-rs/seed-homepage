@@ -85,7 +85,6 @@ avoids the dependency glue-code associated with Redux and React-Router.
 ### Features to add
 - Dynamic SVG creation and modification
 - Websocket API
-- Better recursive updating
 - Virtual DOM optimization
 - High-level CSS-grid/Flexbox API ?
  

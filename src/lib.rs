@@ -87,15 +87,11 @@ enum Msg {
 fn update(msg: Msg, model: Model) -> Update<Model> {
     match msg {
         Msg::RoutePage(page) => {
-            seed::push_route(
-                seed::Url::new(vec![&page.to_string()])
-            );
+            seed::push_path(vec![&page.to_string()]);
             update(Msg::ChangePage(page), model)
         },
         Msg::RouteGuidePage(guide_page) => {
-            seed::push_route(
-                seed::Url::new(vec!["guide", &guide_page.to_string()])
-            );
+            seed::push_path(vec!["guide", &guide_page.to_string()]);
             update(Msg::ChangeGuidePage(guide_page), model)
         },
 
@@ -105,7 +101,6 @@ fn update(msg: Msg, model: Model) -> Update<Model> {
         Msg::ChangeGuidePage(guide_page) => Render(Model {guide_page, page: Page::Guide, ..model}),
     }
 }
-
 
 // View
 
@@ -213,10 +208,12 @@ fn changelog() -> El<Msg> {
     let mut entries = El::from_markdown(
 "
 ## v0.2.5
-- Attributes and Events now can use At and Ev enums
+- Attributes and Events now can use `At` and `Ev` enums
 - Routing overhauled; modelled after react-reason. Cleaner syntax, and more flexible.
 - Input, Textarea, and Select elements are now \"controlled\" - they always
 stay in sync with the model.
+- index.html file updated in examples and quickstart to use relative paths,
+which fixes some routing problems
 
 ## v0.2.4
 - Changed render func to use a new pattern (Breaking)
