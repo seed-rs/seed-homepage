@@ -3,8 +3,8 @@ Seed includes flexible routing, inspired by
 [React-Reason](https://github.com/reasonml/reason-react/blob/master/docs/router.md): 
 You can trigger state changes that update the address bar,
  and can be nagivated to/from using forward and back buttons. This works for landing-page
-routing as well, provided your server is configured to support. For an examples,
-see the [homepage](https://github.com/David-OConnor/seed/tree/master/examples/homepage) or
+routing as well, provided your server is configured to support. See the
+ [homepage](https://github.com/David-OConnor/seed/tree/master/examples/homepage) and
 [todomvc](https://github.com/David-OConnor/seed/tree/master/examples/todomvc) examples.
   
 Let's say our site the following pages:
@@ -12,11 +12,11 @@ a guide, which can have subpages, and a changelog, accessible by `http://seed-rs
 `http://seed-rs.org/guide`, and `http://seed-rs.org/guide/3 (where 3 is the page we want) respectively. 
 We describe the page by a `page`
 field in our model, which is an integer: 0 for guide, 1 for changelog, and an additional
-number for the guide page. (An enum would be cleaner, but we don't wish to complicate this example).
+number for the guide page. An enum would be cleaner, but we don't wish to complicate this example.
 
-To set up the initial routing, we pass a `Routes` function describing how to handle
-routing, to [App::build](https://docs.rs/seed/0.2.5/seed/struct.App.html#method.build)`'s 
-routes` method.
+To set up the initial routing, we pass a `routes` function describing how to handle
+routing, to [App::build](https://docs.rs/seed/0.2.5/seed/struct.App.html#method.build)'s 
+`routes` method.
 ```rust
 fn routes(url: seed::Url) -> Msg {
     if url.path.len() == 0 {
@@ -45,7 +45,7 @@ pub fn render() {
 }
 ```
 the [Url struct](https://docs.rs/seed/0.2.4/seed/routing/struct.Url.html)
-which routes has the following fields, which describe the route:
+which routes has the following fields, describes the route:
 ```rust
 pub struct Url {
     pub path: Vec<String>,
@@ -62,7 +62,7 @@ text after a `?`, but before `#`, and title is unimplemented in current web brow
 find use in the future.
 
 In order to trigger our route change through in-app naviation (eg clicking a link or pushing a button), include
-logic like this in the update function:
+logic like this in the `update` function:
 ```rust
 #[derive(Clone)]
 enum Msg {
@@ -95,7 +95,7 @@ and the `Change` messages are called in the `routes` function, and are recursive
 update function. `push_path` is a convenience function for 
 [seed::push_route](https://docs.rs/seed/0.1.8/seed/routing/fn.push_route.html).
 `push_route` accepts a single parameter: a `Url` struct, which you can create with
- `seed::Url::new` .  It
+ [seed::Url::new](https://docs.rs/seed/0.2.5/seed/routing/struct.Url.html#method.new) .  It
 accepts the path as a `Vec` of items that implement `ToString` (eg `String`, `&str`, numbers),
 and makes the rest of the fields `None`. If you wish to define one of these fields, there are additional
 methods you can chain together, eg: 
@@ -123,7 +123,7 @@ browser navigation event would add a redundant route history entry, interfering 
 We call routing messages from in-app navigation events, like this:
 
 ```rust
-h2![ simple_ev(Ev::Click, Msg::RoutePage), "Guide" ]
+h2![ simple_ev(Ev::Click, Msg::RoutePage(0)), "Guide" ]
 ```
 
 Or programatically using lifecycle hooks:
@@ -131,7 +131,7 @@ Or programatically using lifecycle hooks:
 ```rust
     did_mount(move |_| {
         if model.logged_in {
-            state.update(Msg::RoutePage(Page::Home))
+            state.update(Msg::RoutePage(0))
         }
     })
 ```

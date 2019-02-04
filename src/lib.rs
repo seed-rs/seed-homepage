@@ -213,7 +213,7 @@ fn changelog() -> El<Msg> {
 - Input, Textarea, and Select elements are now \"controlled\" - they always
 stay in sync with the model.
 - index.html file updated in examples and quickstart to use relative paths,
-which fixes some routing problems
+which fixes landing-page routing
 
 ## v0.2.4
 - Changed render func to use a new pattern (Breaking)
