@@ -20,7 +20,7 @@ To start, clone [The quickstart repo](https://github.com/David-OConnor/seed-quic
 run `build.sh` or `build.ps1` in a terminal, then start a dev server that supports WASM.
 For example, with [Python](https://www.python.org/downloads/) installed, run `python serve.py`.
 (Linux users may need to run `python3 serve.py`.)
-Once you change your package name, you'll need to tweak the html file and build script, as described below.
+Once you change your package name, you'll need to tweak the build script, as described below.
 
 
 ## A little deeper
@@ -31,14 +31,14 @@ If not using the quickstart repo, create an Html file with a body that contains 
 ```html
 <section id="app"></section>
 
-<script src='./pkg/package.js'></script>
+<script src='/pkg/package.js'></script>
 
 <script>
     const { render } = wasm_bindgen;
     function run() {
         render();
     }
-    wasm_bindgen('./pkg/package_bg.wasm')
+    wasm_bindgen('/pkg/package_bg.wasm')
         .then(run)
         .catch(console.error);
 </script>

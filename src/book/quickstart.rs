@@ -8,20 +8,20 @@ r#"
 <p>And wasm-bindgen: <code>cargo install wasm-bindgen-cli</code></p>
 <p>If you run into errors while installing <code>wasm-bindgen-cli</code>, you may need to install C++ build tools. On linux, run <code>sudo apt install build-essential</code>. On Windows, download and install <a href="https://visualstudio.microsoft.com/downloads/">Visual Studio 2017</a>; when asked in the installer, <a href="https://visualstudio.microsoft.com/downloads/">Visual Studio 2017</a>; when asked in the installer, include the C++ workload.</p>
 <h2 id="the-theoretical-minimum">The theoretical minimum</h2>
-<p>To start, clone <a href="https://github.com/David-OConnor/seed-quickstart">The quickstart repo</a>, run <code>build.sh</code> or <code>build.ps1</code> in a terminal, then start a dev server that supports WASM. For example, with <a href="https://www.python.org/downloads/">Python</a> installed, run <code>python serve.py</code>. (Linux users may need to run <code>python3 serve.py</code>.) Once you change your package name, you'll need to tweak the html file and build script, as described below.</p>
+<p>To start, clone <a href="https://github.com/David-OConnor/seed-quickstart">The quickstart repo</a>, run <code>build.sh</code> or <code>build.ps1</code> in a terminal, then start a dev server that supports WASM. For example, with <a href="https://www.python.org/downloads/">Python</a> installed, run <code>python serve.py</code>. (Linux users may need to run <code>python3 serve.py</code>.) Once you change your package name, you'll need to tweak the build script, as described below.</p>
 <h2 id="a-little-deeper">A little deeper</h2>
 <p>Alternatively, create a new lib with Cargo: <code>cargo new --lib appname</code>. Here and everywhere it appears in this guide, <code>appname</code> should be replaced with the name of your app.</p>
 <p>If not using the quickstart repo, create an Html file with a body that contains this:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">&lt;section</span><span class="ot"> id=</span><span class="st">&quot;app&quot;</span><span class="kw">&gt;&lt;/section&gt;</span></a>
 <a class="sourceLine" id="cb1-2" title="2"></a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&#39;./pkg/package.js&#39;</span><span class="kw">&gt;&lt;/script&gt;</span></a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&#39;/pkg/package.js&#39;</span><span class="kw">&gt;&lt;/script&gt;</span></a>
 <a class="sourceLine" id="cb1-4" title="4"></a>
 <a class="sourceLine" id="cb1-5" title="5"><span class="kw">&lt;script&gt;</span></a>
 <a class="sourceLine" id="cb1-6" title="6">    <span class="kw">const</span> <span class="op">{</span> render <span class="op">}</span> <span class="op">=</span> wasm_bindgen<span class="op">;</span></a>
 <a class="sourceLine" id="cb1-7" title="7">    <span class="kw">function</span> <span class="at">run</span>() <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-8" title="8">        <span class="at">render</span>()<span class="op">;</span></a>
 <a class="sourceLine" id="cb1-9" title="9">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb1-10" title="10">    <span class="at">wasm_bindgen</span>(<span class="st">&#39;./pkg/package_bg.wasm&#39;</span>)</a>
+<a class="sourceLine" id="cb1-10" title="10">    <span class="at">wasm_bindgen</span>(<span class="st">&#39;/pkg/package_bg.wasm&#39;</span>)</a>
 <a class="sourceLine" id="cb1-11" title="11">        .<span class="at">then</span>(run)</a>
 <a class="sourceLine" id="cb1-12" title="12">        .<span class="at">catch</span>(<span class="va">console</span>.<span class="at">error</span>)<span class="op">;</span></a>
 <a class="sourceLine" id="cb1-13" title="13"><span class="kw">&lt;/script&gt;</span></a></code></pre></div>

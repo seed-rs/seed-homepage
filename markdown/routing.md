@@ -15,7 +15,8 @@ field in our model, which is an integer: 0 for guide, 1 for changelog, and an ad
 number for the guide page. (An enum would be cleaner, but we don't wish to complicate this example).
 
 To set up the initial routing, we pass a `Routes` function describing how to handle
-routing, to `App::build`'s `routes` method.(https://docs.rs/seed/0.1.10/seed/fn.run.html).
+routing, to [App::build](https://docs.rs/seed/0.2.5/seed/struct.App.html#method.build)`'s 
+routes` method.
 ```rust
 fn routes(url: seed::Url) -> Msg {
     if url.path.len() == 0 {
@@ -60,12 +61,6 @@ The other three properties aren't as common; `hash` describes text after a `#`; 
 text after a `?`, but before `#`, and title is unimplemented in current web browsers, but may
 find use in the future.
 
-To make landing-page routing work, configure your server so that all three of these paths point towards the app,
-or that any (sub)path points towards it, instead of returning an error. The `serve.py` script
-included in the quickstart repo and examples is set up for this. Once this is configured, intial 
-routing on page load will work as expected: The page will load with the default state, then immediately 
-trigger the update prescribed by the RoutePage message.
-
 In order to trigger our route change through in-app naviation (eg clicking a link or pushing a button), include
 logic like this in the update function:
 ```rust
@@ -95,10 +90,10 @@ fn update(msg: Msg, model: Model) -> Model {
 }
 ```
 
-Notice how the `Route` messages above call [seed::push_path](https://docs.rs/seed/0.1.8/seed/fn.push_path.html), 
+Notice how the `Route` messages above call [seed::push_path](https://docs.rs/seed/0.2.5/seed/routing/fn.push_path.html), 
 and the `Change` messages are called in the `routes` function, and are recursively called in the
 update function. `push_path` is a convenience function for 
-[seed::push_route](https://docs.rs/seed/0.1.8/seed/fn.push_route.html).
+[seed::push_route](https://docs.rs/seed/0.1.8/seed/routing/fn.push_route.html).
 `push_route` accepts a single parameter: a `Url` struct, which you can create with
  `seed::Url::new` .  It
 accepts the path as a `Vec` of items that implement `ToString` (eg `String`, `&str`, numbers),
@@ -140,3 +135,9 @@ Or programatically using lifecycle hooks:
         }
     })
 ```
+
+To make landing-page routing work, configure your server so that all three of these paths point towards the app,
+or that any (sub)path points towards it, instead of returning an error. The `serve.py` script
+included in the quickstart repo and examples is set up for this. Once this is configured, intial 
+routing on page load will work as expected: The page will load with the default state, then immediately 
+trigger the update prescribed by the RoutePage message.
