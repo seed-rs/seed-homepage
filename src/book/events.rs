@@ -74,7 +74,7 @@ r#"
 <p>Event syntax may be improved later with the addition of a single macro that infers what the type of event is based on the trigger, and avoids the use of manually creating a <code>Vec</code> to store the <code>Listener</code>s. For examples of all of the above (except raw_ev), check out the <a href="https://github.com/David-OConnor/seed/tree/master/examples/todomvc">todomvc example</a>.</p>
 <p>The <a href="https://github.com/David-OConnor/seed/tree/master/examples/todomvc">todomvc example</a> has a number of event-handling examples, including use of raw_ev, where it handles text input triggered by a key press, and uses prevent_default().</p>
 <h2 id="window-events">Window events</h2>
-<p>We handle events triggered by the overall window specially, since it doesn't fit directly into our virtual DOM. We pass to <code>Seed::App::build::window_events()</code> a functionthat accepts a <code>Model</code>, and returns a <code>Vec&lt;dom_types::Listener&gt;</code>. We use it to control which listeners are attached to the window based on the model. Excerpt from the <a href="https://github.com/David-OConnor/seed/blob/master/examples/window_events/src/lib.rs">window_events</a> example:</p>
+<p>We handle events triggered by the overall window specially, since it doesn't fit directly into our virtual DOM. We pass to <code>Seed::App::build::window_events()</code> a functionthat accepts a ref to <code>Model</code>, and returns a <code>Vec&lt;dom_types::Listener&gt;</code>. We use it to control which listeners are attached to the window based on the model. Excerpt from the <a href="https://github.com/David-OConnor/seed/blob/master/examples/window_events/src/lib.rs">window_events</a> example:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb9-1" title="1"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
 <a class="sourceLine" id="cb9-2" title="2"><span class="kw">enum</span> Msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb9-3" title="3">    ToggleWatching,</a>
@@ -92,7 +92,7 @@ r#"
 <a class="sourceLine" id="cb9-15" title="15"></a>
 <a class="sourceLine" id="cb9-16" title="16"><span class="co">// ...</span></a>
 <a class="sourceLine" id="cb9-17" title="17"></a>
-<a class="sourceLine" id="cb9-18" title="18"><span class="kw">fn</span> window_events(model: Model) -&gt; <span class="dt">Vec</span>&lt;<span class="pp">seed::</span>Listener&lt;Msg&gt;&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb9-18" title="18"><span class="kw">fn</span> window_events(model: &amp;Model) -&gt; <span class="dt">Vec</span>&lt;<span class="pp">seed::dom_types::</span>Listener&lt;Msg&gt;&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb9-19" title="19">    <span class="kw">let</span> <span class="kw">mut</span> result = <span class="dt">Vec</span>::new();</a>
 <a class="sourceLine" id="cb9-20" title="20">    <span class="kw">if</span> model.watching <span class="op">{</span></a>
 <a class="sourceLine" id="cb9-21" title="21">        result.push(mouse_ev(<span class="st">&quot;mousemove&quot;</span>, |ev| <span class="pp">Msg::</span>UpdateCoords(ev)));</a>

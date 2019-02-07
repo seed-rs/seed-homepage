@@ -44,8 +44,9 @@ pub fn render() {
         .run();
 }
 ```
-the [Url struct](https://docs.rs/seed/0.2.4/seed/routing/struct.Url.html)
-which routes has the following fields, describes the route:
+Your `routes` function outputs the message that handles the routing, and accepts a ref to a 
+[Url struct](https://docs.rs/seed/0.2.4/seed/routing/struct.Url.html)
+describing the route, which routes has the following fields:
 ```rust
 pub struct Url {
     pub path: Vec<String>,
@@ -56,10 +57,10 @@ pub struct Url {
 ```
 `path` contains the path heirarchy from top to bottom. For example, the `changelog` page above's path
 is `vec![String::from("changelog")]`, representing `/changelog/`, and guide page 3's is 
-`vec![String::from("guide"), 3.to_string()]`, representing `/guide/3/`.
+`vec![String::from("guide"), 3.to_string()]`, representing `/guide/3/`. It's likely all you'll need.
 The other three properties aren't as common; `hash` describes text after a `#`; `search` describes
-text after a `?`, but before `#`, and title is unimplemented in current web browsers, but may
-find use in the future.
+text after a `?`, but before `#`, and title is a descriptive title, unimplemented in current web browsers, but may
+see use in the future.
 
 In order to trigger our route change through in-app naviation (eg clicking a link or pushing a button), include
 logic like this in the `update` function:
@@ -102,7 +103,7 @@ methods you can chain together, eg:
 
 ```rust
 seed::push_route(
-    seed::url::New(vec!["myurl"])
+    seed::Url::new(vec!["myurl"])
         .hash("textafterhash")
         .search("textafterquestionmark")
 )
@@ -136,8 +137,9 @@ Or programatically using lifecycle hooks:
     })
 ```
 
-To make landing-page routing work, configure your server so that all three of these paths point towards the app,
-or that any (sub)path points towards it, instead of returning an error. The `serve.py` script
+To make landing-page routing work, configure your server so that all relevant paths towards the 
+root or html file,
+ instead of returning an error. The `serve.py` script
 included in the quickstart repo and examples is set up for this. Once this is configured, intial 
-routing on page load will work as expected: The page will load with the default state, then immediately 
-trigger the update prescribed by the RoutePage message.
+routing on page load will work as expected: The page will initialize with the default state, then immediately 
+update based on the message returned by the `routes` function.

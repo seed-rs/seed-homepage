@@ -29,14 +29,14 @@ r#"
 <a class="sourceLine" id="cb1-23" title="23">        .finish()</a>
 <a class="sourceLine" id="cb1-24" title="24">        .run();</a>
 <a class="sourceLine" id="cb1-25" title="25"><span class="op">}</span></a></code></pre></div>
-<p>the <a href="https://docs.rs/seed/0.2.6/seed/routing/struct.Url.html">Url struct</a> which routes has the following fields, describes the route:</p>
+<p>Your <code>routes</code> function outputs the message that handles the routing, and accepts a ref to a <a href="https://docs.rs/seed/0.2.6/seed/routing/struct.Url.html">Url struct</a> describing the route, which routes has the following fields:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">pub</span> <span class="kw">struct</span> Url <span class="op">{</span></a>
 <a class="sourceLine" id="cb2-2" title="2">    <span class="kw">pub</span> path: <span class="dt">Vec</span>&lt;<span class="dt">String</span>&gt;,</a>
 <a class="sourceLine" id="cb2-3" title="3">    <span class="kw">pub</span> hash: <span class="dt">Option</span>&lt;<span class="dt">String</span>&gt;,</a>
 <a class="sourceLine" id="cb2-4" title="4">    <span class="kw">pub</span> search: <span class="dt">Option</span>&lt;<span class="dt">String</span>&gt;,</a>
 <a class="sourceLine" id="cb2-5" title="5">    <span class="kw">pub</span> title: <span class="dt">Option</span>&lt;<span class="dt">String</span>&gt;,</a>
 <a class="sourceLine" id="cb2-6" title="6"><span class="op">}</span></a></code></pre></div>
-<p><code>path</code> contains the path heirarchy from top to bottom. For example, the <code>changelog</code> page above's path is <code>vec![String::from("changelog")]</code>, representing <code>/changelog/</code>, and guide page 3's is <code>vec![String::from("guide"), 3.to_string()]</code>, representing <code>/guide/3/</code>. The other three properties aren't as common; <code>hash</code> describes text after a <code>#</code>; <code>search</code> describes text after a <code>?</code>, but before <code>#</code>, and title is unimplemented in current web browsers, but may find use in the future.</p>
+<p><code>path</code> contains the path heirarchy from top to bottom. For example, the <code>changelog</code> page above's path is <code>vec![String::from("changelog")]</code>, representing <code>/changelog/</code>, and guide page 3's is <code>vec![String::from("guide"), 3.to_string()]</code>, representing <code>/guide/3/</code>. It's likely all you'll need. The other three properties aren't as common; <code>hash</code> describes text after a <code>#</code>; <code>search</code> describes text after a <code>?</code>, but before <code>#</code>, and title is a descriptive title, unimplemented in current web browsers, but may see use in the future.</p>
 <p>In order to trigger our route change through in-app naviation (eg clicking a link or pushing a button), include logic like this in the <code>update</code> function:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="kw">enum</span> Msg <span class="op">{</span></a>
@@ -64,7 +64,7 @@ r#"
 <a class="sourceLine" id="cb3-24" title="24"><span class="op">}</span></a></code></pre></div>
 <p>Notice how the <code>Route</code> messages above call <a href="https://docs.rs/seed/0.2.6/seed/routing/fn.push_path.html">seed::push_path</a>, and the <code>Change</code> messages are called in the <code>routes</code> function, and are recursively called in the update function. <code>push_path</code> is a convenience function for <a href="https://docs.rs/seed/0.2.6/seed/routing/fn.push_route.html">seed::push_route</a>. <code>push_route</code> accepts a single parameter: a <code>Url</code> struct, which you can create with <a href="https://docs.rs/seed/0.2.6/seed/routing/struct.Url.html#method.new">seed::Url::new</a> . It accepts the path as a <code>Vec</code> of items that implement <code>ToString</code> (eg <code>String</code>, <code>&amp;str</code>, numbers), and makes the rest of the fields <code>None</code>. If you wish to define one of these fields, there are additional methods you can chain together, eg:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="pp">seed::</span>push_route(</a>
-<a class="sourceLine" id="cb4-2" title="2">    <span class="pp">seed::url::</span>New(<span class="pp">vec!</span><span class="op">[</span><span class="st">&quot;myurl&quot;</span><span class="op">]</span>)</a>
+<a class="sourceLine" id="cb4-2" title="2">    <span class="pp">seed::Url::</span>new(<span class="pp">vec!</span><span class="op">[</span><span class="st">&quot;myurl&quot;</span><span class="op">]</span>)</a>
 <a class="sourceLine" id="cb4-3" title="3">        .hash(<span class="st">&quot;textafterhash&quot;</span>)</a>
 <a class="sourceLine" id="cb4-4" title="4">        .search(<span class="st">&quot;textafterquestionmark&quot;</span>)</a>
 <a class="sourceLine" id="cb4-5" title="5">)</a></code></pre></div>
@@ -78,6 +78,6 @@ r#"
 <a class="sourceLine" id="cb6-3" title="3">            state.update(<span class="pp">Msg::</span>RoutePage(<span class="dv">0</span>))</a>
 <a class="sourceLine" id="cb6-4" title="4">        <span class="op">}</span></a>
 <a class="sourceLine" id="cb6-5" title="5">    <span class="op">}</span>)</a></code></pre></div>
-<p>To make landing-page routing work, configure your server so that all three of these paths point towards the app, or that any (sub)path points towards it, instead of returning an error. The <code>serve.py</code> script included in the quickstart repo and examples is set up for this. Once this is configured, intial routing on page load will work as expected: The page will load with the default state, then immediately trigger the update prescribed by the RoutePage message.</p>
+<p>To make landing-page routing work, configure your server so that all relevant paths towards the root or html file, instead of returning an error. The <code>serve.py</code> script included in the quickstart repo and examples is set up for this. Once this is configured, intial routing on page load will work as expected: The page will initialize with the default state, then immediately update based on the message returned by the <code>routes</code> function.</p>
 "#.into()
 }

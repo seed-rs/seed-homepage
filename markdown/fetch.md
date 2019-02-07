@@ -159,12 +159,13 @@ fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
 }
 ```
 
-'seed::run' returns an instance of `seed::App`, which we can use to updated state from the `render` function. Example
-of how you might use this, from `flosse`:
+`App::build` returns an instance of `seed::App`, which we can use to updated state from the `render` function. Example:
 ```rust
 pub fn render() {
-    let app = seed::run(Model::default(), update, view, "app", None, None);
-    open_websockets(app);
+    let state = App::build(Model::default(), update, view)
+        .finish()
+        .run();
+    open_websockets(state);
 }
 
 fn open_websockets(state: seed::App<Msg, Model>) {
@@ -176,6 +177,20 @@ fn open_websockets(state: seed::App<Msg, Model>) {
     let json: JsonMsg = serde_json::from_str(&text).unwrap();
     state.update(Msg::Json(json));
   });
+}
+```
+
+Re-examining our initial example, instead of loading the data when the top-level element mounts,
+we could load it in `render` like this:
+
+```rust
+#[wasm_bindgen]
+pub fn render() {
+    let state = seed::App::build(Model::default(), update, view)
+        .finish()
+        .run();
+
+    spawn_local(get_data(state));
 }
 ```
 
