@@ -1,7 +1,7 @@
 pub fn text() -> String {
 r#"
 <h1 id="http-requests-fetch-and-updating-state">Http requests (fetch), and updating state</h1>
-<p>We use the <a href="https://docs.rs/seed/0.2.6/seed/fetch/struct.Request.html">seed::Request</a> struct to make HTTP requests in the browser, wrapping the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>. To use this, we need to include <code>futures = "^0.1.20"</code> in <code>Cargo.toml</code>. The <a href="https://docs.rs/seed/0.2.6/seed/fetch/index.html">Fetch module</a> is standalone: It can be used with any wasm-bindgen program.</p>
+<p>We use the <a href="https://docs.rs/seed/0.2.7/seed/fetch/struct.Request.html">seed::Request</a> struct to make HTTP requests in the browser, wrapping the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>. To use this, we need to include <code>futures = "^0.1.20"</code> in <code>Cargo.toml</code>. The <a href="https://docs.rs/seed/0.2.7/seed/fetch/index.html">Fetch module</a> is standalone: It can be used with any wasm-bindgen program.</p>
 <p>Example, where we update the state on initial load:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">use</span> <span class="pp">seed::</span><span class="op">{</span>Request, Method, spawn_local<span class="op">}</span></a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="kw">use</span> <span class="pp">futures::</span>Future;</a>
@@ -124,24 +124,24 @@ r#"
 <a class="sourceLine" id="cb4-17" title="17">    <span class="op">]</span></a>
 <a class="sourceLine" id="cb4-18" title="18"><span class="op">}</span></a></code></pre></div>
 <p><code>App::build</code> returns an instance of <code>seed::App</code>, which we can use to updated state from the <code>render</code> function. Example:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-2" title="2">    <span class="kw">let</span> state = <span class="pp">App::</span>build(<span class="pp">Model::</span><span class="kw">default</span>(), update, view)</a>
-<a class="sourceLine" id="cb5-3" title="3">        .finish()</a>
-<a class="sourceLine" id="cb5-4" title="4">        .run();</a>
-<a class="sourceLine" id="cb5-5" title="5">    open_websockets(state);</a>
-<a class="sourceLine" id="cb5-6" title="6"><span class="op">}</span></a>
-<a class="sourceLine" id="cb5-7" title="7"></a>
-<a class="sourceLine" id="cb5-8" title="8"><span class="kw">fn</span> open_websockets(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;) <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-9" title="9"></a>
-<a class="sourceLine" id="cb5-10" title="10">  <span class="co">// setup websockets ...</span></a>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">fn</span> open_websockets(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;) <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-2" title="2"></a>
+<a class="sourceLine" id="cb5-3" title="3">  <span class="co">// setup websockets ...</span></a>
+<a class="sourceLine" id="cb5-4" title="4"></a>
+<a class="sourceLine" id="cb5-5" title="5">  <span class="kw">let</span> on_message = <span class="dt">Box</span>::new(<span class="kw">move</span>|ev: MessageEvent| <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-6" title="6">    <span class="kw">let</span> txt = ev.data().as_string().unwrap();</a>
+<a class="sourceLine" id="cb5-7" title="7">    <span class="kw">let</span> json: JsonMsg = <span class="pp">serde_json::</span>from_str(&amp;text).unwrap();</a>
+<a class="sourceLine" id="cb5-8" title="8">    state.update(<span class="pp">Msg::</span>Json(json));</a>
+<a class="sourceLine" id="cb5-9" title="9">  <span class="op">}</span>);</a>
+<a class="sourceLine" id="cb5-10" title="10"><span class="op">}</span></a>
 <a class="sourceLine" id="cb5-11" title="11"></a>
-<a class="sourceLine" id="cb5-12" title="12">  <span class="kw">let</span> on_message = <span class="dt">Box</span>::new(<span class="kw">move</span>|ev: MessageEvent| <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-13" title="13">    <span class="kw">let</span> txt = ev.data().as_string().unwrap();</a>
-<a class="sourceLine" id="cb5-14" title="14">    <span class="kw">let</span> json: JsonMsg = <span class="pp">serde_json::</span>from_str(&amp;text).unwrap();</a>
-<a class="sourceLine" id="cb5-15" title="15">    state.update(<span class="pp">Msg::</span>Json(json));</a>
-<a class="sourceLine" id="cb5-16" title="16">  <span class="op">}</span>);</a>
+<a class="sourceLine" id="cb5-12" title="12"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-13" title="13">    <span class="kw">let</span> state = <span class="pp">App::</span>build(<span class="pp">Model::</span><span class="kw">default</span>(), update, view)</a>
+<a class="sourceLine" id="cb5-14" title="14">        .finish()</a>
+<a class="sourceLine" id="cb5-15" title="15">        .run();</a>
+<a class="sourceLine" id="cb5-16" title="16">    open_websockets(state);</a>
 <a class="sourceLine" id="cb5-17" title="17"><span class="op">}</span></a></code></pre></div>
-<p>Re-examining our initial example, instead of loading the data when the top-level element mounts, we could load it in <code>render</code> like this:</p>
+<p>Re-examining our initial example, instead of loading the data when the top-level element mounts, we can load it in <code>render</code> like this:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb6-1" title="1"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
 <a class="sourceLine" id="cb6-2" title="2"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
 <a class="sourceLine" id="cb6-3" title="3">    <span class="kw">let</span> state = <span class="pp">seed::App::</span>build(<span class="pp">Model::</span><span class="kw">default</span>(), update, view)</a>

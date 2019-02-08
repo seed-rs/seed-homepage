@@ -161,13 +161,6 @@ fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
 
 `App::build` returns an instance of `seed::App`, which we can use to updated state from the `render` function. Example:
 ```rust
-pub fn render() {
-    let state = App::build(Model::default(), update, view)
-        .finish()
-        .run();
-    open_websockets(state);
-}
-
 fn open_websockets(state: seed::App<Msg, Model>) {
 
   // setup websockets ...
@@ -178,10 +171,17 @@ fn open_websockets(state: seed::App<Msg, Model>) {
     state.update(Msg::Json(json));
   });
 }
+
+pub fn render() {
+    let state = App::build(Model::default(), update, view)
+        .finish()
+        .run();
+    open_websockets(state);
+}
 ```
 
 Re-examining our initial example, instead of loading the data when the top-level element mounts,
-we could load it in `render` like this:
+we can load it in `render` like this:
 
 ```rust
 #[wasm_bindgen]
