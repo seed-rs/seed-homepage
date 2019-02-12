@@ -373,20 +373,9 @@ __exports.__widl_f_replace_child_Node = function(arg0, arg1, arg2, exnptr) {
     }
 };
 
-__exports.__widl_f_child_nodes_Node = function(arg0) {
-    return addHeapObject(getObject(arg0).childNodes);
-};
-
 __exports.__widl_f_set_text_content_Node = function(arg0, arg1, arg2) {
     let varg1 = arg1 == 0 ? undefined : getStringFromWasm(arg1, arg2);
     getObject(arg0).textContent = varg1;
-};
-
-__exports.__widl_f_get_NodeList = function(arg0, arg1) {
-
-    const val = getObject(arg0)[arg1];
-    return isLikeNone(val) ? 0 : addHeapObject(val);
-
 };
 
 __exports.__widl_instanceof_PopStateEvent = function(idx) {
