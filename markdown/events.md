@@ -1,6 +1,6 @@
 # Events
-Events are created by passing a a [Listener](https://docs.rs/seed/0.1.6/seed/dom_types/struct.Listener.html),
-or vec of Listeners, created using the following functions exposed in the prelude: `simple_ev`,
+Events are created by passing [Listener](https://docs.rs/seed/0.1.6/seed/dom_types/struct.Listener.html)s,
+or vecs of Listeners into `El` macros. They're created using the following functions exposed in the prelude: `simple_ev`,
 `input_ev`, `keyboard_ev`, `mouse_ev`, and `raw_ev`. The first is demonstrated in the example in the quickstart section,
 and all are demonstrated in the todomvc example.
 
@@ -61,7 +61,7 @@ input_ev("input", move |text| Msg::NewWords(text, 0))
 It lets you access any part of any type of
 event, albeit with more verbose syntax.
 If you wish to do something like prevent_default(), or anything not listed above, 
-you need to take this approach. Note that for many common operations, like taking
+you may need to take this approach. Note that for many common operations, like taking
 the value of an input element after an `input` or `change` event, you have to deal with
 casting from a generic event or target to the specific one. Seed provides convenience
 functions to handle this. They wrap wasm-bindgen's .dyn_ref(), from its

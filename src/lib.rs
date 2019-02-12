@@ -8,6 +8,7 @@ extern crate seed;
 use seed::prelude::*;
 
 
+
 // Model
 
 #[derive(Copy, Clone)]
@@ -16,8 +17,8 @@ enum Page {
     Changelog
 }
 
-impl Page {
-    fn to_string(self) -> String {
+impl ToString for Page {
+    fn to_string(&self) -> String {
         // Eg for url routing
         match self {
             Page::Guide => "guide".into(),
@@ -197,8 +198,12 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
 
         div![
             class!["guide"],
-            style!{"display" => "flex"; "grid-column" => "2 / 3";
-            "padding" => 80;},
+            style!{
+                "display" => "flex";
+                "flex-direction" => "column";
+                "grid-column" => "2 / 3";
+                "padding" => 80;
+            },
             sections[guide_page].clone().element
         ]
     ]
