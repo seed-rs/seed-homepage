@@ -107,3 +107,23 @@ fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
 This means that even if there's no event associated with user input to these fields, their
 value will always stay in sync with the model, which may mean ignoring text input if
 not set up with a `Ev::Input` event.
+
+
+## Debugging elements
+`El`s implement the `Debug` trait, so you can view outputs using `log!`: `log!(format!("{:?}", my_el));`
+In order to take advantage of this, you must implement `Debug` for your message type, and 
+any sub-types. Example:
+
+```rust
+#[derive(Copy, Clone, Debug)]
+enum Page {
+    Guide,
+    Changelog
+}
+
+#[derive(Clone, Debug)]
+enum Msg {
+    RoutePage(Page),
+    ChangePage(Page),
+}
+```

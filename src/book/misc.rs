@@ -74,5 +74,18 @@ r#"
 <a class="sourceLine" id="cb4-9" title="9"><span class="op">}</span></a></code></pre></div>
 <h2 id="input-elements-are-controlled">Input elements are controlled</h2>
 <p><code>input</code>, <code>textarea</code>, and <code>select</code> elements are always controlled, in the vein of React. This means that even if there's no event associated with user input to these fields, their value will always stay in sync with the model, which may mean ignoring text input if not set up with a <code>Ev::Input</code> event.</p>
+<h2 id="debugging-elements">Debugging elements</h2>
+<p><code>El</code>s implement the <code>Debug</code> trait, so you can view outputs using <code>log!</code>: <code>log!(format!("{:?}", my_el));</code> In order to take advantage of this, you must implement <code>Debug</code> for your message type, and any sub-types. Example:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb5-1" title="1"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Copy</span><span class="at">,</span> <span class="bu">Clone</span><span class="at">,</span> <span class="bu">Debug</span><span class="at">)]</span></a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="kw">enum</span> Page <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-3" title="3">    Guide,</a>
+<a class="sourceLine" id="cb5-4" title="4">    Changelog</a>
+<a class="sourceLine" id="cb5-5" title="5"><span class="op">}</span></a>
+<a class="sourceLine" id="cb5-6" title="6"></a>
+<a class="sourceLine" id="cb5-7" title="7"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">,</span> <span class="bu">Debug</span><span class="at">)]</span></a>
+<a class="sourceLine" id="cb5-8" title="8"><span class="kw">enum</span> Msg <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-9" title="9">    RoutePage(Page),</a>
+<a class="sourceLine" id="cb5-10" title="10">    ChangePage(Page),</a>
+<a class="sourceLine" id="cb5-11" title="11"><span class="op">}</span></a></code></pre></div>
 "#.into()
 }

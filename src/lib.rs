@@ -11,7 +11,7 @@ use seed::prelude::*;
 
 // Model
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 enum Page {
     Guide,
     Changelog
@@ -30,7 +30,7 @@ impl ToString for Page {
 #[derive(Clone)]
 struct GuideSection {
     title: String,
-    element: El<Msg>
+    elements: Vec<El<Msg>>
 }
 
 #[derive(Clone)]
@@ -39,6 +39,13 @@ struct Model {
     guide_page: usize,  // Index of our guide sections.
     guide_sections: Vec<GuideSection>,
 }
+
+//fn p<Ms>(e: &El<Ms>) {
+//    log!(e.tag.as_str(), e.get_text());
+//    for c in &e.children {
+//        p(c);
+//    }
+//}
 
 // Setup a default here, for initialization later.
 impl Default for Model {
@@ -50,7 +57,7 @@ impl Default for Model {
             ("Structure", crate::book::structure::text()),
             ("Events", crate::book::events::text()),
             ("Components", crate::book::components::text()),
-            ("Http requests", crate::book::fetch::text()),
+            ("Http requests and state", crate::book::fetch::text()),
             ("Lifecycle hooks", crate::book::lifecycle::text()),
             ("Routing", crate::book::routing::text()),
             ("Misc features", crate::book::misc::text()),
@@ -61,8 +68,12 @@ impl Default for Model {
         ];
 
         for (title, md_text) in md_texts {
-            let element = El::from_markdown(&md_text);
-            guide_sections.push(GuideSection{title: title.to_string(), element});
+            let elements = El::from_markdown(&md_text);
+//
+//            for e in &elements {
+//                p(e);
+//            }
+            guide_sections.push(GuideSection{title: title.to_string(), elements});
         }
 
         Self {
@@ -76,7 +87,7 @@ impl Default for Model {
 
 // Update
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 enum Msg {
     RoutePage(Page),
     RouteGuidePage(usize),
@@ -204,16 +215,21 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
                 "grid-column" => "2 / 3";
                 "padding" => 80;
             },
-            sections[guide_page].clone().element
+            sections[guide_page].clone().elements
         ]
     ]
 }
 
 fn changelog() -> El<Msg> {
-    let mut entries = El::from_markdown(
+    let mut entries = span![ El::from_markdown(
 "
+## v0.2.8
+- Reflowed `El::from_html` and `El::from_markdown` to return `Vec`s of `El`s, instead of wrapping
+them in a single span.
+- Added `set_timeout` wrapper
+
 ## v0.2.7
-- Fixed a bug where `line!` macro interfered with builtin in
+- Fixed a bug where `line!` macro interfered with builtin
 - Fixed a bug with routing search (ie `?`)
 
 ## v0.2.6
@@ -265,7 +281,7 @@ to allow conditional rendering (Breaking)
 - Initial release
 
 "
-    );
+    ) ];
     entries.style = style!{
         "grid-column" => "2 / 3";
      };
@@ -279,7 +295,7 @@ to allow conditional rendering (Breaking)
             "padding" => 50;
             "color" => "black";
         },
-        entries
+        entries,
     ]
 }
 
@@ -314,7 +330,7 @@ fn view(_state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
         ],
         section![
             footer()
-        ]
+        ],
     ]
 }
 

@@ -137,7 +137,7 @@ may require calling `state.clone()`, to use it in multiple places. Note that we 
 to prepend our closures with `move`, as above, any time `state` is used in one.
 
 Here's an example of using set_interval to update the state once every second. It uses
-`seed::set_interval`:
+`seed::set_interval`. `seed::set_timeout` also exists, and works the same way:
 ```rust
 fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {  
     div![

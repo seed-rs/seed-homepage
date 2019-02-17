@@ -6,7 +6,7 @@ r#"
 <p>You'll need a recent version of Rust: <code>rustup update</code></p>
 <p>The wasm32-unknown-unknown target: <code>rustup target add wasm32-unknown-unknown</code></p>
 <p>And wasm-bindgen: <code>cargo install wasm-bindgen-cli</code></p>
-<p>If you run into errors while installing <code>wasm-bindgen-cli</code>, you may need to install C++ build tools. On linux, run <code>sudo apt install build-essential</code>. On Windows, download and install <a href="https://visualstudio.microsoft.com/downloads/">Visual Studio 2017</a>; when asked in the installer, <a href="https://visualstudio.microsoft.com/downloads/">Visual Studio 2017</a>; when asked in the installer, include the C++ workload.</p>
+<p>If you run into errors while installing <code>wasm-bindgen-cli</code>, you may need to install C++ build tools. On linux, run <code>sudo apt install build-essential</code>. On Windows, download and install <a href="https://visualstudio.microsoft.com/downloads/">Visual Studio 2017</a>; when asked in the installer, include the C++ workload.</p>
 <h2 id="the-theoretical-minimum">The theoretical minimum</h2>
 <p>To start, clone <a href="https://github.com/David-OConnor/seed-quickstart">The quickstart repo</a>, run <code>build.sh</code> or <code>build.ps1</code> in a terminal, then start a dev server that supports WASM. For example, with <a href="https://www.python.org/downloads/">Python</a> installed, run <code>python serve.py</code>. (Linux users may need to run <code>python3 serve.py</code>.) Once you change your package name, you'll need to tweak the build script, as described below.</p>
 <h2 id="a-little-deeper">A little deeper</h2>
@@ -127,22 +127,21 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <a class="sourceLine" id="cb3-81" title="81"></a>
 <a class="sourceLine" id="cb3-82" title="82">            <span class="co">// Optionally-displaying an element</span></a>
 <a class="sourceLine" id="cb3-83" title="83">            <span class="kw">if</span> model.count &gt;= <span class="dv">10</span> <span class="op">{</span> <span class="pp">h2!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;padding&quot;</span> =&gt; <span class="dv">50</span><span class="op">}</span>, <span class="st">&quot;Nice!&quot;</span> <span class="op">]</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> <span class="pp">seed::</span>empty() <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-84" title="84"></a>
-<a class="sourceLine" id="cb3-85" title="85">            <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb3-86" title="86">        success_level(model.count),  <span class="co">// Incorporating a separate component</span></a>
-<a class="sourceLine" id="cb3-87" title="87"></a>
-<a class="sourceLine" id="cb3-88" title="88">        <span class="pp">h3!</span><span class="op">[</span> <span class="st">&quot;What precisely is it we&#39;re counting?&quot;</span> <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb3-89" title="89">        <span class="pp">input!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="pp">At::</span>Value =&gt; model.what_we_count<span class="op">}</span>, input_ev(<span class="pp">Ev::</span>Input, <span class="pp">Msg::</span>ChangeWWC) <span class="op">]</span></a>
-<a class="sourceLine" id="cb3-90" title="90">    <span class="op">]</span></a>
-<a class="sourceLine" id="cb3-91" title="91"><span class="op">}</span></a>
+<a class="sourceLine" id="cb3-84" title="84">        <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb3-85" title="85">        success_level(model.count),  <span class="co">// Incorporating a separate component</span></a>
+<a class="sourceLine" id="cb3-86" title="86"></a>
+<a class="sourceLine" id="cb3-87" title="87">        <span class="pp">h3!</span><span class="op">[</span> <span class="st">&quot;What precisely is it we&#39;re counting?&quot;</span> <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb3-88" title="88">        <span class="pp">input!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="pp">At::</span>Value =&gt; model.what_we_count<span class="op">}</span>, input_ev(<span class="pp">Ev::</span>Input, <span class="pp">Msg::</span>ChangeWWC) <span class="op">]</span></a>
+<a class="sourceLine" id="cb3-89" title="89">    <span class="op">]</span></a>
+<a class="sourceLine" id="cb3-90" title="90"><span class="op">}</span></a>
+<a class="sourceLine" id="cb3-91" title="91"></a>
 <a class="sourceLine" id="cb3-92" title="92"></a>
-<a class="sourceLine" id="cb3-93" title="93"></a>
-<a class="sourceLine" id="cb3-94" title="94"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
-<a class="sourceLine" id="cb3-95" title="95"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-96" title="96">    <span class="pp">seed::App::</span>build(<span class="pp">Model::</span><span class="kw">default</span>(), update, view)</a>
-<a class="sourceLine" id="cb3-97" title="97">        .finish()</a>
-<a class="sourceLine" id="cb3-98" title="98">        .run();</a>
-<a class="sourceLine" id="cb3-99" title="99"><span class="op">}</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-93" title="93"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
+<a class="sourceLine" id="cb3-94" title="94"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-95" title="95">    <span class="pp">seed::App::</span>build(<span class="pp">Model::</span><span class="kw">default</span>(), update, view)</a>
+<a class="sourceLine" id="cb3-96" title="96">        .finish()</a>
+<a class="sourceLine" id="cb3-97" title="97">        .run();</a>
+<a class="sourceLine" id="cb3-98" title="98"><span class="op">}</span></a></code></pre></div>
 <p>For a truly minimimal example, see <a href="https://github.com/David-OConnor/seed-quickstart/blob/master/src/lib.rs">lib.rs in the quickstart repo</a></p>
 <h2 id="building-and-running">Building and running</h2>
 <p>To build your app, create a <code>pkg</code> subdirectory, and run the following two commands:</p>
