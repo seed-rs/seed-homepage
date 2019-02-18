@@ -109,21 +109,31 @@ value will always stay in sync with the model, which may mean ignoring text inpu
 not set up with a `Ev::Input` event.
 
 
-## Debugging elements
-`El`s implement the `Debug` trait, so you can view outputs using `log!`: `log!(format!("{:?}", my_el));`
-In order to take advantage of this, you must implement `Debug` for your message type, and 
-any sub-types. Example:
+## SVGs
+Inline SVGs can be rendered using `El::from_html`, or by using element-creation macros, ie `svg!`,
+`path!` etc. Example:
 
 ```rust
-#[derive(Copy, Clone, Debug)]
-enum Page {
-    Guide,
-    Changelog
+fn view(_state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
+    div![
+        svg![
+            attrs!{
+                At::Width => "100%";
+                At::Height => "100%";
+                At::Xlmns => "http://www.w3.org/2000/svg";
+                At::ViewBox => "0 0 512 512";
+            },
+            path![ 
+                attrs!{
+                    At::Fill => "lightgrey";
+                    At::D => "M345.863,281.853c19.152-8.872,38.221-15.344,56.1"  // etc
+                }
+            ],
+            // More elements as required, eg mesh, polyline, circle
+        ]
+    ]
 }
 
-#[derive(Clone, Debug)]
-enum Msg {
-    RoutePage(Page),
-    ChangePage(Page),
-}
+
+
 ```

@@ -74,18 +74,28 @@ r#"
 <a class="sourceLine" id="cb4-9" title="9"><span class="op">}</span></a></code></pre></div>
 <h2 id="input-elements-are-controlled">Input elements are controlled</h2>
 <p><code>input</code>, <code>textarea</code>, and <code>select</code> elements are always controlled, in the vein of React. This means that even if there's no event associated with user input to these fields, their value will always stay in sync with the model, which may mean ignoring text input if not set up with a <code>Ev::Input</code> event.</p>
-<h2 id="debugging-elements">Debugging elements</h2>
-<p><code>El</code>s implement the <code>Debug</code> trait, so you can view outputs using <code>log!</code>: <code>log!(format!("{:?}", my_el));</code> In order to take advantage of this, you must implement <code>Debug</code> for your message type, and any sub-types. Example:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb5-1" title="1"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Copy</span><span class="at">,</span> <span class="bu">Clone</span><span class="at">,</span> <span class="bu">Debug</span><span class="at">)]</span></a>
-<a class="sourceLine" id="cb5-2" title="2"><span class="kw">enum</span> Page <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-3" title="3">    Guide,</a>
-<a class="sourceLine" id="cb5-4" title="4">    Changelog</a>
-<a class="sourceLine" id="cb5-5" title="5"><span class="op">}</span></a>
-<a class="sourceLine" id="cb5-6" title="6"></a>
-<a class="sourceLine" id="cb5-7" title="7"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">,</span> <span class="bu">Debug</span><span class="at">)]</span></a>
-<a class="sourceLine" id="cb5-8" title="8"><span class="kw">enum</span> Msg <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-9" title="9">    RoutePage(Page),</a>
-<a class="sourceLine" id="cb5-10" title="10">    ChangePage(Page),</a>
-<a class="sourceLine" id="cb5-11" title="11"><span class="op">}</span></a></code></pre></div>
+<h2 id="svgs">SVGs</h2>
+<p>Inline SVGs can be rendered using <code>El::from_html</code>, or by using element-creation macros, ie <code>svg!</code>, <code>path!</code> etc. Example:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">fn</span> view(_state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: &amp;Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-2" title="2">    <span class="pp">div!</span><span class="op">[</span></a>
+<a class="sourceLine" id="cb5-3" title="3">        <span class="pp">svg!</span><span class="op">[</span></a>
+<a class="sourceLine" id="cb5-4" title="4">            <span class="pp">attrs!</span><span class="op">{</span></a>
+<a class="sourceLine" id="cb5-5" title="5">                <span class="pp">At::</span>Width =&gt; <span class="st">&quot;100%&quot;</span>;</a>
+<a class="sourceLine" id="cb5-6" title="6">                <span class="pp">At::</span>Height =&gt; <span class="st">&quot;100%&quot;</span>;</a>
+<a class="sourceLine" id="cb5-7" title="7">                <span class="pp">At::</span>Xlmns =&gt; <span class="st">&quot;http://www.w3.org/2000/svg&quot;</span>;</a>
+<a class="sourceLine" id="cb5-8" title="8">                <span class="pp">At::</span>ViewBox =&gt; <span class="st">&quot;0 0 512 512&quot;</span>;</a>
+<a class="sourceLine" id="cb5-9" title="9">            <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb5-10" title="10">            <span class="pp">path!</span><span class="op">[</span> </a>
+<a class="sourceLine" id="cb5-11" title="11">                <span class="pp">attrs!</span><span class="op">{</span></a>
+<a class="sourceLine" id="cb5-12" title="12">                    <span class="pp">At::</span>Fill =&gt; <span class="st">&quot;lightgrey&quot;</span>;</a>
+<a class="sourceLine" id="cb5-13" title="13">                    <span class="pp">At::</span>D =&gt; <span class="st">&quot;M345.863,281.853c19.152-8.872,38.221-15.344,56.1&quot;</span>  <span class="co">// etc</span></a>
+<a class="sourceLine" id="cb5-14" title="14">                <span class="op">}</span></a>
+<a class="sourceLine" id="cb5-15" title="15">            <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb5-16" title="16">            <span class="co">// More elements as required, eg mesh, polyline, circle</span></a>
+<a class="sourceLine" id="cb5-17" title="17">        <span class="op">]</span></a>
+<a class="sourceLine" id="cb5-18" title="18">    <span class="op">]</span></a>
+<a class="sourceLine" id="cb5-19" title="19"><span class="op">}</span></a>
+<a class="sourceLine" id="cb5-20" title="20"></a>
+<a class="sourceLine" id="cb5-21" title="21"></a></code></pre></div>
 "#.into()
 }

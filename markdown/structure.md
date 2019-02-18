@@ -142,8 +142,7 @@ show helpful methods for functional iterator manipulation.
 
 Alternatively, we could write the same update function like this:
 ```rust
-fn update(msg: Msg, model: Model) -> Update<Model> {
-    let mut model = model;
+fn update(msg: Msg, mut model: Model) -> Update<Model> {
     match msg {
         Msg::ClearCompleted => {
             model.todos = model.todos.into_iter()

@@ -8,10 +8,9 @@ extern crate seed;
 use seed::prelude::*;
 
 
-
 // Model
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone)]
 enum Page {
     Guide,
     Changelog
@@ -87,7 +86,7 @@ impl Default for Model {
 
 // Update
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 enum Msg {
     RoutePage(Page),
     RouteGuidePage(usize),
@@ -227,6 +226,7 @@ fn changelog() -> El<Msg> {
 - Reflowed `El::from_html` and `El::from_markdown` to return `Vec`s of `El`s, instead of wrapping
 them in a single span.
 - Added `set_timeout` wrapper
+- Improved support for SVG and namespaces
 
 ## v0.2.7
 - Fixed a bug where `line!` macro interfered with builtin

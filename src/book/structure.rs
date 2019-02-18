@@ -90,26 +90,25 @@ r#"
 <a class="sourceLine" id="cb5-33" title="33"><span class="op">}</span></a></code></pre></div>
 <p>In this example, we avoid mutating data. In the first two Msgs, we filter the todos, then pass them to a new model using <a href="https://doc.rust-lang.org/book/ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax">struct update syntax</a> . In the third Msg, we mutate todos, but don't mutate the model itself. In the fourth, we build a new todo list using a functional technique. The <a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html">docs for Rust Iterators</a> show helpful methods for functional iterator manipulation.</p>
 <p>Alternatively, we could write the same update function like this:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Model&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb6-2" title="2">    <span class="kw">let</span> <span class="kw">mut</span> model = model;</a>
-<a class="sourceLine" id="cb6-3" title="3">    <span class="kw">match</span> msg <span class="op">{</span></a>
-<a class="sourceLine" id="cb6-4" title="4">        <span class="pp">Msg::</span>ClearCompleted =&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb6-5" title="5">            model.todos = model.todos.into_iter()</a>
-<a class="sourceLine" id="cb6-6" title="6">            .filter(|t| !t.completed)</a>
-<a class="sourceLine" id="cb6-7" title="7">            .collect();</a>
-<a class="sourceLine" id="cb6-8" title="8">        <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb6-9" title="9">        <span class="pp">Msg::</span>Destroy(posit) =&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb6-10" title="10">            model.todos.remove(posit);</a>
-<a class="sourceLine" id="cb6-11" title="11">        <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb6-12" title="12">        <span class="pp">Msg::</span>Toggle(posit) =&gt; model.todos<span class="op">[</span>posit<span class="op">]</span>.completed = !model.todos<span class="op">[</span>posit<span class="op">]</span>.completed,</a>
-<a class="sourceLine" id="cb6-13" title="13">        <span class="pp">Msg::</span>ToggleAll =&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb6-14" title="14">            <span class="kw">let</span> completed = model.active_count() != <span class="dv">0</span>;</a>
-<a class="sourceLine" id="cb6-15" title="15">            <span class="kw">for</span> todo <span class="kw">in</span> &amp;<span class="kw">mut</span> model.todos <span class="op">{</span></a>
-<a class="sourceLine" id="cb6-16" title="16">                todo.completed = completed;</a>
-<a class="sourceLine" id="cb6-17" title="17">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb6-18" title="18">    <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb6-19" title="19">    Render(model)</a>
-<a class="sourceLine" id="cb6-20" title="20"><span class="op">}</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">fn</span> update(msg: Msg, <span class="kw">mut</span> model: Model) -&gt; Update&lt;Model&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb6-2" title="2">    <span class="kw">match</span> msg <span class="op">{</span></a>
+<a class="sourceLine" id="cb6-3" title="3">        <span class="pp">Msg::</span>ClearCompleted =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb6-4" title="4">            model.todos = model.todos.into_iter()</a>
+<a class="sourceLine" id="cb6-5" title="5">            .filter(|t| !t.completed)</a>
+<a class="sourceLine" id="cb6-6" title="6">            .collect();</a>
+<a class="sourceLine" id="cb6-7" title="7">        <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb6-8" title="8">        <span class="pp">Msg::</span>Destroy(posit) =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb6-9" title="9">            model.todos.remove(posit);</a>
+<a class="sourceLine" id="cb6-10" title="10">        <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb6-11" title="11">        <span class="pp">Msg::</span>Toggle(posit) =&gt; model.todos<span class="op">[</span>posit<span class="op">]</span>.completed = !model.todos<span class="op">[</span>posit<span class="op">]</span>.completed,</a>
+<a class="sourceLine" id="cb6-12" title="12">        <span class="pp">Msg::</span>ToggleAll =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb6-13" title="13">            <span class="kw">let</span> completed = model.active_count() != <span class="dv">0</span>;</a>
+<a class="sourceLine" id="cb6-14" title="14">            <span class="kw">for</span> todo <span class="kw">in</span> &amp;<span class="kw">mut</span> model.todos <span class="op">{</span></a>
+<a class="sourceLine" id="cb6-15" title="15">                todo.completed = completed;</a>
+<a class="sourceLine" id="cb6-16" title="16">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb6-17" title="17">    <span class="op">}</span>;</a>
+<a class="sourceLine" id="cb6-18" title="18">    Render(model)</a>
+<a class="sourceLine" id="cb6-19" title="19"><span class="op">}</span></a></code></pre></div>
 <p>This approach, where we mutate the model directly, is much more concise when handling collections. We only need to involve <code>Render(Model...)</code> once, at the end. How-to: Reassign <code>model</code> as mutable at the start of <code>update</code>. Return <code>model</code> at the end. Mutate it during the match legs.</p>
 <p>As with the model, only one update function is passed to the app, but it may be split into sub-functions to aid code organization.</p>
 <p>You can perform updates recursively, ie have one update trigger another. For example, here's a non-recursive approach, where functions do_things() and do_other_things() each act on an Model, and output a Model:</p>

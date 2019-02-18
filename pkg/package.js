@@ -58,15 +58,18 @@ function getUint32Memory() {
     return cachegetUint32Memory;
 }
 
+function handleError(exnptr, e) {
+    const view = getUint32Memory();
+    view[exnptr / 4] = 1;
+    view[exnptr / 4 + 1] = addHeapObject(e);
+}
+
 __exports.__widl_f_create_element_Document = function(arg0, arg1, arg2, exnptr) {
     let varg1 = getStringFromWasm(arg1, arg2);
     try {
         return addHeapObject(getObject(arg0).createElement(varg1));
     } catch (e) {
-        const view = getUint32Memory();
-        view[exnptr / 4] = 1;
-        view[exnptr / 4 + 1] = addHeapObject(e);
-
+        handleError(exnptr, e);
     }
 };
 
@@ -76,10 +79,7 @@ __exports.__widl_f_create_element_ns_Document = function(arg0, arg1, arg2, arg3,
     try {
         return addHeapObject(getObject(arg0).createElementNS(varg1, varg3));
     } catch (e) {
-        const view = getUint32Memory();
-        view[exnptr / 4] = 1;
-        view[exnptr / 4 + 1] = addHeapObject(e);
-
+        handleError(exnptr, e);
     }
 };
 
@@ -137,10 +137,7 @@ __exports.__widl_f_remove_attribute_Element = function(arg0, arg1, arg2, exnptr)
     try {
         getObject(arg0).removeAttribute(varg1);
     } catch (e) {
-        const view = getUint32Memory();
-        view[exnptr / 4] = 1;
-        view[exnptr / 4 + 1] = addHeapObject(e);
-
+        handleError(exnptr, e);
     }
 };
 
@@ -150,11 +147,18 @@ __exports.__widl_f_set_attribute_Element = function(arg0, arg1, arg2, arg3, arg4
     try {
         getObject(arg0).setAttribute(varg1, varg3);
     } catch (e) {
-        const view = getUint32Memory();
-        view[exnptr / 4] = 1;
-        view[exnptr / 4 + 1] = addHeapObject(e);
-
+        handleError(exnptr, e);
     }
+};
+
+__exports.__widl_f_namespace_uri_Element = function(ret, arg0) {
+    const val = getObject(arg0).namespaceURI;
+    const retptr = isLikeNone(val) ? [0, 0] : passStringToWasm(val);
+    const retlen = WASM_VECTOR_LEN;
+    const mem = getUint32Memory();
+    mem[ret / 4] = retptr;
+    mem[ret / 4 + 1] = retlen;
+
 };
 
 __exports.__widl_f_tag_name_Element = function(ret, arg0) {
@@ -177,10 +181,7 @@ __exports.__widl_f_add_event_listener_with_callback_EventTarget = function(arg0,
     try {
         getObject(arg0).addEventListener(varg1, getObject(arg3));
     } catch (e) {
-        const view = getUint32Memory();
-        view[exnptr / 4] = 1;
-        view[exnptr / 4 + 1] = addHeapObject(e);
-
+        handleError(exnptr, e);
     }
 };
 
@@ -189,10 +190,7 @@ __exports.__widl_f_remove_event_listener_with_callback_EventTarget = function(ar
     try {
         getObject(arg0).removeEventListener(varg1, getObject(arg3));
     } catch (e) {
-        const view = getUint32Memory();
-        view[exnptr / 4] = 1;
-        view[exnptr / 4 + 1] = addHeapObject(e);
-
+        handleError(exnptr, e);
     }
 };
 
@@ -283,10 +281,7 @@ __exports.__widl_f_push_state_with_url_History = function(arg0, arg1, arg2, arg3
     try {
         getObject(arg0).pushState(getObject(arg1), varg2, varg4);
     } catch (e) {
-        const view = getUint32Memory();
-        view[exnptr / 4] = 1;
-        view[exnptr / 4 + 1] = addHeapObject(e);
-
+        handleError(exnptr, e);
     }
 };
 
@@ -300,10 +295,7 @@ __exports.__widl_f_pathname_Location = function(ret, arg0, exnptr) {
         mem[ret / 4 + 1] = retlen;
 
     } catch (e) {
-        const view = getUint32Memory();
-        view[exnptr / 4] = 1;
-        view[exnptr / 4 + 1] = addHeapObject(e);
-
+        handleError(exnptr, e);
     }
 };
 
@@ -317,10 +309,7 @@ __exports.__widl_f_search_Location = function(ret, arg0, exnptr) {
         mem[ret / 4 + 1] = retlen;
 
     } catch (e) {
-        const view = getUint32Memory();
-        view[exnptr / 4] = 1;
-        view[exnptr / 4 + 1] = addHeapObject(e);
-
+        handleError(exnptr, e);
     }
 };
 
@@ -329,10 +318,7 @@ __exports.__widl_f_set_search_Location = function(arg0, arg1, arg2, exnptr) {
     try {
         getObject(arg0).search = varg1;
     } catch (e) {
-        const view = getUint32Memory();
-        view[exnptr / 4] = 1;
-        view[exnptr / 4 + 1] = addHeapObject(e);
-
+        handleError(exnptr, e);
     }
 };
 
@@ -346,10 +332,7 @@ __exports.__widl_f_hash_Location = function(ret, arg0, exnptr) {
         mem[ret / 4 + 1] = retlen;
 
     } catch (e) {
-        const view = getUint32Memory();
-        view[exnptr / 4] = 1;
-        view[exnptr / 4 + 1] = addHeapObject(e);
-
+        handleError(exnptr, e);
     }
 };
 
@@ -358,10 +341,7 @@ __exports.__widl_f_set_hash_Location = function(arg0, arg1, arg2, exnptr) {
     try {
         getObject(arg0).hash = varg1;
     } catch (e) {
-        const view = getUint32Memory();
-        view[exnptr / 4] = 1;
-        view[exnptr / 4 + 1] = addHeapObject(e);
-
+        handleError(exnptr, e);
     }
 };
 
@@ -369,10 +349,7 @@ __exports.__widl_f_append_child_Node = function(arg0, arg1, exnptr) {
     try {
         return addHeapObject(getObject(arg0).appendChild(getObject(arg1)));
     } catch (e) {
-        const view = getUint32Memory();
-        view[exnptr / 4] = 1;
-        view[exnptr / 4 + 1] = addHeapObject(e);
-
+        handleError(exnptr, e);
     }
 };
 
@@ -380,10 +357,7 @@ __exports.__widl_f_remove_child_Node = function(arg0, arg1, exnptr) {
     try {
         return addHeapObject(getObject(arg0).removeChild(getObject(arg1)));
     } catch (e) {
-        const view = getUint32Memory();
-        view[exnptr / 4] = 1;
-        view[exnptr / 4 + 1] = addHeapObject(e);
-
+        handleError(exnptr, e);
     }
 };
 
@@ -391,10 +365,7 @@ __exports.__widl_f_replace_child_Node = function(arg0, arg1, arg2, exnptr) {
     try {
         return addHeapObject(getObject(arg0).replaceChild(getObject(arg1), getObject(arg2)));
     } catch (e) {
-        const view = getUint32Memory();
-        view[exnptr / 4] = 1;
-        view[exnptr / 4 + 1] = addHeapObject(e);
-
+        handleError(exnptr, e);
     }
 };
 
@@ -459,10 +430,7 @@ __exports.__widl_f_history_Window = function(arg0, exnptr) {
     try {
         return addHeapObject(getObject(arg0).history);
     } catch (e) {
-        const view = getUint32Memory();
-        view[exnptr / 4] = 1;
-        view[exnptr / 4 + 1] = addHeapObject(e);
-
+        handleError(exnptr, e);
     }
 };
 
@@ -470,7 +438,7 @@ __exports.__widl_f_log_1_ = function(arg0) {
     console.log(getObject(arg0));
 };
 
-__exports.__wbg_forEach_0dd6d02a7eb3a720 = function(arg0, arg1, arg2) {
+__exports.__wbg_forEach_68de5f5095e928d2 = function(arg0, arg1, arg2) {
     let cbarg1 = function(arg0, arg1, arg2) {
         let a = this.a;
         this.a = 0;
@@ -483,7 +451,7 @@ __exports.__wbg_forEach_0dd6d02a7eb3a720 = function(arg0, arg1, arg2) {
         }
 
     };
-    cbarg1.f = wasm.__wbg_function_table.get(79);
+    cbarg1.f = wasm.__wbg_function_table.get(84);
     cbarg1.a = arg1;
     cbarg1.b = arg2;
     try {
@@ -494,19 +462,16 @@ __exports.__wbg_forEach_0dd6d02a7eb3a720 = function(arg0, arg1, arg2) {
     }
 };
 
-__exports.__wbg_newnoargs_43c5f57b77232284 = function(arg0, arg1) {
+__exports.__wbg_newnoargs_4b1bc9d06177648d = function(arg0, arg1) {
     let varg0 = getStringFromWasm(arg0, arg1);
     return addHeapObject(new Function(varg0));
 };
 
-__exports.__wbg_call_7ac13208e630ddeb = function(arg0, arg1, exnptr) {
+__exports.__wbg_call_b1011dd6b074a84c = function(arg0, arg1, exnptr) {
     try {
         return addHeapObject(getObject(arg0).call(getObject(arg1)));
     } catch (e) {
-        const view = getUint32Memory();
-        view[exnptr / 4] = 1;
-        view[exnptr / 4 + 1] = addHeapObject(e);
-
+        handleError(exnptr, e);
     }
 };
 
@@ -622,7 +587,7 @@ __exports.__wbindgen_json_parse = function(ptr, len) {
     return addHeapObject(JSON.parse(getStringFromWasm(ptr, len)));
 };
 
-__exports.__wbindgen_closure_wrapper97 = function(a, b, _ignored) {
+__exports.__wbindgen_closure_wrapper363 = function(a, b, _ignored) {
     const f = wasm.__wbg_function_table.get(48);
     const d = wasm.__wbg_function_table.get(49);
     const cb = function(arg0) {
@@ -661,7 +626,13 @@ function init(path_or_module) {
 } else {
     const data = fetch(path_or_module);
     if (typeof WebAssembly.instantiateStreaming === 'function') {
-        instantiation = WebAssembly.instantiateStreaming(data, imports);
+        instantiation = WebAssembly.instantiateStreaming(data, imports)
+        .catch(e => {
+            console.warn("`WebAssembly.instantiateStreaming` failed. Assuming this is because your server does not serve wasm with `application/wasm` MIME type. Falling back to `WebAssembly.instantiate` which is slower. Original error:\n", e);
+            return data
+            .then(r => r.arrayBuffer())
+            .then(bytes => WebAssembly.instantiate(bytes, imports));
+        });
     } else {
         instantiation = data
         .then(response => response.arrayBuffer())

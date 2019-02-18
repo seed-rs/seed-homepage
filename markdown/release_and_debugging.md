@@ -9,7 +9,7 @@ cargo build --target wasm32-unknown-unknown --release
 ```
 and 
 ```
-wasm-bindgen target/wasm32-unknown-unknown/release/appname.wasm --no modules --out-dir ./pkg
+wasm-bindgen target/wasm32-unknown-unknown/release/appname.wasm --no modules --out-dir ./pkg --out-name package
 ```
 
 ## Debugging
@@ -26,7 +26,28 @@ borrow checker.
 
 2: Runtime [panics](https://doc.rust-lang.org/book/ch09-01-unrecoverable-errors-with-panic.html)
 show up as console errors in the web browser. Example:
-`panicked at 'assertion failed`. They usually provide a traceback. (For example, a problem while using `unwrap()`). 
- They're often associated with`unwrap()` or `expect()` calls. When applicable, try to use expect() with a useful
- error message instead of unwrap(): Your message will show in the console, helping identify where
+`panicked at 'assertion failed`. They usually provide a traceback. (For example, a problem while using `unwrap`). 
+ They're often associated with`unwrap` or `expect` calls. When applicable, try to use normal
+  pattern matching, or `expect` with a useful
+ error message instead of `unwrap`: Your message will show in the console, helping identify where
  the panic triggered.
+
+
+### Debugging elements
+`El`s implement the `Debug` trait, so you can view outputs using `log!`: `log!(format!("{:?}", my_el));`
+In order to take advantage of this, you must implement `Debug` for your message type, and 
+any sub-types. Example:
+
+```rust
+#[derive(Copy, Clone, Debug)]
+enum Page {
+    Guide,
+    Changelog
+}
+
+#[derive(Clone, Debug)]
+enum Msg {
+    RoutePage(Page),
+    ChangePage(Page),
+}
+```
