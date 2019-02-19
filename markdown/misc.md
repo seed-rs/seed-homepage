@@ -109,9 +109,9 @@ value will always stay in sync with the model, which may mean ignoring text inpu
 not set up with a `Ev::Input` event.
 
 
-## SVGs
+## SVG
 Inline SVGs can be rendered using `El::from_html`, or by using element-creation macros, ie `svg!`,
-`path!` etc. Example:
+`path!` etc. Setting the `xmlns` attribute isn't required; it's set automatically when using the macro. Example:
 
 ```rust
 fn view(_state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
@@ -120,7 +120,6 @@ fn view(_state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
             attrs!{
                 At::Width => "100%";
                 At::Height => "100%";
-                At::Xlmns => "http://www.w3.org/2000/svg";
                 At::ViewBox => "0 0 512 512";
             },
             path![ 

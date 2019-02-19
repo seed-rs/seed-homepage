@@ -34,7 +34,7 @@ r#"
 <a class="sourceLine" id="cb2-17" title="17"><span class="kw">let</span> loaded_serialized = storage.get_item(<span class="st">&quot;my-data&quot;</span>).unwrap().unwrap();</a>
 <a class="sourceLine" id="cb2-18" title="18"><span class="kw">let</span> data = <span class="pp">serde_json::</span>from_str(&amp;loaded_serialized).unwrap();</a></code></pre></div>
 <h2 id="display-markdown-and-raw-html">Display markdown and raw HTML</h2>
-<p>Seed supports creating elements from markdown text, using <a href="https://github.com/raphlinus/pulldown-cmark">pulldown-cmark</a> internally. Use the <a href="https://docs.rs/seed/0.2.7/seed/dom_types/struct.El.html#method.from_markdown">El::from_markdown()</a> method to create an element that accepts a markdown &amp;str as its only parameter, and displays it normally as html. Note that it does not support syntax highlighting. You can render raw HTML with <code>El::from_html(html)</code>, where <code>html</code> is a &amp;str of HTML.</p>
+<p>Seed supports creating elements from markdown text, using <a href="https://github.com/raphlinus/pulldown-cmark">pulldown-cmark</a> internally. Use the <a href="https://docs.rs/seed/0.2.8/seed/dom_types/struct.El.html#method.from_markdown">El::from_markdown()</a> method to create an element that accepts a markdown &amp;str as its only parameter, and displays it normally as html. Note that it does not support syntax highlighting. You can render raw HTML with <code>El::from_html(html)</code>, where <code>html</code> is a &amp;str of HTML.</p>
 <p>Example:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">fn</span> view(app: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-2" title="2"></a>
@@ -74,28 +74,27 @@ r#"
 <a class="sourceLine" id="cb4-9" title="9"><span class="op">}</span></a></code></pre></div>
 <h2 id="input-elements-are-controlled">Input elements are controlled</h2>
 <p><code>input</code>, <code>textarea</code>, and <code>select</code> elements are always controlled, in the vein of React. This means that even if there's no event associated with user input to these fields, their value will always stay in sync with the model, which may mean ignoring text input if not set up with a <code>Ev::Input</code> event.</p>
-<h2 id="svgs">SVGs</h2>
-<p>Inline SVGs can be rendered using <code>El::from_html</code>, or by using element-creation macros, ie <code>svg!</code>, <code>path!</code> etc. Example:</p>
+<h2 id="svg">SVG</h2>
+<p>Inline SVGs can be rendered using <code>El::from_html</code>, or by using element-creation macros, ie <code>svg!</code>, <code>path!</code> etc. Setting the <code>xmlns</code> attribute isn't required; it's set automatically when using the macro. Example:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">fn</span> view(_state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: &amp;Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb5-2" title="2">    <span class="pp">div!</span><span class="op">[</span></a>
 <a class="sourceLine" id="cb5-3" title="3">        <span class="pp">svg!</span><span class="op">[</span></a>
 <a class="sourceLine" id="cb5-4" title="4">            <span class="pp">attrs!</span><span class="op">{</span></a>
 <a class="sourceLine" id="cb5-5" title="5">                <span class="pp">At::</span>Width =&gt; <span class="st">&quot;100%&quot;</span>;</a>
 <a class="sourceLine" id="cb5-6" title="6">                <span class="pp">At::</span>Height =&gt; <span class="st">&quot;100%&quot;</span>;</a>
-<a class="sourceLine" id="cb5-7" title="7">                <span class="pp">At::</span>Xlmns =&gt; <span class="st">&quot;http://www.w3.org/2000/svg&quot;</span>;</a>
-<a class="sourceLine" id="cb5-8" title="8">                <span class="pp">At::</span>ViewBox =&gt; <span class="st">&quot;0 0 512 512&quot;</span>;</a>
-<a class="sourceLine" id="cb5-9" title="9">            <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb5-10" title="10">            <span class="pp">path!</span><span class="op">[</span> </a>
-<a class="sourceLine" id="cb5-11" title="11">                <span class="pp">attrs!</span><span class="op">{</span></a>
-<a class="sourceLine" id="cb5-12" title="12">                    <span class="pp">At::</span>Fill =&gt; <span class="st">&quot;lightgrey&quot;</span>;</a>
-<a class="sourceLine" id="cb5-13" title="13">                    <span class="pp">At::</span>D =&gt; <span class="st">&quot;M345.863,281.853c19.152-8.872,38.221-15.344,56.1&quot;</span>  <span class="co">// etc</span></a>
-<a class="sourceLine" id="cb5-14" title="14">                <span class="op">}</span></a>
-<a class="sourceLine" id="cb5-15" title="15">            <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb5-16" title="16">            <span class="co">// More elements as required, eg mesh, polyline, circle</span></a>
-<a class="sourceLine" id="cb5-17" title="17">        <span class="op">]</span></a>
-<a class="sourceLine" id="cb5-18" title="18">    <span class="op">]</span></a>
-<a class="sourceLine" id="cb5-19" title="19"><span class="op">}</span></a>
-<a class="sourceLine" id="cb5-20" title="20"></a>
-<a class="sourceLine" id="cb5-21" title="21"></a></code></pre></div>
+<a class="sourceLine" id="cb5-7" title="7">                <span class="pp">At::</span>ViewBox =&gt; <span class="st">&quot;0 0 512 512&quot;</span>;</a>
+<a class="sourceLine" id="cb5-8" title="8">            <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb5-9" title="9">            <span class="pp">path!</span><span class="op">[</span> </a>
+<a class="sourceLine" id="cb5-10" title="10">                <span class="pp">attrs!</span><span class="op">{</span></a>
+<a class="sourceLine" id="cb5-11" title="11">                    <span class="pp">At::</span>Fill =&gt; <span class="st">&quot;lightgrey&quot;</span>;</a>
+<a class="sourceLine" id="cb5-12" title="12">                    <span class="pp">At::</span>D =&gt; <span class="st">&quot;M345.863,281.853c19.152-8.872,38.221-15.344,56.1&quot;</span>  <span class="co">// etc</span></a>
+<a class="sourceLine" id="cb5-13" title="13">                <span class="op">}</span></a>
+<a class="sourceLine" id="cb5-14" title="14">            <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb5-15" title="15">            <span class="co">// More elements as required, eg mesh, polyline, circle</span></a>
+<a class="sourceLine" id="cb5-16" title="16">        <span class="op">]</span></a>
+<a class="sourceLine" id="cb5-17" title="17">    <span class="op">]</span></a>
+<a class="sourceLine" id="cb5-18" title="18"><span class="op">}</span></a>
+<a class="sourceLine" id="cb5-19" title="19"></a>
+<a class="sourceLine" id="cb5-20" title="20"></a></code></pre></div>
 "#.into()
 }

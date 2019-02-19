@@ -34,7 +34,7 @@ show up as console errors in the web browser. Example:
 
 
 ### Debugging elements
-`El`s implement the `Debug` trait, so you can view outputs using `log!`: `log!(format!("{:?}", my_el));`
+`El` implements the `Debug` trait, so you can view them using `log!`: `log!(format!("{:?}", my_el));`
 In order to take advantage of this, you must implement `Debug` for your message type, and 
 any sub-types. Example:
 
