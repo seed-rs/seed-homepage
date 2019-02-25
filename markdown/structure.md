@@ -76,13 +76,14 @@ you pass to `seed::App::build(` describes how the state should change, upon
 receiving each type of message. It's the only place where the model is changed. It accepts a message, 
 and model as parameters, and returns an `Update` enum: This, and its variants are imported in the prelude, 
 and has variants of 
-`Render` and `Skip`. Each wrap a model. Render triggers a rendering update, and will be used in 
-most cases. `Skip` updates the model without triggering a render, and is useful in animations.
-Note that it doesn’t update the model in place: It returns a new one.
+`Render`, `Skip`, and `RenderThen`. Each wrap a model. Render triggers a rendering update, and will be used in 
+most cases. `Skip` updates the model without triggering a render, and is useful in animations. `RenderThen`
+wraps a mdoel and a message: It triggers a rendering update, then a second one based on the message passed.
+The update function doesn't update the model in place: It returns a new one.
 
 Example:
 ```rust
-fn update(msg: Msg, model: Model) -> Model {
+fn update(msg: Msg, model: Model) -> Update<Model> {
     match msg {
         Msg::Increment => Render(Model {count: model.count + 1, ..model}),
         Msg::SetCount(count) => Render(Model {count, ..model}),
@@ -177,24 +178,34 @@ act on an Model, and output a Model:
 fn update(fn update(msg: Msg, model: Model) -> Update<Model> {
     match msg {
         Msg::A => Render(do_things(model)),
+        // Update the model with do_things, then with do_other_things, then render.
         Msg::B => Render(do_other_things(do_things(model))),
     }
 }
 ```
-
  
-Here's a recursive equivalent. Currently verbose due to not returning the model
-directly.
+Here's a recursive equivalent. Note the use of the `Update` enum's `model` method, which returns
+the model it wraps.
 ```rust
 fn update(fn update(msg: Msg, model: Model) -> Update<Model> {
     match msg {
         Msg::A => Render(do_things(model)),
-        Msg::B => {
-            match update(Msg::A, model) {
-                Render(m) => Render(do_other_things(m))
-                Skip(m) => Render(do_other_things(m))
-            }
-        },
+        // Update the model with do_things, then with do_other_things, then render.
+        Msg::B => Render(do_other_things(update(Msg::A, model).model())),
+    }
+}
+```
+
+We can render the update, then chain another update using the `RenderThen` variant of `Update`:
+```rust
+fn update(fn update(msg: Msg, model: Model) -> Update<Model> {
+    match msg {
+        Msg::A => Render(do_things(model)),
+        // Update the model with do_other_things, render, then update with do_things and render.
+        Msg::B => RenderThen(
+            do_other_things(model),
+            Msg::A 
+        )
     }
 }
 ```

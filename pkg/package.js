@@ -176,6 +176,13 @@ __exports.__widl_f_set_inner_html_Element = function(arg0, arg1, arg2) {
     getObject(arg0).innerHTML = varg1;
 };
 
+__exports.__widl_f_target_Event = function(arg0) {
+
+    const val = getObject(arg0).target;
+    return isLikeNone(val) ? 0 : addHeapObject(val);
+
+};
+
 __exports.__widl_f_add_event_listener_with_callback_EventTarget = function(arg0, arg1, arg2, arg3, exnptr) {
     let varg1 = getStringFromWasm(arg1, arg2);
     try {
@@ -210,8 +217,32 @@ __exports.__widl_f_set_autofocus_HTMLInputElement = function(arg0, arg1) {
     getObject(arg0).autofocus = arg1 !== 0;
 };
 
+__exports.__widl_f_checked_HTMLInputElement = function(arg0) {
+    return getObject(arg0).checked;
+};
+
 __exports.__widl_f_set_checked_HTMLInputElement = function(arg0, arg1) {
     getObject(arg0).checked = arg1 !== 0;
+};
+
+__exports.__widl_f_type_HTMLInputElement = function(ret, arg0) {
+
+    const retptr = passStringToWasm(getObject(arg0).type);
+    const retlen = WASM_VECTOR_LEN;
+    const mem = getUint32Memory();
+    mem[ret / 4] = retptr;
+    mem[ret / 4 + 1] = retlen;
+
+};
+
+__exports.__widl_f_default_value_HTMLInputElement = function(ret, arg0) {
+
+    const retptr = passStringToWasm(getObject(arg0).defaultValue);
+    const retlen = WASM_VECTOR_LEN;
+    const mem = getUint32Memory();
+    mem[ret / 4] = retptr;
+    mem[ret / 4 + 1] = retlen;
+
 };
 
 __exports.__widl_f_value_HTMLInputElement = function(ret, arg0) {
@@ -587,9 +618,9 @@ __exports.__wbindgen_json_parse = function(ptr, len) {
     return addHeapObject(JSON.parse(getStringFromWasm(ptr, len)));
 };
 
-__exports.__wbindgen_closure_wrapper367 = function(a, b, _ignored) {
-    const f = wasm.__wbg_function_table.get(48);
-    const d = wasm.__wbg_function_table.get(49);
+__exports.__wbindgen_closure_wrapper329 = function(a, b, _ignored) {
+    const f = wasm.__wbg_function_table.get(24);
+    const d = wasm.__wbg_function_table.get(25);
     const cb = function(arg0) {
         this.cnt++;
         let a = this.a;

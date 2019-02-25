@@ -78,4 +78,5 @@ branches must return an `El` (Or `Vec` of `El`s) to satisfy Rust's type system. 
 div![
     if model.count >= 10 { h2![ style!{"padding" => 50}, "Nice!" ] } else { seed::empty() }
 ]
+
 ```

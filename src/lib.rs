@@ -95,7 +95,7 @@ enum Msg {
 }
 
 /// The sole source of updating the model; returns a fresh one.
-fn update(msg: Msg, model: Model) -> Update<Model> {
+fn update(msg: Msg, model: Model) -> Update<Msg, Model> {
     match msg {
         Msg::RoutePage(page) => {
             seed::push_path(vec![&page.to_string()]);
@@ -222,6 +222,11 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
 fn changelog() -> El<Msg> {
     let mut entries = span![ El::from_markdown(
 "
+## v0.2.9
+- Added a `RenderThen` option to `Update`, which allows chaining update messages
+- Added a `.model` method to `Update`, allowing for cleaner recursion in updates
+- Improved controlled-comonent (sync fields with model) logic
+
 ## v0.2.8
 - Reflowed `El::from_html` and `El::from_markdown` to return `Vec`s of `El`s, instead of wrapping
 them in a single span.
