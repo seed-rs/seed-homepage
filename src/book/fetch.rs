@@ -23,7 +23,7 @@ r#"
 <a class="sourceLine" id="cb1-18" title="18">    Replace(Branch),</a>
 <a class="sourceLine" id="cb1-19" title="19"><span class="op">}</span></a>
 <a class="sourceLine" id="cb1-20" title="20"></a>
-<a class="sourceLine" id="cb1-21" title="21"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Model&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-21" title="21"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Msg, Model&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-22" title="22">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-23" title="23">        Render(<span class="pp">Msg::</span>Replace(data) =&gt; Model <span class="op">{</span>data<span class="op">}</span>),</a>
 <a class="sourceLine" id="cb1-24" title="24">    <span class="op">}</span></a>
@@ -54,7 +54,7 @@ r#"
 <a class="sourceLine" id="cb2-4" title="4">    GetData(<span class="pp">seed::</span>App&lt;Msg, Model&gt;),</a>
 <a class="sourceLine" id="cb2-5" title="5"><span class="op">}</span></a>
 <a class="sourceLine" id="cb2-6" title="6"></a>
-<a class="sourceLine" id="cb2-7" title="7"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Model&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-7" title="7"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Msg, Model&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb2-8" title="8">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb2-9" title="9">        <span class="pp">Msg::</span>Replace(data) =&gt; Render(Model <span class="op">{</span>data<span class="op">}</span>),</a>
 <a class="sourceLine" id="cb2-10" title="10">        <span class="pp">Msg::</span>GetData(state) =&gt; <span class="op">{</span></a>

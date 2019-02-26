@@ -83,7 +83,7 @@ The update function doesn't update the model in place: It returns a new one.
 
 Example:
 ```rust
-fn update(msg: Msg, model: Model) -> Update<Model> {
+fn update(msg: Msg, model: Model) -> Update<Msg, Model> {
     match msg {
         Msg::Increment => Render(Model {count: model.count + 1, ..model}),
         Msg::SetCount(count) => Render(Model {count, ..model}),
@@ -101,7 +101,7 @@ it straightforward, this becomes important with more complex updates.
  side-effects (ie other things that happen other than updating the model) don't require special 
  handling. Example, from the todomvc example:
 ```rust
-fn update(msg: Msg, model: Model) -> Update<Model> {
+fn update(msg: Msg, model: Model) -> Update<Msg, Model> {
     match msg {
         Msg::ClearCompleted => {
             let todos = model.todos.into_iter()
@@ -143,7 +143,7 @@ show helpful methods for functional iterator manipulation.
 
 Alternatively, we could write the same update function like this:
 ```rust
-fn update(msg: Msg, mut model: Model) -> Update<Model> {
+fn update(msg: Msg, mut model: Model) -> Update<Msg, Model> {
     match msg {
         Msg::ClearCompleted => {
             model.todos = model.todos.into_iter()
@@ -165,8 +165,9 @@ fn update(msg: Msg, mut model: Model) -> Update<Model> {
 ```
 
 This approach, where we mutate the model directly, is much more concise when
-handling collections. We only need to involve `Render(Model...)` once, at the end. How-to: Reassign `model` as mutable at the start of `update`. 
-Return `model` at the end. Mutate it during the match legs.
+handling collections. We only need to involve `Render(Model...)` once, at the end. How-to: set the
+ `model` parameter to be mutable in the `update` signature. 
+ Mutate it during the match legs. Return `Render(model)` at the end.
 
 As with the model, only one update function is passed to the app, but it may be split into 
 sub-functions to aid code organization.
@@ -175,7 +176,7 @@ You can perform updates recursively, ie have one update trigger another. For exa
 here's a non-recursive approach, where functions do_things() and do_other_things() each
 act on an Model, and output a Model:
 ```rust
-fn update(fn update(msg: Msg, model: Model) -> Update<Model> {
+fn update(fn update(msg: Msg, model: Model) -> Update<Msg, Model> {
     match msg {
         Msg::A => Render(do_things(model)),
         // Update the model with do_things, then with do_other_things, then render.
@@ -187,7 +188,7 @@ fn update(fn update(msg: Msg, model: Model) -> Update<Model> {
 Here's a recursive equivalent. Note the use of the `Update` enum's `model` method, which returns
 the model it wraps.
 ```rust
-fn update(fn update(msg: Msg, model: Model) -> Update<Model> {
+fn update(fn update(msg: Msg, model: Model) -> Update<Msg, Model> {
     match msg {
         Msg::A => Render(do_things(model)),
         // Update the model with do_things, then with do_other_things, then render.
@@ -198,7 +199,7 @@ fn update(fn update(msg: Msg, model: Model) -> Update<Model> {
 
 We can render the update, then chain another update using the `RenderThen` variant of `Update`:
 ```rust
-fn update(fn update(msg: Msg, model: Model) -> Update<Model> {
+fn update(fn update(msg: Msg, model: Model) -> Update<Msg, Model> {
     match msg {
         Msg::A => Render(do_things(model)),
         // Update the model with do_other_things, render, then update with do_things and render.

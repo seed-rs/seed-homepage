@@ -78,7 +78,7 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <a class="sourceLine" id="cb3-32" title="32"><span class="op">}</span></a>
 <a class="sourceLine" id="cb3-33" title="33"></a>
 <a class="sourceLine" id="cb3-34" title="34"><span class="co">/// The sole source of updating the model; returns a fresh one.</span></a>
-<a class="sourceLine" id="cb3-35" title="35"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Model&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-35" title="35"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Msg, Model&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-36" title="36">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-37" title="37">        <span class="pp">Msg::</span>Increment =&gt; Render(Model <span class="op">{</span>count: model.count + <span class="dv">1</span>, ..model<span class="op">}</span>),</a>
 <a class="sourceLine" id="cb3-38" title="38">        <span class="pp">Msg::</span>Decrement =&gt; Render(Model <span class="op">{</span>count: model.count - <span class="dv">1</span>, ..model<span class="op">}</span>),</a>

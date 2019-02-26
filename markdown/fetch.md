@@ -27,7 +27,7 @@ enum Msg {
     Replace(Branch),
 }
 
-fn update(msg: Msg, model: Model) -> Update<Model> {
+fn update(msg: Msg, model: Model) -> Update<Msg, Model> {
     match msg {
         Render(Msg::Replace(data) => Model {data}),
     }
@@ -72,7 +72,7 @@ enum Msg {
     GetData(seed::App<Msg, Model>),
 }
 
-fn update(msg: Msg, model: Model) -> Update<Model> {
+fn update(msg: Msg, model: Model) -> Update<Msg, Model> {
     match msg {
         Msg::Replace(data) => Render(Model {data}),
         Msg::GetData(state) => {

@@ -47,7 +47,7 @@ r#"
 <a class="sourceLine" id="cb3-6" title="6"><span class="op">}</span></a></code></pre></div>
 <p>The update <a href="https://doc.rust-lang.org/book/ch03-03-how-functions-work.html">function</a> you pass to <code>seed::App::build(</code> describes how the state should change, upon receiving each type of message. It's the only place where the model is changed. It accepts a message, and model as parameters, and returns an <code>Update</code> enum: This, and its variants are imported in the prelude, and has variants of <code>Render</code>, <code>Skip</code>, and <code>RenderThen</code>. Each wrap a model. Render triggers a rendering update, and will be used in most cases. <code>Skip</code> updates the model without triggering a render, and is useful in animations. <code>RenderThen</code> wraps a mdoel and a message: It triggers a rendering update, then a second one based on the message passed. The update function doesn't update the model in place: It returns a new one.</p>
 <p>Example:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Model&gt; <span class="op">{</span></a>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Msg, Model&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb4-2" title="2">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb4-3" title="3">        <span class="pp">Msg::</span>Increment =&gt; Render(Model <span class="op">{</span>count: model.count + <span class="dv">1</span>, ..model<span class="op">}</span>),</a>
 <a class="sourceLine" id="cb4-4" title="4">        <span class="pp">Msg::</span>SetCount(count) =&gt; Render(Model <span class="op">{</span>count, ..model<span class="op">}</span>),</a>
@@ -55,7 +55,7 @@ r#"
 <a class="sourceLine" id="cb4-6" title="6"><span class="op">}</span></a></code></pre></div>
 <p>While the signature of the update function is fixed, and will usually involve a match pattern with an arm for each message, there are many ways you can structure this function. Some may be easier to write, and others may be more efficient, or appeal to specific aesthetics. While the example above it straightforward, this becomes important with more complex updates.</p>
 <p>The signature suggests taking an immutable-design/functional approach. This can be verbose when modifying collections, but is a common pattern in Elm and Redux. Unlike in a pure functional language, side-effects (ie other things that happen other than updating the model) don't require special handling. Example, from the todomvc example:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Model&gt; <span class="op">{</span></a>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Msg, Model&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb5-2" title="2">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb5-3" title="3">        <span class="pp">Msg::</span>ClearCompleted =&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb5-4" title="4">            <span class="kw">let</span> todos = model.todos.into_iter()</a>
@@ -90,7 +90,7 @@ r#"
 <a class="sourceLine" id="cb5-33" title="33"><span class="op">}</span></a></code></pre></div>
 <p>In this example, we avoid mutating data. In the first two Msgs, we filter the todos, then pass them to a new model using <a href="https://doc.rust-lang.org/book/ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax">struct update syntax</a> . In the third Msg, we mutate todos, but don't mutate the model itself. In the fourth, we build a new todo list using a functional technique. The <a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html">docs for Rust Iterators</a> show helpful methods for functional iterator manipulation.</p>
 <p>Alternatively, we could write the same update function like this:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">fn</span> update(msg: Msg, <span class="kw">mut</span> model: Model) -&gt; Update&lt;Model&gt; <span class="op">{</span></a>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">fn</span> update(msg: Msg, <span class="kw">mut</span> model: Model) -&gt; Update&lt;Msg, Model&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb6-2" title="2">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb6-3" title="3">        <span class="pp">Msg::</span>ClearCompleted =&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb6-4" title="4">            model.todos = model.todos.into_iter()</a>
@@ -109,10 +109,10 @@ r#"
 <a class="sourceLine" id="cb6-17" title="17">    <span class="op">}</span>;</a>
 <a class="sourceLine" id="cb6-18" title="18">    Render(model)</a>
 <a class="sourceLine" id="cb6-19" title="19"><span class="op">}</span></a></code></pre></div>
-<p>This approach, where we mutate the model directly, is much more concise when handling collections. We only need to involve <code>Render(Model...)</code> once, at the end. How-to: Reassign <code>model</code> as mutable at the start of <code>update</code>. Return <code>model</code> at the end. Mutate it during the match legs.</p>
+<p>This approach, where we mutate the model directly, is much more concise when handling collections. We only need to involve <code>Render(Model...)</code> once, at the end. How-to: set the <code>model</code> parameter to be mutable in the <code>update</code> signature. Mutate it during the match legs. Return <code>Render(model)</code> at the end.</p>
 <p>As with the model, only one update function is passed to the app, but it may be split into sub-functions to aid code organization.</p>
 <p>You can perform updates recursively, ie have one update trigger another. For example, here's a non-recursive approach, where functions do_things() and do_other_things() each act on an Model, and output a Model:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">fn</span> update(<span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Model&gt; <span class="op">{</span></a>
+<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">fn</span> update(<span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Msg, Model&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb7-2" title="2">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb7-3" title="3">        <span class="pp">Msg::</span>A =&gt; Render(do_things(model)),</a>
 <a class="sourceLine" id="cb7-4" title="4">        <span class="co">// Update the model with do_things, then with do_other_things, then render.</span></a>
@@ -120,7 +120,7 @@ r#"
 <a class="sourceLine" id="cb7-6" title="6">    <span class="op">}</span></a>
 <a class="sourceLine" id="cb7-7" title="7"><span class="op">}</span></a></code></pre></div>
 <p>Here's a recursive equivalent. Note the use of the <code>Update</code> enum's <code>model</code> method, which returns the model it wraps.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">fn</span> update(<span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Model&gt; <span class="op">{</span></a>
+<div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">fn</span> update(<span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Msg, Model&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb8-2" title="2">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb8-3" title="3">        <span class="pp">Msg::</span>A =&gt; Render(do_things(model)),</a>
 <a class="sourceLine" id="cb8-4" title="4">        <span class="co">// Update the model with do_things, then with do_other_things, then render.</span></a>
@@ -128,7 +128,7 @@ r#"
 <a class="sourceLine" id="cb8-6" title="6">    <span class="op">}</span></a>
 <a class="sourceLine" id="cb8-7" title="7"><span class="op">}</span></a></code></pre></div>
 <p>We can render the update, then chain another update using the <code>RenderThen</code> variant of <code>Update</code>:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">fn</span> update(<span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Model&gt; <span class="op">{</span></a>
+<div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">fn</span> update(<span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Msg, Model&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb9-2" title="2">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb9-3" title="3">        <span class="pp">Msg::</span>A =&gt; Render(do_things(model)),</a>
 <a class="sourceLine" id="cb9-4" title="4">        <span class="co">// Update the model with do_other_things, render, then update with do_things and render.</span></a>
