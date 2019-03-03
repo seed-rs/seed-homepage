@@ -176,6 +176,10 @@ __exports.__widl_f_set_inner_html_Element = function(arg0, arg1, arg2) {
     getObject(arg0).innerHTML = varg1;
 };
 
+__exports.__widl_f_prevent_default_Event = function(arg0) {
+    getObject(arg0).preventDefault();
+};
+
 __exports.__widl_f_target_Event = function(arg0) {
 
     const val = getObject(arg0).target;
@@ -614,13 +618,15 @@ __exports.__wbindgen_cb_drop = function(i) {
     return 0;
 };
 
+__exports.__wbindgen_cb_forget = dropObject;
+
 __exports.__wbindgen_json_parse = function(ptr, len) {
     return addHeapObject(JSON.parse(getStringFromWasm(ptr, len)));
 };
 
-__exports.__wbindgen_closure_wrapper329 = function(a, b, _ignored) {
-    const f = wasm.__wbg_function_table.get(24);
-    const d = wasm.__wbg_function_table.get(25);
+__exports.__wbindgen_closure_wrapper325 = function(a, b, _ignored) {
+    const f = wasm.__wbg_function_table.get(39);
+    const d = wasm.__wbg_function_table.get(40);
     const cb = function(arg0) {
         this.cnt++;
         let a = this.a;

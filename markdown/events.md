@@ -20,7 +20,8 @@ enum Msg {
 simple_ev(Ev::DblClick, Msg::ClickClick)`
 ```
 
-`input_ev` passes the event target's value field, eg what a user typed in an input field.
+`input_ev` passes the event target's value field, eg what a user entered in an `input`, `textarea`, or
+select`,  field.
 Example: 
 ```rust
 enum Msg {
@@ -28,6 +29,27 @@ enum Msg {
 }
 // ...
 input_ev(Ev::Input, Msg::NewWords)
+```
+
+Example `select` element:
+```rust
+enum Msg {
+    ChangeSelected(String)
+}
+// ... (in update)
+ChangeSelected(selected) => {
+    log!("Value of the option selected: ", selected);
+    Render(Model{selected, ..model})
+}
+
+// ...
+select![
+    attrs!{At::Value => "0"},
+    option![attrs!{At::Value => "0"}, "Option A"],
+    option![attrs!{At::Value => "1"}, "Option B"],
+    option![attrs!{At::Value => "2"}, "Option C"],
+    input_ev(Ev::Input, Msg::ChangeSelected)
+]
 ```
 
 `keyboard_ev` returns a [web_sys::KeyboardEvent](https://rustwasm.github.io/wasm-bindgen/api/web_sys/struct.KeyboardEvent.html),

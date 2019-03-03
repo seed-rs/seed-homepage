@@ -32,7 +32,6 @@ struct GuideSection {
     elements: Vec<El<Msg>>
 }
 
-#[derive(Clone)]
 struct Model {
     page: Page,
     guide_page: usize,  // Index of our guide sections.
@@ -88,8 +87,6 @@ impl Default for Model {
 
 #[derive(Clone)]
 enum Msg {
-    RoutePage(Page),
-    RouteGuidePage(usize),
     ChangePage(Page),
     ChangeGuidePage(usize),
 }
@@ -97,17 +94,6 @@ enum Msg {
 /// The sole source of updating the model; returns a fresh one.
 fn update(msg: Msg, model: Model) -> Update<Msg, Model> {
     match msg {
-        Msg::RoutePage(page) => {
-            seed::push_path(vec![&page.to_string()]);
-            update(Msg::ChangePage(page), model)
-        },
-        Msg::RouteGuidePage(guide_page) => {
-            seed::push_path(vec!["guide", &guide_page.to_string()]);
-            update(Msg::ChangeGuidePage(guide_page), model)
-        },
-
-        // This is separate, because nagivating the route triggers state updates, which would
-        // trigger an additional push state.
         Msg::ChangePage(page) => Render(Model {page, ..model}),
         Msg::ChangeGuidePage(guide_page) => Render(Model {guide_page, page: Page::Guide, ..model}),
     }
@@ -127,11 +113,8 @@ fn header(_version: &str) -> El<Msg> {
 
     header![ style!{"display" => "flex"; "justify-content" => "flex-end"},
         ul![
-//            a![ &link_style, "Guide", simple_ev(Ev::Click, Msg::ChangePage(state.clone(), Page::Guide)) ],
-//            a![ &link_style, "Changelog", simple_ev(Ev::Click, Msg::ChangePage(state, Page::Changelog)) ],
-
-            a![ &link_style, "Guide", simple_ev(Ev::Click, Msg::RoutePage(Page::Guide)) ],
-            a![ &link_style, "Changelog", simple_ev(Ev::Click, Msg::RoutePage(Page::Changelog)) ],
+            a![ &link_style, "Guide", attrs!{At::Href => "/guide"} ],
+            a![ &link_style, "Changelog", attrs!{At::Href => "/changelog"} ],
 
             a![ &link_style, "Repo", attrs!{At::Href => "https://github.com/David-OConnor/seed"} ],
             a![ &link_style, "Quickstart repo", attrs!{At::Href => "https://github.com/David-OConnor/seed-quickstart"} ],
@@ -186,8 +169,10 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
         .map(|(i, s)|
         h4![
             &menu_item_style,
-            class![if i == guide_page {"guide-menu-selected"} else {"guide-menu"}],
-            simple_ev(Ev::Click, Msg::RouteGuidePage(i)),
+            attrs!{
+                At::Class => if i == guide_page {"guide-menu-selected"} else {"guide-menu"};
+                At::Href => "/guide/".to_string() + &i.to_string()
+            },
             s.title
         ]
     ).collect();
@@ -222,6 +207,13 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
 fn changelog() -> El<Msg> {
     let mut entries = span![ El::from_markdown(
 "
+## v0.2.10
+- Routing can be triggered by clicking any element containing a `Href` attribute
+with value as a relative link
+- Internal links no longer trigger a page refresh
+- Models no longer need to implement `Clone`
+- Fixed a bug introduced in 0.2.9 for `select` elements
+
 ## v0.2.9
 - Added a `RenderThen` option to `Update`, which allows chaining update messages
 - Added a `.model` method to `Update`, allowing for cleaner recursion in updates

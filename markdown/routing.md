@@ -9,10 +9,12 @@ routing as well, provided your server is configured to support. See the
   
 Let's say our site the following pages:
 a guide, which can have subpages, and a changelog, accessible by `http://seed-rs.org/changelog`,
-`http://seed-rs.org/guide`, and `http://seed-rs.org/guide/3 (where 3 is the page we want) respectively. 
+`http://seed-rs.org/guide`, and `http://seed-rs.org/guide/3` (where 3 is the page we want) respectively. 
 We describe the page by a `page`
 field in our model, which is an integer: 0 for guide, 1 for changelog, and an additional
 number for the guide page. An enum would be cleaner, but we don't wish to complicate this example.
+
+## The basics
 
 To set up the initial routing, we pass a `routes` function describing how to handle
 routing, to [App::build](https://docs.rs/seed/0.2.5/seed/struct.App.html#method.build)'s 
@@ -44,6 +46,25 @@ pub fn render() {
         .run();
 }
 ```
+
+The simplest way to trigger routing is to set up an element with an `At::Href` attribute, who's
+value contains a leading `/`, and corresponds to one of the routes defined in your `routes` function.
+Clicking this will trigger routing, as defined in `routes`:
+
+```rust
+a!["Guide", attrs!{At::Href => "/guide"} ]
+a!["Guide page 1", attrs!{At::Href => "/guide/1"} ]
+```
+
+The tag containing `Href` doesn't need to be an `a!` tag; any will work:
+
+```rust
+button!["Changelog", attrs!{At::Href => "/changelog"} ]
+```
+
+
+## More detail, and routing using events
+
 Your `routes` function outputs the message that handles the routing, and accepts a ref to a 
 [Url struct](https://docs.rs/seed/0.2.4/seed/routing/struct.Url.html)
 describing the route, which routes has the following fields:
@@ -62,8 +83,7 @@ The other three properties aren't as common; `hash` describes text after a `#`; 
 text after a `?`, but before `#`, and title is a descriptive title, unimplemented in current web browsers, but may
 see use in the future.
 
-In order to trigger our route change through in-app naviation (eg clicking a link or pushing a button), include
-logic like this in the `update` function:
+To trigger routing from events, instead of using `At::Href`, include logic like this in the `update` function:
 ```rust
 #[derive(Clone)]
 enum Msg {

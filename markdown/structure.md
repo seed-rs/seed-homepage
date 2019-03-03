@@ -2,13 +2,12 @@
 
 ## Model
 Each app must contain a model [struct]( https://doc.rust-lang.org/book/ch05-00-structs.html), 
-which contains the app’s state. It must derive `Clone`, and should contain 
+which contains the app’s state. It must should contain 
 [owned data](https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html). References
 with a static [lifetime](https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html) work,
 but may be more difficult to work with. Example:
 
 ```rust
-#[derive(Clone)]
 struct Model {
     count: i32,
     what_we_count: String
@@ -31,10 +30,9 @@ In this example, we initialize using Rust’s `Default` trait, in order to keep 
  on our `&str` literal, to convert it into an owned `String`.
  
 The model holds all data used by the app, and will be replaced with updated versions when the data changes.
-Use owned data in the model; eg `String` instead of `&'static str`. The model may be split into sub-structs to organize it – this is especially useful as the app grows.
-Sub-structs must implement `Clone`:
+Use owned data in the model; eg `String` instead of `&'static str`. The model may be split into sub-structs to organize it – 
+this is especially useful as the app grows:
  
-
 ```rust
 #[derive(Clone)]
 struct FormData {
@@ -48,7 +46,6 @@ struct Misc {
     descrip: String,
 }
 
-#[derive(Clone)]
 struct Model {
     form_data: FormData,
     misc: Misc

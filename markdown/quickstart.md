@@ -84,7 +84,6 @@ use seed::prelude::*;
 
 // Model
 
-#[derive(Clone)]
 struct Model {
     count: i32,
     what_we_count: String

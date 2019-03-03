@@ -2,24 +2,23 @@ pub fn text() -> String {
 r#"
 <h1 id="app-structure">App structure</h1>
 <h2 id="model">Model</h2>
-<p>Each app must contain a model <a href="https://doc.rust-lang.org/book/ch05-00-structs.html">struct</a>, which contains the app's state. It must derive <code>Clone</code>, and should contain <a href="https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html">owned data</a>. References with a static <a href="https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html">lifetime</a> work, but may be more difficult to work with. Example:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw">struct</span> Model <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-3" title="3">    count: <span class="dt">i32</span>,</a>
-<a class="sourceLine" id="cb1-4" title="4">    what_we_count: <span class="dt">String</span></a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="op">}</span></a>
-<a class="sourceLine" id="cb1-6" title="6"></a>
-<a class="sourceLine" id="cb1-7" title="7"><span class="co">// Setup a default here, for initialization later.</span></a>
-<a class="sourceLine" id="cb1-8" title="8"><span class="kw">impl</span> <span class="bu">Default</span> <span class="kw">for</span> Model <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-9" title="9">    <span class="kw">fn</span> default() -&gt; <span class="kw">Self</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-10" title="10">        <span class="kw">Self</span> <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-11" title="11">            count: <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb1-12" title="12">            what_we_count: <span class="st">&quot;click&quot;</span>.into()</a>
-<a class="sourceLine" id="cb1-13" title="13">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb1-14" title="14">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb1-15" title="15"><span class="op">}</span></a></code></pre></div>
+<p>Each app must contain a model <a href="https://doc.rust-lang.org/book/ch05-00-structs.html">struct</a>, which contains the app's state. It must should contain <a href="https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html">owned data</a>. References with a static <a href="https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html">lifetime</a> work, but may be more difficult to work with. Example:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">struct</span> Model <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-2" title="2">    count: <span class="dt">i32</span>,</a>
+<a class="sourceLine" id="cb1-3" title="3">    what_we_count: <span class="dt">String</span></a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="op">}</span></a>
+<a class="sourceLine" id="cb1-5" title="5"></a>
+<a class="sourceLine" id="cb1-6" title="6"><span class="co">// Setup a default here, for initialization later.</span></a>
+<a class="sourceLine" id="cb1-7" title="7"><span class="kw">impl</span> <span class="bu">Default</span> <span class="kw">for</span> Model <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-8" title="8">    <span class="kw">fn</span> default() -&gt; <span class="kw">Self</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-9" title="9">        <span class="kw">Self</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-10" title="10">            count: <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb1-11" title="11">            what_we_count: <span class="st">&quot;click&quot;</span>.into()</a>
+<a class="sourceLine" id="cb1-12" title="12">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb1-13" title="13">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb1-14" title="14"><span class="op">}</span></a></code></pre></div>
 <p>In this example, we initialize using Rust's <code>Default</code> trait, in order to keep the initialization code by the model struct. When we call <code>Model.default()</code>, it initializes with these values. We could also initialize it using a constructor method, or a struct literal. Note the use of <code>into()</code> on our <code>&amp;str</code> literal, to convert it into an owned <code>String</code>.</p>
-<p>The model holds all data used by the app, and will be replaced with updated versions when the data changes. Use owned data in the model; eg <code>String</code> instead of <code>&amp;'static str</code>. The model may be split into sub-structs to organize it – this is especially useful as the app grows. Sub-structs must implement <code>Clone</code>:</p>
+<p>The model holds all data used by the app, and will be replaced with updated versions when the data changes. Use owned data in the model; eg <code>String</code> instead of <code>&amp;'static str</code>. The model may be split into sub-structs to organize it – this is especially useful as the app grows:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="kw">struct</span> FormData <span class="op">{</span></a>
 <a class="sourceLine" id="cb2-3" title="3">    name: <span class="dt">String</span>,</a>
@@ -32,11 +31,10 @@ r#"
 <a class="sourceLine" id="cb2-10" title="10">    descrip: <span class="dt">String</span>,</a>
 <a class="sourceLine" id="cb2-11" title="11"><span class="op">}</span></a>
 <a class="sourceLine" id="cb2-12" title="12"></a>
-<a class="sourceLine" id="cb2-13" title="13"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
-<a class="sourceLine" id="cb2-14" title="14"><span class="kw">struct</span> Model <span class="op">{</span></a>
-<a class="sourceLine" id="cb2-15" title="15">    form_data: FormData,</a>
-<a class="sourceLine" id="cb2-16" title="16">    misc: Misc</a>
-<a class="sourceLine" id="cb2-17" title="17"><span class="op">}</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-13" title="13"><span class="kw">struct</span> Model <span class="op">{</span></a>
+<a class="sourceLine" id="cb2-14" title="14">    form_data: FormData,</a>
+<a class="sourceLine" id="cb2-15" title="15">    misc: Misc</a>
+<a class="sourceLine" id="cb2-16" title="16"><span class="op">}</span></a></code></pre></div>
 <h2 id="update">Update</h2>
 <p>The Message is an <a href="https://doc.rust-lang.org/book/ch06-00-enums.html">enum</a> which categorizes each type of interaction with the app. Its fields may hold a value, or not. We've abbreviated it as <code>Msg</code> here for brevity. If you're not familiar with enums, think of one as a set of options; in other languages, you might use an integer, or string for this, but an enum is explicitly limited in which values it can take. Example:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
@@ -149,9 +147,9 @@ r#"
 <p>Elements are created using macros, named by the lowercase name of each element, and imported into the global namespace. Eg <code>div!</code> above. We use this code to import them:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb11-1" title="1"><span class="at">#[</span>macro_use<span class="at">]</span></a>
 <a class="sourceLine" id="cb11-2" title="2"><span class="kw">extern</span> <span class="kw">crate</span> seed;</a></code></pre></div>
-<p>These macros accept any combination of the following parameters: - One <a href="https://docs.rs/seed/0.2.9/seed/dom_types/struct.Attrs.html">Attrs</a> struct - One <a href="https://docs.rs/seed/0.2.9/seed/dom_types/struct.Style.html">Style</a> struct - One or more <a href="https://docs.rs/seed/0.2.9/seed/dom_types/struct.Listener.html">Listener</a> structs, which handle events - One or more <code>Vec</code>s of <code>Listener</code> structs - One <code>String</code> or <code>&amp;str</code> representing a node text - One or more <a href="https://docs.rs/seed/0.2.9/seed/dom_types/struct.El.html">El</a> structs, representing a child - One or more Vecs of <code>El</code> structs, representing multiple children</p>
+<p>These macros accept any combination of the following parameters: - One <a href="https://docs.rs/seed/0.2.10/seed/dom_types/struct.Attrs.html">Attrs</a> struct - One <a href="https://docs.rs/seed/0.2.10/seed/dom_types/struct.Style.html">Style</a> struct - One or more <a href="https://docs.rs/seed/0.2.10/seed/dom_types/struct.Listener.html">Listener</a> structs, which handle events - One or more <code>Vec</code>s of <code>Listener</code> structs - One <code>String</code> or <code>&amp;str</code> representing a node text - One or more <a href="https://docs.rs/seed/0.2.10/seed/dom_types/struct.El.html">El</a> structs, representing a child - One or more Vecs of <code>El</code> structs, representing multiple children</p>
 <p>The parameters can be passed in any order; the compiler knows how to handle them based on their types. Children are rendered in the order passed.</p>
-<p>Views are described using <a href="https://docs.rs/seed/0.2.9/seed/dom_types/struct.El.html">El</a> structs, defined in the <a href="https://docs.rs/seed/0.2.9/seed/dom_types/index.html">seed::dom_types</a> module.</p>
+<p>Views are described using <a href="https://docs.rs/seed/0.2.10/seed/dom_types/struct.El.html">El</a> structs, defined in the <a href="https://docs.rs/seed/0.2.10/seed/dom_types/index.html">seed::dom_types</a> module.</p>
 <p><code>Attrs</code> and <code>Style</code> are thinly-wrapped hashmaps created with their own macros: <code>attrs!{}</code> and <code>style!{}</code> respectively.</p>
 <p>Example:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: &amp;Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
