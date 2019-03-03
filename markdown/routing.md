@@ -16,7 +16,7 @@ number for the guide page. An enum would be cleaner, but we don't wish to compli
 
 ## The basics
 
-To set up the initial routing, we pass a `routes` function describing how to handle
+To set up the initial routing, pass a `routes` function describing how to handle
 routing, to [App::build](https://docs.rs/seed/0.2.5/seed/struct.App.html#method.build)'s 
 `routes` method.
 ```rust

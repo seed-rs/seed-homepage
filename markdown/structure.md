@@ -375,18 +375,20 @@ fn a_component() -> El<Msg> {
 ```
 
 Overall: we leverage of Rust's strict type system to flexibly-create the view
-using normal Rust code.
+using normal Rust code.W
 
 
 ## Initializing
 To start your app, call the `seed::App::build` method, which takes the following parameters:
+
 - The initial instance of your model
 - Your update function
 - Your view function
 
 You can can chain the following optional methods:
+
 - `.mount("element-id")` to mount in an element that has an id other than `app`
-- `.routes(routse) to set a HashMap of landing-page routings, used to initialize your 
+- `.routes(routes)` to set a HashMap of landing-page routings, used to initialize your 
 state based on url (See the `Routing` section)
 - `.window_events(window_events)`, to set a function describing events on the `Window`. (See the `Events` section)
 

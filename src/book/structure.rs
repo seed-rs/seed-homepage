@@ -231,10 +231,20 @@ r#"
 <a class="sourceLine" id="cb19-6" title="6">        <span class="pp">h1!</span><span class="op">[</span> &amp;base_style.merge(&amp;<span class="pp">style!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;2 / 3&quot;</span><span class="op">}</span>) <span class="st">&quot;Second row&quot;</span> <span class="op">]</span>,</a>
 <a class="sourceLine" id="cb19-7" title="7">    <span class="op">]</span></a>
 <a class="sourceLine" id="cb19-8" title="8"><span class="op">}</span></a></code></pre></div>
-<p>Overall: we leverage of Rust's strict type system to flexibly-create the view using normal Rust code.</p>
+<p>Overall: we leverage of Rust's strict type system to flexibly-create the view using normal Rust code.W</p>
 <h2 id="initializing">Initializing</h2>
-<p>To start your app, call the <code>seed::App::build</code> method, which takes the following parameters: - The initial instance of your model - Your update function - Your view function</p>
-<p>You can can chain the following optional methods: - <code>.mount("element-id")</code> to mount in an element that has an id other than <code>app</code> - <code>.routes(routse) to set a HashMap of landing-page routings, used to initialize your  state based on url (See the</code>Routing<code>section) -</code>.window_events(window_events)<code>, to set a function describing events on the</code>Window<code>. (See the</code>Events` section)</p>
+<p>To start your app, call the <code>seed::App::build</code> method, which takes the following parameters:</p>
+<ul>
+<li>The initial instance of your model</li>
+<li>Your update function</li>
+<li>Your view function</li>
+</ul>
+<p>You can can chain the following optional methods:</p>
+<ul>
+<li><code>.mount("element-id")</code> to mount in an element that has an id other than <code>app</code></li>
+<li><code>.routes(routes)</code> to set a HashMap of landing-page routings, used to initialize your state based on url (See the <code>Routing</code> section)</li>
+<li><code>.window_events(window_events)</code>, to set a function describing events on the <code>Window</code>. (See the <code>Events</code> section)</li>
+</ul>
 <p>And must must complete with these methods: <code>.finish().run()</code>.</p>
 <p>This must be wrapped in a function named <code>render</code>, with the #[wasm_bindgen] invocation above. (More correctly, its name must match the func in this line in your html file):</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb20-1" title="1"><span class="kw">function</span> <span class="at">run</span>() <span class="op">{</span></a>
