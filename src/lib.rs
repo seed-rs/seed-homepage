@@ -92,11 +92,15 @@ enum Msg {
 }
 
 /// The sole source of updating the model; returns a fresh one.
-fn update(msg: Msg, model: Model) -> Update<Msg, Model> {
+fn update(msg: Msg, model: &mut Model) -> Update<Msg> {
     match msg {
-        Msg::ChangePage(page) => Render(Model {page, ..model}),
-        Msg::ChangeGuidePage(guide_page) => Render(Model {guide_page, page: Page::Guide, ..model}),
+        Msg::ChangePage(page) => model.page = page,
+        Msg::ChangeGuidePage(guide_page) => {
+            model.page = Page::Guide;
+            model.guide_page = guide_page;
+        },
     }
+    Render.into()
 }
 
 // View
@@ -207,6 +211,8 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
 fn changelog() -> El<Msg> {
     let mut entries = span![ El::from_markdown(
 "
+quit()
+
 ## v0.2.10
 - Routing can be triggered by clicking any element containing a `Href` attribute
 with value as a relative link
@@ -304,7 +310,7 @@ fn footer() -> El<Msg> {
 
 
 
-fn view(_state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
+fn view(model: &Model) -> El<Msg> {
     let version = "0.2.23";
 
     div![

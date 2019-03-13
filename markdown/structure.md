@@ -71,76 +71,35 @@ enum Msg {
 The update [function]( https://doc.rust-lang.org/book/ch03-03-how-functions-work.html) 
 you pass to `seed::App::build(` describes how the state should change, upon
 receiving each type of message. It's the only place where the model is changed. It accepts a message, 
-and model as parameters, and returns an `Update` enum: This, and its variants are imported in the prelude, 
+and model as parameters, and returns an `Update` struct. `Update` contains `ShouldRender` and `Effect`
+enums. `ShouldRender` and its variants are imported in the prelude, 
 and has variants of 
-`Render`, `Skip`, and `RenderThen`. Each wrap a model. Render triggers a rendering update, and will be used in 
-most cases. `Skip` updates the model without triggering a render, and is useful in animations. `RenderThen`
-wraps a mdoel and a message: It triggers a rendering update, then a second one based on the message passed.
-The update function doesn't update the model in place: It returns a new one.
+`Render` and `Skip`. Render triggers a rendering update, and will be used in 
+most cases. `Skip` updates the model without triggering a render, and is useful in animations.
+`Effect` isn't exposed in the API: it's used internally to handle async events like
+fetch requests. See the `Http requests` section for more info.
 
 Example:
 ```rust
-fn update(msg: Msg, model: Model) -> Update<Msg, Model> {
+fn update(msg: Msg, model: &mut Model) -> Update<Msg> {
     match msg {
-        Msg::Increment => Render(Model {count: model.count + 1, ..model}),
-        Msg::SetCount(count) => Render(Model {count, ..model}),
+        Msg::Increment => model.count += 1,
+        Msg::SetCount(count) => model.count = count,
     }
+    Render.into()
 }
 ```
 
 While the signature of the update function is fixed, and will usually involve a match pattern with an arm for each message, there
 are many ways you can structure this function. Some may be easier to write, and others may 
 be more efficient, or appeal to specific aesthetics. While the example above
-it straightforward, this becomes important with more complex updates.
- 
- The signature suggests taking an immutable-design/functional approach. This can be verbose
- when modifying collections, but is a common pattern in Elm and Redux. Unlike in a pure functional language,
- side-effects (ie other things that happen other than updating the model) don't require special 
- handling. Example, from the todomvc example:
-```rust
-fn update(msg: Msg, model: Model) -> Update<Msg, Model> {
-    match msg {
-        Msg::ClearCompleted => {
-            let todos = model.todos.into_iter()
-                .filter(|t| !t.completed)
-                .collect();
-            Render(Model {todos, ..model})
-        },
-        Msg::Destroy(posit) => {
-            let todos = model.todos.into_iter()
-                .enumerate()
-                .filter(|(i, t)| i != &posit)
-                .map(|(i, t)| t)
-                .collect();
-            Render(Model {todos, ..model})
-        },
-        Msg::Toggle(posit) => {
-            let mut todos = model.todos;
-            let mut todo = todos.remove(posit);
-            todo.completed = !todo.completed;
-            todos.insert(posit, todo);
+it straightforward, this becomes important with more complex updates. Note the `Render.into()`
+line at the end: This converts `ShouldRender::Render` into an `Update` struct with no `Effect`.
 
-            Render(Model {todos, ..model})
-        },
-        Msg::ToggleAll => {
-            let completed = model.active_count() != 0;
-            let todos = model.todos.into_iter()
-                .map(|t| Todo {completed, ..t})
-                .collect();
-            Render(Model {todos, ..model})
-        }
-    }
-}
- ```
-In this example, we avoid mutating data. In the first two Msgs, we filter the todos,
-then pass them to a new model using [struct update syntax](https://doc.rust-lang.org/book/ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax)
-.  In the third Msg, we mutate todos, but don't mutate the model itself. In the fourth,
-we build a new todo list using a functional technique. The [docs for Rust Iterators](https://doc.rust-lang.org/std/iter/trait.Iterator.html)
-show helpful methods for functional iterator manipulation.
-
-Alternatively, we could write the same update function like this:
+More detailed example, from the 
+[todoMVC example](https://github.com/David-OConnor/seed/tree/master/examples/todomvc):
 ```rust
-fn update(msg: Msg, mut model: Model) -> Update<Msg, Model> {
+fn update(msg: Msg, &mut model: Model) -> Update<Msg> {
     match msg {
         Msg::ClearCompleted => {
             model.todos = model.todos.into_iter()
@@ -155,58 +114,14 @@ fn update(msg: Msg, mut model: Model) -> Update<Msg, Model> {
             let completed = model.active_count() != 0;
             for todo in &mut model.todos {
                 todo.completed = completed;
+            }
         }
-    };
-    Render(model)
+    Render.into()
 }
 ```
-
-This approach, where we mutate the model directly, is much more concise when
-handling collections. We only need to involve `Render(Model...)` once, at the end. How-to: set the
- `model` parameter to be mutable in the `update` signature. 
- Mutate it during the match legs. Return `Render(model)` at the end.
 
 As with the model, only one update function is passed to the app, but it may be split into 
 sub-functions to aid code organization.
-
-You can perform updates recursively, ie have one update trigger another. For example,
-here's a non-recursive approach, where functions do_things() and do_other_things() each
-act on an Model, and output a Model:
-```rust
-fn update(fn update(msg: Msg, model: Model) -> Update<Msg, Model> {
-    match msg {
-        Msg::A => Render(do_things(model)),
-        // Update the model with do_things, then with do_other_things, then render.
-        Msg::B => Render(do_other_things(do_things(model))),
-    }
-}
-```
- 
-Here's a recursive equivalent. Note the use of the `Update` enum's `model` method, which returns
-the model it wraps.
-```rust
-fn update(fn update(msg: Msg, model: Model) -> Update<Msg, Model> {
-    match msg {
-        Msg::A => Render(do_things(model)),
-        // Update the model with do_things, then with do_other_things, then render.
-        Msg::B => Render(do_other_things(update(Msg::A, model).model())),
-    }
-}
-```
-
-We can render the update, then chain another update using the `RenderThen` variant of `Update`:
-```rust
-fn update(fn update(msg: Msg, model: Model) -> Update<Msg, Model> {
-    match msg {
-        Msg::A => Render(do_things(model)),
-        // Update the model with do_other_things, render, then update with do_things and render.
-        Msg::B => RenderThen(
-            do_other_things(model),
-            Msg::A 
-        )
-    }
-}
-```
 
 ## View
  Visual layout (ie HTML/DOM elements) is described declaratively in Rust, and uses 
@@ -250,7 +165,7 @@ respectively.
 
 Example:
 ```rust
-fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
+fn view(model: &Model) -> El<Msg> {
     let things = vec![ h4![ "thing1" ], h4![ "thing2" ] ];
 
     div![ attrs!{At::Class => "hardly-any"}, 
@@ -262,7 +177,8 @@ fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
 Note that you can create any of the above items inside an element macro, or create it separately,
 and pass it in.
 
-Keeys passed to `attrs` can be `Seed::At`s,  `String`s, `&str`s. Values passed to `attrs`, and `style` macros can be owned `Strings`, `&str`s, or when applicable, numerical and 
+Keeys passed to `attrs` can be `Seed::At`s,  `String`s, `&str`s. Values passed to `attrs`, and `style` macros can 
+be owned `Strings`, `&str`s, or when applicable, numerical and 
 boolean values. Eg: `input![ attrs!{At::Disabled => false]` and `input![ attrs!{"disabled" => "false"]` 
 are equivalent. If a numerical value is used in a `Style`, 'px' will be automatically appended.
 If you don't want this behavior, use a `String` or`&str`. Eg: `h2![ style!{"font-size" => 16} ]` , or
@@ -338,7 +254,7 @@ attributes.add(At::Class, "truckloads");
 
 Example of the style tag, and how you can use pattern-matching in views:
 ```rust
-fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
+fn view(model: &Model) -> El<Msg> {
     div![ style!{
         "display" => "grid";
         "grid-template-columns" => "auto";

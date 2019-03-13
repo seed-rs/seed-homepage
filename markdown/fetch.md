@@ -7,7 +7,6 @@ is standalone: It can be used with any wasm-bindgen program.
 
 Example, where we update the state on initial load:
 ```rust
-use seed::{Request, Method, spawn_local}
 use futures::Future;
 use serde::{Serialize, Deserialize};
 
@@ -24,45 +23,66 @@ pub struct Branch {
 
 #[derive(Clone)]
 enum Msg {
+    GetData,
     Replace(Branch),
+    OnFetchErr(JsValue),
 }
 
-fn update(msg: Msg, model: Model) -> Update<Msg, Model> {
+fn update(msg: Msg, model: &mut Model) -> Update<Msg> {
     match msg {
-        Render(Msg::Replace(data) => Model {data}),
+        Msg::GetData => Update::with_future_msg(get_data()).skip(),
+        
+        Msg::Replace(data) => {
+            model.data = data;
+            Render.into()
+        },
+        Msg::OnFetchErr(err) => {
+            log!(format!("Fetch error: {:?}", err));
+            Skip.into()
+        }
     }
 }
 
-fn get_data(state: seed::App<Msg, Model>) -> impl Future<Item = (), Error = JsValue> {
+fn get_data() -> impl Future<Item = Msg, Error = Msg> {
     let url = "https://api.github.com/repos/david-oconnor/seed/branches/master";
 
-    Request::new(url)
-        .method(Method::Get)
+    seed::Request::new(url)
+        .method(seed::Method::Get)
         .fetch_json()
-        .map(move |json| {
-            state.update(Msg::Replace(json));
-        })
+        .map(Msg::Replace)
+        .map_err(Msg::OnFetchErr)
 }
 
-fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
-    div![ format!("name: {}, sha: {}", model.data.name, model.data.commit.sha),
-        did_mount(move |_| spawn_local(get_data(state.clone())))
-     ]
-}
+// ...
+
+#[wasm_bindgen]
+pub fn render() {
+    let state = seed::App::build(Model::default(), update, view)
+        .finish()
+        .run();
+
+    state.update(Msg::GetData);
+
 ```
-When the top-level element is rendered for the first time (`did_mount`), we make
+On page load, we trigger an update using `Msg::GetData`, which points the `update`
+function to use the `Update::with_future_msg` method. This allows state to be
+update asynchronosly, when the request is complete. `skip()` is a convenience method that
+sets `Update::ShouldRender` to `Skip`; sending the request doesn't trigger a render.
+We use `Request::map` to point to an enum that handles successful retrieval, and wraps
+the struct of the response. In this case, `Msg::Replace`. We use `Request::map_err` in a similar
+way to handle http failures; the enum it points to wraps a `wasm_bindgen::JsValue`.
+
+This
 a `get` request by passing the url, options like headers (In this example, we don't use any),
-and a callback to be executed once the data's received. In this case, we update our
-state by sending a message which contains the data to `state.update`. Note the signature
-of our get_data func, and that we always wrap calls to `seed::Request` with `seed::spawn_local`.
+and a callback to be executed once the data's received.
 
 We've set up nested structs that have fields matching the names of the JSON fields of
 the response, which `Serde` deserializes the response into, through the `fetch_json` method of
  `Request`. Note that even though more data than 
 what's contained in our Branch struct is included
 in the response, Serde automatically applies only the info matching our struct's fields.
-In order to update our state outside of a normal event, we used `did_mount`. 
 
+ 
 If we wish to trigger
 this update from a normal event instead of on load, we can do something like this:
 ```rust

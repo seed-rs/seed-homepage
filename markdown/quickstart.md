@@ -65,7 +65,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 seed = "^0.2.4"
-wasm-bindgen = "^0.2.33"
+wasm-bindgen = "^0.2.38"
 web-sys = "^0.3.6"
 ```
 
@@ -109,13 +109,14 @@ enum Msg {
     ChangeWWC(String),
 }
 
-/// The sole source of updating the model; returns a fresh one.
-fn update(msg: Msg, model: Model) -> Update<Msg, Model> {
+/// The sole source of updating the model
+fn update(msg: Msg, model: &mut Model) -> Update<Msg> {
     match msg {
-        Msg::Increment => Render(Model {count: model.count + 1, ..model}),
-        Msg::Decrement => Render(Model {count: model.count - 1, ..model}),
-        Msg::ChangeWWC(what_we_count) => Render(Model {what_we_count, ..model })
+        Msg::Increment => model.count += 1,
+        Msg::Decrement => model.count -= 1,
+        Msg::ChangeWWC(what_we_count) => model.what_we_count = what_we_count,
     }
+    Render.into()
 }
 
 
@@ -133,7 +134,7 @@ fn success_level(clicks: i32) -> El<Msg> {
 }
 
 /// The top-level component we pass to the virtual dom.
-fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
+fn view(model: &Model) -> El<Msg> {
     let plural = if model.count == 1 {""} else {"s"};
 
     // Attrs, Style, Events, and children may be defined separately.

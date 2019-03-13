@@ -93,27 +93,33 @@ enum Msg {
     ChangeGuidePage(u32),
 }
 
-fn update(msg: Msg, model: Model) -> Model {
+fn set_guide_page(guide_page: Page, model: &mut Model) {
+    model.page = Page::Guide;
+    model.guide_page = guide_page;
+}
+
+fn update(msg: Msg, model: &mut Model) -> Update<Msg> {
     match msg {
         Msg::RoutePage(page) => {
             seed::push_path(vec![page]);
-            update(Msg::ChangePage(page), model)
-        },
+            model.page = page
+        }
         Msg::RouteGuidePage(guide_page) => {
             seed::push_path(vec!["guide", guide_page]);
-            update(Msg::ChangeGuidePage(guide_page), model)
-        },
-        // This is separate, because nagivating the route triggers state updates, which would
-        // trigger an additional push state.
-        Msg::ChangePage(page) => Render(Model {page, ..model}),
-        Msg::ChangeGuidePage(guide_page) => Render(Model {guide_page, page: Page::Guide, ..model}),
+            set_guide_page(guide_page, model);
+        }
+        // This is separate, because nagivating the route triggers state updates,
+        // which would trigger an additional push state.
+        Msg::ChangePage(page) => model.page = page,
+        Msg::ChangeGuidePage(guide_page) => set_guide_page(guide_page, model),
     }
+    Render.into()
 }
 ```
 
 Notice how the `Route` messages above call [seed::push_path](https://docs.rs/seed/0.2.5/seed/routing/fn.push_path.html), 
-and the `Change` messages are called in the `routes` function, and are recursively called in the
-update function. `push_path` is a convenience function for 
+then changet the page, and the `Change` messages just change the page.
+`push_path` is a convenience function for 
 [seed::push_route](https://docs.rs/seed/0.1.8/seed/routing/fn.push_route.html).
 `push_route` accepts a single parameter: a `Url` struct, which you can create with
  [seed::Url::new](https://docs.rs/seed/0.2.5/seed/routing/struct.Url.html#method.new) .  It

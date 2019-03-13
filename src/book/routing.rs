@@ -4,7 +4,7 @@ r#"
 <p>Seed includes flexible routing, inspired by <a href="https://github.com/reasonml/reason-react/blob/master/docs/router.md">React-Reason</a>: You can trigger state changes that update the address bar, and can be nagivated to/from using forward and back buttons. This works for landing-page routing as well, provided your server is configured to support. See the <a href="https://github.com/David-OConnor/seed/tree/master/examples/homepage">homepage</a> and <a href="https://github.com/David-OConnor/seed/tree/master/examples/todomvc">todomvc</a> examples.</p>
 <p>Let's say our site the following pages: a guide, which can have subpages, and a changelog, accessible by <code>http://seed-rs.org/changelog</code>, <code>http://seed-rs.org/guide</code>, and <code>http://seed-rs.org/guide/3</code> (where 3 is the page we want) respectively. We describe the page by a <code>page</code> field in our model, which is an integer: 0 for guide, 1 for changelog, and an additional number for the guide page. An enum would be cleaner, but we don't wish to complicate this example.</p>
 <h2 id="the-basics">The basics</h2>
-<p>To set up the initial routing, pass a <code>routes</code> function describing how to handle routing, to <a href="https://docs.rs/seed/0.2.10/seed/struct.App.html#method.build">App::build</a>'s <code>routes</code> method.</p>
+<p>To set up the initial routing, pass a <code>routes</code> function describing how to handle routing, to <a href="https://docs.rs/seed/0.3.0/seed/struct.App.html#method.build">App::build</a>'s <code>routes</code> method.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">fn</span> routes(url: &amp;<span class="pp">seed::</span>Url) -&gt; Msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-2" title="2">    <span class="kw">if</span> url.path.is_empty() <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-3" title="3">        <span class="kw">return</span> <span class="pp">Msg::</span>ChangePage(<span class="dv">0</span>)</a>
@@ -36,7 +36,7 @@ r#"
 <p>The tag containing <code>Href</code> doesn't need to be an <code>a!</code> tag; any will work:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="pp">button!</span><span class="op">[</span><span class="st">&quot;Changelog&quot;</span>, <span class="pp">attrs!</span><span class="op">{</span><span class="pp">At::</span>Href =&gt; <span class="st">&quot;/changelog&quot;</span><span class="op">}</span> <span class="op">]</span></a></code></pre></div>
 <h2 id="more-detail-and-routing-using-events">More detail, and routing using events</h2>
-<p>Your <code>routes</code> function outputs the message that handles the routing, and accepts a ref to a <a href="https://docs.rs/seed/0.2.10/seed/routing/struct.Url.html">Url struct</a> describing the route, which routes has the following fields:</p>
+<p>Your <code>routes</code> function outputs the message that handles the routing, and accepts a ref to a <a href="https://docs.rs/seed/0.3.0/seed/routing/struct.Url.html">Url struct</a> describing the route, which routes has the following fields:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">pub</span> <span class="kw">struct</span> Url <span class="op">{</span></a>
 <a class="sourceLine" id="cb4-2" title="2">    <span class="kw">pub</span> path: <span class="dt">Vec</span>&lt;<span class="dt">String</span>&gt;,</a>
 <a class="sourceLine" id="cb4-3" title="3">    <span class="kw">pub</span> hash: <span class="dt">Option</span>&lt;<span class="dt">String</span>&gt;,</a>
@@ -53,23 +53,29 @@ r#"
 <a class="sourceLine" id="cb5-6" title="6">    ChangeGuidePage(<span class="dt">u32</span>),</a>
 <a class="sourceLine" id="cb5-7" title="7"><span class="op">}</span></a>
 <a class="sourceLine" id="cb5-8" title="8"></a>
-<a class="sourceLine" id="cb5-9" title="9"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-10" title="10">    <span class="kw">match</span> msg <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-11" title="11">        <span class="pp">Msg::</span>RoutePage(page) =&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-12" title="12">            <span class="pp">seed::</span>push_path(<span class="pp">vec!</span><span class="op">[</span>page<span class="op">]</span>);</a>
-<a class="sourceLine" id="cb5-13" title="13">            update(<span class="pp">Msg::</span>ChangePage(page), model)</a>
-<a class="sourceLine" id="cb5-14" title="14">        <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb5-15" title="15">        <span class="pp">Msg::</span>RouteGuidePage(guide_page) =&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-16" title="16">            <span class="pp">seed::</span>push_path(<span class="pp">vec!</span><span class="op">[</span><span class="st">&quot;guide&quot;</span>, guide_page<span class="op">]</span>);</a>
-<a class="sourceLine" id="cb5-17" title="17">            update(<span class="pp">Msg::</span>ChangeGuidePage(guide_page), model)</a>
-<a class="sourceLine" id="cb5-18" title="18">        <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb5-19" title="19">        <span class="co">// This is separate, because nagivating the route triggers state updates, which would</span></a>
-<a class="sourceLine" id="cb5-20" title="20">        <span class="co">// trigger an additional push state.</span></a>
-<a class="sourceLine" id="cb5-21" title="21">        <span class="pp">Msg::</span>ChangePage(page) =&gt; Render(Model <span class="op">{</span>page, ..model<span class="op">}</span>),</a>
-<a class="sourceLine" id="cb5-22" title="22">        <span class="pp">Msg::</span>ChangeGuidePage(guide_page) =&gt; Render(Model <span class="op">{</span>guide_page, page: <span class="pp">Page::</span>Guide, ..model<span class="op">}</span>),</a>
-<a class="sourceLine" id="cb5-23" title="23">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb5-24" title="24"><span class="op">}</span></a></code></pre></div>
-<p>Notice how the <code>Route</code> messages above call <a href="https://docs.rs/seed/0.2.10/seed/routing/fn.push_path.html">seed::push_path</a>, and the <code>Change</code> messages are called in the <code>routes</code> function, and are recursively called in the update function. <code>push_path</code> is a convenience function for <a href="https://docs.rs/seed/0.2.10/seed/routing/fn.push_route.html">seed::push_route</a>. <code>push_route</code> accepts a single parameter: a <code>Url</code> struct, which you can create with <a href="https://docs.rs/seed/0.2.10/seed/routing/struct.Url.html#method.new">seed::Url::new</a> . It accepts the path as a <code>Vec</code> of items that implement <code>ToString</code> (eg <code>String</code>, <code>&amp;str</code>, numbers), and makes the rest of the fields <code>None</code>. If you wish to define one of these fields, there are additional methods you can chain together, eg:</p>
+<a class="sourceLine" id="cb5-9" title="9"><span class="kw">fn</span> set_guide_page(guide_page: Page, model: &amp;<span class="kw">mut</span> Model) <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-10" title="10">    model.page = <span class="pp">Page::</span>Guide;</a>
+<a class="sourceLine" id="cb5-11" title="11">    model.guide_page = guide_page;</a>
+<a class="sourceLine" id="cb5-12" title="12"><span class="op">}</span></a>
+<a class="sourceLine" id="cb5-13" title="13"></a>
+<a class="sourceLine" id="cb5-14" title="14"><span class="kw">fn</span> update(msg: Msg, model: &amp;<span class="kw">mut</span> Model) -&gt; Update&lt;Msg&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-15" title="15">    <span class="kw">match</span> msg <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-16" title="16">        <span class="pp">Msg::</span>RoutePage(page) =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-17" title="17">            <span class="pp">seed::</span>push_path(<span class="pp">vec!</span><span class="op">[</span>page<span class="op">]</span>);</a>
+<a class="sourceLine" id="cb5-18" title="18">            model.page = page</a>
+<a class="sourceLine" id="cb5-19" title="19">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb5-20" title="20">        <span class="pp">Msg::</span>RouteGuidePage(guide_page) =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-21" title="21">            <span class="pp">seed::</span>push_path(<span class="pp">vec!</span><span class="op">[</span><span class="st">&quot;guide&quot;</span>, guide_page<span class="op">]</span>);</a>
+<a class="sourceLine" id="cb5-22" title="22">            set_guide_page(guide_page, model);</a>
+<a class="sourceLine" id="cb5-23" title="23">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb5-24" title="24">        <span class="co">// This is separate, because nagivating the route triggers state updates,</span></a>
+<a class="sourceLine" id="cb5-25" title="25">        <span class="co">// which would trigger an additional push state.</span></a>
+<a class="sourceLine" id="cb5-26" title="26">        <span class="pp">Msg::</span>ChangePage(page) =&gt; model.page = page,</a>
+<a class="sourceLine" id="cb5-27" title="27">        <span class="pp">Msg::</span>ChangeGuidePage(guide_page) =&gt; set_guide_page(guide_page, model),</a>
+<a class="sourceLine" id="cb5-28" title="28">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb5-29" title="29">    Render.into()</a>
+<a class="sourceLine" id="cb5-30" title="30"><span class="op">}</span></a></code></pre></div>
+<p>Notice how the <code>Route</code> messages above call <a href="https://docs.rs/seed/0.3.0/seed/routing/fn.push_path.html">seed::push_path</a>, then changet the page, and the <code>Change</code> messages just change the page. <code>push_path</code> is a convenience function for <a href="https://docs.rs/seed/0.3.0/seed/routing/fn.push_route.html">seed::push_route</a>. <code>push_route</code> accepts a single parameter: a <code>Url</code> struct, which you can create with <a href="https://docs.rs/seed/0.3.0/seed/routing/struct.Url.html#method.new">seed::Url::new</a> . It accepts the path as a <code>Vec</code> of items that implement <code>ToString</code> (eg <code>String</code>, <code>&amp;str</code>, numbers), and makes the rest of the fields <code>None</code>. If you wish to define one of these fields, there are additional methods you can chain together, eg:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb6-1" title="1"><span class="pp">seed::</span>push_route(</a>
 <a class="sourceLine" id="cb6-2" title="2">    <span class="pp">seed::Url::</span>new(<span class="pp">vec!</span><span class="op">[</span><span class="st">&quot;myurl&quot;</span><span class="op">]</span>)</a>
 <a class="sourceLine" id="cb6-3" title="3">        .hash(<span class="st">&quot;textafterhash&quot;</span>)</a>
