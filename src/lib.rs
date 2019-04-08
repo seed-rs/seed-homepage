@@ -212,8 +212,10 @@ fn changelog() -> El<Msg> {
     let mut entries = span![ El::from_markdown(
 "
 ## v0.3.1
-- `Top level view functions now return `Vec<El<Ms>>` instead of `El<Ms>`. (Breaking)
-- `push_route()` now can accept a `Vec<&str>`, depreciating `push_path()`.
+- Top level view functions now return `Vec<El<Ms>>` instead of `El<Ms>`, mounted directly to
+ the mount point. (Breaking)
+- `push_route()` can now accept a `Vec<&str>`, depreciating `push_path()`.
+- Fixed a bug where window events couldn't be enabled on initialization
 
 ## v0.3.0
 - `update` function now takes a mutable ref of the model. (Breaking)
