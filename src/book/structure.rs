@@ -141,8 +141,10 @@ r#"
 <p>The view's defined bya function that's passed to <code>seed::run</code>. This takes a <code>Seed::app&lt;Msg, Model&gt;</code>, and Model as parameters, and outputs an <code>Vec&lt;El&gt;</code>, representing all elements that will be inserted as children on the top-level element. (The top-level element is in the html file, and specified in <code>seed::App::build.mount()</code>, or as a default, <code>app</code>). It may composed into sub-functions, which can be thought of like components in other frameworks. The first parameter, which we will call <code>state</code> in our examples, is used for updating state outside of the message system, and will not be used in these examples.</p>
 <p>Example:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb10-1" title="1"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: &amp;Model) -&gt; <span class="dt">Vec</span>&lt;El&lt;Msg&gt;&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb10-2" title="2">    <span class="pp">div!</span><span class="op">[</span> <span class="st">&quot;Let there be light&quot;</span> <span class="op">]</span></a>
-<a class="sourceLine" id="cb10-3" title="3"><span class="op">}</span></a></code></pre></div>
+<a class="sourceLine" id="cb10-2" title="2">    <span class="pp">vec!</span><span class="op">[</span></a>
+<a class="sourceLine" id="cb10-3" title="3">        <span class="pp">h1!</span><span class="op">[</span> <span class="st">&quot;Let there be light&quot;</span> <span class="op">]</span></a>
+<a class="sourceLine" id="cb10-4" title="4">    <span class="op">]</span></a>
+<a class="sourceLine" id="cb10-5" title="5"><span class="op">}</span></a></code></pre></div>
 <h2 id="elements-attributes-styles">Elements, attributes, styles</h2>
 <p>Elements are created using macros, named by the lowercase name of each element, and imported into the global namespace. Eg <code>div!</code> above. We use this code to import them:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb11-1" title="1"><span class="at">#[</span>macro_use<span class="at">]</span></a>
@@ -155,11 +157,13 @@ r#"
 <div class="sourceCode" id="cb12"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: &amp;Model) -&gt; <span class="dt">Vec</span>&lt;El&lt;Msg&gt;&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb12-2" title="2">    <span class="kw">let</span> things = <span class="pp">vec!</span><span class="op">[</span> <span class="pp">h4!</span><span class="op">[</span> <span class="st">&quot;thing1&quot;</span> <span class="op">]</span>, <span class="pp">h4!</span><span class="op">[</span> <span class="st">&quot;thing2&quot;</span> <span class="op">]</span> <span class="op">]</span>;</a>
 <a class="sourceLine" id="cb12-3" title="3"></a>
-<a class="sourceLine" id="cb12-4" title="4">    <span class="pp">div!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="pp">At::</span>Class =&gt; <span class="st">&quot;hardly-any&quot;</span><span class="op">}</span>, </a>
-<a class="sourceLine" id="cb12-5" title="5">        things,</a>
-<a class="sourceLine" id="cb12-6" title="6">        <span class="pp">h4!</span><span class="op">[</span> <span class="st">&quot;thing3?&quot;</span> <span class="op">]</span></a>
-<a class="sourceLine" id="cb12-7" title="7">    <span class="op">]</span></a>
-<a class="sourceLine" id="cb12-8" title="8"><span class="op">}</span></a></code></pre></div>
+<a class="sourceLine" id="cb12-4" title="4">    <span class="pp">vec!</span><span class="op">[</span></a>
+<a class="sourceLine" id="cb12-5" title="5">        <span class="pp">div!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="pp">At::</span>Class =&gt; <span class="st">&quot;hardly-any&quot;</span><span class="op">}</span>, </a>
+<a class="sourceLine" id="cb12-6" title="6">            things,</a>
+<a class="sourceLine" id="cb12-7" title="7">            <span class="pp">h4!</span><span class="op">[</span> <span class="st">&quot;thing3?&quot;</span> <span class="op">]</span></a>
+<a class="sourceLine" id="cb12-8" title="8">        <span class="op">]</span></a>
+<a class="sourceLine" id="cb12-9" title="9">    <span class="op">]</span></a>
+<a class="sourceLine" id="cb12-10" title="10"><span class="op">}</span></a></code></pre></div>
 <p>Note that you can create any of the above items inside an element macro, or create it separately, and pass it in.</p>
 <p>Keeys passed to <code>attrs</code> can be <code>Seed::At</code>s, <code>String</code>s, <code>&amp;str</code>s. Values passed to <code>attrs</code>, and <code>style</code> macros can be owned <code>Strings</code>, <code>&amp;str</code>s, or when applicable, numerical and boolean values. Eg: <code>input![ attrs!{At::Disabled =&gt; false]</code> and <code>input![ attrs!{"disabled" =&gt; "false"]</code> are equivalent. If a numerical value is used in a <code>Style</code>, ‘px' will be automatically appended. If you don't want this behavior, use a <code>String</code> or<code>&amp;str</code>. Eg: <code>h2![ style!{"font-size" =&gt; 16} ]</code> , or <code>h2![ style!{"font-size" =&gt; "1.5em"} ]</code> for specifying font size in pixels or em respectively. Note that once created, a <code>Style</code> instance holds all its values as <code>Strings</code>; eg that <code>16</code> above will be stored as <code>"16px"</code>; keep this in mind if editing a style that you made outside an element macro.</p>
 <p>We can set multiple values for an attribute using <code>Attribute.add_multiple</code>. This is useful for setting multiple classes. Note that we must set this up outside of the view macro, since it involves modifying a variable:</p>
@@ -203,25 +207,27 @@ r#"
 <a class="sourceLine" id="cb17-2" title="2">attributes.add(<span class="pp">At::</span>Class, <span class="st">&quot;truckloads&quot;</span>);</a></code></pre></div>
 <p>Example of the style tag, and how you can use pattern-matching in views:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb18-1" title="1"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: &amp;Model) -&gt; <span class="dt">Vec</span>&lt;El&lt;Msg&gt;&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb18-2" title="2">    <span class="pp">div!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span></a>
-<a class="sourceLine" id="cb18-3" title="3">        <span class="st">&quot;display&quot;</span> =&gt; <span class="st">&quot;grid&quot;</span>;</a>
-<a class="sourceLine" id="cb18-4" title="4">        <span class="st">&quot;grid-template-columns&quot;</span> =&gt; <span class="st">&quot;auto&quot;</span>;</a>
-<a class="sourceLine" id="cb18-5" title="5">        <span class="st">&quot;grid-template-rows&quot;</span> =&gt; <span class="st">&quot;100px auto 100px&quot;</span></a>
-<a class="sourceLine" id="cb18-6" title="6">        <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb18-7" title="7">        <span class="pp">section!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;1 / 2&quot;</span><span class="op">}</span>,</a>
-<a class="sourceLine" id="cb18-8" title="8">            header(),</a>
-<a class="sourceLine" id="cb18-9" title="9">        <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb18-10" title="10">        <span class="pp">section!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;2 / 3&quot;</span><span class="op">}</span>,</a>
-<a class="sourceLine" id="cb18-11" title="11">            <span class="kw">match</span> model.page <span class="op">{</span></a>
-<a class="sourceLine" id="cb18-12" title="12">                <span class="pp">Page::</span>Guide =&gt; guide(),</a>
-<a class="sourceLine" id="cb18-13" title="13">                <span class="pp">Page::</span>Changelog =&gt; changelog(),</a>
-<a class="sourceLine" id="cb18-14" title="14">            <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb18-15" title="15">        <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb18-16" title="16">        <span class="pp">section!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;3 / 4&quot;</span><span class="op">}</span>,</a>
-<a class="sourceLine" id="cb18-17" title="17">            footer()</a>
-<a class="sourceLine" id="cb18-18" title="18">        <span class="op">]</span></a>
-<a class="sourceLine" id="cb18-19" title="19">    <span class="op">]</span></a>
-<a class="sourceLine" id="cb18-20" title="20"><span class="op">}</span></a></code></pre></div>
+<a class="sourceLine" id="cb18-2" title="2">    <span class="pp">vec!</span><span class="op">[</span></a>
+<a class="sourceLine" id="cb18-3" title="3">        <span class="pp">div!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span></a>
+<a class="sourceLine" id="cb18-4" title="4">            <span class="st">&quot;display&quot;</span> =&gt; <span class="st">&quot;grid&quot;</span>;</a>
+<a class="sourceLine" id="cb18-5" title="5">            <span class="st">&quot;grid-template-columns&quot;</span> =&gt; <span class="st">&quot;auto&quot;</span>;</a>
+<a class="sourceLine" id="cb18-6" title="6">            <span class="st">&quot;grid-template-rows&quot;</span> =&gt; <span class="st">&quot;100px auto 100px&quot;</span></a>
+<a class="sourceLine" id="cb18-7" title="7">            <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb18-8" title="8">            <span class="pp">section!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;1 / 2&quot;</span><span class="op">}</span>,</a>
+<a class="sourceLine" id="cb18-9" title="9">                header(),</a>
+<a class="sourceLine" id="cb18-10" title="10">            <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb18-11" title="11">            <span class="pp">section!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;2 / 3&quot;</span><span class="op">}</span>,</a>
+<a class="sourceLine" id="cb18-12" title="12">                <span class="kw">match</span> model.page <span class="op">{</span></a>
+<a class="sourceLine" id="cb18-13" title="13">                    <span class="pp">Page::</span>Guide =&gt; guide(),</a>
+<a class="sourceLine" id="cb18-14" title="14">                    <span class="pp">Page::</span>Changelog =&gt; changelog(),</a>
+<a class="sourceLine" id="cb18-15" title="15">                <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb18-16" title="16">            <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb18-17" title="17">            <span class="pp">section!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;3 / 4&quot;</span><span class="op">}</span>,</a>
+<a class="sourceLine" id="cb18-18" title="18">                footer()</a>
+<a class="sourceLine" id="cb18-19" title="19">            <span class="op">]</span></a>
+<a class="sourceLine" id="cb18-20" title="20">        <span class="op">]</span></a>
+<a class="sourceLine" id="cb18-21" title="21">    <span class="op">]</span></a>
+<a class="sourceLine" id="cb18-22" title="22"><span class="op">}</span></a></code></pre></div>
 <p>We can combine Attrs and Style instances using their <code>merge</code> methods, which take an &amp;Attrs and &amp;Style respectively. This can be used to compose styles from reusable parts. Example:</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb19-1" title="1"><span class="kw">fn</span> a_component() -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb19-2" title="2">    <span class="kw">let</span> base_style = !style<span class="op">{</span><span class="st">&quot;color&quot;</span> =&gt; <span class="st">&quot;lavender&quot;</span><span class="op">}</span>;</a>

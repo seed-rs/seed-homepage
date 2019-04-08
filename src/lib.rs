@@ -92,11 +92,15 @@ enum Msg {
 }
 
 /// The sole source of updating the model; returns a fresh one.
-fn update(msg: Msg, model: Model) -> Update<Msg, Model> {
+fn update(msg: Msg, model: &mut Model) -> Update<Msg> {
     match msg {
-        Msg::ChangePage(page) => Render(Model {page, ..model}),
-        Msg::ChangeGuidePage(guide_page) => Render(Model {guide_page, page: Page::Guide, ..model}),
+        Msg::ChangePage(page) => model.page = page,
+        Msg::ChangeGuidePage(guide_page) => {
+            model.page = Page::Guide;
+            model.guide_page = guide_page;
+        },
     }
+    Render.into()
 }
 
 // View
@@ -318,8 +322,8 @@ fn footer() -> El<Msg> {
 
 
 
-fn view(_state: seed::App<Msg, Model>, model: &Model) -> Vec<El<Msg>> {
-    let version = "0.2.23";
+fn view(model: &Model) -> Vec<El<Msg>> {
+    let version = "0.3.1";
 
     vec![
         div![

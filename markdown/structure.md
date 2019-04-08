@@ -223,7 +223,9 @@ on the top-level element. (The top-level element is in the html file, and specif
 Example:
 ```rust
 fn view(state: seed::App<Msg, Model>, model: &Model) -> Vec<El<Msg>> {
-    div![ "Let there be light" ]
+    vec![
+        h1![ "Let there be light" ]
+    ]
 }
 ```
 
@@ -258,9 +260,11 @@ Example:
 fn view(state: seed::App<Msg, Model>, model: &Model) -> Vec<El<Msg>> {
     let things = vec![ h4![ "thing1" ], h4![ "thing2" ] ];
 
-    div![ attrs!{At::Class => "hardly-any"}, 
-        things,
-        h4![ "thing3?" ]
+    vec![
+        div![ attrs!{At::Class => "hardly-any"}, 
+            things,
+            h4![ "thing3?" ]
+        ]
     ]
 }
 ```
@@ -344,22 +348,24 @@ attributes.add(At::Class, "truckloads");
 Example of the style tag, and how you can use pattern-matching in views:
 ```rust
 fn view(state: seed::App<Msg, Model>, model: &Model) -> Vec<El<Msg>> {
-    div![ style!{
-        "display" => "grid";
-        "grid-template-columns" => "auto";
-        "grid-template-rows" => "100px auto 100px"
-        },
-        section![ style!{"grid-row" => "1 / 2"},
-            header(),
-        ],
-        section![ attrs!{"grid-row" => "2 / 3"},
-            match model.page {
-                Page::Guide => guide(),
-                Page::Changelog => changelog(),
+    vec![
+        div![ style!{
+            "display" => "grid";
+            "grid-template-columns" => "auto";
+            "grid-template-rows" => "100px auto 100px"
             },
-        ],
-        section![ style!{"grid-row" => "3 / 4"},
-            footer()
+            section![ style!{"grid-row" => "1 / 2"},
+                header(),
+            ],
+            section![ attrs!{"grid-row" => "2 / 3"},
+                match model.page {
+                    Page::Guide => guide(),
+                    Page::Changelog => changelog(),
+                },
+            ],
+            section![ style!{"grid-row" => "3 / 4"},
+                footer()
+            ]
         ]
     ]
 }
