@@ -91,7 +91,7 @@ and just [learn to code](https://play.rust-lang.org/).
 You can use `seed::document` and `seed::window` to access the `web_sys` document
 and window functions. Example:
 ```rust
-fn view(state: seed::App<Msg, Model>, model: Model) -> El<Msg> {
+fn view(state: seed::App<Msg, Model>, model: Model) -> Vec<El<Msg>> {
     button![ 
         simple_ev("click", Msg::Increment), 
         format!("Hello, World × {}", model.val),

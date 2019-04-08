@@ -44,7 +44,7 @@ fn get_data(state: seed::App<Msg, Model>) -> impl Future<Item = (), Error = JsVa
         })
 }
 
-fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
+fn view(state: seed::App<Msg, Model>, model: &Model) -> Vec<El<Msg>> {
     div![ format!("name: {}, sha: {}", model.data.name, model.data.commit.sha),
         did_mount(move |_| spawn_local(get_data(state.clone())))
      ]

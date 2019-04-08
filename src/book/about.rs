@@ -19,8 +19,15 @@ r#"
 <p>Seed's different approach to view syntax also distinguishes it: rather than use an HTML-like markup similar to JSX, it uses Rust builtin types, thinly-wrapped by macros that allow flexible composition. This decision will not appeal to everyone, but I think it integrates more naturally with the language.</p>
 <h2 id="why-build-a-frontend-in-rust-over-elm-or-javascript-based-frameworks">Why build a frontend in Rust over Elm, or Javascript-based frameworks?</h2>
 <p>You may prefer writing in Rust, and using packages from Cargo vice npm. Getting started with this framework will in most cases be easier, and require less config and setup overhead than with JS frameworks. You may appreciate Rust's compile-time error-checking, and built-in testing.</p>
-<p>You may choose this approach over Elm if you're already comfortable with Rust, or don't want to code business logic in a purely-functional langauge.</p>
+<p>You may choose this approach over `Elm if you're already comfortable with Rust, or don't want to code business logic in a purely-functional langauge.</p>
 <p>Compared with React, you may appreciate the consistency of how to write apps: There's no distinction between logic and display code; no restrictions on comments; no distinction between components and normal functions. The API is flexible, and avoids OOP boilerplate. Its integrated routing and message system avoids the dependency glue-code associated with Redux and React-Router.</p>
+<p>Seed has a <em>batteries-included</em> approach, which you may appreciate.</p>
+<h2 id="why-not-to-use-this-and-stick-with-js">Why not to use this, and stick with JS</h2>
+<p>Seed's under rapid development, and breaking changes are likely. Finding Rust/WASM-help, both in person, and in online communities will be difficult, and finding help for Seed even more so. Seed doesn't have the wealth of existing reusable <em>components</em> that other frameworks have, so you will need to implement solved problems (eg date-pickers) yourself, or adapt them from existing solutions. There are no existing tutorials or guides outside the official one, and few examples.</p>
+<p>Seed doesn't have a track-record of production apps. Finding developers experienced with Rust/wasm-bindgen, or Seed specifically will be much more difficult than popular JS/compile-to-JS frameworks. Seed's feature-set is incomplete compared to JS frameworks. Seed hasn't been benchmarked, and its performance may be lower than JS frameworks.</p>
+<p>Seed's view syntax is non-standard compared to HTML-templates, or HTML-mockup languages like <code>JSX</code>.</p>
+<h2 id="what-about-gloo">What about Gloo ?</h2>
+<p>We're working closely with the <code>rustwasm</code> team on <a href="https://github.com/rustwasm/gloo">Gloo</a>, and intend to incorporate <code>Gloo</code> crates into Seed as appropriate, as well as contribute Seed code into <code>Gloo</code> crates. Seed's a cohesive, high-level framework, while <code>Gloo</code> will be a versatile, standardized toolkit.</p>
 <h3 id="shoutouts">Shoutouts</h3>
 <ul>
 <li>The <a href="https://github.com/rustwasm/wasm-bindgen">WASM-Bindgen</a> team, for building the tools this project relies on</li>
@@ -30,13 +37,6 @@ r#"
 <li>Denis Kolodin, for creating the inspirational <a href="https://github.com/DenisKolodin/yew">Yew framework</a></li>
 <li>Utkarsh Kukreti, for through his <a href="https://github.com/utkarshkukreti/draco">Draco repo</a>, helping me understand how wasm-bindgen's closure system can be used to update state.</li>
 <li>Tim Robinson, for being very helpful on the <a href="https://gitter.im/rust-lang/rust">Rust Gitter</a>.</li>
-</ul>
-<h3 id="features-to-add">Features to add</h3>
-<ul>
-<li>Dynamic SVG creation and modification</li>
-<li>Websocket API</li>
-<li>Virtual DOM optimization</li>
-<li>High-level CSS-grid/Flexbox API ?</li>
 </ul>
 <h2 id="reference">Reference</h2>
 <ul>

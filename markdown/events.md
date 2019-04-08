@@ -211,7 +211,5 @@ pub fn render() {
         .run();
 }
 ```
-If `model.watching` is true, the window listens for keyboard and mouse events, then
-updates the model accordingly. If not, it doesn't listen. There's currently a bug
-where window listeners won't work until the first (non-window-listener) update
-is triggered.
+If `model.watching` is `true`, the window listens for keyboard and mouse events, then 
+updates the model accordingly. If not, it doesn't listen.

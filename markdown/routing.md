@@ -96,11 +96,11 @@ enum Msg {
 fn update(msg: Msg, model: Model) -> Model {
     match msg {
         Msg::RoutePage(page) => {
-            seed::push_path(vec![page]);
+            seed::push_route(vec![page]);
             update(Msg::ChangePage(page), model)
         },
         Msg::RouteGuidePage(guide_page) => {
-            seed::push_path(vec!["guide", guide_page]);
+            seed::push_route(vec!["guide", guide_page]);
             update(Msg::ChangeGuidePage(guide_page), model)
         },
         // This is separate, because nagivating the route triggers state updates, which would
@@ -111,15 +111,12 @@ fn update(msg: Msg, model: Model) -> Model {
 }
 ```
 
-Notice how the `Route` messages above call [seed::push_path](https://docs.rs/seed/0.2.5/seed/routing/fn.push_path.html), 
+Notice how the `Route` messages above call [seed::push_route](https://docs.rs/seed/0.2.5/seed/routing/fn.push_route.html), 
 and the `Change` messages are called in the `routes` function, and are recursively called in the
-update function. `push_path` is a convenience function for 
-[seed::push_route](https://docs.rs/seed/0.1.8/seed/routing/fn.push_route.html).
-`push_route` accepts a single parameter: a `Url` struct, which you can create with
- [seed::Url::new](https://docs.rs/seed/0.2.5/seed/routing/struct.Url.html#method.new) .  It
-accepts the path as a `Vec` of items that implement `ToString` (eg `String`, `&str`, numbers),
-and makes the rest of the fields `None`. If you wish to define one of these fields, there are additional
-methods you can chain together, eg: 
+update function. `push_route` accepts a single parameter: a `Url` struct, which you can create with a 
+struct literal, or
+ [seed::Url::new](https://docs.rs/seed/0.2.5/seed/routing/struct.Url.html#method.new). Alternatively,
+  you can pass a `Vec<String>` / `Vec<&str>`, representing the path.
 
 ```rust
 seed::push_route(
@@ -128,14 +125,12 @@ seed::push_route(
         .search("textafterquestionmark")
 )
 ```
-
-`push_path` doesn't support `hash`, `search`, or `title`, but has cleaner syntax; it takes the path,
-as described above, as its only parameter. 
+ 
 When a page is loaded or browser naviation occurs (eg back button), Seed uses the `routes`
 func you provided to determine which message to call. 
 
 Notice how we keep ChangePage and RoutePage separate in our example. Do not
-call `push_path` or `push_route` from one of these messages, or you'll end up with recusions/unwanted behavior:
+call `push_route` from one of these messages, or you'll end up with recusions/unwanted behavior:
  `ChangePage` in our example performs
 the action associated with routing, while `RoutePage` updates our route history, then
 recursively calls `ChangePage`. If you were to attempt this in the same message, each

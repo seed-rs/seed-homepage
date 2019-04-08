@@ -100,7 +100,7 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <a class="sourceLine" id="cb3-54" title="54"><span class="op">}</span></a>
 <a class="sourceLine" id="cb3-55" title="55"></a>
 <a class="sourceLine" id="cb3-56" title="56"><span class="co">/// The top-level component we pass to the virtual dom.</span></a>
-<a class="sourceLine" id="cb3-57" title="57"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: &amp;Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-57" title="57"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: &amp;Model) -&gt; <span class="dt">Vec</span>&lt;El&lt;Msg&gt;&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-58" title="58">    <span class="kw">let</span> plural = <span class="kw">if</span> model.count == <span class="dv">1</span> <span class="op">{</span><span class="st">&quot;&quot;</span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span><span class="st">&quot;s&quot;</span><span class="op">}</span>;</a>
 <a class="sourceLine" id="cb3-59" title="59"></a>
 <a class="sourceLine" id="cb3-60" title="60">    <span class="co">// Attrs, Style, Events, and children may be defined separately.</span></a>

@@ -1,7 +1,7 @@
 pub fn text() -> String {
 r#"
 <h1 id="http-requests-fetch-and-updating-state">Http requests (fetch), and updating state</h1>
-<p>We use the <a href="https://docs.rs/seed/0.2.10/seed/fetch/struct.Request.html">seed::Request</a> struct to make HTTP requests in the browser, wrapping the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>. To use this, we need to include <code>futures = "^0.1.20"</code> in <code>Cargo.toml</code>. The <a href="https://docs.rs/seed/0.2.10/seed/fetch/index.html">Fetch module</a> is standalone: It can be used with any wasm-bindgen program.</p>
+<p>We use the <a href="https://docs.rs/seed/0.3.1/seed/fetch/struct.Request.html">seed::Request</a> struct to make HTTP requests in the browser, wrapping the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>. To use this, we need to include <code>futures = "^0.1.20"</code> in <code>Cargo.toml</code>. The <a href="https://docs.rs/seed/0.3.1/seed/fetch/index.html">Fetch module</a> is standalone: It can be used with any wasm-bindgen program.</p>
 <p>Example, where we update the state on initial load:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">use</span> <span class="pp">seed::</span><span class="op">{</span>Request, Method, spawn_local<span class="op">}</span></a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="kw">use</span> <span class="pp">futures::</span>Future;</a>
@@ -40,7 +40,7 @@ r#"
 <a class="sourceLine" id="cb1-35" title="35">        <span class="op">}</span>)</a>
 <a class="sourceLine" id="cb1-36" title="36"><span class="op">}</span></a>
 <a class="sourceLine" id="cb1-37" title="37"></a>
-<a class="sourceLine" id="cb1-38" title="38"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: &amp;Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-38" title="38"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: &amp;Model) -&gt; <span class="dt">Vec</span>&lt;El&lt;Msg&gt;&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-39" title="39">    <span class="pp">div!</span><span class="op">[</span> <span class="pp">format!</span>(<span class="st">&quot;name: {}, sha: {}&quot;</span>, model.data.name, model.data.commit.sha),</a>
 <a class="sourceLine" id="cb1-40" title="40">        did_mount(<span class="kw">move</span> |_| spawn_local(get_data(state.clone())))</a>
 <a class="sourceLine" id="cb1-41" title="41">     <span class="op">]</span></a>

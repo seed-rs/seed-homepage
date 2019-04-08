@@ -1,7 +1,7 @@
 pub fn text() -> String {
 r#"
 <h1 id="events">Events</h1>
-<p>Events are created by passing <a href="https://docs.rs/seed/0.2.10/seed/dom_types/struct.Listener.html">Listener</a>s, or vecs of Listeners into <code>El</code> macros. They're created using the following functions exposed in the prelude: <code>simple_ev</code>, <code>input_ev</code>, <code>keyboard_ev</code>, <code>mouse_ev</code>, and <code>raw_ev</code>. The first is demonstrated in the example in the quickstart section, and all are demonstrated in the todomvc example.</p>
+<p>Events are created by passing <a href="https://docs.rs/seed/0.3.1/seed/dom_types/struct.Listener.html">Listener</a>s, or vecs of Listeners into <code>El</code> macros. They're created using the following functions exposed in the prelude: <code>simple_ev</code>, <code>input_ev</code>, <code>keyboard_ev</code>, <code>mouse_ev</code>, and <code>raw_ev</code>. The first is demonstrated in the example in the quickstart section, and all are demonstrated in the todomvc example.</p>
 <p><code>simple_ev</code> takes two arguments: an event trigger, which can be a <code>Seed::Ev</code> (imported in the prelude), an <code>&amp;str</code>, or a <code>String</code>, (eg <code>Ev::Click</code>, “click”, “contextmenu” etc), and an instance of your <code>Msg</code> enum. (eg Msg::Increment). The other three event-creation-funcs take a trigger, and a <a href="https://doc.rust-lang.org/book/ch13-01-closures.html">closure</a> (An anonymous function, similar to an arrow func in JS) that returns a Msg enum.</p>
 <p><code>simple_ev</code> does not pass any information about the event, only that it fired. Example:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">enum</span> Msg <span class="op">{</span></a>
@@ -127,6 +127,6 @@ r#"
 <a class="sourceLine" id="cb10-32" title="32">        .finish()</a>
 <a class="sourceLine" id="cb10-33" title="33">        .run();</a>
 <a class="sourceLine" id="cb10-34" title="34"><span class="op">}</span></a></code></pre></div>
-<p>If <code>model.watching</code> is true, the window listens for keyboard and mouse events, then updates the model accordingly. If not, it doesn't listen. There's currently a bug where window listeners won't work until the first (non-window-listener) update is triggered.</p>
+<p>If <code>model.watching</code> is <code>true</code>, the window listens for keyboard and mouse events, then updates the model accordingly. If not, it doesn't listen.</p>
 "#.into()
 }

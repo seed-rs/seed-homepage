@@ -213,11 +213,16 @@ fn update(fn update(msg: Msg, model: Model) -> Update<Msg, Model> {
 [macros]( https://doc.rust-lang.org/book/appendix-04-macros.html) to simplify syntax.
 
 The view's defined bya function that's passed to `seed::run`. This takes a `Seed::app<Msg, Model>`, and Model
-as parameters, and outputs an `El`, representing the top-level element. It may composed into sub-functions, which can be thought of like components in other frameworks. The first parameter, which we will call `state` in our examples, is used for updating state outside of the message system, and will not be used in these examples.
+as parameters, and outputs an `Vec<El>`, representing all elements that will be inserted as children
+on the top-level element. (The top-level element is in the html file, and specified in 
+`seed::App::build.mount()`, or as a default, `app`).
+ It may composed into sub-functions, which can be thought of like components in other frameworks. 
+ The first parameter, which we will call `state` in our examples, is used for updating state 
+ outside of the message system, and will not be used in these examples.
 
 Example:
 ```rust
-fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
+fn view(state: seed::App<Msg, Model>, model: &Model) -> Vec<El<Msg>> {
     div![ "Let there be light" ]
 }
 ```
@@ -250,7 +255,7 @@ respectively.
 
 Example:
 ```rust
-fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
+fn view(state: seed::App<Msg, Model>, model: &Model) -> Vec<El<Msg>> {
     let things = vec![ h4![ "thing1" ], h4![ "thing2" ] ];
 
     div![ attrs!{At::Class => "hardly-any"}, 
@@ -338,7 +343,7 @@ attributes.add(At::Class, "truckloads");
 
 Example of the style tag, and how you can use pattern-matching in views:
 ```rust
-fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
+fn view(state: seed::App<Msg, Model>, model: &Model) -> Vec<El<Msg>> {
     div![ style!{
         "display" => "grid";
         "grid-template-columns" => "auto";
@@ -394,7 +399,7 @@ state based on url (See the `Routing` section)
 
 And must must complete with these methods: `.finish().run()`.
 
-This must be wrapped in a function named `render`, with the #[wasm_bindgen] invocation above.
+This must be wrapped in a function named `render`, with the `#[wasm_bindgen]` invocation above.
  (More correctly, its name must match the func in this line in your html file):
 ```javascript
 function run() {
