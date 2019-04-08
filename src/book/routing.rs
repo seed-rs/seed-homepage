@@ -53,22 +53,28 @@ r#"
 <a class="sourceLine" id="cb5-6" title="6">    ChangeGuidePage(<span class="dt">u32</span>),</a>
 <a class="sourceLine" id="cb5-7" title="7"><span class="op">}</span></a>
 <a class="sourceLine" id="cb5-8" title="8"></a>
-<a class="sourceLine" id="cb5-9" title="9"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Model <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-10" title="10">    <span class="kw">match</span> msg <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-11" title="11">        <span class="pp">Msg::</span>RoutePage(page) =&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-12" title="12">            <span class="pp">seed::</span>push_route(<span class="pp">vec!</span><span class="op">[</span>page<span class="op">]</span>);</a>
-<a class="sourceLine" id="cb5-13" title="13">            update(<span class="pp">Msg::</span>ChangePage(page), model)</a>
-<a class="sourceLine" id="cb5-14" title="14">        <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb5-15" title="15">        <span class="pp">Msg::</span>RouteGuidePage(guide_page) =&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-16" title="16">            <span class="pp">seed::</span>push_route(<span class="pp">vec!</span><span class="op">[</span><span class="st">&quot;guide&quot;</span>, guide_page<span class="op">]</span>);</a>
-<a class="sourceLine" id="cb5-17" title="17">            update(<span class="pp">Msg::</span>ChangeGuidePage(guide_page), model)</a>
-<a class="sourceLine" id="cb5-18" title="18">        <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb5-19" title="19">        <span class="co">// This is separate, because nagivating the route triggers state updates, which would</span></a>
-<a class="sourceLine" id="cb5-20" title="20">        <span class="co">// trigger an additional push state.</span></a>
-<a class="sourceLine" id="cb5-21" title="21">        <span class="pp">Msg::</span>ChangePage(page) =&gt; Render(Model <span class="op">{</span>page, ..model<span class="op">}</span>),</a>
-<a class="sourceLine" id="cb5-22" title="22">        <span class="pp">Msg::</span>ChangeGuidePage(guide_page) =&gt; Render(Model <span class="op">{</span>guide_page, page: <span class="pp">Page::</span>Guide, ..model<span class="op">}</span>),</a>
-<a class="sourceLine" id="cb5-23" title="23">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb5-24" title="24"><span class="op">}</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-9" title="9"><span class="kw">fn</span> set_guide_page(guide_page: Page, model: &amp;<span class="kw">mut</span> Model) <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-10" title="10">    model.page = <span class="pp">Page::</span>Guide;</a>
+<a class="sourceLine" id="cb5-11" title="11">    model.guide_page = guide_page;</a>
+<a class="sourceLine" id="cb5-12" title="12"><span class="op">}</span></a>
+<a class="sourceLine" id="cb5-13" title="13"></a>
+<a class="sourceLine" id="cb5-14" title="14"><span class="kw">fn</span> update(msg: Msg, model: &amp;<span class="kw">mut</span> Model) -&gt; Update&lt;Msg&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-15" title="15">    <span class="kw">match</span> msg <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-16" title="16">        <span class="pp">Msg::</span>RoutePage(page) =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-17" title="17">            <span class="pp">seed::</span>push_route(<span class="pp">vec!</span><span class="op">[</span>page<span class="op">]</span>);</a>
+<a class="sourceLine" id="cb5-18" title="18">            update(<span class="pp">Msg::</span>ChangePage(page), model)</a>
+<a class="sourceLine" id="cb5-19" title="19">        <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb5-20" title="20">        <span class="pp">Msg::</span>RouteGuidePage(guide_page) =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-21" title="21">            <span class="pp">seed::</span>push_route(<span class="pp">vec!</span><span class="op">[</span><span class="st">&quot;guide&quot;</span>, guide_page<span class="op">]</span>);</a>
+<a class="sourceLine" id="cb5-22" title="22">            update(<span class="pp">Msg::</span>ChangeGuidePage(guide_page), model)</a>
+<a class="sourceLine" id="cb5-23" title="23">        <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb5-24" title="24">        <span class="co">// This is separate, because nagivating the route triggers state updates, which would</span></a>
+<a class="sourceLine" id="cb5-25" title="25">        <span class="co">// trigger an additional push state.</span></a>
+<a class="sourceLine" id="cb5-26" title="26">        <span class="pp">Msg::</span>ChangePage(page) =&gt; Render(Model <span class="op">{</span>page, ..model<span class="op">}</span>),</a>
+<a class="sourceLine" id="cb5-27" title="27">        <span class="pp">Msg::</span>ChangeGuidePage(guide_page) =&gt; Render(Model <span class="op">{</span>guide_page, page: <span class="pp">Page::</span>Guide, ..model<span class="op">}</span>),</a>
+<a class="sourceLine" id="cb5-28" title="28">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb5-29" title="29">    Render.into()</a>
+<a class="sourceLine" id="cb5-30" title="30"><span class="op">}</span></a></code></pre></div>
 <p>Notice how the <code>Route</code> messages above call <a href="https://docs.rs/seed/0.3.1/seed/routing/fn.push_route.html">seed::push_route</a>, and the <code>Change</code> messages are called in the <code>routes</code> function, and are recursively called in the update function. <code>push_route</code> accepts a single parameter: a <code>Url</code> struct, which you can create with a struct literal, or <a href="https://docs.rs/seed/0.3.1/seed/routing/struct.Url.html#method.new">seed::Url::new</a>. Alternatively, you can pass a <code>Vec&lt;String&gt;</code> / <code>Vec&lt;&amp;str&gt;</code>, representing the path.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb6-1" title="1"><span class="pp">seed::</span>push_route(</a>
 <a class="sourceLine" id="cb6-2" title="2">    <span class="pp">seed::Url::</span>new(<span class="pp">vec!</span><span class="op">[</span><span class="st">&quot;myurl&quot;</span><span class="op">]</span>)</a>

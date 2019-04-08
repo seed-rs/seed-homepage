@@ -3,50 +3,73 @@ r#"
 <h1 id="http-requests-fetch-and-updating-state">Http requests (fetch), and updating state</h1>
 <p>We use the <a href="https://docs.rs/seed/0.3.1/seed/fetch/struct.Request.html">seed::Request</a> struct to make HTTP requests in the browser, wrapping the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>. To use this, we need to include <code>futures = "^0.1.20"</code> in <code>Cargo.toml</code>. The <a href="https://docs.rs/seed/0.3.1/seed/fetch/index.html">Fetch module</a> is standalone: It can be used with any wasm-bindgen program.</p>
 <p>Example, where we update the state on initial load:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">use</span> <span class="pp">seed::</span><span class="op">{</span>Request, Method, spawn_local<span class="op">}</span></a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw">use</span> <span class="pp">futures::</span>Future;</a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw">use</span> <span class="pp">serde::</span><span class="op">{</span>Serialize, Deserialize<span class="op">}</span>;</a>
-<a class="sourceLine" id="cb1-4" title="4"></a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">,</span> Serialize<span class="at">,</span> Deserialize<span class="at">)]</span></a>
-<a class="sourceLine" id="cb1-6" title="6"><span class="kw">pub</span> <span class="kw">struct</span> Commit <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-7" title="7">    <span class="kw">pub</span> sha: <span class="dt">String</span>,</a>
-<a class="sourceLine" id="cb1-8" title="8"><span class="op">}</span></a>
-<a class="sourceLine" id="cb1-9" title="9"></a>
-<a class="sourceLine" id="cb1-10" title="10"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">,</span> Serialize<span class="at">,</span> Deserialize<span class="at">)]</span></a>
-<a class="sourceLine" id="cb1-11" title="11"><span class="kw">pub</span> <span class="kw">struct</span> Branch <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-12" title="12">    <span class="kw">pub</span> name: <span class="dt">String</span>,</a>
-<a class="sourceLine" id="cb1-13" title="13">    <span class="kw">pub</span> commit: Commit,</a>
-<a class="sourceLine" id="cb1-14" title="14"><span class="op">}</span></a>
-<a class="sourceLine" id="cb1-15" title="15"></a>
-<a class="sourceLine" id="cb1-16" title="16"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
-<a class="sourceLine" id="cb1-17" title="17"><span class="kw">enum</span> Msg <span class="op">{</span></a>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">use</span> <span class="pp">futures::</span>Future;</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">use</span> <span class="pp">serde::</span><span class="op">{</span>Serialize, Deserialize<span class="op">}</span>;</a>
+<a class="sourceLine" id="cb1-3" title="3"></a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">,</span> Serialize<span class="at">,</span> Deserialize<span class="at">)]</span></a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="kw">pub</span> <span class="kw">struct</span> Commit <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-6" title="6">    <span class="kw">pub</span> sha: <span class="dt">String</span>,</a>
+<a class="sourceLine" id="cb1-7" title="7"><span class="op">}</span></a>
+<a class="sourceLine" id="cb1-8" title="8"></a>
+<a class="sourceLine" id="cb1-9" title="9"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">,</span> Serialize<span class="at">,</span> Deserialize<span class="at">)]</span></a>
+<a class="sourceLine" id="cb1-10" title="10"><span class="kw">pub</span> <span class="kw">struct</span> Branch <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-11" title="11">    <span class="kw">pub</span> name: <span class="dt">String</span>,</a>
+<a class="sourceLine" id="cb1-12" title="12">    <span class="kw">pub</span> commit: Commit,</a>
+<a class="sourceLine" id="cb1-13" title="13"><span class="op">}</span></a>
+<a class="sourceLine" id="cb1-14" title="14"></a>
+<a class="sourceLine" id="cb1-15" title="15"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
+<a class="sourceLine" id="cb1-16" title="16"><span class="kw">enum</span> Msg <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-17" title="17">    GetData,</a>
 <a class="sourceLine" id="cb1-18" title="18">    Replace(Branch),</a>
-<a class="sourceLine" id="cb1-19" title="19"><span class="op">}</span></a>
-<a class="sourceLine" id="cb1-20" title="20"></a>
-<a class="sourceLine" id="cb1-21" title="21"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Msg, Model&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-22" title="22">    <span class="kw">match</span> msg <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-23" title="23">        Render(<span class="pp">Msg::</span>Replace(data) =&gt; Model <span class="op">{</span>data<span class="op">}</span>),</a>
-<a class="sourceLine" id="cb1-24" title="24">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb1-25" title="25"><span class="op">}</span></a>
-<a class="sourceLine" id="cb1-26" title="26"></a>
-<a class="sourceLine" id="cb1-27" title="27"><span class="kw">fn</span> get_data(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;) -&gt; <span class="kw">impl</span> Future&lt;Item = (), Error = JsValue&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-28" title="28">    <span class="kw">let</span> url = <span class="st">&quot;https://api.github.com/repos/david-oconnor/seed/branches/master&quot;</span>;</a>
-<a class="sourceLine" id="cb1-29" title="29"></a>
-<a class="sourceLine" id="cb1-30" title="30">    <span class="pp">Request::</span>new(url)</a>
-<a class="sourceLine" id="cb1-31" title="31">        .method(<span class="pp">Method::</span>Get)</a>
-<a class="sourceLine" id="cb1-32" title="32">        .fetch_json()</a>
-<a class="sourceLine" id="cb1-33" title="33">        .map(<span class="kw">move</span> |json| <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-34" title="34">            state.update(<span class="pp">Msg::</span>Replace(json));</a>
-<a class="sourceLine" id="cb1-35" title="35">        <span class="op">}</span>)</a>
-<a class="sourceLine" id="cb1-36" title="36"><span class="op">}</span></a>
-<a class="sourceLine" id="cb1-37" title="37"></a>
-<a class="sourceLine" id="cb1-38" title="38"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: &amp;Model) -&gt; <span class="dt">Vec</span>&lt;El&lt;Msg&gt;&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-39" title="39">    <span class="pp">div!</span><span class="op">[</span> <span class="pp">format!</span>(<span class="st">&quot;name: {}, sha: {}&quot;</span>, model.data.name, model.data.commit.sha),</a>
-<a class="sourceLine" id="cb1-40" title="40">        did_mount(<span class="kw">move</span> |_| spawn_local(get_data(state.clone())))</a>
-<a class="sourceLine" id="cb1-41" title="41">     <span class="op">]</span></a>
-<a class="sourceLine" id="cb1-42" title="42"><span class="op">}</span></a></code></pre></div>
-<p>When the top-level element is rendered for the first time (<code>did_mount</code>), we make a <code>get</code> request by passing the url, options like headers (In this example, we don't use any), and a callback to be executed once the data's received. In this case, we update our state by sending a message which contains the data to <code>state.update</code>. Note the signature of our get_data func, and that we always wrap calls to <code>seed::Request</code> with <code>seed::spawn_local</code>.</p>
-<p>We've set up nested structs that have fields matching the names of the JSON fields of the response, which <code>Serde</code> deserializes the response into, through the <code>fetch_json</code> method of <code>Request</code>. Note that even though more data than what's contained in our Branch struct is included in the response, Serde automatically applies only the info matching our struct's fields. In order to update our state outside of a normal event, we used <code>did_mount</code>.</p>
+<a class="sourceLine" id="cb1-19" title="19">    OnFetchErr(JsValue),</a>
+<a class="sourceLine" id="cb1-20" title="20"><span class="op">}</span></a>
+<a class="sourceLine" id="cb1-21" title="21"></a>
+<a class="sourceLine" id="cb1-22" title="22"><span class="kw">fn</span> update(msg: Msg, model: &amp;<span class="kw">mut</span> Model) -&gt; Update&lt;Msg&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-23" title="23">    <span class="kw">match</span> msg <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-24" title="24">        <span class="pp">Msg::</span>GetData =&gt; <span class="pp">Update::</span>with_future_msg(get_data()).skip(),</a>
+<a class="sourceLine" id="cb1-25" title="25">        </a>
+<a class="sourceLine" id="cb1-26" title="26">        <span class="pp">Msg::</span>Replace(data) =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-27" title="27">            model.data = data;</a>
+<a class="sourceLine" id="cb1-28" title="28">            Render.into()</a>
+<a class="sourceLine" id="cb1-29" title="29">        <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb1-30" title="30">        <span class="pp">Msg::</span>OnFetchErr(err) =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-31" title="31">            <span class="pp">log!</span>(<span class="pp">format!</span>(<span class="st">&quot;Fetch error: {:?}&quot;</span>, err));</a>
+<a class="sourceLine" id="cb1-32" title="32">            Skip.into()</a>
+<a class="sourceLine" id="cb1-33" title="33">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb1-34" title="34">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb1-35" title="35"><span class="op">}</span></a>
+<a class="sourceLine" id="cb1-36" title="36"></a>
+<a class="sourceLine" id="cb1-37" title="37"><span class="kw">fn</span> get_data() -&gt; <span class="kw">impl</span> Future&lt;Item = Msg, Error = Msg&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-38" title="38">    <span class="kw">let</span> url = <span class="st">&quot;https://api.github.com/repos/david-oconnor/seed/branches/master&quot;</span>;</a>
+<a class="sourceLine" id="cb1-39" title="39"></a>
+<a class="sourceLine" id="cb1-40" title="40">    <span class="pp">seed::Request::</span>new(url)</a>
+<a class="sourceLine" id="cb1-41" title="41">        .method(<span class="pp">seed::Method::</span>Get)</a>
+<a class="sourceLine" id="cb1-42" title="42">        .fetch_json()</a>
+<a class="sourceLine" id="cb1-43" title="43">        .map(<span class="pp">Msg::</span>Replace)</a>
+<a class="sourceLine" id="cb1-44" title="44">        .map_err(<span class="pp">Msg::</span>OnFetchErr)</a>
+<a class="sourceLine" id="cb1-45" title="45"><span class="op">}</span></a>
+<a class="sourceLine" id="cb1-46" title="46"></a>
+<a class="sourceLine" id="cb1-47" title="47">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</a>
+<a class="sourceLine" id="cb1-48" title="48"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: &amp;Model) -&gt; <span class="dt">Vec</span>&lt;El&lt;Msg&gt;&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-49" title="49">    <span class="pp">div!</span><span class="op">[</span> <span class="pp">format!</span>(<span class="st">&quot;name: {}, sha: {}&quot;</span>, model.data.name, model.data.commit.sha),</a>
+<a class="sourceLine" id="cb1-50" title="50">        did_mount(<span class="kw">move</span> |_| spawn_local(get_data(state.clone())))</a>
+<a class="sourceLine" id="cb1-51" title="51">     <span class="op">]</span></a>
+<a class="sourceLine" id="cb1-52" title="52"><span class="op">}</span></a>
+<a class="sourceLine" id="cb1-53" title="53">=======</a>
+<a class="sourceLine" id="cb1-54" title="54"><span class="co">// ...</span></a>
+<a class="sourceLine" id="cb1-55" title="55"></a>
+<a class="sourceLine" id="cb1-56" title="56"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
+<a class="sourceLine" id="cb1-57" title="57"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-58" title="58">    <span class="kw">let</span> state = <span class="pp">seed::App::</span>build(<span class="pp">Model::</span><span class="kw">default</span>(), update, view)</a>
+<a class="sourceLine" id="cb1-59" title="59">        .finish()</a>
+<a class="sourceLine" id="cb1-60" title="60">        .run();</a>
+<a class="sourceLine" id="cb1-61" title="61"></a>
+<a class="sourceLine" id="cb1-62" title="62">    state.update(<span class="pp">Msg::</span>GetData);</a>
+<a class="sourceLine" id="cb1-63" title="63"></a>
+<a class="sourceLine" id="cb1-64" title="64">&gt;&gt;&gt;&gt;&gt;&gt;&gt; 120884dccd13e179489134a53d4d28393bd19370</a></code></pre></div>
+<p>On page load, we trigger an update using <code>Msg::GetData</code>, which points the <code>update</code> function to use the <code>Update::with_future_msg</code> method. This allows state to be update asynchronosly, when the request is complete. <code>skip()</code> is a convenience method that sets <code>Update::ShouldRender</code> to <code>Skip</code>; sending the request doesn't trigger a render. We use <code>Request::map</code> to point to an enum that handles successful retrieval, and wraps the struct of the response. In this case, <code>Msg::Replace</code>. We use <code>Request::map_err</code> in a similar way to handle http failures; the enum it points to wraps a <code>wasm_bindgen::JsValue</code>.</p>
+<p>This a <code>get</code> request by passing the url, options like headers (In this example, we don't use any), and a callback to be executed once the data's received.</p>
+<p>We've set up nested structs that have fields matching the names of the JSON fields of the response, which <code>Serde</code> deserializes the response into, through the <code>fetch_json</code> method of <code>Request</code>. Note that even though more data than what's contained in our Branch struct is included in the response, Serde automatically applies only the info matching our struct's fields.</p>
 <p>If we wish to trigger this update from a normal event instead of on load, we can do something like this:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="kw">enum</span> Msg <span class="op">{</span></a>

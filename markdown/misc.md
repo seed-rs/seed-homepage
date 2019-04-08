@@ -59,7 +59,7 @@ it normally as html. Note that it does not support syntax highlighting. You can 
 
 Example:
 ```rust
-fn view(app: seed::App<Msg, Model>, model: Model) -> El<Msg> {
+fn view(model: Model) -> El<Msg> {
 
     let markdown = 
 "
@@ -114,7 +114,7 @@ Inline SVGs can be rendered using `El::from_html`, or by using element-creation 
 `path!` etc. Setting the `xmlns` attribute isn't required; it's set automatically when using the macro. Example:
 
 ```rust
-fn view(_state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
+fn view(model: &Model) -> El<Msg> {
     div![
         svg![
             attrs!{

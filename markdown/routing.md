@@ -93,7 +93,12 @@ enum Msg {
     ChangeGuidePage(u32),
 }
 
-fn update(msg: Msg, model: Model) -> Model {
+fn set_guide_page(guide_page: Page, model: &mut Model) {
+    model.page = Page::Guide;
+    model.guide_page = guide_page;
+}
+
+fn update(msg: Msg, model: &mut Model) -> Update<Msg> {
     match msg {
         Msg::RoutePage(page) => {
             seed::push_route(vec![page]);
@@ -108,6 +113,7 @@ fn update(msg: Msg, model: Model) -> Model {
         Msg::ChangePage(page) => Render(Model {page, ..model}),
         Msg::ChangeGuidePage(guide_page) => Render(Model {guide_page, page: Page::Guide, ..model}),
     }
+    Render.into()
 }
 ```
 

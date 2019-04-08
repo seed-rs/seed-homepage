@@ -211,6 +211,7 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
 fn changelog() -> El<Msg> {
     let mut entries = span![ El::from_markdown(
 "
+
 ## v0.3.1
 - Top level view functions now return `Vec<El<Ms>>` instead of `El<Ms>`, mounted directly to
  the mount point. (Breaking)
@@ -226,6 +227,8 @@ through the view func. (breaking)
 - Internal code cleanup
 - Added commented-out release command to example build files
 - Added more tests
+=======
+quit()
 
 ## v0.2.10
 - Routing can be triggered by clicking any element containing a `Href` attribute
@@ -326,7 +329,6 @@ fn footer() -> El<Msg> {
 
 fn view(model: &Model) -> Vec<El<Msg>> {
     let version = "0.3.1";
-
     vec![
         div![
             style!{
