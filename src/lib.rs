@@ -227,8 +227,6 @@ through the view func. (breaking)
 - Internal code cleanup
 - Added commented-out release command to example build files
 - Added more tests
-=======
-quit()
 
 ## v0.2.10
 - Routing can be triggered by clicking any element containing a `Href` attribute
