@@ -263,28 +263,12 @@ attributes.add(At::Class, "truckloads");
 
 Example of the style tag, and how you can use pattern-matching in views:
 ```rust
-<<<<<<< HEAD
-fn view(state: seed::App<Msg, Model>, model: &Model) -> Vec<El<Msg>> {
+fn view(model: &Model) -> Vec<El<Msg>> {
     vec![
         div![ style!{
             "display" => "grid";
             "grid-template-columns" => "auto";
             "grid-template-rows" => "100px auto 100px"
-=======
-fn view(model: &Model) -> El<Msg> {
-    div![ style!{
-        "display" => "grid";
-        "grid-template-columns" => "auto";
-        "grid-template-rows" => "100px auto 100px"
-        },
-        section![ style!{"grid-row" => "1 / 2"},
-            header(),
-        ],
-        section![ attrs!{"grid-row" => "2 / 3"},
-            match model.page {
-                Page::Guide => guide(),
-                Page::Changelog => changelog(),
->>>>>>> 120884dccd13e179489134a53d4d28393bd19370
             },
             section![ style!{"grid-row" => "1 / 2"},
                 header(),

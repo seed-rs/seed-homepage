@@ -144,44 +144,28 @@ r#"
 <div class="sourceCode" id="cb13"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">let</span> <span class="kw">mut</span> attributes = <span class="pp">attrs!</span><span class="op">{}</span>;</a>
 <a class="sourceLine" id="cb13-2" title="2">attributes.add(<span class="pp">At::</span>Class, <span class="st">&quot;truckloads&quot;</span>);</a></code></pre></div>
 <p>Example of the style tag, and how you can use pattern-matching in views:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb14-1" title="1">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</a>
-<a class="sourceLine" id="cb14-2" title="2"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: &amp;Model) -&gt; <span class="dt">Vec</span>&lt;El&lt;Msg&gt;&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb14-3" title="3">    <span class="pp">vec!</span><span class="op">[</span></a>
-<a class="sourceLine" id="cb14-4" title="4">        <span class="pp">div!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span></a>
-<a class="sourceLine" id="cb14-5" title="5">            <span class="st">&quot;display&quot;</span> =&gt; <span class="st">&quot;grid&quot;</span>;</a>
-<a class="sourceLine" id="cb14-6" title="6">            <span class="st">&quot;grid-template-columns&quot;</span> =&gt; <span class="st">&quot;auto&quot;</span>;</a>
-<a class="sourceLine" id="cb14-7" title="7">            <span class="st">&quot;grid-template-rows&quot;</span> =&gt; <span class="st">&quot;100px auto 100px&quot;</span></a>
-<a class="sourceLine" id="cb14-8" title="8">=======</a>
-<a class="sourceLine" id="cb14-9" title="9"><span class="kw">fn</span> view(model: &amp;Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb14-10" title="10">    <span class="pp">div!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span></a>
-<a class="sourceLine" id="cb14-11" title="11">        <span class="st">&quot;display&quot;</span> =&gt; <span class="st">&quot;grid&quot;</span>;</a>
-<a class="sourceLine" id="cb14-12" title="12">        <span class="st">&quot;grid-template-columns&quot;</span> =&gt; <span class="st">&quot;auto&quot;</span>;</a>
-<a class="sourceLine" id="cb14-13" title="13">        <span class="st">&quot;grid-template-rows&quot;</span> =&gt; <span class="st">&quot;100px auto 100px&quot;</span></a>
-<a class="sourceLine" id="cb14-14" title="14">        <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb14-15" title="15">        <span class="pp">section!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;1 / 2&quot;</span><span class="op">}</span>,</a>
-<a class="sourceLine" id="cb14-16" title="16">            header(),</a>
-<a class="sourceLine" id="cb14-17" title="17">        <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb14-18" title="18">        <span class="pp">section!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;2 / 3&quot;</span><span class="op">}</span>,</a>
-<a class="sourceLine" id="cb14-19" title="19">            <span class="kw">match</span> model.page <span class="op">{</span></a>
-<a class="sourceLine" id="cb14-20" title="20">                <span class="pp">Page::</span>Guide =&gt; guide(),</a>
-<a class="sourceLine" id="cb14-21" title="21">                <span class="pp">Page::</span>Changelog =&gt; changelog(),</a>
-<a class="sourceLine" id="cb14-22" title="22">&gt;&gt;&gt;&gt;&gt;&gt;&gt; 120884dccd13e179489134a53d4d28393bd19370</a>
-<a class="sourceLine" id="cb14-23" title="23">            <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb14-24" title="24">            <span class="pp">section!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;1 / 2&quot;</span><span class="op">}</span>,</a>
-<a class="sourceLine" id="cb14-25" title="25">                header(),</a>
-<a class="sourceLine" id="cb14-26" title="26">            <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb14-27" title="27">            <span class="pp">section!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;2 / 3&quot;</span><span class="op">}</span>,</a>
-<a class="sourceLine" id="cb14-28" title="28">                <span class="kw">match</span> model.page <span class="op">{</span></a>
-<a class="sourceLine" id="cb14-29" title="29">                    <span class="pp">Page::</span>Guide =&gt; guide(),</a>
-<a class="sourceLine" id="cb14-30" title="30">                    <span class="pp">Page::</span>Changelog =&gt; changelog(),</a>
-<a class="sourceLine" id="cb14-31" title="31">                <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb14-32" title="32">            <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb14-33" title="33">            <span class="pp">section!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;3 / 4&quot;</span><span class="op">}</span>,</a>
-<a class="sourceLine" id="cb14-34" title="34">                footer()</a>
-<a class="sourceLine" id="cb14-35" title="35">            <span class="op">]</span></a>
-<a class="sourceLine" id="cb14-36" title="36">        <span class="op">]</span></a>
-<a class="sourceLine" id="cb14-37" title="37">    <span class="op">]</span></a>
-<a class="sourceLine" id="cb14-38" title="38"><span class="op">}</span></a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb14-1" title="1"><span class="kw">fn</span> view(model: &amp;Model) -&gt; <span class="dt">Vec</span>&lt;El&lt;Msg&gt;&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb14-2" title="2">    <span class="pp">vec!</span><span class="op">[</span></a>
+<a class="sourceLine" id="cb14-3" title="3">        <span class="pp">div!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span></a>
+<a class="sourceLine" id="cb14-4" title="4">            <span class="st">&quot;display&quot;</span> =&gt; <span class="st">&quot;grid&quot;</span>;</a>
+<a class="sourceLine" id="cb14-5" title="5">            <span class="st">&quot;grid-template-columns&quot;</span> =&gt; <span class="st">&quot;auto&quot;</span>;</a>
+<a class="sourceLine" id="cb14-6" title="6">            <span class="st">&quot;grid-template-rows&quot;</span> =&gt; <span class="st">&quot;100px auto 100px&quot;</span></a>
+<a class="sourceLine" id="cb14-7" title="7">            <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb14-8" title="8">            <span class="pp">section!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;1 / 2&quot;</span><span class="op">}</span>,</a>
+<a class="sourceLine" id="cb14-9" title="9">                header(),</a>
+<a class="sourceLine" id="cb14-10" title="10">            <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb14-11" title="11">            <span class="pp">section!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;2 / 3&quot;</span><span class="op">}</span>,</a>
+<a class="sourceLine" id="cb14-12" title="12">                <span class="kw">match</span> model.page <span class="op">{</span></a>
+<a class="sourceLine" id="cb14-13" title="13">                    <span class="pp">Page::</span>Guide =&gt; guide(),</a>
+<a class="sourceLine" id="cb14-14" title="14">                    <span class="pp">Page::</span>Changelog =&gt; changelog(),</a>
+<a class="sourceLine" id="cb14-15" title="15">                <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb14-16" title="16">            <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb14-17" title="17">            <span class="pp">section!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;3 / 4&quot;</span><span class="op">}</span>,</a>
+<a class="sourceLine" id="cb14-18" title="18">                footer()</a>
+<a class="sourceLine" id="cb14-19" title="19">            <span class="op">]</span></a>
+<a class="sourceLine" id="cb14-20" title="20">        <span class="op">]</span></a>
+<a class="sourceLine" id="cb14-21" title="21">    <span class="op">]</span></a>
+<a class="sourceLine" id="cb14-22" title="22"><span class="op">}</span></a></code></pre></div>
 <p>We can combine Attrs and Style instances using their <code>merge</code> methods, which take an &amp;Attrs and &amp;Style respectively. This can be used to compose styles from reusable parts. Example:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb15-1" title="1"><span class="kw">fn</span> a_component() -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb15-2" title="2">    <span class="kw">let</span> base_style = !style<span class="op">{</span><span class="st">&quot;color&quot;</span> =&gt; <span class="st">&quot;lavender&quot;</span><span class="op">}</span>;</a>

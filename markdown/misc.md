@@ -59,7 +59,7 @@ it normally as html. Note that it does not support syntax highlighting. You can 
 
 Example:
 ```rust
-fn view(model: Model) -> El<Msg> {
+fn view(model: &Model) -> Vec<El<Msg>> {
 
     let markdown = 
 "
@@ -79,7 +79,7 @@ and just [learn to code](https://play.rust-lang.org/).
 "
 ;
     
-    div![
+    vec![
         El::from_markdown(markdown) 
         El::from_html(html) 
     ]
@@ -91,13 +91,15 @@ and just [learn to code](https://play.rust-lang.org/).
 You can use `seed::document` and `seed::window` to access the `web_sys` document
 and window functions. Example:
 ```rust
-fn view(state: seed::App<Msg, Model>, model: Model) -> Vec<El<Msg>> {
-    button![ 
-        simple_ev("click", Msg::Increment), 
-        format!("Hello, World × {}", model.val),
-        did_mount(|_| {
-            seed::document().set_title("New title")
-        })
+fn view(model: &Model) -> Vec<El<Msg>> {
+    vec![
+        button![ 
+            simple_ev("click", Msg::Increment), 
+            format!("Hello, World × {}", model.val),
+            did_mount(|_| {
+                seed::document().set_title("New title")
+            })
+        ]
     ]
 }
 ```
@@ -114,8 +116,8 @@ Inline SVGs can be rendered using `El::from_html`, or by using element-creation 
 `path!` etc. Setting the `xmlns` attribute isn't required; it's set automatically when using the macro. Example:
 
 ```rust
-fn view(model: &Model) -> El<Msg> {
-    div![
+fn view(model: &Model) -> Vec<El<Msg>> {
+    vec![
         svg![
             attrs!{
                 At::Width => "100%";

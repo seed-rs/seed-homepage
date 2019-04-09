@@ -134,7 +134,7 @@ fn success_level(clicks: i32) -> El<Msg> {
 }
 
 /// The top-level component we pass to the virtual dom.
-fn view(state: seed::App<Msg, Model>, model: &Model) -> Vec<El<Msg>> {
+fn view(model: &Model) -> Vec<El<Msg>> {
     let plural = if model.count == 1 {""} else {"s"};
 
     // Attrs, Style, Events, and children may be defined separately.
