@@ -1,16 +1,7 @@
 ## Building a release version
 The build commands in the Building and Running section are intended
 for development: They produce large `.wasm` file sizes, and unoptimized performance.
-To build a release version, append `--release` to the `cargo build` command,
-and point your `wasm-bindgen` command to the `release` subdirectory vice `debug`.
-Example:
-```
-cargo build --target wasm32-unknown-unknown --release
-```
-and 
-```
-wasm-bindgen target/wasm32-unknown-unknown/release/appname.wasm --no modules --out-dir ./pkg --out-name package
-```
+To build a release version, run `cargo make all_release` instead of `cargo make all`.
 
 ## Debugging
 There are two categories of error message you may receive: Compiler errors, and panics.

@@ -5,10 +5,9 @@ r#"
 <p>This framework requires you to install <a href="https://www.rust-lang.org/tools/install">Rust</a>.</p>
 <p>You'll need a recent version of Rust: <code>rustup update</code></p>
 <p>The wasm32-unknown-unknown target: <code>rustup target add wasm32-unknown-unknown</code></p>
-<p>And wasm-bindgen: <code>cargo install wasm-bindgen-cli</code></p>
-<p>If you run into errors while installing <code>wasm-bindgen-cli</code>, you may need to install C++ build tools. On linux, run <code>sudo apt install build-essential</code>. On Windows, download and install <a href="https://visualstudio.microsoft.com/downloads/">Visual Studio 2017</a>; when asked in the installer, include the C++ workload.</p>
+<p>And Cargo make: <code>cargo install cargo-make</code></p>
 <h2 id="the-theoretical-minimum">The theoretical minimum</h2>
-<p>To start, clone <a href="https://github.com/David-OConnor/seed-quickstart">The quickstart repo</a>, run <code>build.sh</code> or <code>build.ps1</code> in a terminal, then start a dev server that supports WASM. For example, with <a href="https://www.python.org/downloads/">Python</a> installed, run <code>python serve.py</code>. (Linux users may need to run <code>python3 serve.py</code>.) Once you change your package name, you'll need to tweak the build script, as described below.</p>
+<p>To start, clone <a href="https://github.com/David-OConnor/seed-quickstart">The quickstart repo</a>, run <code>cargo make all</code> in a terminal to build the app, and <code>cargo make serve</code> to start a dev server on <code>127.0.0.0:8000</code>.</p>
 <h2 id="a-little-deeper">A little deeper</h2>
 <p>Alternatively, create a new lib with Cargo: <code>cargo new --lib appname</code>. Here and everywhere it appears in this guide, <code>appname</code> should be replaced with the name of your app.</p>
 <p>If not using the quickstart repo, create an Html file with a body that contains this:</p>
@@ -144,16 +143,9 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <a class="sourceLine" id="cb3-98" title="98"><span class="op">}</span></a></code></pre></div>
 <p>For a truly minimimal example, see <a href="https://github.com/David-OConnor/seed-quickstart/blob/master/src/lib.rs">lib.rs in the quickstart repo</a></p>
 <h2 id="building-and-running">Building and running</h2>
-<p>To build your app, create a <code>pkg</code> subdirectory, and run the following two commands:</p>
-<pre><code>cargo build --target wasm32-unknown-unknown</code></pre>
-<p>and</p>
-<pre><code>wasm-bindgen target/wasm32-unknown-unknown/debug/appname.wasm --no modules --out-dir ./pkg --out-name package</code></pre>
-<p>where <code>appname</code> is replaced with your app's name. This compiles your code in the target folder, and populates the pkg folder with your WASM module, a Typescript definitions file, and a JS file used to link your module from HTML.</p>
-<p>You may wish to create a build script with these two lines. (<code>build.sh</code> for Linux; <code>build.ps1</code> for Windows). The quickstart repo includes these, but you'll still need to do the rename. You can then use <code>./build.sh</code> or <code>.\build.ps1</code> If you run into permission errors on <code>build.sh</code>, try this command to allow executing the file:<code>chmod +x build.sh</code>. If you run into persmission errors on <code>build.ps1</code>, open Powershell as an administrator, and enter this command: <code>Set-ExecutionPolicy RemoteSigned</code>.</p>
-<p>For development, you can view your app using a shimmed Python dev server, as described above. (Set up <a href="https://github.com/David-OConnor/seed-quickstart/blob/master/serve.py">this mime-type shim</a> from the quickstart repo, and run <code>python serve.py</code>).</p>
+<p>To build your app run <code>cargo make all</code>, and to host on a dev server, run <code>cargo make serve</code>.</p>
 <p>For a more robust starting setup, check out Martin Kavik's <a href="https://github.com/MartinKavik/seed-quickstart-webpack">seed-quickstart-webpack repo</a>.</p>
-<p>In the future, the build script and commands above may be replaced by <a href="https://github.com/rustwasm/wasm-pack">wasm-pack</a>. You may use it now if you wish, but may run into issues running the examples, enabling no-modules mode, and syntax-highlighting in the compile logs.</p>
 <h2 id="running-included-examples">Running included examples</h2>
-<p>To run an example located in the <a href="https://github.com/David-OConnor/seed/tree/master/examples">examples folder</a>, navigate to that folder in a terminal, run the build script for your system (<code>build.sh</code> or <code>build.ps1</code>), then start a dev server as described above. Note that if you copy an example to a separate folder, you'll need to edit its <code>Cargo.toml</code> to point to the package on <a href="https://crates.io">crates.io</a> instead of locally: Ie replace <code>seed = { path = "../../"</code> with <code>seed = "^0.2.4"</code>, and in the build script, remove the leading <code>../../</code> on the second line.</p>
+<p>To run an example located in the <a href="https://github.com/David-OConnor/seed/tree/master/examples">examples folder</a>, run <code>cargo make e_examplename</code>, where you replace <code>examplename</code> with the example name. Eg: <code>cargo make e_counter</code>.</p>
 "#.into()
 }
