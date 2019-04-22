@@ -212,10 +212,14 @@ fn changelog() -> El<Msg> {
     let mut entries = span![ El::from_markdown(
 "
 
+## v0.3.2
+- Top level view functions can now return `Vec<El<Ms>>`, `El<Ms>`, or something else implementing
+the new ElContainer trait
+
 ## v0.3.1
 - Top level view functions now return `Vec<El<Ms>>` instead of `El<Ms>`, mounted directly to
  the mount point. (Breaking)
-- `push_route()` can now accept a `Vec<&str>`, depreciating `push_path()`.
+- `push_route()` can now accept a `Vec<&str>`, depreciating `push_path()`
 - Fixed a bug where window events couldn't be enabled on initialization
 
 ## v0.3.0
@@ -256,7 +260,7 @@ them in a single span.
 
 ## v0.2.5
 - Attributes and Events now can use `At` and `Ev` enums
-- Routing overhauled; modelled after react-reason. Cleaner syntax, and more flexible.
+- Routing overhauled; modelled after react-reason. Cleaner syntax, and more flexible
 - Input, Textarea, and Select elements are now \"controlled\" - they always
 stay in sync with the model.
 - index.html file updated in examples and quickstart to use relative paths,
@@ -269,7 +273,7 @@ which fixes landing-page routing
 - Routing refactored; now works dynamically
 - Update function now returns an enum that returns Render or Skip,
 to allow conditional rendering (Breaking)
-- Elements can now store more than 1 text node.
+- Elements can now store more than 1 text node
 
 ## V0.2.3
 - Fixed a bug where initially-empty text won't update
@@ -325,31 +329,29 @@ fn footer() -> El<Msg> {
 
 
 
-fn view(model: &Model) -> Vec<El<Msg>> {
+fn view(model: &Model) -> El<Msg> {
     let version = "0.3.1";
-    vec![
-        div![
-            style!{
-                "display" => "flex";
-                "flex-direction" => "column";
-            },
+    div![
+        style!{
+            "display" => "flex";
+            "flex-direction" => "column";
+        },
 
-            section![
-                header(version)
-            ],
-            section![
-                title()
-            ],
-            section![
-                match model.page {
-                    Page::Guide => guide(&model.guide_sections, model.guide_page),
-                    Page::Changelog => changelog(),
-                }
-            ],
-            section![
-                footer()
-            ],
-        ]
+        section![
+            header(version)
+        ],
+        section![
+            title()
+        ],
+        section![
+            match model.page {
+                Page::Guide => guide(&model.guide_sections, model.guide_page),
+                Page::Changelog => changelog(),
+            }
+        ],
+        section![
+            footer()
+        ],
     ]
 }
 

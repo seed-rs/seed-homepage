@@ -1,7 +1,7 @@
 pub fn text() -> String {
 r#"
 <h1 id="http-requests-fetch-and-updating-state">Http requests (fetch), and updating state</h1>
-<p>We use the <a href="https://docs.rs/seed/0.3.1/seed/fetch/struct.Request.html">seed::Request</a> struct to make HTTP requests in the browser, wrapping the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>. To use this, we need to include <code>futures = "^0.1.20"</code> in <code>Cargo.toml</code>. The <a href="https://docs.rs/seed/0.3.1/seed/fetch/index.html">Fetch module</a> is standalone: It can be used with any wasm-bindgen program.</p>
+<p>We use the <a href="https://docs.rs/seed/0.3.2/seed/fetch/struct.Request.html">seed::Request</a> struct to make HTTP requests in the browser, wrapping the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>. To use this, we need to include <code>futures = "^0.1.20"</code> in <code>Cargo.toml</code>. The <a href="https://docs.rs/seed/0.3.2/seed/fetch/index.html">Fetch module</a> is standalone: It can be used with any wasm-bindgen program.</p>
 <p>Example, where we update the state on initial load:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">use</span> <span class="pp">futures::</span>Future;</a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="kw">use</span> <span class="pp">serde::</span><span class="op">{</span>Serialize, Deserialize<span class="op">}</span>;</a>

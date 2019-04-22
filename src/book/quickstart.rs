@@ -101,7 +101,7 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <a class="sourceLine" id="cb3-55" title="55"><span class="op">}</span></a>
 <a class="sourceLine" id="cb3-56" title="56"></a>
 <a class="sourceLine" id="cb3-57" title="57"><span class="co">/// The top-level component we pass to the virtual dom.</span></a>
-<a class="sourceLine" id="cb3-58" title="58"><span class="kw">fn</span> view(model: &amp;Model) -&gt; <span class="dt">Vec</span>&lt;El&lt;Msg&gt;&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-58" title="58"><span class="kw">fn</span> view(model: &amp;Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-59" title="59">    <span class="kw">let</span> plural = <span class="kw">if</span> model.count == <span class="dv">1</span> <span class="op">{</span><span class="st">&quot;&quot;</span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span><span class="st">&quot;s&quot;</span><span class="op">}</span>;</a>
 <a class="sourceLine" id="cb3-60" title="60"></a>
 <a class="sourceLine" id="cb3-61" title="61">    <span class="co">// Attrs, Style, Events, and children may be defined separately.</span></a>
@@ -111,39 +111,37 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <a class="sourceLine" id="cb3-65" title="65">            <span class="st">&quot;text-align&quot;</span> =&gt; <span class="st">&quot;center&quot;</span></a>
 <a class="sourceLine" id="cb3-66" title="66">    <span class="op">}</span>;</a>
 <a class="sourceLine" id="cb3-67" title="67"></a>
-<a class="sourceLine" id="cb3-68" title="68">    <span class="pp">vec!</span><span class="op">[</span></a>
-<a class="sourceLine" id="cb3-69" title="69">        <span class="pp">div!</span><span class="op">[</span> outer_style,</a>
-<a class="sourceLine" id="cb3-70" title="70">            <span class="pp">h1!</span><span class="op">[</span> <span class="st">&quot;The Grand Total&quot;</span> <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb3-71" title="71">            <span class="pp">div!</span><span class="op">[</span></a>
-<a class="sourceLine" id="cb3-72" title="72">                <span class="pp">style!</span><span class="op">{</span></a>
-<a class="sourceLine" id="cb3-73" title="73">                    <span class="co">// Example of conditional logic in a style.</span></a>
-<a class="sourceLine" id="cb3-74" title="74">                    <span class="st">&quot;color&quot;</span> =&gt; <span class="kw">if</span> model.count &gt; <span class="dv">4</span> <span class="op">{</span><span class="st">&quot;purple&quot;</span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span><span class="st">&quot;gray&quot;</span><span class="op">}</span>;</a>
-<a class="sourceLine" id="cb3-75" title="75">                    <span class="co">// When passing numerical values to style!, &quot;px&quot; is implied.</span></a>
-<a class="sourceLine" id="cb3-76" title="76">                    <span class="st">&quot;border&quot;</span> =&gt; <span class="st">&quot;2px solid #004422&quot;</span>; <span class="st">&quot;padding&quot;</span> =&gt; <span class="dv">20</span></a>
-<a class="sourceLine" id="cb3-77" title="77">                <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb3-78" title="78">                <span class="co">// We can use normal Rust code and comments in the view.</span></a>
-<a class="sourceLine" id="cb3-79" title="79">                <span class="pp">h3!</span><span class="op">[</span> <span class="pp">format!</span>(<span class="st">&quot;{} {}{} so far&quot;</span>, model.count, model.what_we_count, plural) <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb3-80" title="80">                <span class="pp">button!</span><span class="op">[</span> simple_ev(<span class="pp">Ev::</span>Click, <span class="pp">Msg::</span>Increment), <span class="st">&quot;+&quot;</span> <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb3-81" title="81">                <span class="pp">button!</span><span class="op">[</span> simple_ev(<span class="pp">Ev::</span>Click, <span class="pp">Msg::</span>Decrement), <span class="st">&quot;-&quot;</span> <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb3-82" title="82">    </a>
-<a class="sourceLine" id="cb3-83" title="83">                <span class="co">// Optionally-displaying an element</span></a>
-<a class="sourceLine" id="cb3-84" title="84">                <span class="kw">if</span> model.count &gt;= <span class="dv">10</span> <span class="op">{</span> <span class="pp">h2!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;padding&quot;</span> =&gt; <span class="dv">50</span><span class="op">}</span>, <span class="st">&quot;Nice!&quot;</span> <span class="op">]</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> <span class="pp">seed::</span>empty() <span class="op">}</span></a>
-<a class="sourceLine" id="cb3-85" title="85">            <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb3-86" title="86">            success_level(model.count),  <span class="co">// Incorporating a separate component</span></a>
-<a class="sourceLine" id="cb3-87" title="87">    </a>
-<a class="sourceLine" id="cb3-88" title="88">            <span class="pp">h3!</span><span class="op">[</span> <span class="st">&quot;What precisely is it we&#39;re counting?&quot;</span> <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb3-89" title="89">            <span class="pp">input!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="pp">At::</span>Value =&gt; model.what_we_count<span class="op">}</span>, input_ev(<span class="pp">Ev::</span>Input, <span class="pp">Msg::</span>ChangeWWC) <span class="op">]</span></a>
-<a class="sourceLine" id="cb3-90" title="90">        <span class="op">]</span></a>
-<a class="sourceLine" id="cb3-91" title="91">    <span class="op">]</span></a>
-<a class="sourceLine" id="cb3-92" title="92"><span class="op">}</span></a>
-<a class="sourceLine" id="cb3-93" title="93"></a>
-<a class="sourceLine" id="cb3-94" title="94"></a>
-<a class="sourceLine" id="cb3-95" title="95"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
-<a class="sourceLine" id="cb3-96" title="96"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-97" title="97">    <span class="pp">seed::App::</span>build(<span class="pp">Model::</span><span class="kw">default</span>(), update, view)</a>
-<a class="sourceLine" id="cb3-98" title="98">        .finish()</a>
-<a class="sourceLine" id="cb3-99" title="99">        .run();</a>
-<a class="sourceLine" id="cb3-100" title="100"><span class="op">}</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-68" title="68">    <span class="pp">div!</span><span class="op">[</span> outer_style,</a>
+<a class="sourceLine" id="cb3-69" title="69">        <span class="pp">h1!</span><span class="op">[</span> <span class="st">&quot;The Grand Total&quot;</span> <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb3-70" title="70">        <span class="pp">div!</span><span class="op">[</span></a>
+<a class="sourceLine" id="cb3-71" title="71">            <span class="pp">style!</span><span class="op">{</span></a>
+<a class="sourceLine" id="cb3-72" title="72">                <span class="co">// Example of conditional logic in a style.</span></a>
+<a class="sourceLine" id="cb3-73" title="73">                <span class="st">&quot;color&quot;</span> =&gt; <span class="kw">if</span> model.count &gt; <span class="dv">4</span> <span class="op">{</span><span class="st">&quot;purple&quot;</span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span><span class="st">&quot;gray&quot;</span><span class="op">}</span>;</a>
+<a class="sourceLine" id="cb3-74" title="74">                <span class="co">// When passing numerical values to style!, &quot;px&quot; is implied.</span></a>
+<a class="sourceLine" id="cb3-75" title="75">                <span class="st">&quot;border&quot;</span> =&gt; <span class="st">&quot;2px solid #004422&quot;</span>; <span class="st">&quot;padding&quot;</span> =&gt; <span class="dv">20</span></a>
+<a class="sourceLine" id="cb3-76" title="76">            <span class="op">}</span>,</a>
+<a class="sourceLine" id="cb3-77" title="77">            <span class="co">// We can use normal Rust code and comments in the view.</span></a>
+<a class="sourceLine" id="cb3-78" title="78">            <span class="pp">h3!</span><span class="op">[</span> <span class="pp">format!</span>(<span class="st">&quot;{} {}{} so far&quot;</span>, model.count, model.what_we_count, plural) <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb3-79" title="79">            <span class="pp">button!</span><span class="op">[</span> simple_ev(<span class="pp">Ev::</span>Click, <span class="pp">Msg::</span>Increment), <span class="st">&quot;+&quot;</span> <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb3-80" title="80">            <span class="pp">button!</span><span class="op">[</span> simple_ev(<span class="pp">Ev::</span>Click, <span class="pp">Msg::</span>Decrement), <span class="st">&quot;-&quot;</span> <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb3-81" title="81"></a>
+<a class="sourceLine" id="cb3-82" title="82">            <span class="co">// Optionally-displaying an element</span></a>
+<a class="sourceLine" id="cb3-83" title="83">            <span class="kw">if</span> model.count &gt;= <span class="dv">10</span> <span class="op">{</span> <span class="pp">h2!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;padding&quot;</span> =&gt; <span class="dv">50</span><span class="op">}</span>, <span class="st">&quot;Nice!&quot;</span> <span class="op">]</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> <span class="pp">seed::</span>empty() <span class="op">}</span></a>
+<a class="sourceLine" id="cb3-84" title="84">        <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb3-85" title="85">        success_level(model.count),  <span class="co">// Incorporating a separate component</span></a>
+<a class="sourceLine" id="cb3-86" title="86"></a>
+<a class="sourceLine" id="cb3-87" title="87">        <span class="pp">h3!</span><span class="op">[</span> <span class="st">&quot;What precisely is it we&#39;re counting?&quot;</span> <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb3-88" title="88">        <span class="pp">input!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="pp">At::</span>Value =&gt; model.what_we_count<span class="op">}</span>, input_ev(<span class="pp">Ev::</span>Input, <span class="pp">Msg::</span>ChangeWWC) <span class="op">]</span></a>
+<a class="sourceLine" id="cb3-89" title="89">    <span class="op">]</span></a>
+<a class="sourceLine" id="cb3-90" title="90"><span class="op">}</span></a>
+<a class="sourceLine" id="cb3-91" title="91"></a>
+<a class="sourceLine" id="cb3-92" title="92"></a>
+<a class="sourceLine" id="cb3-93" title="93"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
+<a class="sourceLine" id="cb3-94" title="94"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-95" title="95">    <span class="pp">seed::App::</span>build(<span class="pp">Model::</span><span class="kw">default</span>(), update, view)</a>
+<a class="sourceLine" id="cb3-96" title="96">        .finish()</a>
+<a class="sourceLine" id="cb3-97" title="97">        .run();</a>
+<a class="sourceLine" id="cb3-98" title="98"><span class="op">}</span></a></code></pre></div>
 <p>For a truly minimimal example, see <a href="https://github.com/David-OConnor/seed-quickstart/blob/master/src/lib.rs">lib.rs in the quickstart repo</a></p>
 <h2 id="building-and-running">Building and running</h2>
 <p>To build your app, create a <code>pkg</code> subdirectory, and run the following two commands:</p>
@@ -153,6 +151,7 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <p>where <code>appname</code> is replaced with your app's name. This compiles your code in the target folder, and populates the pkg folder with your WASM module, a Typescript definitions file, and a JS file used to link your module from HTML.</p>
 <p>You may wish to create a build script with these two lines. (<code>build.sh</code> for Linux; <code>build.ps1</code> for Windows). The quickstart repo includes these, but you'll still need to do the rename. You can then use <code>./build.sh</code> or <code>.\build.ps1</code> If you run into permission errors on <code>build.sh</code>, try this command to allow executing the file:<code>chmod +x build.sh</code>. If you run into persmission errors on <code>build.ps1</code>, open Powershell as an administrator, and enter this command: <code>Set-ExecutionPolicy RemoteSigned</code>.</p>
 <p>For development, you can view your app using a shimmed Python dev server, as described above. (Set up <a href="https://github.com/David-OConnor/seed-quickstart/blob/master/serve.py">this mime-type shim</a> from the quickstart repo, and run <code>python serve.py</code>).</p>
+<p>For a more robust starting setup, check out Martin Kavik's <a href="https://github.com/MartinKavik/seed-quickstart-webpack">seed-quickstart-webpack repo</a>.</p>
 <p>In the future, the build script and commands above may be replaced by <a href="https://github.com/rustwasm/wasm-pack">wasm-pack</a>. You may use it now if you wish, but may run into issues running the examples, enabling no-modules mode, and syntax-highlighting in the compile logs.</p>
 <h2 id="running-included-examples">Running included examples</h2>
 <p>To run an example located in the <a href="https://github.com/David-OConnor/seed/tree/master/examples">examples folder</a>, navigate to that folder in a terminal, run the build script for your system (<code>build.sh</code> or <code>build.ps1</code>), then start a dev server as described above. Note that if you copy an example to a separate folder, you'll need to edit its <code>Cargo.toml</code> to point to the package on <a href="https://crates.io">crates.io</a> instead of locally: Ie replace <code>seed = { path = "../../"</code> with <code>seed = "^0.2.4"</code>, and in the build script, remove the leading <code>../../</code> on the second line.</p>
