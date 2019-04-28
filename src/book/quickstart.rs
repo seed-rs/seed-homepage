@@ -5,9 +5,9 @@ r#"
 <p>This framework requires you to install <a href="https://www.rust-lang.org/tools/install">Rust</a>.</p>
 <p>You'll need a recent version of Rust: <code>rustup update</code></p>
 <p>The wasm32-unknown-unknown target: <code>rustup target add wasm32-unknown-unknown</code></p>
-<p>And Cargo make: <code>cargo install cargo-make</code></p>
+<p>And cargo-make: <code>cargo install cargo-make</code></p>
 <h2 id="the-theoretical-minimum">The theoretical minimum</h2>
-<p>To start, clone <a href="https://github.com/David-OConnor/seed-quickstart">The quickstart repo</a>, run <code>cargo make all</code> in a terminal to build the app, and <code>cargo make serve</code> to start a dev server on <code>127.0.0.0:8000</code>.</p>
+<p>To start, clone <a href="https://github.com/David-OConnor/seed-quickstart">The quickstart repo</a>: <code>git clone https://github.com/david-oconnor/seed-quickstart.git</code>, run <code>cargo make all</code> in a terminal to build the app, and <code>cargo make serve</code> to start a dev server on <code>127.0.0.0:8000</code>.</p>
 <h2 id="a-little-deeper">A little deeper</h2>
 <p>Alternatively, create a new lib with Cargo: <code>cargo new --lib appname</code>. Here and everywhere it appears in this guide, <code>appname</code> should be replaced with the name of your app.</p>
 <p>If not using the quickstart repo, create an Html file with a body that contains this:</p>
@@ -146,6 +146,8 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <p>To build your app run <code>cargo make all</code>, and to host on a dev server, run <code>cargo make serve</code>.</p>
 <p>For a more robust starting setup, check out Martin Kavik's <a href="https://github.com/MartinKavik/seed-quickstart-webpack">seed-quickstart-webpack repo</a>.</p>
 <h2 id="running-included-examples">Running included examples</h2>
-<p>To run an example located in the <a href="https://github.com/David-OConnor/seed/tree/master/examples">examples folder</a>, run <code>cargo make e_examplename</code>, where you replace <code>examplename</code> with the example name. Eg: <code>cargo make e_counter</code>.</p>
+<p>To run an example located in the <a href="https://github.com/David-OConnor/seed/tree/master/examples">examples folder</a>, run <code>cargo make start example_name</code>, where you replace <code>example_name</code> with the example name. Eg: <code>cargo make start counter</code>.</p>
+<p>Some examples also require to run API server in another terminal window - <code>cargo make start_server example_name</code>.</p>
+<p>When server(s) are running, open <a href="http://127.0.0.1:8000">127.0.0.1:8000</a> in your browser.</p>
 "#.into()
 }
