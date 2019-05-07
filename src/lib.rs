@@ -7,13 +7,12 @@ mod book;
 extern crate seed;
 use seed::prelude::*;
 
-
 // Model
 
 #[derive(Copy, Clone)]
 enum Page {
     Guide,
-    Changelog
+    Changelog,
 }
 
 impl ToString for Page {
@@ -29,12 +28,12 @@ impl ToString for Page {
 #[derive(Clone)]
 struct GuideSection {
     title: String,
-    elements: Vec<El<Msg>>
+    elements: Vec<El<Msg>>,
 }
 
 struct Model {
     page: Page,
-    guide_page: usize,  // Index of our guide sections.
+    guide_page: usize, // Index of our guide sections.
     guide_sections: Vec<GuideSection>,
 }
 
@@ -59,19 +58,28 @@ impl Default for Model {
             ("Lifecycle hooks", crate::book::lifecycle::text()),
             ("Routing", crate::book::routing::text()),
             ("Misc features", crate::book::misc::text()),
-            ("Release and debugging", crate::book::release_and_debugging::text()),
+            (
+                "Release and debugging",
+                crate::book::release_and_debugging::text(),
+            ),
             ("Element deep-dive", crate::book::element_deepdive::text()),
-            ("Server integration", crate::book::server_integration::text()),
+            (
+                "Server integration",
+                crate::book::server_integration::text(),
+            ),
             ("About", crate::book::about::text()),
         ];
 
         for (title, md_text) in md_texts {
             let elements = El::from_markdown(&md_text);
-//
-//            for e in &elements {
-//                p(e);
-//            }
-            guide_sections.push(GuideSection{title: title.to_string(), elements});
+            //
+            //            for e in &elements {
+            //                p(e);
+            //            }
+            guide_sections.push(GuideSection {
+                title: title.to_string(),
+                elements,
+            });
         }
 
         Self {
@@ -81,7 +89,6 @@ impl Default for Model {
         }
     }
 }
-
 
 // Update
 
@@ -98,7 +105,7 @@ fn update(msg: Msg, model: &mut Model) -> Update<Msg> {
         Msg::ChangeGuidePage(guide_page) => {
             model.page = Page::Guide;
             model.guide_page = guide_page;
-        },
+        }
     }
     Render.into()
 }
@@ -106,7 +113,7 @@ fn update(msg: Msg, model: &mut Model) -> Update<Msg> {
 // View
 
 fn header(_version: &str) -> El<Msg> {
-    let link_style = style!{
+    let link_style = style! {
         "margin-left" => 20;
         "margin-right" => 20;
         "font-weight" => "bold";
@@ -115,47 +122,70 @@ fn header(_version: &str) -> El<Msg> {
         "cursor" => "pointer";
     };
 
-    header![ style!{"display" => "flex"; "justify-content" => "flex-end"},
+    header![
+        style! {"display" => "flex"; "justify-content" => "flex-end"},
         ul![
-            a![ &link_style, "Guide", attrs!{At::Href => "/guide"} ],
-            a![ &link_style, "Changelog", attrs!{At::Href => "/changelog"} ],
-
-            a![ &link_style, "Repo", attrs!{At::Href => "https://github.com/David-OConnor/seed"} ],
-            a![ &link_style, "Quickstart repo", attrs!{At::Href => "https://github.com/David-OConnor/seed-quickstart"} ],
-            a![ &link_style, "Crate", attrs!{At::Href => "https://crates.io/crates/seed"} ],
-            a![ &link_style, "API docs", attrs!{At::Href => "https://docs.rs/seed"} ]
+            a![&link_style, "Guide", attrs! {At::Href => "/guide"}],
+            a![&link_style, "Changelog", attrs! {At::Href => "/changelog"}],
+            a![
+                &link_style,
+                "Repo",
+                attrs! {At::Href => "https://github.com/David-OConnor/seed"}
+            ],
+            a![
+                &link_style,
+                "Quickstart repo",
+                attrs! {At::Href => "https://github.com/David-OConnor/seed-quickstart"}
+            ],
+            a![
+                &link_style,
+                "Crate",
+                attrs! {At::Href => "https://crates.io/crates/seed"}
+            ],
+            a![
+                &link_style,
+                "API docs",
+                attrs! {At::Href => "https://docs.rs/seed"}
+            ]
         ]
     ]
 }
 
 fn title() -> El<Msg> {
-    div![ style!{
-            // todo look up areas
-            "display" => "grid";
-            "grid-template-rows" => "auto 160px";
-            "grid-template-columns" => "1fr 1fr 1fr";
-            "text-align" => "center";
-            "align-items" => "center";
-            },
-        div![ style!{"grid-row" => "1/2"; "grid-column" => "1 / 4"},
-            h1![ style!{"font-size" => "2em"},"Seed" ],
-            h2![ "A Rust framework for creating web apps" ],
+    div![
+        style! {
+        // todo look up areas
+        "display" => "grid";
+        "grid-template-rows" => "auto 160px";
+        "grid-template-columns" => "1fr 1fr 1fr";
+        "text-align" => "center";
+        "align-items" => "center";
+        },
+        div![
+            style! {"grid-row" => "1/2"; "grid-column" => "1 / 4"},
+            img![
+                attrs! {At::Src => "public/seed_logo.svg"; At::Width => 256; At::Alt => "Seed"},
+                style! {"margin-top" => 30},
+            ],
+            h2!["A Rust framework for creating web apps"],
         ],
-        div![  style!{"grid-row" => "2/3"; "grid-column" => "1 / 2"},
-            h2![ "Expressive view syntax"]
+        div![
+            style! {"grid-row" => "2/3"; "grid-column" => "1 / 2"},
+            h2!["Expressive view syntax"]
         ],
-        div![  style!{"grid-row" => "2/3"; "grid-column" => "2 / 3"},
-            h2![ "Compile-time error checking" ]
+        div![
+            style! {"grid-row" => "2/3"; "grid-column" => "2 / 3"},
+            h2!["Compile-time error checking"]
         ],
-        div![  style!{"grid-row" => "2/3"; "grid-column" => "3 / 4"},
-            h2![ "Clean architecture" ]
+        div![
+            style! {"grid-row" => "2/3"; "grid-column" => "3 / 4"},
+            h2!["Clean architecture"]
         ],
-
     ]
 }
 
 fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
-    let menu_item_style = style!{
+    let menu_item_style = style! {
         "display" => "flex";  // So we can vertically center
         "align-items" => "center";
         "padding" => 4;
@@ -170,34 +200,36 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
     let menu_items: Vec<El<Msg>> = sections
         .iter()
         .enumerate()
-        .map(|(i, s)|
-        h4![
-            &menu_item_style,
-            attrs!{
-                At::Class => if i == guide_page {"guide-menu-selected"} else {"guide-menu"};
-                At::Href => "/guide/".to_string() + &i.to_string()
-            },
-            s.title
-        ]
-    ).collect();
+        .map(|(i, s)| {
+            h4![
+                &menu_item_style,
+                attrs! {
+                    At::Class => if i == guide_page {"guide-menu-selected"} else {"guide-menu"};
+                    At::Href => "/guide/".to_string() + &i.to_string()
+                },
+                s.title
+            ]
+        })
+        .collect();
 
-    div![ style! {
-        "display" => "grid";
-        "grid-template-columns" => "200px auto";
-        "color" => "black";
-        "grid-auto-rows" => "1fr";
-        "align-items" => "start";
-    },
-        div![ style!{"display" => "flex"; "flex-direction" => "column";
-                     "grid-column" => "1 / 2";
-                      "justify-content" => "flex-start";
-                     "padding" => 10;},
+    div![
+        style! {
+            "display" => "grid";
+            "grid-template-columns" => "200px auto";
+            "color" => "black";
+            "grid-auto-rows" => "1fr";
+            "align-items" => "start";
+        },
+        div![
+            style! {"display" => "flex"; "flex-direction" => "column";
+            "grid-column" => "1 / 2";
+             "justify-content" => "flex-start";
+            "padding" => 10;},
             menu_items
         ],
-
         div![
             class!["guide"],
-            style!{
+            style! {
                 "display" => "flex";
                 "flex-direction" => "column";
                 "grid-column" => "2 / 3";
@@ -304,13 +336,13 @@ to allow conditional rendering (Breaking)
 
 "
     ) ];
-    entries.style = style!{
-        "grid-column" => "2 / 3";
-     };
+    entries.style = style! {
+       "grid-column" => "2 / 3";
+    };
 
     div![
         class!["guide"],
-        style!{
+        style! {
             "display" => "grid";
             "grid-template-columns" => "1fr 2fr 1fr";
 
@@ -322,50 +354,38 @@ to allow conditional rendering (Breaking)
 }
 
 fn footer() -> El<Msg> {
-    footer![ style!{"display" => "flex"; "justify-content" => "center"},
-        h4![ "© 2019 David O'Connor"]
+    footer![
+        style! {"display" => "flex"; "justify-content" => "center"},
+        h4!["© 2019 David O'Connor"]
     ]
 }
-
-
 
 fn view(model: &Model) -> El<Msg> {
     let version = "0.3.1";
     div![
-        style!{
+        style! {
             "display" => "flex";
             "flex-direction" => "column";
         },
-
-        section![
-            header(version)
-        ],
-        section![
-            title()
-        ],
-        section![
-            match model.page {
-                Page::Guide => guide(&model.guide_sections, model.guide_page),
-                Page::Changelog => changelog(),
-            }
-        ],
-        section![
-            footer()
-        ],
+        section![header(version)],
+        section![title()],
+        section![match model.page {
+            Page::Guide => guide(&model.guide_sections, model.guide_page),
+            Page::Changelog => changelog(),
+        }],
+        section![footer()],
     ]
 }
 
 fn routes(url: &seed::Url) -> Msg {
     if url.path.is_empty() {
-        return Msg::ChangePage(Page::Guide)
+        return Msg::ChangePage(Page::Guide);
     }
 
     match url.path[0].as_ref() {
-        "guide" => {
-            match url.path.get(1).as_ref() {
-                Some(page) => Msg::ChangeGuidePage(page.parse::<usize>().unwrap()),
-                None => Msg::ChangePage(Page::Guide)
-            }
+        "guide" => match url.path.get(1).as_ref() {
+            Some(page) => Msg::ChangeGuidePage(page.parse::<usize>().unwrap()),
+            None => Msg::ChangePage(Page::Guide),
         },
         "changelog" => Msg::ChangePage(Page::Changelog),
         _ => Msg::ChangePage(Page::Guide),

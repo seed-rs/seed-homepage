@@ -1,51 +1,52 @@
 # Quickstart
 
 ## Setup
+
 This framework requires you to install [Rust](https://www.rust-lang.org/tools/install).
 
 You'll need a recent version of Rust: `rustup update`
 
 The wasm32-unknown-unknown target: `rustup target add wasm32-unknown-unknown`
 
-And cargo-make: `cargo install cargo-make`
-
+And cargo-make: `cargo install --force cargo-make`
 
 ## The theoretical minimum
-To start, clone [The quickstart repo](https://github.com/David-OConnor/seed-quickstart): 
+
+To start, clone [the quickstart repo](https://github.com/David-OConnor/seed-quickstart):
 `git clone https://github.com/david-oconnor/seed-quickstart.git`,
 run `cargo make all` in a terminal to build the app, and `cargo make serve` to start a dev server
 on `127.0.0.0:8000`.
 
-
 ## A little deeper
-Alternatively, create a new lib with Cargo: `cargo new --lib appname`. Here and everywhere it appears in this guide, `
-appname` should be replaced with the name of your app.
+
+Alternatively, create a new lib with Cargo: `cargo new --lib appname`. Here and everywhere it appears in this guide, `appname` should be replaced with the name of your app.
 
 If not using the quickstart repo, create an Html file with a body that contains this:
+
 ```html
 <section id="app"></section>
 
-<script src='/pkg/package.js'></script>
+<script src="/pkg/package.js"></script>
 
 <script>
-    const { render } = wasm_bindgen;
-    function run() {
-        render();
-    }
-    wasm_bindgen('/pkg/package_bg.wasm')
-        .then(run)
-        .catch(console.error);
+  const { render } = wasm_bindgen;
+  function run() {
+    render();
+  }
+  wasm_bindgen("/pkg/package_bg.wasm")
+    .then(run)
+    .catch(console.error);
 </script>
 ```
+
 The first line above is an empty element with id: It's where your app will render.
 The subsequent ones load your app's wasm modules.
 
-The quickstart repo includes this file. You will eventually need to modify it to 
+The quickstart repo includes this file. You will eventually need to modify it to
 change the page's title, add a description, favicon, stylesheet etc.
 
-`Cargo.toml`, which is a file created by Cargo that describes your app, needs `wasm-bindgen`, `web-sys`, and `
-seed` as depdendencies,
- and crate-type
+`Cargo.toml`, which is a file created by Cargo that describes your app, needs `wasm-bindgen`, `web-sys`, and `seed` as depdendencies,
+and crate-type
 of `"cdylib"`. The version in the quickstart repo has these set up already. Example:
 
 ```toml
@@ -65,12 +66,14 @@ web-sys = "^0.3.6"
 ```
 
 ## A short example
+
 Here's an example demonstrating structure and syntax; it can be found in working form
-in the [counter example](https://github.com/David-OConnor/seed/tree/master/examples/counter) 
+in the [counter example](https://github.com/David-OConnor/seed/tree/master/examples/counter)
 Descriptions of its parts are in the
 Guide section below. Its structure follows [The Elm Architecture](https://guide.elm-lang.org/architecture/).
 
-*lib.rs*:
+_lib.rs_:
+
 ```rust
 #[macro_use]
 extern crate seed;
@@ -171,16 +174,19 @@ pub fn render() {
         .run();
 }
 ```
+
 For a truly minimimal example, see [lib.rs in the quickstart repo](https://github.com/David-OConnor/seed-quickstart/blob/master/src/lib.rs)
 
 ## Building and running
+
 To build your app run `cargo make all`, and to host on a dev server, run `cargo make serve`.
 
 For a more robust starting setup, check out Martin Kavik's [seed-quickstart-webpack repo](https://github.com/MartinKavik/seed-quickstart-webpack).
 
 ## Running included examples
+
 To run an example located in the [examples folder](https://github.com/David-OConnor/seed/tree/master/examples),
-run `cargo make start example_name`, where you replace `example_name` with the example name. Eg: 
+run `cargo make start example_name`, where you replace `example_name` with the example name. Eg:
 `cargo make start counter`.
 
 Some examples also require to run API server in another terminal window - `cargo make start_server example_name`.
