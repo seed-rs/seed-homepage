@@ -54,7 +54,8 @@ struct Model {
 
 ## Update
 The Message is an [enum]( https://doc.rust-lang.org/book/ch06-00-enums.html) which 
-categorizes each type of interaction with the app. Its fields may hold a value, or not. 
+categorizes each type of interaction with the app. It must implement `Clone`, and its 
+fields may hold a value, or not.
 We’ve abbreviated it as `Msg` here for brevity. If you're not familiar with enums,
 think of one as a set of options; in other languages, you might use an integer, or string 
 for this, but an enum is explicitly limited in which values it can take. Example:

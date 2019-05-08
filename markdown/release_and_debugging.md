@@ -24,6 +24,11 @@ show up as console errors in the web browser. Example:
  the panic triggered.
 
 
+## Logging
+
+You may log things to the JS console using the following 3 functions:
+
+
 ### Debugging elements
 `El` implements the `Debug` trait, so you can view them using `log!`: `log!(format!("{:?}", my_el));`
 In order to take advantage of this, you must implement `Debug` for your message type, and 
@@ -41,4 +46,20 @@ enum Msg {
     RoutePage(Page),
     ChangePage(Page),
 }
+```
+
+
+### Tests
+To run tests, you may either use `wasm-pack` test commands, or simplified ones from the 
+`Makefile.toml` included in the quickstart repo. 
+
+To run all tests with the makefile:
+`cargo make test firefox`
+Where `firefox` may be replaced with `chrome` or `safari`.
+
+With `wasm-pack` directly, or to run individual tests, use commands similar to this, with 
+`module_name` and `test_name` replaced
+with the module which contains the test, and the test name repectively.:
+```bash
+wasm-pack test --firefox --headless -- --module_name test_name
 ```

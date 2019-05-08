@@ -36,7 +36,7 @@ r#"
 <a class="sourceLine" id="cb2-15" title="15">    misc: Misc</a>
 <a class="sourceLine" id="cb2-16" title="16"><span class="op">}</span></a></code></pre></div>
 <h2 id="update">Update</h2>
-<p>The Message is an <a href="https://doc.rust-lang.org/book/ch06-00-enums.html">enum</a> which categorizes each type of interaction with the app. Its fields may hold a value, or not. We've abbreviated it as <code>Msg</code> here for brevity. If you're not familiar with enums, think of one as a set of options; in other languages, you might use an integer, or string for this, but an enum is explicitly limited in which values it can take. Example:</p>
+<p>The Message is an <a href="https://doc.rust-lang.org/book/ch06-00-enums.html">enum</a> which categorizes each type of interaction with the app. It must implement <code>Clone</code>, and its fields may hold a value, or not. We've abbreviated it as <code>Msg</code> here for brevity. If you're not familiar with enums, think of one as a set of options; in other languages, you might use an integer, or string for this, but an enum is explicitly limited in which values it can take. Example:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="kw">enum</span> Msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-3" title="3">    Increment,</a>
