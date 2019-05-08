@@ -24,7 +24,7 @@ r#"
 <h3 id="tests">Tests</h3>
 <p>To run tests, you may either use <code>wasm-pack</code> test commands, or simplified ones from the <code>Makefile.toml</code> included in the quickstart repo.</p>
 <p>To run all tests with the makefile: <code>cargo make test firefox</code> Where <code>firefox</code> may be replaced with <code>chrome</code> or <code>safari</code>.</p>
-<p>With <code>wasm-pack</code> directly, or to run individual tests, use commands similar to this, with <code>module_name</code> and <code>test_name</code> replaced with the module which contains the test, and the test name repectively.:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" title="1"><span class="ex">wasm-pack</span> test --firefox --headless -- --module_name test_name</a></code></pre></div>
+<p>With <code>wasm-pack</code> directly, or to run individual tests, use commands similar to this, with <code>test_name</code> replaced with the name of the test:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" title="1"><span class="ex">wasm-pack</span> test --firefox --headless -- --lib test_name</a></code></pre></div>
 "#.into()
 }

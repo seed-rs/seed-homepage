@@ -61,8 +61,8 @@ To run all tests with the makefile:
 Where `firefox` may be replaced with `chrome` or `safari`.
 
 With `wasm-pack` directly, or to run individual tests, use commands similar to this, with 
-`module_name` and `test_name` replaced
-with the module which contains the test, and the test name repectively.:
+`test_name` replaced
+with the name of the test:
 ```bash
-wasm-pack test --firefox --headless -- --module_name test_name
+wasm-pack test --firefox --headless -- --lib test_name
 ```
