@@ -28,7 +28,7 @@ show up as console errors in the web browser. Example:
 You may log things to the JS console using the following 3 functions: `seed::log`, `seed::error`,
 and `seed::debug`. The first two accept a single argument which implements `ToString`, eg `String`,
 `&str` etc. The third accepts one that implements `Debug`. Each has a corresponding macro: `log!`,
-`error`, and `debug`, which work in a similar way, but accept multiple arguments, which will
+`error!`, and `debug!`, which work in a similar way, but accept multiple arguments, which will
 be displayed separated by spaces.
 
 
