@@ -33,7 +33,8 @@ enum Msg {
 fn update(msg: Msg, model: &mut Model) -> impl Updater<Msg> {
     match msg {
         Msg::Replace(data) => {
-            model.data = data
+            model.data = data;
+            Render.into()
         }
 
         Msg::GetData => Update::with_future_msg(get_data()).skip(),
@@ -42,12 +43,12 @@ fn update(msg: Msg, model: &mut Model) -> impl Updater<Msg> {
 
         Msg::OnServerResponse(result) => {
             log!(format!("Response: {:#?}", result));
-            Skip
+            Skip.into()
         }
 
         Msg::OnFetchErr(err) => {
             log!(format!("Fetch error: {:#?}", err));
-            Skip
+            Skip.into()
         }
     }
 }

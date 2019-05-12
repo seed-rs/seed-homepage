@@ -1,10 +1,5 @@
 pub fn text() -> String {
 r#"
-<p><a href="https://travis-ci.org/David-OConnor/seed"><img src="https://travis-ci.org/David-OConnor/seed.svg?branch=master" alt="Build Status" /></a> <a href="https://crates.io/crates/seed"><img src="https://meritbadge.herokuapp.com/seed" alt="crates.io version" /></a> <a href="https://crates.io/crates/seed"><img src="https://img.shields.io/crates/d/seed.svg" alt="crates.io downloads" /></a> <a href="https://docs.rs/seed"><img src="https://docs.rs/seed/badge.svg" alt="docs.rs" /></a> <a href="https://sagiegurari.github.io/cargo-make"><img src="https://sagiegurari.github.io/cargo-make/assets/badges/cargo-make.svg" alt="Built with cargo-make" /></a></p>
-<p align="center">
-<img src="/seed_branding/seed_logo.svg" width="256" title="Seed logo">
-</p>
-<p>The best place to learn is the <a href="https://seed-rs.org">guide</a> - this readme is an excerpt from it.</p>
 <h1 id="quickstart">Quickstart</h1>
 <h2 id="setup">Setup</h2>
 <p>This framework requires you to install <a href="https://www.rust-lang.org/tools/install">Rust</a>.</p>
