@@ -23,22 +23,31 @@ pub struct Branch {
 
 #[derive(Clone)]
 enum Msg {
-    GetData,
     Replace(Branch),
+    GetData,
+    Send,
+    OnServerResponse(ServerResponse),
     OnFetchErr(JsValue),
 }
 
-fn update(msg: Msg, model: &mut Model) -> Update<Msg> {
+fn update(msg: Msg, model: &mut Model) -> impl Updater<Msg> {
     match msg {
-        Msg::GetData => Update::with_future_msg(get_data()).skip(),
-        
         Msg::Replace(data) => {
-            model.data = data;
-            Render.into()
-        },
+            model.data = data
+        }
+
+        Msg::GetData => Update::with_future_msg(get_data()).skip(),
+
+        Msg::Send => Update::with_future_msg(send()).skip(),
+
+        Msg::OnServerResponse(result) => {
+            log!(format!("Response: {:#?}", result));
+            Skip
+        }
+
         Msg::OnFetchErr(err) => {
-            log!(format!("Fetch error: {:?}", err));
-            Skip.into()
+            log!(format!("Fetch error: {:#?}", err));
+            Skip
         }
     }
 }
@@ -46,21 +55,19 @@ fn update(msg: Msg, model: &mut Model) -> Update<Msg> {
 fn get_data() -> impl Future<Item = Msg, Error = Msg> {
     let url = "https://api.github.com/repos/david-oconnor/seed/branches/master";
 
-    seed::Request::new(url)
-        .method(seed::Method::Get)
+    Request::new(url)
+        .method(Method::Get)
         .fetch_json()
         .map(Msg::Replace)
         .map_err(Msg::OnFetchErr)
 }
 
-<<<<<<< HEAD
-fn view(state: seed::App<Msg, Model>, model: &Model) -> Vec<El<Msg>> {
+fn view(model: &Model) -> El<Msg> {
     div![ format!("name: {}, sha: {}", model.data.name, model.data.commit.sha),
         did_mount(move |_| spawn_local(get_data(state.clone())))
      ]
 }
-=======
-// ...
+
 
 #[wasm_bindgen]
 pub fn render() {
@@ -70,7 +77,6 @@ pub fn render() {
 
     state.update(Msg::GetData);
 
->>>>>>> 120884dccd13e179489134a53d4d28393bd19370
 ```
 On page load, we trigger an update using `Msg::GetData`, which points the `update`
 function to use the `Update::with_future_msg` method. This allows state to be
@@ -94,13 +100,7 @@ in the response, Serde automatically applies only the info matching our struct's
 If we wish to trigger
 this update from a normal event instead of on load, we can do something like this:
 ```rust
-#[derive(Clone)]
-enum Msg {
-    Replace(Branch),
-    GetData(seed::App<Msg, Model>),
-}
-
-fn update(msg: Msg, model: Model) -> Update<Msg, Model> {
+fn update(msg: Msg, model: &mut Model) -> impl Updater<Msg> {
     match msg {
         Msg::Replace(data) => Render(Model {data}),
         Msg::GetData(state) => {
@@ -110,10 +110,10 @@ fn update(msg: Msg, model: Model) -> Update<Msg, Model> {
     }
 }
 
-fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
+fn view(model: &Model) -> El<Msg> {
     div![
         div![ format!("Hello World. name: {}, sha: {}", model.data.name, model.data.commit.sha) ],
-        button![ raw_ev(Ev::Click, move |_| Msg::GetData(state.clone())), "Update from the internet"]
+        button![ raw_ev(Ev::Click, move |_| Msg::GetData), "Update from the internet"]
     ]
 }
 ```
@@ -132,7 +132,7 @@ struct ServerResponse {
     pub success: bool,
 }
 
-fn send() -> impl Future<Item = (), Error = JsValue> {
+fn send() -> impl Future<Item = Msg, Error = Msg> {
     let url = "https://infinitea.herokuapp.com/api/contact";
 
     let message = Message {
@@ -146,9 +146,8 @@ fn send() -> impl Future<Item = (), Error = JsValue> {
         .header("Content-Type", "application/json")
         .body_json(&message)
         .fetch_json()
-        .map(|result: ServerResponse| {
-            log!(format!("Response: {:?}", result));
-        })
+        .map(Msg::OnServerResponse)
+        .map_err(Msg::OnFetchErr)
 }
 ```
 Note how we pass a ref to the struct we wish to serialize (the payload) to the `.body_json()` method;
@@ -158,6 +157,8 @@ them. (eg: `credentials`, `mode`, `integrity`)
 
 
 ## Updating state
+## Todo: This section is out of date, and the behavior it describes will change in the future.
+
 To update the model outside of the element-based event system, we call `update_state` on
 our state var, which is the first parameter in our view func. A consequence of this is
 that we must pass state to any components that need to update state in this way. This
@@ -167,7 +168,7 @@ to prepend our closures with `move`, as above, any time `state` is used in one.
 Here's an example of using set_interval to update the state once every second. It uses
 `seed::set_interval`. `seed::set_timeout` also exists, and works the same way:
 ```rust
-fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {  
+fn view(model: &Model) -> El<Msg> {  
     div![
         did_mount(move |_| {
             let state2 = state.clone();

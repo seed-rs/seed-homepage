@@ -17,8 +17,10 @@ It neither uses completely natural (ie macro-free) Rust code, nor
 an HTML-like abstraction (eg JSX or templates). My intent is to make the code close
 to natural Rust, while streamlining the syntax in a way suited for creating
 a visual layout with minimal repetition. The macros used are thin wrappers
-for constructors, and don't conceal much. Specifically, the element-creation macros
-allow for accepting a variable number of parameters, and the attrs/style marcros are
+for constructors, and don't conceal much. 
+
+Specifically, the element-creation macros
+allow for accepting a variable number and order of parameters, and the attrs/style marcros are
 essentially HashMap literals, with wrappers that let element macros know how to distinguish
 them.
 
@@ -50,7 +52,7 @@ quickstart guide.
 
 Seed's different approach to view syntax also distinguishes it:
 rather than use an HTML-like markup similar to JSX,
-it uses Rust builtin types, thinly-wrapped by macros that allow flexible composition.
+it uses Rust builtin types, with thinly-wrapped by macros that allow flexible composition.
 This decision will not appeal to everyone, but I think it integrates more naturally with
 the language.
 

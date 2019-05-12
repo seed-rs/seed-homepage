@@ -517,7 +517,7 @@ __exports.__wbg_forEach_9899ccee170da7ff = function(arg0, arg1, arg2) {
         }
 
     };
-    cbarg1.f = wasm.__wbg_function_table.get(132);
+    cbarg1.f = wasm.__wbg_function_table.get(124);
     cbarg1.a = arg1;
     cbarg1.b = arg2;
     try {
@@ -562,7 +562,7 @@ __exports.__wbg_new_ce158cf1048d4c17 = function(arg0, arg1) {
         }
 
     };
-    cbarg0.f = wasm.__wbg_function_table.get(136);
+    cbarg0.f = wasm.__wbg_function_table.get(128);
     cbarg0.a = arg0;
     cbarg0.b = arg1;
     try {
@@ -696,9 +696,9 @@ __exports.__wbindgen_throw = function(ptr, len) {
     throw new Error(getStringFromWasm(ptr, len));
 };
 
-__exports.__wbindgen_closure_wrapper253 = function(a, b, _ignored) {
-    const f = wasm.__wbg_function_table.get(58);
-    const d = wasm.__wbg_function_table.get(59);
+__exports.__wbindgen_closure_wrapper249 = function(a, b, _ignored) {
+    const f = wasm.__wbg_function_table.get(54);
+    const d = wasm.__wbg_function_table.get(55);
     const cb = function(arg0) {
         this.cnt++;
         let a = this.a;
@@ -720,9 +720,9 @@ __exports.__wbindgen_closure_wrapper253 = function(a, b, _ignored) {
     return addHeapObject(real);
 };
 
-__exports.__wbindgen_closure_wrapper382 = function(a, b, _ignored) {
-    const f = wasm.__wbg_function_table.get(104);
-    const d = wasm.__wbg_function_table.get(105);
+__exports.__wbindgen_closure_wrapper375 = function(a, b, _ignored) {
+    const f = wasm.__wbg_function_table.get(96);
+    const d = wasm.__wbg_function_table.get(97);
     const cb = function(arg0) {
         this.cnt++;
         let a = this.a;

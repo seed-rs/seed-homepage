@@ -90,8 +90,6 @@ impl Default for Model {
     }
 }
 
-// Update
-
 #[derive(Clone)]
 enum Msg {
     ChangePage(Page),
@@ -99,7 +97,7 @@ enum Msg {
 }
 
 /// The sole source of updating the model; returns a fresh one.
-fn update(msg: Msg, model: &mut Model) -> Update<Msg> {
+fn update(msg: Msg, model: &mut Model) -> impl Updater<Msg> {
     match msg {
         Msg::ChangePage(page) => model.page = page,
         Msg::ChangeGuidePage(guide_page) => {
@@ -107,10 +105,7 @@ fn update(msg: Msg, model: &mut Model) -> Update<Msg> {
             model.guide_page = guide_page;
         }
     }
-    Render.into()
 }
-
-// View
 
 fn header(_version: &str) -> El<Msg> {
     let link_style = style! {

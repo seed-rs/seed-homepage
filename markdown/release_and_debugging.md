@@ -25,11 +25,11 @@ show up as console errors in the web browser. Example:
 
 
 ### Logging
-You may log things to the JS console using the following 3 functions: `seed::log`, `seed::error`,
-and `seed::debug`. The first two accept a single argument which implements `ToString`, eg `String`,
-`&str` etc. The third accepts one that implements `Debug`. Each has a corresponding macro: `log!`,
-`error!`, and `debug!`, which work in a similar way, but accept multiple arguments, which will
-be displayed separated by spaces.
+You may log things to the browser console using the following functions: `seed::log`, and `seed::error`.
+ They accept a single argument which implements `Debug`. Each has a corresponding macro: `log!`, and
+`error!`, which work in a similar way, but accept multiple arguments, which will
+be displayed separated by spaces. If you'd like to log something which implements `ToString`, but
+not `Debug`, call `to_string()` on it when using it in the function or macro.
 
 
 ### Debugging elements
@@ -56,13 +56,15 @@ enum Msg {
 To run tests, you may either use `wasm-pack` test commands, or simplified ones from the 
 `Makefile.toml` included in the quickstart repo. 
 
-To run all tests with the makefile:
+To run all tests with the Makefile:
 `cargo make test firefox`
 Where `firefox` may be replaced with `chrome` or `safari`.
 
-With `wasm-pack` directly, or to run individual tests, use commands similar to this, with 
-`test_name` replaced
-with the name of the test:
+To run a single test:
+`cargo make test test_name`. 
+with `test_name` replaced by the name of the test. It uses Firefox.
+
+With `wasm-pack` directly, or to run individual tests, use commands similar to this:
 ```bash
 wasm-pack test --firefox --headless -- --lib test_name
 ```

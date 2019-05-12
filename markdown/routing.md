@@ -98,7 +98,7 @@ fn set_guide_page(guide_page: Page, model: &mut Model) {
     model.guide_page = guide_page;
 }
 
-fn update(msg: Msg, model: &mut Model) -> Update<Msg> {
+fn update(msg: Msg, model: &mut Model) -> impl Updater<Msg> {
     match msg {
         Msg::RoutePage(page) => {
             seed::push_route(vec![page]);
@@ -113,7 +113,6 @@ fn update(msg: Msg, model: &mut Model) -> Update<Msg> {
         Msg::ChangePage(page) => Render(Model {page, ..model}),
         Msg::ChangeGuidePage(guide_page) => Render(Model {guide_page, page: Page::Guide, ..model}),
     }
-    Render.into()
 }
 ```
 

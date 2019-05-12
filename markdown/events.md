@@ -13,6 +13,7 @@ similar to an arrow func in JS) that returns a Msg enum.
 `simple_ev` does not pass any information about the event, only that it fired.
 Example: 
 ```rust
+#[derive(Clone)]
 enum Msg {
     ClickClick
 }
@@ -24,6 +25,7 @@ simple_ev(Ev::DblClick, Msg::ClickClick)`
 select`,  field.
 Example: 
 ```rust
+#[derive(Clone)]
 enum Msg {
     NewWords(String)
 }
@@ -57,6 +59,7 @@ which exposes several getter methods like `key_code` and `key`. `mouse_ev` works
 way.
 Example:
 ```rust
+#[derive(Clone)]
 enum Msg {
     PutTheHammerDown(web_sys::KeyboardEvent)
 }
@@ -72,6 +75,7 @@ or Event for raw_ev described below),
 you can't use this shorthand, and would have to do something like this intead,
 explicitly writing the closure:
 ```rust
+#[derive(Clone)]
 enum Msg {
     NewWords(String, u32)
 }
@@ -124,6 +128,7 @@ and more code in the update func's match arms. For example, to process a keyboar
 these two approaches are equivalent:
 
 ```rust
+#[derive(Clone)]
 enum Msg {
     KeyDown(web_sys::KeyboardEvent)
 }
@@ -183,11 +188,11 @@ enum Msg {
     KeyPressed(web_sys::KeyboardEvent),
 }
 
-fn update(msg: Msg, model: Model) -> Update<Model> {
+fn update(msg: Msg, model: Model) -> impl Updater<Model> {
     match msg {
-        Msg::ToggleWatching => Render(Model {watching: !model.watching, ..model}),
-        Msg::UpdateCoords(ev) => Render(Model {coords: (ev.screen_x(), ev.screen_y()), ..model}),
-        Msg::KeyPressed(ev) => Render(Model {last_keycode: ev.key_code(), ..model})
+        Msg::ToggleWatching => Model {watching: !model.watching, ..model},
+        Msg::UpdateCoords(ev) => Model {coords: (ev.screen_x(), ev.screen_y()), ..model},
+        Msg::KeyPressed(ev) => Model {last_keycode: ev.key_code(), ..model}
     }
 }
 

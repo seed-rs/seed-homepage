@@ -1,3 +1,15 @@
+[![Build Status](https://travis-ci.org/David-OConnor/seed.svg?branch=master)](https://travis-ci.org/David-OConnor/seed)
+[![crates.io version](https://meritbadge.herokuapp.com/seed)](https://crates.io/crates/seed)
+[![crates.io downloads](https://img.shields.io/crates/d/seed.svg)](https://crates.io/crates/seed)
+[![docs.rs](https://docs.rs/seed/badge.svg)](https://docs.rs/seed)
+[![Built with cargo-make](https://sagiegurari.github.io/cargo-make/assets/badges/cargo-make.svg)](https://sagiegurari.github.io/cargo-make)
+
+<p align="center">
+  <img src="/seed_branding/seed_logo.svg" width="256" title="Seed logo">
+</p>
+
+The best place to learn is the [guide](https://seed-rs.org) - this readme is an excerpt from it.
+
 # Quickstart
 
 ## Setup
@@ -107,14 +119,13 @@ enum Msg {
     ChangeWWC(String),
 }
 
-/// The sole source of updating the model
-fn update(msg: Msg, model: &mut Model) -> Update<Msg> {
+/// How we update the model
+fn update(msg: Msg, model: &mut Model) -> impl Updater<Msg> {
     match msg {
         Msg::Increment => model.count += 1,
         Msg::Decrement => model.count -= 1,
         Msg::ChangeWWC(what_we_count) => model.what_we_count = what_we_count,
     }
-    Render.into()
 }
 
 
@@ -179,7 +190,7 @@ For a truly minimimal example, see [lib.rs in the quickstart repo](https://githu
 
 ## Building and running
 
-To build your app run `cargo make all`, and to host on a dev server, run `cargo make serve`.
+To build your app, run `cargo make all`, and to host on a dev server, run `cargo make serve`.
 
 For a more robust starting setup, check out Martin Kavik's [seed-quickstart-webpack repo](https://github.com/MartinKavik/seed-quickstart-webpack).
 

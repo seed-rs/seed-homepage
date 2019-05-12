@@ -87,7 +87,7 @@ In `shared/lib.rs`, we set up serializable data structures:
 ```rust
 use serde::{Serialize, Deserialize};
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Data {
     pub val: i8,
     pub text: String,
@@ -116,35 +116,47 @@ update it from the backend:
 ```rust
 use shared::Data;
 
-#[derive(Clone)]
 struct Model {
     pub data: Data,
 }
 
-fn get_data(state: seed::App<Msg, Model>) -> impl Future<Item = (), Error = JsValue>  {
-    let url = "http://localhost:8001/data";
+fn get_data() -> impl Future<Item = Msg, Error = Msg> {
+    let url = "https://localhost:8001/get_data";
 
-        seed::Request::new(url)
-        .method(seed::Method::Get)
+    Request::new(url)
+        .method(Method::Get)
         .fetch_json()
-        .map(move |json| {
-            state.update(Msg::Replace(json));
-        })
+        .map(Msg::Replace)
+        .map_err(Msg::OnFetchErr)
 }
 
 #[derive(Clone)]
 enum Msg {
-    GetData(seed::App<Msg, Model>),
+    GetData,
     Replace(Data),
+    OnServerResponse(ServerResponse),
+    OnFetchErr(JsValue),
 }
 
-fn update(msg: Msg, model: Model) -> Update<Msg, Model> {
+fn update(msg: Msg, model: &mut Model) -> impl Updater<Msg> {
     match msg {
-        Msg::GetData(state) => {
-            seed::spawn_local(get_data(state));
-            Render(model)
-        },
-        Msg::Replace(data) => Render(Model {data})
+        Msg::Replace(data) => {
+            model.data = data
+        }
+
+        Msg::GetData => Update::with_future_msg(get_data()).skip(),
+
+        Msg::Send => Update::with_future_msg(send()).skip(),
+
+        Msg::OnServerResponse(result) => {
+            log!(format!("Response: {:#?}", result));
+            Skip
+        }
+
+        Msg::OnFetchErr(err) => {
+            log!(format!("Fetch error: {:#?}", err));
+            Skip
+        }
     }
 }
 

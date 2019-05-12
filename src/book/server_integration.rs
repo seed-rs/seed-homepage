@@ -57,7 +57,7 @@ serde = { version = &quot;^1.0.80&quot;, features = [&#39;derive&#39;] }</code><
 <p>In <code>shared/lib.rs</code>, we set up serializable data structures:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">use</span> <span class="pp">serde::</span><span class="op">{</span>Serialize, Deserialize<span class="op">}</span>;</a>
 <a class="sourceLine" id="cb5-2" title="2"></a>
-<a class="sourceLine" id="cb5-3" title="3"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">,</span> Serialize<span class="at">,</span> Deserialize<span class="at">)]</span></a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="at">#[</span>derive<span class="at">(</span>Serialize<span class="at">,</span> Deserialize<span class="at">)]</span></a>
 <a class="sourceLine" id="cb5-4" title="4"><span class="kw">pub</span> <span class="kw">struct</span> Data <span class="op">{</span></a>
 <a class="sourceLine" id="cb5-5" title="5">    <span class="kw">pub</span> val: <span class="dt">i8</span>,</a>
 <a class="sourceLine" id="cb5-6" title="6">    <span class="kw">pub</span> text: <span class="dt">String</span>,</a>
@@ -78,36 +78,48 @@ serde = { version = &quot;^1.0.80&quot;, features = [&#39;derive&#39;] }</code><
 <p>Frontend, showing how you might use the same data Struct as part of the model, and update it from the backend:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">use</span> <span class="pp">shared::</span>Data;</a>
 <a class="sourceLine" id="cb7-2" title="2"></a>
-<a class="sourceLine" id="cb7-3" title="3"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
-<a class="sourceLine" id="cb7-4" title="4"><span class="kw">struct</span> Model <span class="op">{</span></a>
-<a class="sourceLine" id="cb7-5" title="5">    <span class="kw">pub</span> data: Data,</a>
-<a class="sourceLine" id="cb7-6" title="6"><span class="op">}</span></a>
-<a class="sourceLine" id="cb7-7" title="7"></a>
-<a class="sourceLine" id="cb7-8" title="8"><span class="kw">fn</span> get_data(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;) -&gt; <span class="kw">impl</span> Future&lt;Item = (), Error = JsValue&gt;  <span class="op">{</span></a>
-<a class="sourceLine" id="cb7-9" title="9">    <span class="kw">let</span> url = <span class="st">&quot;http://localhost:8001/data&quot;</span>;</a>
-<a class="sourceLine" id="cb7-10" title="10"></a>
-<a class="sourceLine" id="cb7-11" title="11">        <span class="pp">seed::Request::</span>new(url)</a>
-<a class="sourceLine" id="cb7-12" title="12">        .method(<span class="pp">seed::Method::</span>Get)</a>
-<a class="sourceLine" id="cb7-13" title="13">        .fetch_json()</a>
-<a class="sourceLine" id="cb7-14" title="14">        .map(<span class="kw">move</span> |json| <span class="op">{</span></a>
-<a class="sourceLine" id="cb7-15" title="15">            state.update(<span class="pp">Msg::</span>Replace(json));</a>
-<a class="sourceLine" id="cb7-16" title="16">        <span class="op">}</span>)</a>
-<a class="sourceLine" id="cb7-17" title="17"><span class="op">}</span></a>
-<a class="sourceLine" id="cb7-18" title="18"></a>
-<a class="sourceLine" id="cb7-19" title="19"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
-<a class="sourceLine" id="cb7-20" title="20"><span class="kw">enum</span> Msg <span class="op">{</span></a>
-<a class="sourceLine" id="cb7-21" title="21">    GetData(<span class="pp">seed::</span>App&lt;Msg, Model&gt;),</a>
-<a class="sourceLine" id="cb7-22" title="22">    Replace(Data),</a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="kw">struct</span> Model <span class="op">{</span></a>
+<a class="sourceLine" id="cb7-4" title="4">    <span class="kw">pub</span> data: Data,</a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="op">}</span></a>
+<a class="sourceLine" id="cb7-6" title="6"></a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="kw">fn</span> get_data() -&gt; <span class="kw">impl</span> Future&lt;Item = Msg, Error = Msg&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb7-8" title="8">    <span class="kw">let</span> url = <span class="st">&quot;https://localhost:8001/get_data&quot;</span>;</a>
+<a class="sourceLine" id="cb7-9" title="9"></a>
+<a class="sourceLine" id="cb7-10" title="10">    <span class="pp">Request::</span>new(url)</a>
+<a class="sourceLine" id="cb7-11" title="11">        .method(<span class="pp">Method::</span>Get)</a>
+<a class="sourceLine" id="cb7-12" title="12">        .fetch_json()</a>
+<a class="sourceLine" id="cb7-13" title="13">        .map(<span class="pp">Msg::</span>Replace)</a>
+<a class="sourceLine" id="cb7-14" title="14">        .map_err(<span class="pp">Msg::</span>OnFetchErr)</a>
+<a class="sourceLine" id="cb7-15" title="15"><span class="op">}</span></a>
+<a class="sourceLine" id="cb7-16" title="16"></a>
+<a class="sourceLine" id="cb7-17" title="17"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
+<a class="sourceLine" id="cb7-18" title="18"><span class="kw">enum</span> Msg <span class="op">{</span></a>
+<a class="sourceLine" id="cb7-19" title="19">    GetData,</a>
+<a class="sourceLine" id="cb7-20" title="20">    Replace(Data),</a>
+<a class="sourceLine" id="cb7-21" title="21">    OnServerResponse(ServerResponse),</a>
+<a class="sourceLine" id="cb7-22" title="22">    OnFetchErr(JsValue),</a>
 <a class="sourceLine" id="cb7-23" title="23"><span class="op">}</span></a>
 <a class="sourceLine" id="cb7-24" title="24"></a>
-<a class="sourceLine" id="cb7-25" title="25"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; Update&lt;Msg, Model&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb7-25" title="25"><span class="kw">fn</span> update(msg: Msg, model: &amp;<span class="kw">mut</span> Model) -&gt; <span class="kw">impl</span> Updater&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb7-26" title="26">    <span class="kw">match</span> msg <span class="op">{</span></a>
-<a class="sourceLine" id="cb7-27" title="27">        <span class="pp">Msg::</span>GetData(state) =&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb7-28" title="28">            <span class="pp">seed::</span>spawn_local(get_data(state));</a>
-<a class="sourceLine" id="cb7-29" title="29">            Render(model)</a>
-<a class="sourceLine" id="cb7-30" title="30">        <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb7-31" title="31">        <span class="pp">Msg::</span>Replace(data) =&gt; Render(Model <span class="op">{</span>data<span class="op">}</span>)</a>
-<a class="sourceLine" id="cb7-32" title="32">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb7-33" title="33"><span class="op">}</span></a></code></pre></div>
+<a class="sourceLine" id="cb7-27" title="27">        <span class="pp">Msg::</span>Replace(data) =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb7-28" title="28">            model.data = data</a>
+<a class="sourceLine" id="cb7-29" title="29">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb7-30" title="30"></a>
+<a class="sourceLine" id="cb7-31" title="31">        <span class="pp">Msg::</span>GetData =&gt; <span class="pp">Update::</span>with_future_msg(get_data()).skip(),</a>
+<a class="sourceLine" id="cb7-32" title="32"></a>
+<a class="sourceLine" id="cb7-33" title="33">        <span class="pp">Msg::</span><span class="bu">Send</span> =&gt; <span class="pp">Update::</span>with_future_msg(send()).skip(),</a>
+<a class="sourceLine" id="cb7-34" title="34"></a>
+<a class="sourceLine" id="cb7-35" title="35">        <span class="pp">Msg::</span>OnServerResponse(result) =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb7-36" title="36">            <span class="pp">log!</span>(<span class="pp">format!</span>(<span class="st">&quot;Response: {:#?}&quot;</span>, result));</a>
+<a class="sourceLine" id="cb7-37" title="37">            Skip</a>
+<a class="sourceLine" id="cb7-38" title="38">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb7-39" title="39"></a>
+<a class="sourceLine" id="cb7-40" title="40">        <span class="pp">Msg::</span>OnFetchErr(err) =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb7-41" title="41">            <span class="pp">log!</span>(<span class="pp">format!</span>(<span class="st">&quot;Fetch error: {:#?}&quot;</span>, err));</a>
+<a class="sourceLine" id="cb7-42" title="42">            Skip</a>
+<a class="sourceLine" id="cb7-43" title="43">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb7-44" title="44">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb7-45" title="45"><span class="op">}</span></a></code></pre></div>
 "#.into()
 }

@@ -34,13 +34,11 @@ Use owned data in the model; eg `String` instead of `&'static str`. The model ma
 this is especially useful as the app grows:
  
 ```rust
-#[derive(Clone)]
 struct FormData {
     name: String,
     age: i8,
 }
 
-#[derive(Clone)]
 struct Misc {
     value: i8,
     descrip: String,
@@ -82,16 +80,16 @@ fetch requests. See the `Http requests` section for more info.
 
 Example:
 ```rust
-fn update(msg: Msg, model: &mut Model) -> Update<Msg> {
+fn update(msg: Msg, model: &mut Model) -> impl Updater<Msg> {
     match msg {
         Msg::Increment => model.count += 1,
         Msg::SetCount(count) => model.count = count,
     }
-    Render.into()
 }
 ```
 
-While the signature of the update function is fixed, and will usually involve a match pattern with an arm for each message, there
+While the signature of the update function is fixed, and will usually involve a 
+match pattern with an arm for each message, there
 are many ways you can structure this function. Some may be easier to write, and others may 
 be more efficient, or appeal to specific aesthetics. While the example above
 it straightforward, this becomes important with more complex updates. Note the `Render.into()`
@@ -100,7 +98,7 @@ line at the end: This converts `ShouldRender::Render` into an `Update` struct wi
 More detailed example, from the 
 [todoMVC example](https://github.com/David-OConnor/seed/tree/master/examples/todomvc):
 ```rust
-fn update(msg: Msg, &mut model: Model) -> Update<Msg> {
+fn update(msg: Msg, &mut model: Model) -> impl Updater<Msg> {
     match msg {
         Msg::ClearCompleted => {
             model.todos = model.todos.into_iter()
@@ -117,12 +115,15 @@ fn update(msg: Msg, &mut model: Model) -> Update<Msg> {
                 todo.completed = completed;
             }
         }
-    Render.into()
 }
 ```
 
 As with the model, only one update function is passed to the app, but it may be split into 
 sub-functions to aid code organization.
+
+`Updater` is a trait which allows the function to return any of several things: a `ShouldRender`,
+which tells the vdom wheather it should render updated elements or not, an `Effect`, which is used
+for updating asynchronously, eg http requests, or nothing, which triggers a render.
 
 ## View
  Visual layout (ie HTML/DOM elements) is described declaratively in Rust, and uses 
@@ -131,15 +132,15 @@ sub-functions to aid code organization.
 The view's defined bya function that's passed to `seed::run`. This takes a `Seed::app<Msg, Model>`, and Model
 as parameters, and outputs something that implements the ` ElContainer` trait, which is imported in the prelude.
 Usually, this is an `El`, or `Vec<El>`, representing all elements that will be inserted as children
-on the top-level element. (The top-level element is in the html file, and specified in 
-`seed::App::build.mount()`, or as a default, `app`).
+on the top-level element. (The top-level element is in the html file, and specified with
+`seed::App::build.mount()`, or as a default, the element with id `app`).
  It may composed into sub-functions, which can be thought of like components in other frameworks. 
  The first parameter, which we will call `state` in our examples, is used for updating state 
  outside of the message system, and will not be used in these examples.
 
 Examples:
 ```rust
-fn view(state: seed::App<Msg, Model>, model: &Model) ->El<Msg> {
+fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
     h1![ "Let there be light" ],
 }
 ```
@@ -319,12 +320,24 @@ To start your app, call the `seed::App::build` method, which takes the following
 
 You can can chain the following optional methods:
 
-- `.mount("element-id")` to mount in an element that has an id other than `app`
+- `.mount()` to mount in an element other than the one with id `app`.
 - `.routes(routes)` to set a HashMap of landing-page routings, used to initialize your 
 state based on url (See the `Routing` section)
 - `.window_events(window_events)`, to set a function describing events on the `Window`. (See the `Events` section)
 
 And must must complete with these methods: `.finish().run()`.
+
+`.mount()` takes a single argument, which can be the id of the element you wish to mount in,
+a `web_sys::Element`, or a `web_sys::HtmlElement`. Examples:
+`seed::App::build(Model::default(), update, view).mount(seed::body())`
+`seed::App::build(Model::default(), update, view).mount('a_div_id`)`
+
+```
+seed::App::build(Model::default(), update, view).mount(
+    seed::body().querySelector("section").unwrap().unwrap()
+)
+```
+
 
 This must be wrapped in a function named `render`, with the `#[wasm_bindgen]` invocation above.
  (More correctly, its name must match the func in this line in your html file):
