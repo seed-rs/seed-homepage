@@ -117,7 +117,9 @@ fn update(msg: Msg, model: &mut Model, _orders: &mut Orders<Msg>) {
 }
 ```
 
-The third parameter of the update function is an `Orders` struct, imported in the prelude.
+The third parameter of the update function is an 
+[Orders](https://docs.rs/seed/0.3.4/seed/prelude/struct.Orders.html)) 
+ struct, imported in the prelude.
 It has four methods, each defining an update behavior:
 
 - `render`: Rerender the DOM, based on the new model. If `orders` is not used for a branch, it
