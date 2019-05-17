@@ -69,7 +69,7 @@ r#"
 <a class="sourceLine" id="cb5-16" title="16">            <span class="op">}</span></a>
 <a class="sourceLine" id="cb5-17" title="17">        <span class="op">}</span></a>
 <a class="sourceLine" id="cb5-18" title="18"><span class="op">}</span></a></code></pre></div>
-<p>The third parameter of the update function is an <a href="https://docs.rs/seed/0.3.4/seed/prelude/struct.Orders.html">Orders</a>) struct, imported in the prelude. It has four methods, each defining an update behavior:</p>
+<p>The third parameter of the update function is an <a href="https://docs.rs/seed/0.3.4/seed/prelude/struct.Orders.html">Orders</a> struct, imported in the prelude. It has four methods, each defining an update behavior:</p>
 <ul>
 <li><code>render</code>: Rerender the DOM, based on the new model. If <code>orders</code> is not used for a branch, it is used.</li>
 <li><code>skip</code>: Update the model without re-rendering</li>
