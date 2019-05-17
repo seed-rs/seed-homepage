@@ -97,7 +97,7 @@ enum Msg {
 }
 
 /// The sole source of updating the model; returns a fresh one.
-fn update(msg: Msg, model: &mut Model) -> impl Updater<Msg> {
+fn update(msg: Msg, model: &mut Model, _orders: &mut Orders<Msg>) {
     match msg {
         Msg::ChangePage(page) => model.page = page,
         Msg::ChangeGuidePage(guide_page) => {
