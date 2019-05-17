@@ -80,7 +80,7 @@ fetch requests. See the `Http requests` section for more info.
 
 Example:
 ```rust
-fn update(msg: Msg, model: &mut Model) -> impl Updater<Msg> {
+fn update(msg: Msg, model: &mut Model, _orders: &mut Orders<Msg>) {
     match msg {
         Msg::Increment => model.count += 1,
         Msg::SetCount(count) => model.count = count,
@@ -92,13 +92,12 @@ While the signature of the update function is fixed, and will usually involve a
 match pattern with an arm for each message, there
 are many ways you can structure this function. Some may be easier to write, and others may 
 be more efficient, or appeal to specific aesthetics. While the example above
-it straightforward, this becomes important with more complex updates. Note the `Render.into()`
-line at the end: This converts `ShouldRender::Render` into an `Update` struct with no `Effect`.
+it straightforward, this becomes important with more complex updates.
 
 More detailed example, from the 
 [todoMVC example](https://github.com/David-OConnor/seed/tree/master/examples/todomvc):
 ```rust
-fn update(msg: Msg, &mut model: Model) -> impl Updater<Msg> {
+fn update(msg: Msg, model: &mut Model, _orders: &mut Orders<Msg>) {
     match msg {
         Msg::ClearCompleted => {
             model.todos = model.todos.into_iter()
@@ -118,12 +117,22 @@ fn update(msg: Msg, &mut model: Model) -> impl Updater<Msg> {
 }
 ```
 
+The third parameter of the update function is an `Orders` struct, imported in the prelude.
+It has four methods, each defining an update behavior:
+
+- `render`: Rerender the DOM, based on the new model. If `orders` is not used for a branch, it
+is used.
+- `skip`: Update the model without re-rendering
+- `send_msg`: Update again, with a new message, the only parameter to this method
+- `perform_cmd`: Perform an asynchronous task, like pulling data from a server. Its parameter
+is a `Future`, ie `Future<Item = Ms, Error = Ms> + 'static`.
+
+For an example of how to use orders, see the 
+[orders example](https://github.com/David-OConnor/seed/blob/master/examples/orders/src/lib.rs).
+
 As with the model, only one update function is passed to the app, but it may be split into 
 sub-functions to aid code organization.
 
-`Updater` is a trait which allows the function to return any of several things: a `ShouldRender`,
-which tells the vdom wheather it should render updated elements or not, an `Effect`, which is used
-for updating asynchronously, eg http requests, or nothing, which triggers a render.
 
 ## View
  Visual layout (ie HTML/DOM elements) is described declaratively in Rust, and uses 
@@ -140,19 +149,20 @@ on the top-level element. (The top-level element is in the html file, and specif
 
 Examples:
 ```rust
-fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
+fn view(model: &Model) -> El<Msg> {
     h1![ "Let there be light" ],
 }
 ```
 
 ```rust
-fn view(state: seed::App<Msg, Model>, model: &Model) -> Vec<El<Msg>> {
+fn view(model: &Model) -> Vec<El<Msg>> {
     vec![
         h1![ "Let there be light" ],
         h2![ "Let it be both a particle and a wave" ]
     ]
 }
 ```
+In either of those examples, you could use the signature: `fn view(model: &Model) -> impl ElContainer<Msg>` instead.
 
 ## Elements, attributes, styles
 Elements are created using macros, named by the lowercase name of
@@ -182,7 +192,7 @@ respectively.
 
 Example:
 ```rust
-fn view(state: seed::App<Msg, Model>, model: &Model) -> El<Msg> {
+fn view(model: &Model) -> El<Msg> {
     let things = vec![ h4![ "thing1" ], h4![ "thing2" ] ];
 
     div![ attrs!{At::Class => "hardly-any"}, 

@@ -238,6 +238,15 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
 fn changelog() -> El<Msg> {
     let mut entries = span![ El::from_markdown(
 "
+## v0.3.4
+- The `update` fn now accepts a (new) `Orders` struct, and returns nothing. Renders occur implicitly,
+with the option to skip rendering, update with an additional message, or perform an asynchronous
+action. (Breaking)
+- `.mount()` now accepts elements. Deprecated `.mount_el()`
+- The `log` function and macro now support items which implement `Debug`
+- Removed deprecated `routing::push_path` function (breaking)
+
+
 ## v0.3.3
 - Added `seed::update` function, which allows custom events, and updates from JS.
 

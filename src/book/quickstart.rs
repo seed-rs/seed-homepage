@@ -76,7 +76,7 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <a class="sourceLine" id="cb3-31" title="31"><span class="op">}</span></a>
 <a class="sourceLine" id="cb3-32" title="32"></a>
 <a class="sourceLine" id="cb3-33" title="33"><span class="co">/// How we update the model</span></a>
-<a class="sourceLine" id="cb3-34" title="34"><span class="kw">fn</span> update(msg: Msg, model: &amp;<span class="kw">mut</span> Model) -&gt; <span class="kw">impl</span> Updater&lt;Msg&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-34" title="34"><span class="kw">fn</span> update(msg: Msg, model: &amp;<span class="kw">mut</span> Model, _orders: &amp;<span class="kw">mut</span> Orders&lt;Msg&gt;) <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-35" title="35">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-36" title="36">        <span class="pp">Msg::</span>Increment =&gt; model.count += <span class="dv">1</span>,</a>
 <a class="sourceLine" id="cb3-37" title="37">        <span class="pp">Msg::</span>Decrement =&gt; model.count -= <span class="dv">1</span>,</a>

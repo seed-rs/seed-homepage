@@ -43,15 +43,15 @@ r#"
 <a class="sourceLine" id="cb3-6" title="6"><span class="op">}</span></a></code></pre></div>
 <p>The update <a href="https://doc.rust-lang.org/book/ch03-03-how-functions-work.html">function</a> you pass to <code>seed::App::build(</code> describes how the state should change, upon receiving each type of message. It's the only place where the model is changed. It accepts a message, and model as parameters, and returns an <code>Update</code> struct. <code>Update</code> contains <code>ShouldRender</code> and <code>Effect</code> enums. <code>ShouldRender</code> and its variants are imported in the prelude, and has variants of <code>Render</code> and <code>Skip</code>. Render triggers a rendering update, and will be used in most cases. <code>Skip</code> updates the model without triggering a render, and is useful in animations. <code>Effect</code> isn't exposed in the API: it's used internally to handle async events like fetch requests. See the <code>Http requests</code> section for more info.</p>
 <p>Example:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">fn</span> update(msg: Msg, model: &amp;<span class="kw">mut</span> Model) -&gt; <span class="kw">impl</span> Updater&lt;Msg&gt; <span class="op">{</span></a>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">fn</span> update(msg: Msg, model: &amp;<span class="kw">mut</span> Model, _orders: &amp;<span class="kw">mut</span> Orders&lt;Msg&gt;) <span class="op">{</span></a>
 <a class="sourceLine" id="cb4-2" title="2">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb4-3" title="3">        <span class="pp">Msg::</span>Increment =&gt; model.count += <span class="dv">1</span>,</a>
 <a class="sourceLine" id="cb4-4" title="4">        <span class="pp">Msg::</span>SetCount(count) =&gt; model.count = count,</a>
 <a class="sourceLine" id="cb4-5" title="5">    <span class="op">}</span></a>
 <a class="sourceLine" id="cb4-6" title="6"><span class="op">}</span></a></code></pre></div>
-<p>While the signature of the update function is fixed, and will usually involve a match pattern with an arm for each message, there are many ways you can structure this function. Some may be easier to write, and others may be more efficient, or appeal to specific aesthetics. While the example above it straightforward, this becomes important with more complex updates. Note the <code>Render.into()</code> line at the end: This converts <code>ShouldRender::Render</code> into an <code>Update</code> struct with no <code>Effect</code>.</p>
+<p>While the signature of the update function is fixed, and will usually involve a match pattern with an arm for each message, there are many ways you can structure this function. Some may be easier to write, and others may be more efficient, or appeal to specific aesthetics. While the example above it straightforward, this becomes important with more complex updates.</p>
 <p>More detailed example, from the <a href="https://github.com/David-OConnor/seed/tree/master/examples/todomvc">todoMVC example</a>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">fn</span> update(msg: Msg, &amp;<span class="kw">mut</span> model: Model) -&gt; <span class="kw">impl</span> Updater&lt;Msg&gt; <span class="op">{</span></a>
+<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">fn</span> update(msg: Msg, model: &amp;<span class="kw">mut</span> Model, _orders: &amp;<span class="kw">mut</span> Orders&lt;Msg&gt;) <span class="op">{</span></a>
 <a class="sourceLine" id="cb5-2" title="2">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb5-3" title="3">        <span class="pp">Msg::</span>ClearCompleted =&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb5-4" title="4">            model.todos = model.todos.into_iter()</a>
@@ -69,21 +69,29 @@ r#"
 <a class="sourceLine" id="cb5-16" title="16">            <span class="op">}</span></a>
 <a class="sourceLine" id="cb5-17" title="17">        <span class="op">}</span></a>
 <a class="sourceLine" id="cb5-18" title="18"><span class="op">}</span></a></code></pre></div>
+<p>The third parameter of the update function is an <code>Orders</code> struct, imported in the prelude. It has four methods, each defining an update behavior:</p>
+<ul>
+<li><code>render</code>: Rerender the DOM, based on the new model. If <code>orders</code> is not used for a branch, it is used.</li>
+<li><code>skip</code>: Update the model without re-rendering</li>
+<li><code>send_msg</code>: Update again, with a new message, the only parameter to this method</li>
+<li><code>perform_cmd</code>: Perform an asynchronous task, like pulling data from a server. Its parameter is a <code>Future</code>, ie <code>Future&lt;Item = Ms, Error = Ms&gt; + 'static</code>.</li>
+</ul>
+<p>For an example of how to use orders, see the <a href="https://github.com/David-OConnor/seed/blob/master/examples/orders/src/lib.rs">orders example</a>.</p>
 <p>As with the model, only one update function is passed to the app, but it may be split into sub-functions to aid code organization.</p>
-<p><code>Updater</code> is a trait which allows the function to return any of several things: a <code>ShouldRender</code>, which tells the vdom wheather it should render updated elements or not, an <code>Effect</code>, which is used for updating asynchronously, eg http requests, or nothing, which triggers a render.</p>
 <h2 id="view">View</h2>
 <p>Visual layout (ie HTML/DOM elements) is described declaratively in Rust, and uses <a href="https://doc.rust-lang.org/book/appendix-04-macros.html">macros</a> to simplify syntax.</p>
 <p>The view's defined bya function that's passed to <code>seed::run</code>. This takes a <code>Seed::app&lt;Msg, Model&gt;</code>, and Model as parameters, and outputs something that implements the <code>ElContainer</code> trait, which is imported in the prelude. Usually, this is an <code>El</code>, or <code>Vec&lt;El&gt;</code>, representing all elements that will be inserted as children on the top-level element. (The top-level element is in the html file, and specified with <code>seed::App::build.mount()</code>, or as a default, the element with id <code>app</code>). It may composed into sub-functions, which can be thought of like components in other frameworks. The first parameter, which we will call <code>state</code> in our examples, is used for updating state outside of the message system, and will not be used in these examples.</p>
 <p>Examples:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: &amp;Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
+<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">fn</span> view(model: &amp;Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb6-2" title="2">    <span class="pp">h1!</span><span class="op">[</span> <span class="st">&quot;Let there be light&quot;</span> <span class="op">]</span>,</a>
 <a class="sourceLine" id="cb6-3" title="3"><span class="op">}</span></a></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: &amp;Model) -&gt; <span class="dt">Vec</span>&lt;El&lt;Msg&gt;&gt; <span class="op">{</span></a>
+<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">fn</span> view(model: &amp;Model) -&gt; <span class="dt">Vec</span>&lt;El&lt;Msg&gt;&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb7-2" title="2">    <span class="pp">vec!</span><span class="op">[</span></a>
 <a class="sourceLine" id="cb7-3" title="3">        <span class="pp">h1!</span><span class="op">[</span> <span class="st">&quot;Let there be light&quot;</span> <span class="op">]</span>,</a>
 <a class="sourceLine" id="cb7-4" title="4">        <span class="pp">h2!</span><span class="op">[</span> <span class="st">&quot;Let it be both a particle and a wave&quot;</span> <span class="op">]</span></a>
 <a class="sourceLine" id="cb7-5" title="5">    <span class="op">]</span></a>
 <a class="sourceLine" id="cb7-6" title="6"><span class="op">}</span></a></code></pre></div>
+<p>In either of those examples, you could use the signature: <code>fn view(model: &amp;Model) -&gt; impl ElContainer&lt;Msg&gt;</code> instead.</p>
 <h2 id="elements-attributes-styles">Elements, attributes, styles</h2>
 <p>Elements are created using macros, named by the lowercase name of each element, and imported into the global namespace. Eg <code>div!</code> above. We use this code to import them:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb8-1" title="1"><span class="at">#[</span>macro_use<span class="at">]</span></a>
@@ -93,7 +101,7 @@ r#"
 <p>Views are described using <a href="https://docs.rs/seed/0.3.4/seed/dom_types/struct.El.html">El</a> structs, defined in the <a href="https://docs.rs/seed/0.3.4/seed/dom_types/index.html">seed::dom_types</a> module.</p>
 <p><code>Attrs</code> and <code>Style</code> are thinly-wrapped hashmaps created with their own macros: <code>attrs!{}</code> and <code>style!{}</code> respectively.</p>
 <p>Example:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">fn</span> view(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;, model: &amp;Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
+<div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">fn</span> view(model: &amp;Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb9-2" title="2">    <span class="kw">let</span> things = <span class="pp">vec!</span><span class="op">[</span> <span class="pp">h4!</span><span class="op">[</span> <span class="st">&quot;thing1&quot;</span> <span class="op">]</span>, <span class="pp">h4!</span><span class="op">[</span> <span class="st">&quot;thing2&quot;</span> <span class="op">]</span> <span class="op">]</span>;</a>
 <a class="sourceLine" id="cb9-3" title="3"></a>
 <a class="sourceLine" id="cb9-4" title="4">    <span class="pp">div!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="pp">At::</span>Class =&gt; <span class="st">&quot;hardly-any&quot;</span><span class="op">}</span>, </a>

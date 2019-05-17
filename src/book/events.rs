@@ -16,7 +16,8 @@ r#"
 <a class="sourceLine" id="cb2-3" title="3">    NewWords(<span class="dt">String</span>)</a>
 <a class="sourceLine" id="cb2-4" title="4"><span class="op">}</span></a>
 <a class="sourceLine" id="cb2-5" title="5"><span class="co">// ...</span></a>
-<a class="sourceLine" id="cb2-6" title="6">input_ev(<span class="pp">Ev::</span>Input, <span class="pp">Msg::</span>NewWords)</a></code></pre></div>
+<a class="sourceLine" id="cb2-6" title="6"><span class="co">// ...</span></a>
+<a class="sourceLine" id="cb2-7" title="7">input_ev(<span class="pp">Ev::</span>Input, <span class="pp">Msg::</span>NewWords)</a></code></pre></div>
 <p>Example <code>select</code> element:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">enum</span> Msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-2" title="2">    ChangeSelected(<span class="dt">String</span>)</a>
@@ -105,11 +106,11 @@ r#"
 <a class="sourceLine" id="cb10-5" title="5">    KeyPressed(<span class="pp">web_sys::</span>KeyboardEvent),</a>
 <a class="sourceLine" id="cb10-6" title="6"><span class="op">}</span></a>
 <a class="sourceLine" id="cb10-7" title="7"></a>
-<a class="sourceLine" id="cb10-8" title="8"><span class="kw">fn</span> update(msg: Msg, model: Model) -&gt; <span class="kw">impl</span> Updater&lt;Model&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb10-8" title="8"><span class="kw">fn</span> update(msg: Msg, model: &amp;<span class="kw">mut</span> Model, _: &amp;<span class="kw">mut</span> Orders&lt;Msg&gt;) <span class="op">{</span></a>
 <a class="sourceLine" id="cb10-9" title="9">    <span class="kw">match</span> msg <span class="op">{</span></a>
-<a class="sourceLine" id="cb10-10" title="10">        <span class="pp">Msg::</span>ToggleWatching =&gt; Model <span class="op">{</span>watching: !model.watching, ..model<span class="op">}</span>,</a>
-<a class="sourceLine" id="cb10-11" title="11">        <span class="pp">Msg::</span>UpdateCoords(ev) =&gt; Model <span class="op">{</span>coords: (ev.screen_x(), ev.screen_y()), ..model<span class="op">}</span>,</a>
-<a class="sourceLine" id="cb10-12" title="12">        <span class="pp">Msg::</span>KeyPressed(ev) =&gt; Model <span class="op">{</span>last_keycode: ev.key_code(), ..model<span class="op">}</span></a>
+<a class="sourceLine" id="cb10-10" title="10">        <span class="pp">Msg::</span>ToggleWatching =&gt; model.watching = !model.watching,</a>
+<a class="sourceLine" id="cb10-11" title="11">        <span class="pp">Msg::</span>UpdateCoords(ev) =&gt; model.coords = (ev.screen_x(), ev.screen_y()),</a>
+<a class="sourceLine" id="cb10-12" title="12">        <span class="pp">Msg::</span>KeyPressed(ev) =&gt; model.last_keycode = ev.key_code(),</a>
 <a class="sourceLine" id="cb10-13" title="13">    <span class="op">}</span></a>
 <a class="sourceLine" id="cb10-14" title="14"><span class="op">}</span></a>
 <a class="sourceLine" id="cb10-15" title="15"></a>

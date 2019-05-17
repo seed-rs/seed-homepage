@@ -98,20 +98,24 @@ fn set_guide_page(guide_page: Page, model: &mut Model) {
     model.guide_page = guide_page;
 }
 
-fn update(msg: Msg, model: &mut Model) -> impl Updater<Msg> {
+fn update(msg: Msg, model: &mut Model, orders: &mut Orders<Msg>) {
     match msg {
         Msg::RoutePage(page) => {
             seed::push_route(vec![page]);
-            update(Msg::ChangePage(page), model)
+            orders.skip().send_msg(Msg::ChangePage(page))
         },
         Msg::RouteGuidePage(guide_page) => {
             seed::push_route(vec!["guide", guide_page]);
-            update(Msg::ChangeGuidePage(guide_page), model)
+            orders.skip().send_msg(Msg::ChangeGuidePage(guide_page))
         },
         // This is separate, because nagivating the route triggers state updates, which would
         // trigger an additional push state.
-        Msg::ChangePage(page) => Render(Model {page, ..model}),
+        Msg::ChangePage(page) => model.page = page
         Msg::ChangeGuidePage(guide_page) => Render(Model {guide_page, page: Page::Guide, ..model}),
+        Msg::ChangeGuidePage(guide_page) => {
+            model.guide_page = page;
+            model.page = Page::Guide;
+        }
     }
 }
 ```

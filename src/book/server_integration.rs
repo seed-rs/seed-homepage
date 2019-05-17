@@ -100,26 +100,24 @@ serde = { version = &quot;^1.0.80&quot;, features = [&#39;derive&#39;] }</code><
 <a class="sourceLine" id="cb7-22" title="22">    OnFetchErr(JsValue),</a>
 <a class="sourceLine" id="cb7-23" title="23"><span class="op">}</span></a>
 <a class="sourceLine" id="cb7-24" title="24"></a>
-<a class="sourceLine" id="cb7-25" title="25"><span class="kw">fn</span> update(msg: Msg, model: &amp;<span class="kw">mut</span> Model) -&gt; <span class="kw">impl</span> Updater&lt;Msg&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb7-25" title="25"><span class="kw">fn</span> update(msg: Msg, model: &amp;<span class="kw">mut</span> Model, orders: &amp;<span class="kw">mut</span> Orders&lt;Msg&gt;) <span class="op">{</span></a>
 <a class="sourceLine" id="cb7-26" title="26">    <span class="kw">match</span> msg <span class="op">{</span></a>
-<a class="sourceLine" id="cb7-27" title="27">        <span class="pp">Msg::</span>Replace(data) =&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb7-28" title="28">            model.data = data</a>
-<a class="sourceLine" id="cb7-29" title="29">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb7-30" title="30"></a>
-<a class="sourceLine" id="cb7-31" title="31">        <span class="pp">Msg::</span>GetData =&gt; <span class="pp">Update::</span>with_future_msg(get_data()).skip(),</a>
+<a class="sourceLine" id="cb7-27" title="27">        <span class="pp">Msg::</span>Replace(data) =&gt; model.data = data,</a>
+<a class="sourceLine" id="cb7-28" title="28"></a>
+<a class="sourceLine" id="cb7-29" title="29">        <span class="pp">Msg::</span>GetData =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb7-30" title="30">            orders.skip().perform_cmd(get_data());</a>
+<a class="sourceLine" id="cb7-31" title="31">        <span class="op">}</span></a>
 <a class="sourceLine" id="cb7-32" title="32"></a>
-<a class="sourceLine" id="cb7-33" title="33">        <span class="pp">Msg::</span><span class="bu">Send</span> =&gt; <span class="pp">Update::</span>with_future_msg(send()).skip(),</a>
-<a class="sourceLine" id="cb7-34" title="34"></a>
-<a class="sourceLine" id="cb7-35" title="35">        <span class="pp">Msg::</span>OnServerResponse(result) =&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb7-36" title="36">            <span class="pp">log!</span>(<span class="pp">format!</span>(<span class="st">&quot;Response: {:#?}&quot;</span>, result));</a>
-<a class="sourceLine" id="cb7-37" title="37">            Skip</a>
-<a class="sourceLine" id="cb7-38" title="38">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb7-39" title="39"></a>
-<a class="sourceLine" id="cb7-40" title="40">        <span class="pp">Msg::</span>OnFetchErr(err) =&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb7-41" title="41">            <span class="pp">log!</span>(<span class="pp">format!</span>(<span class="st">&quot;Fetch error: {:#?}&quot;</span>, err));</a>
-<a class="sourceLine" id="cb7-42" title="42">            Skip</a>
-<a class="sourceLine" id="cb7-43" title="43">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb7-44" title="44">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb7-45" title="45"><span class="op">}</span></a></code></pre></div>
+<a class="sourceLine" id="cb7-33" title="33">        <span class="pp">Msg::</span>OnServerResponse(result) =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb7-34" title="34">            <span class="pp">log!</span>(<span class="pp">format!</span>(<span class="st">&quot;Response: {:?}&quot;</span>, result));</a>
+<a class="sourceLine" id="cb7-35" title="35">            orders.skip();</a>
+<a class="sourceLine" id="cb7-36" title="36">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb7-37" title="37"></a>
+<a class="sourceLine" id="cb7-38" title="38">        <span class="pp">Msg::</span>OnFetchErr(err) =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb7-39" title="39">            <span class="pp">error!</span>(<span class="pp">format!</span>(<span class="st">&quot;Fetch error: {:?}&quot;</span>, err));</a>
+<a class="sourceLine" id="cb7-40" title="40">            orders.skip();</a>
+<a class="sourceLine" id="cb7-41" title="41">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb7-42" title="42">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb7-43" title="43"><span class="op">}</span></a></code></pre></div>
 "#.into()
 }

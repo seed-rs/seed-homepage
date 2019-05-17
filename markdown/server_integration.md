@@ -138,24 +138,22 @@ enum Msg {
     OnFetchErr(JsValue),
 }
 
-fn update(msg: Msg, model: &mut Model) -> impl Updater<Msg> {
+fn update(msg: Msg, model: &mut Model, orders: &mut Orders<Msg>) {
     match msg {
-        Msg::Replace(data) => {
-            model.data = data
+        Msg::Replace(data) => model.data = data,
+
+        Msg::GetData => {
+            orders.skip().perform_cmd(get_data());
         }
 
-        Msg::GetData => Update::with_future_msg(get_data()).skip(),
-
-        Msg::Send => Update::with_future_msg(send()).skip(),
-
         Msg::OnServerResponse(result) => {
-            log!(format!("Response: {:#?}", result));
-            Skip
+            log!(format!("Response: {:?}", result));
+            orders.skip();
         }
 
         Msg::OnFetchErr(err) => {
-            log!(format!("Fetch error: {:#?}", err));
-            Skip
+            error!(format!("Fetch error: {:?}", err));
+            orders.skip();
         }
     }
 }

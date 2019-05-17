@@ -30,6 +30,7 @@ enum Msg {
     NewWords(String)
 }
 // ...
+// ...
 input_ev(Ev::Input, Msg::NewWords)
 ```
 
@@ -188,11 +189,11 @@ enum Msg {
     KeyPressed(web_sys::KeyboardEvent),
 }
 
-fn update(msg: Msg, model: Model) -> impl Updater<Model> {
+fn update(msg: Msg, model: &mut Model, _: &mut Orders<Msg>) {
     match msg {
-        Msg::ToggleWatching => Model {watching: !model.watching, ..model},
-        Msg::UpdateCoords(ev) => Model {coords: (ev.screen_x(), ev.screen_y()), ..model},
-        Msg::KeyPressed(ev) => Model {last_keycode: ev.key_code(), ..model}
+        Msg::ToggleWatching => model.watching = !model.watching,
+        Msg::UpdateCoords(ev) => model.coords = (ev.screen_x(), ev.screen_y()),
+        Msg::KeyPressed(ev) => model.last_keycode = ev.key_code(),
     }
 }
 

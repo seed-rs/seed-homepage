@@ -26,53 +26,54 @@ r#"
 <a class="sourceLine" id="cb1-21" title="21">    OnFetchErr(JsValue),</a>
 <a class="sourceLine" id="cb1-22" title="22"><span class="op">}</span></a>
 <a class="sourceLine" id="cb1-23" title="23"></a>
-<a class="sourceLine" id="cb1-24" title="24"><span class="kw">fn</span> update(msg: Msg, model: &amp;<span class="kw">mut</span> Model) -&gt; <span class="kw">impl</span> Updater&lt;Msg&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-24" title="24"><span class="kw">fn</span> update(msg: Msg, model: &amp;<span class="kw">mut</span> Model, orders: &amp;<span class="kw">mut</span> Orders&lt;Msg&gt;) <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-25" title="25">    <span class="kw">match</span> msg <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-26" title="26">        <span class="pp">Msg::</span>Replace(data) =&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-27" title="27">            model.data = data;</a>
-<a class="sourceLine" id="cb1-28" title="28">            Render.into()</a>
-<a class="sourceLine" id="cb1-29" title="29">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb1-30" title="30"></a>
-<a class="sourceLine" id="cb1-31" title="31">        <span class="pp">Msg::</span>GetData =&gt; <span class="pp">Update::</span>with_future_msg(get_data()).skip(),</a>
-<a class="sourceLine" id="cb1-32" title="32"></a>
-<a class="sourceLine" id="cb1-33" title="33">        <span class="pp">Msg::</span><span class="bu">Send</span> =&gt; <span class="pp">Update::</span>with_future_msg(send()).skip(),</a>
-<a class="sourceLine" id="cb1-34" title="34"></a>
-<a class="sourceLine" id="cb1-35" title="35">        <span class="pp">Msg::</span>OnServerResponse(result) =&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-36" title="36">            <span class="pp">log!</span>(<span class="pp">format!</span>(<span class="st">&quot;Response: {:#?}&quot;</span>, result));</a>
-<a class="sourceLine" id="cb1-37" title="37">            Skip.into()</a>
-<a class="sourceLine" id="cb1-38" title="38">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb1-39" title="39"></a>
-<a class="sourceLine" id="cb1-40" title="40">        <span class="pp">Msg::</span>OnFetchErr(err) =&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-41" title="41">            <span class="pp">log!</span>(<span class="pp">format!</span>(<span class="st">&quot;Fetch error: {:#?}&quot;</span>, err));</a>
-<a class="sourceLine" id="cb1-42" title="42">            Skip.into()</a>
-<a class="sourceLine" id="cb1-43" title="43">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb1-44" title="44">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb1-45" title="45"><span class="op">}</span></a>
-<a class="sourceLine" id="cb1-46" title="46"></a>
-<a class="sourceLine" id="cb1-47" title="47"><span class="kw">fn</span> get_data() -&gt; <span class="kw">impl</span> Future&lt;Item = Msg, Error = Msg&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-48" title="48">    <span class="kw">let</span> url = <span class="st">&quot;https://api.github.com/repos/david-oconnor/seed/branches/master&quot;</span>;</a>
-<a class="sourceLine" id="cb1-49" title="49"></a>
-<a class="sourceLine" id="cb1-50" title="50">    <span class="pp">Request::</span>new(url)</a>
-<a class="sourceLine" id="cb1-51" title="51">        .method(<span class="pp">Method::</span>Get)</a>
-<a class="sourceLine" id="cb1-52" title="52">        .fetch_json()</a>
-<a class="sourceLine" id="cb1-53" title="53">        .map(<span class="pp">Msg::</span>Replace)</a>
-<a class="sourceLine" id="cb1-54" title="54">        .map_err(<span class="pp">Msg::</span>OnFetchErr)</a>
-<a class="sourceLine" id="cb1-55" title="55"><span class="op">}</span></a>
-<a class="sourceLine" id="cb1-56" title="56"></a>
-<a class="sourceLine" id="cb1-57" title="57"><span class="kw">fn</span> view(model: &amp;Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-58" title="58">    <span class="pp">div!</span><span class="op">[</span> <span class="pp">format!</span>(<span class="st">&quot;name: {}, sha: {}&quot;</span>, model.data.name, model.data.commit.sha),</a>
-<a class="sourceLine" id="cb1-59" title="59">        did_mount(<span class="kw">move</span> |_| spawn_local(get_data(state.clone())))</a>
-<a class="sourceLine" id="cb1-60" title="60">     <span class="op">]</span></a>
-<a class="sourceLine" id="cb1-61" title="61"><span class="op">}</span></a>
-<a class="sourceLine" id="cb1-62" title="62"></a>
+<a class="sourceLine" id="cb1-26" title="26">        <span class="pp">Msg::</span>Replace(data) =&gt; model.data = data,</a>
+<a class="sourceLine" id="cb1-27" title="27"></a>
+<a class="sourceLine" id="cb1-28" title="28">        <span class="pp">Msg::</span>GetData =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-29" title="29">            orders.skip().perform_cmd(get_data());</a>
+<a class="sourceLine" id="cb1-30" title="30">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb1-31" title="31"></a>
+<a class="sourceLine" id="cb1-32" title="32">        <span class="pp">Msg::</span><span class="bu">Send</span> =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-33" title="33">            orders.skip().perform_cmd(send());</a>
+<a class="sourceLine" id="cb1-34" title="34">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb1-35" title="35"></a>
+<a class="sourceLine" id="cb1-36" title="36">        <span class="pp">Msg::</span>OnServerResponse(result) =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-37" title="37">            <span class="pp">log!</span>(<span class="pp">format!</span>(<span class="st">&quot;Response: {:?}&quot;</span>, result));</a>
+<a class="sourceLine" id="cb1-38" title="38">            orders.skip();</a>
+<a class="sourceLine" id="cb1-39" title="39">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb1-40" title="40"></a>
+<a class="sourceLine" id="cb1-41" title="41">        <span class="pp">Msg::</span>OnFetchErr(err) =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-42" title="42">            <span class="pp">error!</span>(<span class="pp">format!</span>(<span class="st">&quot;Fetch error: {:?}&quot;</span>, err));</a>
+<a class="sourceLine" id="cb1-43" title="43">            orders.skip();</a>
+<a class="sourceLine" id="cb1-44" title="44">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb1-45" title="45">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb1-46" title="46"><span class="op">}</span></a>
+<a class="sourceLine" id="cb1-47" title="47"></a>
+<a class="sourceLine" id="cb1-48" title="48"><span class="kw">fn</span> get_data() -&gt; <span class="kw">impl</span> Future&lt;Item = Msg, Error = Msg&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-49" title="49">    <span class="kw">let</span> url = <span class="st">&quot;https://api.github.com/repos/david-oconnor/seed/branches/master&quot;</span>;</a>
+<a class="sourceLine" id="cb1-50" title="50"></a>
+<a class="sourceLine" id="cb1-51" title="51">    <span class="pp">Request::</span>new(url)</a>
+<a class="sourceLine" id="cb1-52" title="52">        .method(<span class="pp">Method::</span>Get)</a>
+<a class="sourceLine" id="cb1-53" title="53">        .fetch_json()</a>
+<a class="sourceLine" id="cb1-54" title="54">        .map(<span class="pp">Msg::</span>Replace)</a>
+<a class="sourceLine" id="cb1-55" title="55">        .map_err(<span class="pp">Msg::</span>OnFetchErr)</a>
+<a class="sourceLine" id="cb1-56" title="56"><span class="op">}</span></a>
+<a class="sourceLine" id="cb1-57" title="57"></a>
+<a class="sourceLine" id="cb1-58" title="58"><span class="kw">fn</span> view(model: &amp;Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-59" title="59">    <span class="pp">div!</span><span class="op">[</span> <span class="pp">format!</span>(<span class="st">&quot;name: {}, sha: {}&quot;</span>, model.data.name, model.data.commit.sha),</a>
+<a class="sourceLine" id="cb1-60" title="60">        did_mount(<span class="kw">move</span> |_| spawn_local(get_data(state.clone())))</a>
+<a class="sourceLine" id="cb1-61" title="61">     <span class="op">]</span></a>
+<a class="sourceLine" id="cb1-62" title="62"><span class="op">}</span></a>
 <a class="sourceLine" id="cb1-63" title="63"></a>
-<a class="sourceLine" id="cb1-64" title="64"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
-<a class="sourceLine" id="cb1-65" title="65"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-66" title="66">    <span class="kw">let</span> state = <span class="pp">seed::App::</span>build(<span class="pp">Model::</span><span class="kw">default</span>(), update, view)</a>
-<a class="sourceLine" id="cb1-67" title="67">        .finish()</a>
-<a class="sourceLine" id="cb1-68" title="68">        .run();</a>
-<a class="sourceLine" id="cb1-69" title="69"></a>
-<a class="sourceLine" id="cb1-70" title="70">    state.update(<span class="pp">Msg::</span>GetData);</a></code></pre></div>
+<a class="sourceLine" id="cb1-64" title="64"></a>
+<a class="sourceLine" id="cb1-65" title="65"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
+<a class="sourceLine" id="cb1-66" title="66"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-67" title="67">    <span class="kw">let</span> state = <span class="pp">seed::App::</span>build(<span class="pp">Model::</span><span class="kw">default</span>(), update, view)</a>
+<a class="sourceLine" id="cb1-68" title="68">        .finish()</a>
+<a class="sourceLine" id="cb1-69" title="69">        .run();</a>
+<a class="sourceLine" id="cb1-70" title="70"></a>
+<a class="sourceLine" id="cb1-71" title="71">    state.update(<span class="pp">Msg::</span>GetData);</a></code></pre></div>
 <p>On page load, we trigger an update using <code>Msg::GetData</code>, which points the <code>update</code> function to use the <code>Update::with_future_msg</code> method. This allows state to be update asynchronosly, when the request is complete. <code>skip()</code> is a convenience method that sets <code>Update::ShouldRender</code> to <code>Skip</code>; sending the request doesn't trigger a render. We use <code>Request::map</code> to point to an enum that handles successful retrieval, and wraps the struct of the response. In this case, <code>Msg::Replace</code>. We use <code>Request::map_err</code> in a similar way to handle http failures; the enum it points to wraps a <code>wasm_bindgen::JsValue</code>.</p>
 <p>This a <code>get</code> request by passing the url, options like headers (In this example, we don't use any), and a callback to be executed once the data's received.</p>
 <p>We've set up nested structs that have fields matching the names of the JSON fields of the response, which <code>Serde</code> deserializes the response into, through the <code>fetch_json</code> method of <code>Request</code>. Note that even though more data than what's contained in our Branch struct is included in the response, Serde automatically applies only the info matching our struct's fields.</p>

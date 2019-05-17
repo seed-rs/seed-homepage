@@ -17,7 +17,7 @@ It neither uses completely natural (ie macro-free) Rust code, nor
 an HTML-like abstraction (eg JSX or templates). My intent is to make the code close
 to natural Rust, while streamlining the syntax in a way suited for creating
 a visual layout with minimal repetition. The macros used are thin wrappers
-for constructors, and don't conceal much. 
+for constructors, and don't conceal much.
 
 Specifically, the element-creation macros
 allow for accepting a variable number and order of parameters, and the attrs/style marcros are
