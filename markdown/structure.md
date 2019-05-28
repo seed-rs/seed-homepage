@@ -144,7 +144,8 @@ The view's defined bya function that's passed to `seed::run`. This takes a `Seed
 as parameters, and outputs something that implements the ` ElContainer` trait, which is imported in the prelude.
 Usually, this is an `El`, or `Vec<El>`, representing all elements that will be inserted as children
 on the top-level element. (The top-level element is in the html file, and specified with
-`seed::App::build.mount()`, or as a default, the element with id `app`).
+`seed::App::build.mount()`, or as a default, the element with id `app`). If you use 
+`impl ElContainer<Msg>` as the return type, different branches may return `Vec<El>` and `El`.
  It may composed into sub-functions, which can be thought of like components in other frameworks. 
  The first parameter, which we will call `state` in our examples, is used for updating state 
  outside of the message system, and will not be used in these examples.
