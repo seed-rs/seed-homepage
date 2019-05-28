@@ -69,7 +69,7 @@ r#"
 <a class="sourceLine" id="cb5-16" title="16">            <span class="op">}</span></a>
 <a class="sourceLine" id="cb5-17" title="17">        <span class="op">}</span></a>
 <a class="sourceLine" id="cb5-18" title="18"><span class="op">}</span></a></code></pre></div>
-<p>The third parameter of the update function is an <a href="https://docs.rs/seed/0.3.4/seed/prelude/struct.Orders.html">Orders</a> struct, imported in the prelude. It has four methods, each defining an update behavior:</p>
+<p>The third parameter of the update function is an <a href="https://docs.rs/seed/0.3.5/seed/prelude/struct.Orders.html">Orders</a> struct, imported in the prelude. It has four methods, each defining an update behavior:</p>
 <ul>
 <li><code>render</code>: Rerender the DOM, based on the new model. If <code>orders</code> is not used for a branch, it is used.</li>
 <li><code>skip</code>: Update the model without re-rendering</li>
@@ -96,9 +96,9 @@ r#"
 <p>Elements are created using macros, named by the lowercase name of each element, and imported into the global namespace. Eg <code>div!</code> above. We use this code to import them:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb8-1" title="1"><span class="at">#[</span>macro_use<span class="at">]</span></a>
 <a class="sourceLine" id="cb8-2" title="2"><span class="kw">extern</span> <span class="kw">crate</span> seed;</a></code></pre></div>
-<p>These macros accept any combination of the following parameters: - One <a href="https://docs.rs/seed/0.3.4/seed/dom_types/struct.Attrs.html">Attrs</a> struct - One <a href="https://docs.rs/seed/0.3.4/seed/dom_types/struct.Style.html">Style</a> struct - One or more <a href="https://docs.rs/seed/0.3.4/seed/dom_types/struct.Listener.html">Listener</a> structs, which handle events - One or more <code>Vec</code>s of <code>Listener</code> structs - One <code>String</code> or <code>&amp;str</code> representing a node text - One or more <a href="https://docs.rs/seed/0.3.4/seed/dom_types/struct.El.html">El</a> structs, representing a child - One or more Vecs of <code>El</code> structs, representing multiple children</p>
+<p>These macros accept any combination of the following parameters: - One <a href="https://docs.rs/seed/0.3.5/seed/dom_types/struct.Attrs.html">Attrs</a> struct - One <a href="https://docs.rs/seed/0.3.5/seed/dom_types/struct.Style.html">Style</a> struct - One or more <a href="https://docs.rs/seed/0.3.5/seed/dom_types/struct.Listener.html">Listener</a> structs, which handle events - One or more <code>Vec</code>s of <code>Listener</code> structs - One <code>String</code> or <code>&amp;str</code> representing a node text - One or more <a href="https://docs.rs/seed/0.3.5/seed/dom_types/struct.El.html">El</a> structs, representing a child - One or more Vecs of <code>El</code> structs, representing multiple children</p>
 <p>The parameters can be passed in any order; the compiler knows how to handle them based on their types. Children are rendered in the order passed.</p>
-<p>Views are described using <a href="https://docs.rs/seed/0.3.4/seed/dom_types/struct.El.html">El</a> structs, defined in the <a href="https://docs.rs/seed/0.3.4/seed/dom_types/index.html">seed::dom_types</a> module.</p>
+<p>Views are described using <a href="https://docs.rs/seed/0.3.5/seed/dom_types/struct.El.html">El</a> structs, defined in the <a href="https://docs.rs/seed/0.3.5/seed/dom_types/index.html">seed::dom_types</a> module.</p>
 <p><code>Attrs</code> and <code>Style</code> are thinly-wrapped hashmaps created with their own macros: <code>attrs!{}</code> and <code>style!{}</code> respectively.</p>
 <p>Example:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">fn</span> view(model: &amp;Model) -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
