@@ -73,10 +73,11 @@ fn items() -> El<Msg> {
 ## Dummy elements
 When performing ternary operations inside an element macro, all
 branches must return an `El` (Or `Vec` of `El`s) to satisfy Rust's type system. Seed provides the
-[empty](https://docs.rs/seed/0.1.8/seed/fn.empty.html) function, which creates an element that will not be rendered:
+[empty](https://docs.rs/seed/0.1.8/seed/fn.empty.html) function, which creates an element that will not be 
+rendered, and its `empty![]` macro alias, which is more concise and consistent:
 ```rust
 div![
-    if model.count >= 10 { h2![ style!{"padding" => 50}, "Nice!" ] } else { seed::empty() }
+    if model.count >= 10 { h2![ style!{"padding" => 50}, "Nice!" ] } else { empty![]) }
 ]
 
 ```

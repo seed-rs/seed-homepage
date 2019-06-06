@@ -1,5 +1,10 @@
 pub fn text() -> String {
 r#"
+<p><a href="https://travis-ci.org/David-OConnor/seed"><img src="https://travis-ci.org/David-OConnor/seed.svg?branch=master" alt="Build Status" /></a> <a href="https://crates.io/crates/seed"><img src="https://meritbadge.herokuapp.com/seed" alt="crates.io version" /></a> <a href="https://crates.io/crates/seed"><img src="https://img.shields.io/crates/d/seed.svg" alt="crates.io downloads" /></a> <a href="https://docs.rs/seed"><img src="https://docs.rs/seed/badge.svg" alt="docs.rs" /></a> <a href="https://sagiegurari.github.io/cargo-make"><img src="https://sagiegurari.github.io/cargo-make/assets/badges/cargo-make.svg" alt="Built with cargo-make" /></a></p>
+<p align="center">
+<img src="/seed_branding/seed_logo.svg" width="256" title="Seed logo">
+</p>
+<p>The best place to learn is the <a href="https://seed-rs.org">guide</a> - this readme is an excerpt from it.</p>
 <h1 id="quickstart">Quickstart</h1>
 <h2 id="setup">Setup</h2>
 <p>This framework requires you to install <a href="https://www.rust-lang.org/tools/install">Rust</a>.</p>
@@ -7,7 +12,7 @@ r#"
 <p>The wasm32-unknown-unknown target: <code>rustup target add wasm32-unknown-unknown</code></p>
 <p>And cargo-make: <code>cargo install --force cargo-make</code></p>
 <h2 id="the-theoretical-minimum">The theoretical minimum</h2>
-<p>To start, clone <a href="https://github.com/David-OConnor/seed-quickstart">the quickstart repo</a>: <code>git clone https://github.com/david-oconnor/seed-quickstart.git</code>, run <code>cargo make all</code> in a terminal to build the app, and <code>cargo make serve</code> to start a dev server on <code>127.0.0.0:8000</code>.</p>
+<p>To start, clone <a href="https://github.com/David-OConnor/seed-quickstart">the quickstart repo</a>: <code>git clone https://github.com/david-oconnor/seed-quickstart.git</code>, run <code>cargo make all</code> in a terminal to build the app, and <code>cargo make serve</code> to start a dev server on <code>127.0.0.0:8000</code>. If you'd like the compiler automatically check and recompile when you make changes, run <code>cargo make watch</code> instead of <code>cargo make all</code>.</p>
 <h2 id="a-little-deeper">A little deeper</h2>
 <p>Alternatively, create a new lib with Cargo: <code>cargo new --lib appname</code>. Here and everywhere it appears in this guide, <code>appname</code> should be replaced with the name of your app.</p>
 <p>If not using the quickstart repo, create an Html file with a body that contains this:</p>
@@ -37,7 +42,7 @@ edition = &quot;2018&quot;
 crate-type = [&quot;cdylib&quot;]
 
 [dependencies]
-seed = &quot;^0.2.4&quot;
+seed = &quot;^0.3.4&quot;
 wasm-bindgen = &quot;^0.2.38&quot;
 web-sys = &quot;^0.3.6&quot;</code></pre>
 <h2 id="a-short-example">A short example</h2>
@@ -124,11 +129,11 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <a class="sourceLine" id="cb3-79" title="79">            <span class="pp">button!</span><span class="op">[</span> simple_ev(<span class="pp">Ev::</span>Click, <span class="pp">Msg::</span>Decrement), <span class="st">&quot;-&quot;</span> <span class="op">]</span>,</a>
 <a class="sourceLine" id="cb3-80" title="80"></a>
 <a class="sourceLine" id="cb3-81" title="81">            <span class="co">// Optionally-displaying an element</span></a>
-<a class="sourceLine" id="cb3-82" title="82">            <span class="kw">if</span> model.count &gt;= <span class="dv">10</span> <span class="op">{</span> <span class="pp">h2!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;padding&quot;</span> =&gt; <span class="dv">50</span><span class="op">}</span>, <span class="st">&quot;Nice!&quot;</span> <span class="op">]</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> <span class="pp">seed::</span>empty() <span class="op">}</span></a>
+<a class="sourceLine" id="cb3-82" title="82">            <span class="kw">if</span> model.count &gt;= <span class="dv">10</span> <span class="op">{</span> <span class="pp">h2!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;padding&quot;</span> =&gt; <span class="dv">50</span><span class="op">}</span>, <span class="st">&quot;Nice!&quot;</span> <span class="op">]</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> <span class="pp">empty!</span><span class="op">[]</span> <span class="op">}</span></a>
 <a class="sourceLine" id="cb3-83" title="83">        <span class="op">]</span>,</a>
 <a class="sourceLine" id="cb3-84" title="84">        success_level(model.count),  <span class="co">// Incorporating a separate component</span></a>
 <a class="sourceLine" id="cb3-85" title="85"></a>
-<a class="sourceLine" id="cb3-86" title="86">        <span class="pp">h3!</span><span class="op">[</span> <span class="st">&quot;What precisely is it we&#39;re counting?&quot;</span> <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb3-86" title="86">        <span class="pp">h3!</span><span class="op">[</span> <span class="st">&quot;What are we counting?&quot;</span> <span class="op">]</span>,</a>
 <a class="sourceLine" id="cb3-87" title="87">        <span class="pp">input!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="pp">At::</span>Value =&gt; model.what_we_count<span class="op">}</span>, input_ev(<span class="pp">Ev::</span>Input, <span class="pp">Msg::</span>ChangeWWC) <span class="op">]</span></a>
 <a class="sourceLine" id="cb3-88" title="88">    <span class="op">]</span></a>
 <a class="sourceLine" id="cb3-89" title="89"><span class="op">}</span></a>

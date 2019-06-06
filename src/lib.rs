@@ -238,6 +238,18 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
 fn changelog() -> El<Msg> {
     let mut entries = span![ El::from_markdown(
 "
+## v0.3.6
+- Fetch module and API heavily changed (breaking)
+- Added support for `request​Animation​Frame`, which improves render performance,
+especially for animations
+- Fixed a bug where `empty` elements at the top-level were rendering in the wrong order
+- Added an `empty!` macro, which is similar to `seed::empty`
+- Attributes and Style now retain ordering
+
+## v0.3.5
+- Fixed a bug where view functions returning `Vec<El>` weren't rendering properly
+- Fixed a typo with the `viewBox` attribute
+
 ## v0.3.4
 - The `update` fn now accepts a (new) `Orders` struct, and returns nothing. Renders occur implicitly,
 with the option to skip rendering, update with an additional message, or perform an asynchronous
@@ -245,7 +257,6 @@ action. (Breaking)
 - `.mount()` now accepts elements. Deprecated `.mount_el()`
 - The `log` function and macro now support items which implement `Debug`
 - Removed deprecated `routing::push_path` function (breaking)
-
 
 ## v0.3.3
 - Added `seed::update` function, which allows custom events, and updates from JS.

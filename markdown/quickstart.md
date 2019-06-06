@@ -1,3 +1,15 @@
+[![Build Status](https://travis-ci.org/David-OConnor/seed.svg?branch=master)](https://travis-ci.org/David-OConnor/seed)
+[![crates.io version](https://meritbadge.herokuapp.com/seed)](https://crates.io/crates/seed)
+[![crates.io downloads](https://img.shields.io/crates/d/seed.svg)](https://crates.io/crates/seed)
+[![docs.rs](https://docs.rs/seed/badge.svg)](https://docs.rs/seed)
+[![Built with cargo-make](https://sagiegurari.github.io/cargo-make/assets/badges/cargo-make.svg)](https://sagiegurari.github.io/cargo-make)
+
+<p align="center">
+  <img src="/seed_branding/seed_logo.svg" width="256" title="Seed logo">
+</p>
+
+The best place to learn is the [guide](https://seed-rs.org) - this readme is an excerpt from it.
+
 # Quickstart
 
 ## Setup
@@ -15,7 +27,9 @@ And cargo-make: `cargo install --force cargo-make`
 To start, clone [the quickstart repo](https://github.com/David-OConnor/seed-quickstart):
 `git clone https://github.com/david-oconnor/seed-quickstart.git`,
 run `cargo make all` in a terminal to build the app, and `cargo make serve` to start a dev server
-on `127.0.0.0:8000`.
+on `127.0.0.0:8000`. If you'd like the compiler automatically check and recompile when you 
+make changes, run `cargo make watch` instead of `cargo make all`.
+
 
 ## A little deeper
 
@@ -60,7 +74,7 @@ edition = "2018"
 crate-type = ["cdylib"]
 
 [dependencies]
-seed = "^0.2.4"
+seed = "^0.3.4"
 wasm-bindgen = "^0.2.38"
 web-sys = "^0.3.6"
 ```
@@ -156,11 +170,11 @@ fn view(model: &Model) -> El<Msg> {
             button![ simple_ev(Ev::Click, Msg::Decrement), "-" ],
 
             // Optionally-displaying an element
-            if model.count >= 10 { h2![ style!{"padding" => 50}, "Nice!" ] } else { seed::empty() }
+            if model.count >= 10 { h2![ style!{"padding" => 50}, "Nice!" ] } else { empty![] }
         ],
         success_level(model.count),  // Incorporating a separate component
 
-        h3![ "What precisely is it we're counting?" ],
+        h3![ "What are we counting?" ],
         input![ attrs!{At::Value => model.what_we_count}, input_ev(Ev::Input, Msg::ChangeWWC) ]
     ]
 }

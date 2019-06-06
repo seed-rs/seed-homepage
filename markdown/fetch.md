@@ -2,10 +2,11 @@
 
 We use the [seed::Request](https://docs.rs/seed/0.1.12/seed/fetch/struct.Request.html) struct
 to make HTTP requests in the browser, wrapping the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
-To use this, we need to include `futures = "^0.1.20"` in `Cargo.toml`. The [Fetch module](https://docs.rs/seed/0.2.3/seed/fetch/index.html)
+To use this, we need to include `futures = "^0.1.26"` in `Cargo.toml`. The [Fetch module](https://docs.rs/seed/0.2.3/seed/fetch/index.html)
 is standalone: It can be used with any wasm-bindgen program.
 
-Example, where we update the state on initial load:
+Example, where we update the state on initial load (similar to the `server_interaction` example in the repo)
+from a server. It demonstrates a `GET` request, and deserializing JSON data.
 ```rust
 use futures::Future;
 use serde::{Serialize, Deserialize};
@@ -23,74 +24,73 @@ pub struct Branch {
 
 #[derive(Clone)]
 enum Msg {
-    Replace(Branch),
-    GetData,
-    Send,
-    OnServerResponse(ServerResponse),
-    OnFetchErr(JsValue),
+    FetchData,
+    DataFetched(fetch::FetchObject<Branch>),
+    OnFetchError {
+        label: &'static str,
+        fail_reason: fetch::FailReason,
+    },
+}
+
+fn fetch_data() -> impl Future<Item = Msg, Error = Msg> {
+    let url = "https://api.github.com/repos/david-oconnor/seed/branches/master";
+    Request::new(url.into()).fetch_json(Msg::DataFetched)
 }
 
 fn update(msg: Msg, model: &mut Model, orders: &mut Orders<Msg>) {
     match msg {
-        Msg::Replace(data) => model.data = data,
-
-        Msg::GetData => {
-            orders.skip().perform_cmd(get_data());
+        Msg::FetchData => {
+            orders
+                .skip()
+                .perform_cmd(fetch_data());
         }
 
-        Msg::Send => {
-            orders.skip().perform_cmd(send());
+        Msg::DataFetched(fetch_object) => {
+            match fetch_object.response() {
+                Ok(response) => model.branch = response.data,
+                Err(fail_reason) => {
+                    orders
+                        .send_msg(Msg::OnFetchError {
+                            label: "Fetching repository info failed",
+                            fail_reason,
+                        })
+                        .skip();
+                }
+            }
         }
 
-        Msg::OnServerResponse(result) => {
-            log!(format!("Response: {:?}", result));
-            orders.skip();
-        }
-
-        Msg::OnFetchErr(err) => {
-            error!(format!("Fetch error: {:?}", err));
+        Msg::OnFetchError { label, fail_reason } => {
+            error!(format!("Fetch error - {} - {:#?}", label, fail_reason));
             orders.skip();
         }
     }
 }
 
-fn get_data() -> impl Future<Item = Msg, Error = Msg> {
-    let url = "https://api.github.com/repos/david-oconnor/seed/branches/master";
-
-    Request::new(url)
-        .method(Method::Get)
-        .fetch_json()
-        .map(Msg::Replace)
-        .map_err(Msg::OnFetchErr)
-}
-
 fn view(model: &Model) -> El<Msg> {
-    div![ format!("name: {}, sha: {}", model.data.name, model.data.commit.sha),
-        did_mount(move |_| spawn_local(get_data(state.clone())))
-     ]
+    div![format!(
+        "Repo info: Name: {}, SHA: {}",
+        model.branch.name, model.branch.commit.sha
+    )]
 }
 
 
 #[wasm_bindgen]
 pub fn render() {
-    let state = seed::App::build(Model::default(), update, view)
+    let app = seed::App::build(Model::default(), update, view)
         .finish()
         .run();
 
-    state.update(Msg::GetData);
+    app.update(Msg::FetchData);
+}
 
 ```
-On page load, we trigger an update using `Msg::GetData`, which points the `update`
-function to use the `Update::with_future_msg` method. This allows state to be
+On page load, we trigger an update using `Msg::FetchData`, which points the `update`
+function to use the `Orders.perform_cmd` method. This allows state to be
 update asynchronosly, when the request is complete. `skip()` is a convenience method that
 sets `Update::ShouldRender` to `Skip`; sending the request doesn't trigger a render.
-We use `Request::map` to point to an enum that handles successful retrieval, and wraps
-the struct of the response. In this case, `Msg::Replace`. We use `Request::map_err` in a similar
-way to handle http failures; the enum it points to wraps a `wasm_bindgen::JsValue`.
-
-This
-a `get` request by passing the url, options like headers (In this example, we don't use any),
-and a callback to be executed once the data's received.
+We pattern-match the response in the `update` function's`DataFetched` arm: If successful, we update the model.
+If not, we update recursively to the `OnFetchError` branch using `.send_msg()`, in this case
+displaying an error in the console.
 
 We've set up nested structs that have fields matching the names of the JSON fields of
 the response, which `Serde` deserializes the response into, through the `fetch_json` method of
@@ -102,58 +102,94 @@ in the response, Serde automatically applies only the info matching our struct's
 If we wish to trigger
 this update from a normal event instead of on load, we can do something like this:
 ```rust
-fn update(msg: Msg, model: &mut Model) -> impl Updater<Msg> {
-    match msg {
-        Msg::Replace(data) => Render(Model {data}),
-        Msg::GetData(state) => {
-            spawn_local(get_data(state));
-            Render(model)
-        },
-    }
-}
-
-fn view(model: &Model) -> El<Msg> {
-    div![
-        div![ format!("Hello World. name: {}, sha: {}", model.data.name, model.data.commit.sha) ],
-        button![ raw_ev(Ev::Click, move |_| Msg::GetData), "Update from the internet"]
+fn view(model: &Model) -> Vec<El<Msg>> {
+    vec![
+        div![format!(
+            "Repo info: Name: {}, SHA: {}",
+            model.branch.name, model.branch.commit.sha
+        )],
+        button![ raw_ev(Ev::Click, move |_| Msg::FetchData), "Update"]
     ]
 }
 ```
 
-Example showing POST, and headers:
+Example showing a POST request where we send data to a server and receive the response, 
+and a header:
 ```rust
 #[derive(Serialize)]
-struct Message {
+struct RequestBody {
     pub name: String,
     pub email: String,
     pub message: String,
 }
 
-#[derive(Deserialize, Debug)]
-struct ServerResponse {
+#[derive(Debug, Clone, Deserialize)]
+struct ResponseBody {
     pub success: bool,
 }
 
-fn send() -> impl Future<Item = Msg, Error = Msg> {
-    let url = "https://infinitea.herokuapp.com/api/contact";
+#[derive(Clone)]
+enum Msg {
+    SendMessage,
+    MessageSent(fetch::FetchObject<ResponseBody>),
+    OnFetchError {
+        label: &'static str,
+        fail_reason: fetch::FailReason,
+    },
+}
 
-    let message = Message {
+fn update(msg: Msg, model: &mut Model, orders: &mut Orders<Msg>) {
+    match msg {
+        Msg::SendMessage => {
+            orders.skip().perform_cmd(send_message());
+        }
+
+        Msg::MessageSent(fetch_object) => match fetch_object.response() {
+            Ok(response) => {
+                log!(format!("Response data: {:#?}", response.data));
+                orders.skip();
+            }
+            Err(fail_reason) => {
+                orders
+                    .send_msg(Msg::OnFetchError {
+                        label: "Sending message failed",
+                        fail_reason,
+                    })
+                    .skip();
+            }
+        },
+
+        Msg::OnFetchError { label, fail_reason } => {
+            log!(format!("Fetch error - {} - {:#?}", label, fail_reason));
+            orders.skip();
+        }
+    }
+}
+
+fn send_message() -> impl Future<Item = Msg, Error = Msg> {
+    let message = RequestBody {
         name: "Mark Watney".into(),
         email: "mark@crypt.kk".into(),
         message: "I wanna be like Iron Man".into(),
     };
 
-    Request::new(url)
+    Request::new(CONTACT_URL.into())
         .method(Method::Post)
         .header("Content-Type", "application/json")
-        .body_json(&message)
-        .fetch_json()
-        .map(Msg::OnServerResponse)
-        .map_err(Msg::OnFetchErr)
+        .send_json(&message)
+        .fetch_json(Msg::MessageSent)
 }
+
+fn view(model: &Model) ->El<Msg> {
+    button![
+        simple_ev(Ev::Click, Msg::SendMessage),
+        "Send an urgent message (see console log)"
+    ]
+}
+
 ```
-Note how we pass a ref to the struct we wish to serialize (the payload) to the `.body_json()` method;
-serialization happens out of sight. Reference the `Request` API docs (linked above) for a full
+
+Reference the `Request` API docs (linked above) for a full
 list of methods available to configure the request, and links to the `MDN` docs describing
 them. (eg: `credentials`, `mode`, `integrity`)
 

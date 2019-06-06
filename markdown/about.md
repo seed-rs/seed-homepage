@@ -62,7 +62,7 @@ You may prefer writing in Rust, and using packages from Cargo vice npm. Getting 
 this framework will in most cases be easier, and require less config and setup overhead than
 with JS frameworks. You may appreciate Rust's compile-time error-checking, and built-in testing.
 
-You may choose this approach over `Elm if you're already comfortable with Rust,
+You may choose this approach over Elm if you're already comfortable with Rust,
 or don't want to code business logic in a purely-functional langauge.
 
 Compared with React, you may appreciate the consistency of how to write apps:

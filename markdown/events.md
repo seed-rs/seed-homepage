@@ -22,7 +22,7 @@ simple_ev(Ev::DblClick, Msg::ClickClick)`
 ```
 
 `input_ev` passes the event target's value field, eg what a user entered in an `input`, `textarea`, or
-select`,  field.
+`select`,  field.
 Example: 
 ```rust
 #[derive(Clone)]

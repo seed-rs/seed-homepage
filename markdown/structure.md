@@ -140,7 +140,7 @@ sub-functions to aid code organization.
  Visual layout (ie HTML/DOM elements) is described declaratively in Rust, and uses 
 [macros]( https://doc.rust-lang.org/book/appendix-04-macros.html) to simplify syntax.
 
-The view's defined bya function that's passed to `seed::run`. This takes a `Seed::app<Msg, Model>`, and Model
+The view's defined by a function that's passed to `seed::run`. This takes a `Seed::app<Msg, Model>`, and Model
 as parameters, and outputs something that implements the ` ElContainer` trait, which is imported in the prelude.
 Usually, this is an `El`, or `Vec<El>`, representing all elements that will be inserted as children
 on the top-level element. (The top-level element is in the html file, and specified with

@@ -20,7 +20,7 @@ r#"
 <p>Seed's different approach to view syntax also distinguishes it: rather than use an HTML-like markup similar to JSX, it uses Rust builtin types, with thinly-wrapped by macros that allow flexible composition. This decision will not appeal to everyone, but I think it integrates more naturally with the language.</p>
 <h2 id="why-build-a-frontend-in-rust-over-elm-or-javascript-based-frameworks">Why build a frontend in Rust over Elm, or Javascript-based frameworks?</h2>
 <p>You may prefer writing in Rust, and using packages from Cargo vice npm. Getting started with this framework will in most cases be easier, and require less config and setup overhead than with JS frameworks. You may appreciate Rust's compile-time error-checking, and built-in testing.</p>
-<p>You may choose this approach over `Elm if you're already comfortable with Rust, or don't want to code business logic in a purely-functional langauge.</p>
+<p>You may choose this approach over Elm if you're already comfortable with Rust, or don't want to code business logic in a purely-functional langauge.</p>
 <p>Compared with React, you may appreciate the consistency of how to write apps: There's no distinction between logic and display code; no restrictions on comments; no distinction between components and normal functions. The API is flexible, and avoids OOP boilerplate. Its integrated routing and message system avoids the dependency glue-code associated with Redux and React-Router.</p>
 <p>Seed has a <em>batteries-included</em> approach, which you may appreciate.</p>
 <h2 id="why-not-to-use-this-and-stick-with-js">Why not to use this, and stick with JS</h2>
