@@ -1,15 +1,3 @@
-[![Build Status](https://travis-ci.org/David-OConnor/seed.svg?branch=master)](https://travis-ci.org/David-OConnor/seed)
-[![crates.io version](https://meritbadge.herokuapp.com/seed)](https://crates.io/crates/seed)
-[![crates.io downloads](https://img.shields.io/crates/d/seed.svg)](https://crates.io/crates/seed)
-[![docs.rs](https://docs.rs/seed/badge.svg)](https://docs.rs/seed)
-[![Built with cargo-make](https://sagiegurari.github.io/cargo-make/assets/badges/cargo-make.svg)](https://sagiegurari.github.io/cargo-make)
-
-<p align="center">
-  <img src="/seed_branding/seed_logo.svg" width="256" title="Seed logo">
-</p>
-
-The best place to learn is the [guide](https://seed-rs.org) - this readme is an excerpt from it.
-
 # Quickstart
 
 ## Setup
