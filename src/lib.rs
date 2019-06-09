@@ -109,10 +109,10 @@ fn update(msg: Msg, model: &mut Model, _orders: &mut Orders<Msg>) {
 
 fn header(_version: &str) -> El<Msg> {
     let link_style = style! {
-        "margin-left" => 20;
-        "margin-right" => 20;
+        "margin-left" => unit!(20, px);
+        "margin-right" => unit!(20, px);
         "font-weight" => "bold";
-        "font-size" => "1.2em";
+        "font-size" => unit!(1.2, em);
         "color" => "black";
         "cursor" => "pointer";
     };
@@ -183,13 +183,13 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
     let menu_item_style = style! {
         "display" => "flex";  // So we can vertically center
         "align-items" => "center";
-        "padding" => 4;
+        "padding" => unit!(4, px);
         "cursor" => "pointer";
-        "height" => 40;
+        "height" => unit!(40, px);
         "margin-bottom" => 0;
-        "width" => "100%";
+        "width" => unit!(100, %);
         "color" => "black";
-        "font-size" => "1.2em";
+        "font-size" => unit!(1.2, em);
     };
 
     let menu_items = sections
@@ -218,7 +218,7 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
             style! {"display" => "flex"; "flex-direction" => "column";
             "grid-column" => "1 / 2";
              "justify-content" => "flex-start";
-            "padding" => 10;},
+            "padding" => unit!(10, px);},
             menu_items
         ],
         div![
@@ -227,7 +227,7 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
                 "display" => "flex";
                 "flex-direction" => "column";
                 "grid-column" => "2 / 3";
-                "padding" => 80;
+                "padding" => unit!(80, px);
             },
             sections[guide_page].clone().elements
         ]
@@ -365,7 +365,7 @@ to allow conditional rendering (Breaking)
             "display" => "grid";
             "grid-template-columns" => "1fr 2fr 1fr";
 
-            "padding" => 50;
+            "padding" => unit!(50, px);
             "color" => "black";
         },
         entries,
