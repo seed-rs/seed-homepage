@@ -213,7 +213,10 @@ and pass it in.
 Keeys passed to `attrs` can be `Seed::At`s,  `String`s, `&str`s. Values passed to `attrs`, and `style` macros can 
 be owned `Strings`, `&str`s, or when applicable, numerical and 
 boolean values. Eg: `input![ attrs!{At::Disabled => false]` and `input![ attrs!{"disabled" => "false"]` 
-are equivalent. You can use the `unit` macro to 
+are equivalent. You can use the `unit!` macro to apply units:
+```rust
+style!{"width" => unit!(20, px);}
+```
 
 We can set multiple values for an attribute using `Attribute.add_multiple`. This
 is useful for setting multiple classes. Note that we must set this up outside of
