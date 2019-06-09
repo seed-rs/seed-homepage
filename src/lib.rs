@@ -192,7 +192,7 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
         "font-size" => "1.2em";
     };
 
-    let menu_items: Vec<El<Msg>> = sections
+    let menu_items = sections
         .iter()
         .enumerate()
         .map(|(i, s)| {
@@ -204,8 +204,7 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
                 },
                 s.title
             ]
-        })
-        .collect();
+        });
 
     div![
         style! {

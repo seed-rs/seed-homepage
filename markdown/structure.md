@@ -182,7 +182,7 @@ These macros accept any combination of the following parameters:
 - One `String` or `&str` representing a node text
 - One or more [El](https://docs.rs/seed/0.1.6/seed/dom_types/struct.El.html) structs, representing a child
 - One or more Vecs of `El` structs, representing multiple children
-- The result of `map()`, yielding `El`s or `Listener`s, without having to explicitly `collect`.
+- A `Map`, ie the result of `map()`, yielding `El`s or `Listener`s, without having to explicitly `collect`.
 
 The parameters can be passed in any order; the compiler knows how to handle them
 based on their types. Children are rendered in the order passed.
@@ -197,10 +197,13 @@ Example:
 ```rust
 fn view(model: &Model) -> El<Msg> {
     let things = vec![ h4![ "thing1" ], h4![ "thing2" ] ];
+    
+    let other_things = vec![1, 2];
 
     div![ attrs!{At::Class => "hardly-any"}, 
-        things,
-        h4![ "thing3?" ]
+        things,  // Vec<El<Msg>
+        other_things.map(|t| h4![t.to_string()]),  // Map
+        h4![ "thing3?" ],  // El
     ]
 }
 ```
