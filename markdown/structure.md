@@ -213,9 +213,11 @@ and pass it in.
 Keeys passed to `attrs` can be `Seed::At`s,  `String`s, `&str`s. Values passed to `attrs`, and `style` macros can 
 be owned `Strings`, `&str`s, or when applicable, numerical and 
 boolean values. Eg: `input![ attrs!{At::Disabled => false]` and `input![ attrs!{"disabled" => "false"]` 
-are equivalent. You can use the `unit!` macro to apply units:
+are equivalent. You can use the `unit!` macro to apply units. There's a `px` function for the
+special case where the unit is pixels:
 ```rust
 style!{"width" => unit!(20, px);}
+style!{"width" => px(20);}  // equivalent
 ```
 
 We can set multiple values for an attribute using `Attribute.add_multiple`. This
@@ -254,8 +256,8 @@ the same one more than once:
 ```rust
 fn a_component() -> El<Msg> {
     let item_style = style!{
-        "margin-top" => 10;
-        "font-size" => "1.2em"
+        "margin-top" => px(10);
+        "font-size" => unit!(1.2, em)
     };
 
     div![

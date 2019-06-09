@@ -113,8 +113,9 @@ r#"
 <a class="sourceLine" id="cb9-10" title="10">    <span class="op">]</span></a>
 <a class="sourceLine" id="cb9-11" title="11"><span class="op">}</span></a></code></pre></div>
 <p>Note that you can create any of the above items inside an element macro, or create it separately, and pass it in.</p>
-<p>Keeys passed to <code>attrs</code> can be <code>Seed::At</code>s, <code>String</code>s, <code>&amp;str</code>s. Values passed to <code>attrs</code>, and <code>style</code> macros can be owned <code>Strings</code>, <code>&amp;str</code>s, or when applicable, numerical and boolean values. Eg: <code>input![ attrs!{At::Disabled =&gt; false]</code> and <code>input![ attrs!{"disabled" =&gt; "false"]</code> are equivalent. You can use the <code>unit!</code> macro to apply units:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb10-1" title="1"><span class="pp">style!</span><span class="op">{</span><span class="st">&quot;width&quot;</span> =&gt; <span class="pp">unit!</span>(<span class="dv">20</span>, px);<span class="op">}</span></a></code></pre></div>
+<p>Keeys passed to <code>attrs</code> can be <code>Seed::At</code>s, <code>String</code>s, <code>&amp;str</code>s. Values passed to <code>attrs</code>, and <code>style</code> macros can be owned <code>Strings</code>, <code>&amp;str</code>s, or when applicable, numerical and boolean values. Eg: <code>input![ attrs!{At::Disabled =&gt; false]</code> and <code>input![ attrs!{"disabled" =&gt; "false"]</code> are equivalent. You can use the <code>unit!</code> macro to apply units. There's a <code>px</code> function for the special case where the unit is pixels:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb10-1" title="1"><span class="pp">style!</span><span class="op">{</span><span class="st">&quot;width&quot;</span> =&gt; <span class="pp">unit!</span>(<span class="dv">20</span>, px);<span class="op">}</span></a>
+<a class="sourceLine" id="cb10-2" title="2"><span class="pp">style!</span><span class="op">{</span><span class="st">&quot;width&quot;</span> =&gt; px(<span class="dv">20</span>);<span class="op">}</span>  <span class="co">// equivalent</span></a></code></pre></div>
 <p>We can set multiple values for an attribute using <code>Attribute.add_multiple</code>. This is useful for setting multiple classes. Note that we must set this up outside of the view macro, since it involves modifying a variable:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">fn</span> a_component() -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb11-2" title="2">    <span class="kw">let</span> <span class="kw">mut</span> attributes = <span class="pp">attrs!</span><span class="op">{}</span>;</a>
@@ -133,8 +134,8 @@ r#"
 <p>Styles and Attrs can be passed as refs as well, which is useful if you need to pass the same one more than once:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">fn</span> a_component() -&gt; El&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb13-2" title="2">    <span class="kw">let</span> item_style = <span class="pp">style!</span><span class="op">{</span></a>
-<a class="sourceLine" id="cb13-3" title="3">        <span class="st">&quot;margin-top&quot;</span> =&gt; <span class="dv">10</span>;</a>
-<a class="sourceLine" id="cb13-4" title="4">        <span class="st">&quot;font-size&quot;</span> =&gt; <span class="st">&quot;1.2em&quot;</span></a>
+<a class="sourceLine" id="cb13-3" title="3">        <span class="st">&quot;margin-top&quot;</span> =&gt; px(<span class="dv">10</span>);</a>
+<a class="sourceLine" id="cb13-4" title="4">        <span class="st">&quot;font-size&quot;</span> =&gt; <span class="pp">unit!</span>(<span class="dv">1.2</span>, em)</a>
 <a class="sourceLine" id="cb13-5" title="5">    <span class="op">}</span>;</a>
 <a class="sourceLine" id="cb13-6" title="6"></a>
 <a class="sourceLine" id="cb13-7" title="7">    <span class="pp">div!</span><span class="op">[</span></a>

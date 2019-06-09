@@ -160,7 +160,7 @@ fn title() -> El<Msg> {
             style! {"grid-row" => "1/2"; "grid-column" => "1 / 4"},
             img![
                 attrs! {At::Src => "public/seed_logo.svg"; At::Width => 256; At::Alt => "Seed"},
-                style! {"margin-top" => 30},
+                style! {"margin-top" => unit!(30, px)},
             ],
             h2!["A Rust framework for creating web apps"],
         ],
