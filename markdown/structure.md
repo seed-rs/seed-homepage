@@ -213,11 +213,7 @@ and pass it in.
 Keeys passed to `attrs` can be `Seed::At`s,  `String`s, `&str`s. Values passed to `attrs`, and `style` macros can 
 be owned `Strings`, `&str`s, or when applicable, numerical and 
 boolean values. Eg: `input![ attrs!{At::Disabled => false]` and `input![ attrs!{"disabled" => "false"]` 
-are equivalent. If a numerical value is used in a `Style`, 'px' will be automatically appended.
-If you don't want this behavior, use a `String` or`&str`. Eg: `h2![ style!{"font-size" => 16} ]` , or
-`h2![ style!{"font-size" => "1.5em"} ]` for specifying font size in pixels or em respectively. Note that
-once created, a `Style` instance holds all its values as `Strings`; eg that `16` above will be stored
-as `"16px"`; keep this in mind if editing a style that you made outside an element macro.
+are equivalent. You can use the `unit` macro to 
 
 We can set multiple values for an attribute using `Attribute.add_multiple`. This
 is useful for setting multiple classes. Note that we must set this up outside of

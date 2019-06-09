@@ -241,9 +241,12 @@ fn changelog() -> El<Msg> {
 - Fetch module and API heavily changed (breaking)
 - Added support for `request​Animation​Frame`, which improves render performance,
 especially for animations
+- Styles no longer implicitly add `px`. Added `unit!` macro in its place
+- `Map` can now be used directly in elements, without needing to annotate type and collect
+(ie for child `Elements`, and `Listener`s)
 - Fixed a bug where `empty` elements at the top-level were rendering in the wrong order
 - Added an `empty!` macro, which is similar to `seed::empty`
-- Attributes and Style now retain ordering
+- Attributes and style now retain order
 
 ## v0.3.5
 - Fixed a bug where view functions returning `Vec<El>` weren't rendering properly
