@@ -208,9 +208,9 @@ fn view(model: &Model) -> El<Msg> {
 }
 ```
 Note that you can create any of the above items inside an element macro, or create it separately,
-and pass it in.
+and pass it in. You can separate different items by comma, semicolon, or space.
 
-Keeys passed to `attrs` can be `Seed::At`s,  `String`s, `&str`s. Values passed to `attrs`, and `style` macros can 
+Keys passed to `attrs` can be `Seed::At`s,  `String`s, `&str`s. Values passed to `attrs`, and `style` macros can 
 be owned `Strings`, `&str`s, or when applicable, numerical and 
 boolean values. Eg: `input![ attrs!{At::Disabled => false]` and `input![ attrs!{"disabled" => "false"]` 
 are equivalent. You can use the `unit!` macro to apply units. There's a `px` function for the
@@ -249,6 +249,18 @@ fn a_component() -> El<Msg> {
     span![ id!("unique-element") ],
     // ...
 }
+```
+
+You can conditionally add classes with the `class!` macro:
+```rust
+let active = true;
+
+class![
+    "blue",
+    "highlighted" => active,
+    "confusing" => 0.99999 == 1
+    
+]
 ```
 
 Styles and Attrs can be passed as refs as well, which is useful if you need to pass
@@ -327,6 +339,17 @@ fn a_component() -> El<Msg> {
 Overall: we leverage of Rust's strict type system to flexibly-create the view
 using normal Rust code.W
 
+
+`El` has several helper methods which can be chained together:
+```rust
+let my_el = div![]
+    .add_text("Words")
+    .add_class("complete")
+    .add_attr("alt".to_string(), "a description".to_string())
+    .add_style("height".to_string(), "20px".to_string())
+    .replace_text("OOps, not complete");
+
+```
 
 ## Initializing
 To start your app, call the `seed::App::build` method, which takes the following parameters:

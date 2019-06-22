@@ -177,7 +177,7 @@ where it handles text input triggered by a key press, and uses prevent_default()
 ## Window events
 We handle events triggered by the overall window specially, since it doesn't fit directly
 into our virtual DOM. We pass to `Seed::App::build::window_events()` a function that accepts a
- ref to `Model`, and returns a `Vec<dom_types::Listener>`. We use it to control
+ ref to `Model`, and returns a `Vec<devents::Listener>`. We use it to control
 which listeners are attached to the window based on the model. Excerpt from the
 [window_events](https://github.com/David-OConnor/seed/blob/master/examples/window_events/src/lib.rs)
 example:
@@ -199,7 +199,7 @@ fn update(msg: Msg, model: &mut Model, _: &mut Orders<Msg>) {
 
 // ...
 
-fn window_events(model: &Model) -> Vec<seed::dom_types::Listener<Msg>> {
+fn window_events(model: &Model) -> Vec<seed::events::Listener<Msg>> {
     let mut result = Vec::new();
     if model.watching {
         result.push(mouse_ev("mousemove", |ev| Msg::UpdateCoords(ev)));

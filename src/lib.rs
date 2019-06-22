@@ -396,17 +396,14 @@ fn view(model: &Model) -> El<Msg> {
     ]
 }
 
-fn routes(url: &seed::Url) -> Msg {
-    if url.path.is_empty() {
-        return Msg::ChangePage(Page::Guide);
-    }
-
-    match url.path[0].as_ref() {
-        "guide" => match url.path.get(1).as_ref() {
+#[allow(clippy::needless_pass_by_value)]
+fn routes(url: seed::Url) -> Msg {
+    match url.path.get(0).map(String::as_str) {
+        Some("guide") => match url.path.get(1).as_ref() {
             Some(page) => Msg::ChangeGuidePage(page.parse::<usize>().unwrap()),
             None => Msg::ChangePage(Page::Guide),
         },
-        "changelog" => Msg::ChangePage(Page::Changelog),
+        Some("changelog") => Msg::ChangePage(Page::Changelog),
         _ => Msg::ChangePage(Page::Guide),
     }
 }

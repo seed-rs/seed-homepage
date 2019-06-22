@@ -55,7 +55,8 @@ Seed supports creating elements from markdown text, using [pulldown-cmark](https
 internally. Use the [El::from_markdown()](https://docs.rs/seed/0.1.6/seed/dom_types/struct.El.html#method.from_markdown)
 method to create an element that accepts a markdown &str as its only parameter, and displays
 it normally as html. Note that it does not support syntax highlighting. You can render raw HTML with `El::from_html(html)`, where `html` is a 
-&str of HTML.
+&str of HTML. You can also use the `raw!` and `md!` macros for `from_html` and 
+`from_markdown1` respectively.
 
 Example:
 ```rust
@@ -80,8 +81,8 @@ and just [learn to code](https://play.rust-lang.org/).
 ;
     
     vec![
-        El::from_markdown(markdown) 
-        El::from_html(html) 
+        El::from_markdown(markdown)   // or md!(markdown)
+        El::from_html(html)  // or raw!(html)
     ]
 }
 
