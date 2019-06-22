@@ -237,6 +237,22 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
 fn changelog() -> El<Msg> {
     let mut entries = span![ El::from_markdown(
 "
+## v0.3.7
+- `routes` now accepts `Url` instead of `&Url` (Breaking)
+- Improvements to fetch API
+- Added `raw!`, `md!`, and `plain!` macros that alias `El::from_html`, `El::from_markdown`,
+and `El::new_text` respectively
+- `Attrs!` and `Style!` macros can now use commas and whitespace as separators,
+in addition to semicolons
+- Fixed typos in a few attributes (Breaking)
+- Fixed a bug where an HTML namespace was applied to raw html/markdown elements
+- New conditional syntax added in `class!` macro, similar to `Elm`'s `classList`
+- `Listener` now implements `MessageMapper`
+- `El methods` `add_child`, `add_style`, `add_attr`, and `set_text` now return the elements,
+allowing chaining
+- Fixed a bug with `set_text`. Renamed to `replace_text`. Added `add_text`, which adds
+a text node, but doesn't remove existing ones. Added `add_class`. (Breaking)
+
 ## v0.3.6
 - Fetch module and API heavily changed (breaking)
 - Added support for `request​Animation​Frame`, which improves render performance,
