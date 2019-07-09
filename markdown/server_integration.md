@@ -1,9 +1,11 @@
 # Integration with Rust (backend) servers
 
+# This page is out of date. Standby.
+
 If pairing Seed with a Rust backend server, we can simplify passing data between
 server and frontend using a layout like that in the 
 [server_integration example](https://github.com/David-OConnor/seed/tree/master/examples/server_integration)
-Here, we demonstrate using a single struct for both frontend and server, with [Rocket](https://rocket.rs/).
+Here, we demonstrate using a single struct for both frontend and server, with `Actix`.
 as the server. This is useful for reducing duplication of data structures, and allows
 `Serde` to elegantly handle [de]serialization.
 For example, we can use use the same struct which represents a 
@@ -12,20 +14,15 @@ keeping the same methods on both server and client.
 
 Highlights from the example:
 
-- We set up the frontend and backend as independent crates, with the frontend folder
+- We set up the frontend and backend as independent crates, with the client folder
 inside the backend one. Alternatively, we could set them up at the same nest level.
 - We place the shared data structures in a barebones third crate called `shared`. We can't access
 data on the backend crate due to it being incompatible with the `wasm32-unknown-unknown` target.
 We can't do the reverse due to being unable to import `"cdylib"` crates.
-- With `Rocket`, we must use the nightly toolchain for the backend.
 - We set the server and client to use different ports
-- The Rocket server is set up with CORS, to accept requests from localhost only.
 - We are unable to share a workspace between backend and frontend due to incompatible
 compile targets.
 
-To run the example, navigate to the server_integration example, and run `cargo +nightly run`.
-In a different terminal, navigate to its `frontend` subdirectory, and run a build script and dev server
-as you would normally for a seed app.
 
 Folder structure:
 ```

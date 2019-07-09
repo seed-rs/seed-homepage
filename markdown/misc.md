@@ -60,7 +60,7 @@ it normally as html. Note that it does not support syntax highlighting. You can 
 
 Example:
 ```rust
-fn view(model: &Model) -> Vec<El<Msg>> {
+fn view(model: &Model) -> Vec<Node<Msg>> {
 
     let markdown = 
 "
@@ -92,7 +92,7 @@ and just [learn to code](https://play.rust-lang.org/).
 You can use `seed::document` and `seed::window` to access the `web_sys` document
 and window functions. Example:
 ```rust
-fn view(model: &Model) -> Vec<El<Msg>> {
+fn view(model: &Model) -> Vec<Node<Msg>> {
     vec![
         button![ 
             simple_ev("click", Msg::Increment), 
@@ -117,7 +117,7 @@ Inline SVGs can be rendered using `El::from_html`, or by using element-creation 
 `path!` etc. Setting the `xmlns` attribute isn't required; it's set automatically when using the macro. Example:
 
 ```rust
-fn view(model: &Model) -> Vec<El<Msg>> {
+fn view(model: &Model) -> Vec<Node<Msg>> {
     vec![
         svg![
             attrs!{

@@ -6,7 +6,9 @@ To use this, we need to include `futures = "^0.1.26"` in `Cargo.toml`. The [Fetc
 is standalone: It can be used with any wasm-bindgen program.
 
 Example, where we update the state on initial load (similar to the `server_interaction` example in the repo)
-from a server. It demonstrates a `GET` request, and deserializing JSON data.
+from a server. It demonstrates a `GET` request, and deserializing JSON data. The `server_integration`
+example contains more sample code.
+
 ```rust
 use futures::Future;
 use serde::{Serialize, Deserialize};
@@ -66,7 +68,7 @@ fn update(msg: Msg, model: &mut Model, orders: &mut Orders<Msg>) {
     }
 }
 
-fn view(model: &Model) -> El<Msg> {
+fn view(model: &Model) -> Node<Msg> {
     div![format!(
         "Repo info: Name: {}, SHA: {}",
         model.branch.name, model.branch.commit.sha
@@ -102,7 +104,7 @@ in the response, Serde automatically applies only the info matching our struct's
 If we wish to trigger
 this update from a normal event instead of on load, we can do something like this:
 ```rust
-fn view(model: &Model) -> Vec<El<Msg>> {
+fn view(model: &Model) -> Vec<Node<Msg>>> {
     vec![
         div![format!(
             "Repo info: Name: {}, SHA: {}",
@@ -180,7 +182,7 @@ fn send_message() -> impl Future<Item = Msg, Error = Msg> {
         .fetch_json(Msg::MessageSent)
 }
 
-fn view(model: &Model) ->El<Msg> {
+fn view(model: &Model) ->Node<Msg>> {
     button![
         simple_ev(Ev::Click, Msg::SendMessage),
         "Send an urgent message (see console log)"
@@ -206,7 +208,7 @@ to prepend our closures with `move`, as above, any time `state` is used in one.
 Here's an example of using set_interval to update the state once every second. It uses
 `seed::set_interval`. `seed::set_timeout` also exists, and works the same way:
 ```rust
-fn view(model: &Model) -> El<Msg> {  
+fn view(model: &Model) -> Node<Msg>> {  
     div![
         did_mount(move |_| {
             let state2 = state.clone();

@@ -141,30 +141,40 @@ sub-functions to aid code organization.
 [macros]( https://doc.rust-lang.org/book/appendix-04-macros.html) to simplify syntax.
 
 The view's defined by a function that's passed to `seed::run`. This takes a `Seed::app<Msg, Model>`, and Model
-as parameters, and outputs something that implements the ` ElContainer` trait, which is imported in the prelude.
-Usually, this is an `El`, or `Vec<El>`, representing all elements that will be inserted as children
-on the top-level element. (The top-level element is in the html file, and specified with
+as parameters, and outputs something that implements the ` View` trait, which is imported in the prelude.
+Usually, this is a `Node`, or `Vec<Node>`, representing all nodes that will be inserted as children
+on the top-level one. (The top-level `Node` is in the html file, and specified with
 `seed::App::build.mount()`, or as a default, the element with id `app`).
  It may composed into sub-functions, which can be thought of like components in other frameworks. 
- The first parameter, which we will call `state` in our examples, is used for updating state 
- outside of the message system, and will not be used in these examples.
 
 Examples:
 ```rust
-fn view(model: &Model) -> El<Msg> {
+fn view(model: &Model) -> Node<Msg> {
     h1![ "Let there be light" ],
 }
 ```
 
 ```rust
-fn view(model: &Model) -> Vec<El<Msg>> {
+fn view(model: &Model) -> Vec<Node<Msg>> {
     vec![
         h1![ "Let there be light" ],
         h2![ "Let it be both a particle and a wave" ]
     ]
 }
 ```
-In either of those examples, you could use the signature: `fn view(model: &Model) -> impl ElContainer<Msg>` instead.
+In either of those examples, you could use the signature: `fn view(model: &Model) -> impl View<Msg>` instead.
+This allows you to change between them without changing the function signature.
+
+## The Node Enum
+The Virtual DOM is represnted by nested [Nodes](https://docs.rs/seed/0.1.6/seed/dom_types/enum.None.html).
+THe node has 3 variants: 
+- `Text` holds a [Text](https://docs.rs/seed/0.1.6/seed/dom_types/struct.Text.html)
+struct. Mostly for internal use, burt can be created with `Node::new_text()`.
+- `Element` wraps an [El](https://docs.rs/seed/0.1.6/seed/dom_types/struct.El.html), which is
+the main component of our VDOM. Created using macros, described below.
+- `Empty` is a placeholder that doens't render anything; useful in conditional/ternary logic.
+Created using the `empty![]` macro, or `seed::empty()`.
+
 
 ## Elements, attributes, styles
 Elements are created using macros, named by the lowercase name of
@@ -180,9 +190,9 @@ These macros accept any combination of the following parameters:
 - One or more [Listener](https://docs.rs/seed/0.1.6/seed/dom_types/struct.Listener.html) structs, which handle events
 - One or more `Vec`s of `Listener` structs
 - One `String` or `&str` representing a node text
-- One or more [El](https://docs.rs/seed/0.1.6/seed/dom_types/struct.El.html) structs, representing a child
-- One or more Vecs of `El` structs, representing multiple children
-- A `Map`, ie the result of `map()`, yielding `El`s or `Listener`s, without having to explicitly `collect`.
+- One or more [Node](https://docs.rs/seed/0.1.6/seed/dom_types/enum.Node.html) structs, representing a child
+- One or more Vecs of `Node` structs, representing multiple children
+- A `Map`, ie the result of `map()`, yielding `Node`s or `Listener`s, without having to explicitly `collect`.
 
 The parameters can be passed in any order; the compiler knows how to handle them
 based on their types. Children are rendered in the order passed.
@@ -195,13 +205,13 @@ respectively.
 
 Example:
 ```rust
-fn view(model: &Model) -> El<Msg> {
+fn view(model: &Model) -> Node<Msg> {
     let things = vec![ h4![ "thing1" ], h4![ "thing2" ] ];
     
     let other_things = vec![1, 2];
 
     div![ attrs!{At::Class => "hardly-any"}, 
-        things,  // Vec<El<Msg>
+        things,  // Vec<Node<Msg>
         other_things.map(|t| h4![t.to_string()]),  // Map
         h4![ "thing3?" ],  // El
     ]
@@ -224,7 +234,7 @@ We can set multiple values for an attribute using `Attribute.add_multiple`. This
 is useful for setting multiple classes. Note that we must set this up outside of
 the view macro, since it involves modifying a variable:
 ```rust
-fn a_component() -> El<Msg> {
+fn a_component() -> Node<Msg> {
     let mut attributes = attrs!{};
     attributes.add_multiple(At::Class, vec!["A-modicum-of", "hardly-any"]);
 
@@ -243,7 +253,7 @@ attributes as a list of classes, or a single id, if no other attributes are requ
 Do not mix and match these with each other, or with attrs!; all but the last-passed
 will be thrown out.
 ```rust
-fn a_component() -> El<Msg> {
+fn a_component() -> Node<Msg> {
     // ...
     span![ class!["calculus", "chemistry", "literature"] ],
     span![ id!("unique-element") ],
@@ -266,7 +276,7 @@ class![
 Styles and Attrs can be passed as refs as well, which is useful if you need to pass
 the same one more than once:
 ```rust
-fn a_component() -> El<Msg> {
+fn a_component() -> Node<Msg> {
     let item_style = style!{
         "margin-top" => px(10);
         "font-size" => unit!(1.2, em)
@@ -283,7 +293,7 @@ fn a_component() -> El<Msg> {
 
 Setting an InputElement's `checked`, or `autofocus` property is done through normal attributes:
 ```rust
-fn a_component() -> El<Msg> {
+fn a_component() -> Node<Msg> {
     // ...
     input![ attrs!{At::Typed => "checkbox"; At::Checked => true} ]
     input![ attrs!{At::Autofocus => true} ]
@@ -300,7 +310,7 @@ attributes.add(At::Class, "truckloads");
 
 Example of the style tag, and how you can use pattern-matching in views:
 ```rust
-fn view(model: &Model) -> El<Msg> {
+fn view(model: &Model) -> Node<Msg> {
     div![ style!{
         "display" => "grid";
         "grid-template-columns" => "auto";
@@ -326,7 +336,7 @@ We can combine Attrs and Style instances using their `merge` methods, which take
 an &Attrs and &Style respectively. This can be used to compose styles from reusable parts. 
 Example:
 ```rust
-fn a_component() -> El<Msg> {
+fn a_component() -> Node<Msg> {
     let base_style = !style{"color" => "lavender"};
 
     div![

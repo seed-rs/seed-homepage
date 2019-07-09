@@ -12,7 +12,7 @@ import re
 # ./pandoc --list-highlight-styles
 # pygments tango espresso zenburn kate monochrome breezedark haddock
 STYLE = "tango"
-VERSION = "0.3.7"
+VERSION = "0.4.0"
 
 
 def main():
@@ -41,8 +41,9 @@ def main():
         with open(f'./src/book/{filename}.html', encoding="utf8") as f:
             data = f.read()
 
-        # Correct a pandoc quirk.
+        # Correct pandoc quirks.
         data = data.replace("’", "'")
+        data = data.replace("#", "\#")
 
         regex = re.compile(r'<body>(.*?)</body>', re.DOTALL)
         m = re.search(regex, data)

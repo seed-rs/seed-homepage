@@ -57,7 +57,7 @@ To run tests, you may either use `wasm-pack` test commands, or simplified ones f
 `Makefile.toml` included in the quickstart repo. 
 
 To run all tests with the Makefile:
-`cargo make test firefox`
+`cargo make test_h firefox`
 Where `firefox` may be replaced with `chrome` or `safari`.
 
 To run a single test:

@@ -67,7 +67,7 @@ fn autofocus(el: &web_sys::Element) {
     html_el.focus().unwrap();
 }
 
-fn component() -> El<Msg> {
+fn component() -> Node<Msg> {
     button![
         "Autofocuses on load",
         autofocus

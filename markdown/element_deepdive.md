@@ -1,4 +1,7 @@
 # Element-creation macros, under the hood
+
+# This page is out of date. Standby.
+
 For a better understanding of how views are created, reference the
 [El API docs page](https://docs.rs/seed/0.2.0/seed/dom_types/struct.El.html).
 The following code returns an `El` representing a few nested DOM elements displayed
@@ -69,8 +72,6 @@ El {
             id: None,
             next_level: None,
             el_ws: None,
-            raw_html: false,
-            text_node: false,
             namespace: None,
             did_mount: None,
             did_update: None,
