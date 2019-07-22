@@ -44,6 +44,7 @@ def main():
         # Correct pandoc quirks.
         data = data.replace("’", "'")
         data = data.replace("#", "\#")
+        data = data.replace("\#[derive", "#[derive")
 
         regex = re.compile(r'<body>(.*?)</body>', re.DOTALL)
         m = re.search(regex, data)
