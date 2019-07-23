@@ -9,7 +9,7 @@ use seed::prelude::*;
 
 // Model
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 enum Page {
     Guide,
     Changelog,
@@ -25,7 +25,7 @@ impl ToString for Page {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 struct GuideSection {
     title: String,
     elements: Vec<El<Msg>>,
@@ -36,13 +36,6 @@ struct Model {
     guide_page: usize, // Index of our guide sections.
     guide_sections: Vec<GuideSection>,
 }
-
-//fn p<Ms>(e: &El<Ms>) {
-//    log!(e.tag.as_str(), e.get_text());
-//    for c in &e.children {
-//        p(c);
-//    }
-//}
 
 // Setup a default here, for initialization later.
 impl Default for Model {
@@ -90,7 +83,7 @@ impl Default for Model {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 enum Msg {
     ChangePage(Page),
     ChangeGuidePage(usize),
@@ -206,6 +199,8 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
             ]
         });
 
+//    log!(sections[guide_page]);
+
     div![
         style! {
             "display" => "grid";
@@ -235,7 +230,7 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
 }
 
 fn changelog() -> El<Msg> {
-    let mut entries = span![ El::from_markdown(
+    let entries = span![ El::from_markdown(
 "
 ## v0.3.7
 - `routes` now accepts `Url` instead of `&Url` (Breaking)
@@ -370,10 +365,9 @@ to allow conditional rendering (Breaking)
 - Initial release
 
 "
-    ) ];
-    entries.style = style! {
+    ), style! {
        "grid-column" => "2 / 3";
-    };
+    } ];
 
     div![
         class!["guide"],
@@ -395,7 +389,7 @@ fn footer() -> El<Msg> {
     ]
 }
 
-fn view(model: &Model) -> El<Msg> {
+fn view(model: &Model) -> impl ElContainer<Msg> {
     let version = "0.3.1";
     div![
         style! {

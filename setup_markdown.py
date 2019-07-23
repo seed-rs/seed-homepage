@@ -34,7 +34,7 @@ def main():
     
     for filename in filenames:
         # Perform the conversion
-        os.system(f'.\pandoc .\markdown\{filename}.md -s --highlight-style {STYLE}\
+        os.system(f'pandoc ./markdown/{filename}.md -s --highlight-style {STYLE}\
         -o src/book/{filename}.html --metadata pagetitle="{filename}"')
 
         # Trim everything except for the HTML body; Pandoc outputs full files.
@@ -43,7 +43,7 @@ def main():
 
         # Correct pandoc quirks.
         data = data.replace("’", "'")
-        data = data.replace("#", "\#")
+        # data = data.replace("#", "\#")
 
         regex = re.compile(r'<body>(.*?)</body>', re.DOTALL)
         m = re.search(regex, data)
@@ -56,9 +56,9 @@ def main():
         # Create a new rust file
         with open(f'./src/book/{filename}.rs', 'w', encoding="utf8") as f:
             f.write('pub fn text() -> String {\n')
-            f.write('r#"')
+            f.write('r###"')
             f.write(body)
-            f.write('"#.into()\n')
+            f.write('"###.into()\n')
             f.write('}')
 
         # Clean up the temporary HTML files

@@ -1,5 +1,5 @@
 pub fn text() -> String {
-r#"
+r###"
 <h1 id="about">About</h1>
 <h2 id="goals">Goals</h2>
 <ul>
@@ -50,5 +50,5 @@ r#"
 <li><a href="https://www.rust-lang.org/learn">Learn Rust</a></li>
 <li><a href="https://rustwasm.github.io/wasm-bindgen/wasm-bindgen-test/browsers.html">Testing in Headless Browsers</a></li>
 </ul>
-"#.into()
+"###.into()
 }

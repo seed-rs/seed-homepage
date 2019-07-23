@@ -161,7 +161,7 @@ fn view(model: &Model) -> Vec<Node<Msg>> {
         h2![ "Let it be both a particle and a wave" ]
     ]
 }
-```
+`````
 In either of those examples, you could use the signature: `fn view(model: &Model) -> impl View<Msg>` instead.
 This allows you to change between them without changing the function signature.
 
