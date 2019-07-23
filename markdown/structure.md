@@ -169,7 +169,7 @@ This allows you to change between them without changing the function signature.
 The Virtual DOM is represnted by nested [Nodes](https://docs.rs/seed/0.1.6/seed/dom_types/enum.None.html).
 THe node has 3 variants: 
 - `Text` holds a [Text](https://docs.rs/seed/0.1.6/seed/dom_types/struct.Text.html)
-struct. Mostly for internal use, burt can be created with `Node::new_text()`.
+struct. Mostly for internal use, but can be created with `Node::new_text()`.
 - `Element` wraps an [El](https://docs.rs/seed/0.1.6/seed/dom_types/struct.El.html), which is
 the main component of our VDOM. Created using macros, described below.
 - `Empty` is a placeholder that doens't render anything; useful in conditional/ternary logic.
