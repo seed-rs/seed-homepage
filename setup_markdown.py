@@ -26,7 +26,8 @@ def main():
         "lifecycle",
         "routing",
         "release_and_debugging",
-        "element_deepdive",
+        "complex_apps",
+        # "element_deepdive",
         "misc",
         "server_integration",
         "about",
@@ -42,7 +43,7 @@ def main():
             data = f.read()
 
         # Correct pandoc quirks.
-        data = data.replace("’", "'")
+        # data = data.replace("’", "'")
         # data = data.replace("#", "\#")
 
         regex = re.compile(r'<body>(.*?)</body>', re.DOTALL)
@@ -56,9 +57,9 @@ def main():
         # Create a new rust file
         with open(f'./src/book/{filename}.rs', 'w', encoding="utf8") as f:
             f.write('pub fn text() -> String {\n')
-            f.write('r###"')
+            f.write('r#####"')
             f.write(body)
-            f.write('"###.into()\n')
+            f.write('"#####.into()\n')
             f.write('}')
 
         # Clean up the temporary HTML files

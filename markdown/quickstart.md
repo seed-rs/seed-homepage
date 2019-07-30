@@ -110,7 +110,7 @@ enum Msg {
 }
 
 /// How we update the model
-fn update(msg: Msg, model: &mut Model, _orders: &mut Orders<Msg>) {
+fn update(msg: Msg, model: &mut Model, _orders: &mut impl Orders<Msg>) {
     match msg {
         Msg::Increment => model.count += 1,
         Msg::Decrement => model.count -= 1,
@@ -133,7 +133,7 @@ fn success_level(clicks: i32) -> Node<Msg> {
 }
 
 /// The top-level component we pass to the virtual dom.
-fn view(model: &Model) -> Node<Msg> {
+fn view(model: &Model) -> impl View<Msg> {
     let plural = if model.count == 1 {""} else {"s"};
 
     // Attrs, Style, Events, and children may be defined separately.
@@ -149,8 +149,8 @@ fn view(model: &Model) -> Node<Msg> {
             style!{
                 // Example of conditional logic in a style.
                 "color" => if model.count > 4 {"purple"} else {"gray"};
-                // When passing numerical values to style!, "px" is implied.
-                "border" => "2px solid #004422"; "padding" => 20
+                "border" => "2px solid #004422"; 
+                "padding" => unit!(20, px);
             },
             // We can use normal Rust code and comments in the view.
             h3![ format!("{} {}{} so far", model.count, model.what_we_count, plural) ],
@@ -158,7 +158,7 @@ fn view(model: &Model) -> Node<Msg> {
             button![ simple_ev(Ev::Click, Msg::Decrement), "-" ],
 
             // Optionally-displaying an element
-            if model.count >= 10 { h2![ style!{"padding" => 50}, "Nice!" ] } else { empty![] }
+            if model.count >= 10 { h2![ style!{"padding" => px(50)}, "Nice!" ] } else { empty![] }
         ],
         success_level(model.count),  // Incorporating a separate component
 
@@ -168,12 +168,12 @@ fn view(model: &Model) -> Node<Msg> {
 }
 
 
-#[wasm_bindgen]
+#[wasm_bindgen(start)]
 pub fn render() {
-    seed::App::build(Model::default(), update, view)
+    seed::App::build(|_, _| Model::default(), update, view)
         .finish()
         .run();
-}
+}}
 ```
 
 For a truly minimimal example, see [lib.rs in the quickstart repo](https://github.com/David-OConnor/seed-quickstart/blob/master/src/lib.rs)

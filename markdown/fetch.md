@@ -39,7 +39,7 @@ fn fetch_data() -> impl Future<Item = Msg, Error = Msg> {
     Request::new(url.into()).fetch_json(Msg::DataFetched)
 }
 
-fn update(msg: Msg, model: &mut Model, orders: &mut Orders<Msg>) {
+fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
     match msg {
         Msg::FetchData => {
             orders
@@ -140,7 +140,7 @@ enum Msg {
     },
 }
 
-fn update(msg: Msg, model: &mut Model, orders: &mut Orders<Msg>) {
+fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
     match msg {
         Msg::SendMessage => {
             orders.skip().perform_cmd(send_message());

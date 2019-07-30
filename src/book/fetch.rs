@@ -1,5 +1,5 @@
 pub fn text() -> String {
-r###"
+r#####"
 <h1 id="http-requests-fetch-and-updating-state">Http requests (fetch), and updating state</h1>
 <p>We use the <a href="https://docs.rs/seed/0.4.0/seed/fetch/struct.Request.html">seed::Request</a> struct to make HTTP requests in the browser, wrapping the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>. To use this, we need to include <code>futures = &quot;^0.1.26&quot;</code> in <code>Cargo.toml</code>. The <a href="https://docs.rs/seed/0.4.0/seed/fetch/index.html">Fetch module</a> is standalone: It can be used with any wasm-bindgen program.</p>
 <p>Example, where we update the state on initial load (similar to the <code>server_interaction</code> example in the repo) from a server. It demonstrates a <code>GET</code> request, and deserializing JSON data. The <code>server_integration</code> example contains more sample code.</p>
@@ -32,7 +32,7 @@ r###"
 <a class="sourceLine" id="cb1-27" title="27">    <span class="pp">Request::</span>new(url.into()).fetch_json(<span class="pp">Msg::</span>DataFetched)</a>
 <a class="sourceLine" id="cb1-28" title="28"><span class="op">}</span></a>
 <a class="sourceLine" id="cb1-29" title="29"></a>
-<a class="sourceLine" id="cb1-30" title="30"><span class="kw">fn</span> update(msg: Msg, model: &amp;<span class="kw">mut</span> Model, orders: &amp;<span class="kw">mut</span> Orders&lt;Msg&gt;) <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-30" title="30"><span class="kw">fn</span> update(msg: Msg, model: &amp;<span class="kw">mut</span> Model, orders: &amp;<span class="kw">mut</span> <span class="kw">impl</span> Orders&lt;Msg&gt;) <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-31" title="31">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-32" title="32">        <span class="pp">Msg::</span>FetchData =&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-33" title="33">            orders</a>
@@ -77,8 +77,8 @@ r###"
 <a class="sourceLine" id="cb1-72" title="72"></a>
 <a class="sourceLine" id="cb1-73" title="73">    app.update(<span class="pp">Msg::</span>FetchData);</a>
 <a class="sourceLine" id="cb1-74" title="74"><span class="op">}</span></a></code></pre></div>
-<p>On page load, we trigger an update using <code>Msg::FetchData</code>, which points the <code>update</code> function to use the <code>Orders.perform_cmd</code> method. This allows state to be update asynchronosly, when the request is complete. <code>skip()</code> is a convenience method that sets <code>Update::ShouldRender</code> to <code>Skip</code>; sending the request doesn't trigger a render. We pattern-match the response in the <code>update</code> function's<code>DataFetched</code> arm: If successful, we update the model. If not, we update recursively to the <code>OnFetchError</code> branch using <code>.send_msg()</code>, in this case displaying an error in the console.</p>
-<p>We've set up nested structs that have fields matching the names of the JSON fields of the response, which <code>Serde</code> deserializes the response into, through the <code>fetch_json</code> method of <code>Request</code>. Note that even though more data than what's contained in our Branch struct is included in the response, Serde automatically applies only the info matching our struct's fields.</p>
+<p>On page load, we trigger an update using <code>Msg::FetchData</code>, which points the <code>update</code> function to use the <code>Orders.perform_cmd</code> method. This allows state to be update asynchronosly, when the request is complete. <code>skip()</code> is a convenience method that sets <code>Update::ShouldRender</code> to <code>Skip</code>; sending the request doesn’t trigger a render. We pattern-match the response in the <code>update</code> function’s<code>DataFetched</code> arm: If successful, we update the model. If not, we update recursively to the <code>OnFetchError</code> branch using <code>.send_msg()</code>, in this case displaying an error in the console.</p>
+<p>We’ve set up nested structs that have fields matching the names of the JSON fields of the response, which <code>Serde</code> deserializes the response into, through the <code>fetch_json</code> method of <code>Request</code>. Note that even though more data than what’s contained in our Branch struct is included in the response, Serde automatically applies only the info matching our struct’s fields.</p>
 <p>If we wish to trigger this update from a normal event instead of on load, we can do something like this:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">fn</span> view(model: &amp;Model) -&gt; <span class="dt">Vec</span>&lt;Node&lt;Msg&gt;&gt;&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb2-2" title="2">    <span class="pp">vec!</span><span class="op">[</span></a>
@@ -112,7 +112,7 @@ r###"
 <a class="sourceLine" id="cb3-20" title="20">    <span class="op">}</span>,</a>
 <a class="sourceLine" id="cb3-21" title="21"><span class="op">}</span></a>
 <a class="sourceLine" id="cb3-22" title="22"></a>
-<a class="sourceLine" id="cb3-23" title="23"><span class="kw">fn</span> update(msg: Msg, model: &amp;<span class="kw">mut</span> Model, orders: &amp;<span class="kw">mut</span> Orders&lt;Msg&gt;) <span class="op">{</span></a>
+<a class="sourceLine" id="cb3-23" title="23"><span class="kw">fn</span> update(msg: Msg, model: &amp;<span class="kw">mut</span> Model, orders: &amp;<span class="kw">mut</span> <span class="kw">impl</span> Orders&lt;Msg&gt;) <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-24" title="24">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-25" title="25">        <span class="pp">Msg::</span>SendMessage =&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-26" title="26">            orders.skip().perform_cmd(send_message());</a>
@@ -164,7 +164,7 @@ r###"
 <h2 id="updating-state">Updating state</h2>
 <h2 id="todo-this-section-is-out-of-date-and-the-behavior-it-describes-will-change-in-the-future.">Todo: This section is out of date, and the behavior it describes will change in the future.</h2>
 <p>To update the model outside of the element-based event system, we call <code>update_state</code> on our state var, which is the first parameter in our view func. A consequence of this is that we must pass state to any components that need to update state in this way. This may require calling <code>state.clone()</code>, to use it in multiple places. Note that we also need to prepend our closures with <code>move</code>, as above, any time <code>state</code> is used in one.</p>
-<p>Here's an example of using set_interval to update the state once every second. It uses <code>seed::set_interval</code>. <code>seed::set_timeout</code> also exists, and works the same way:</p>
+<p>Here’s an example of using set_interval to update the state once every second. It uses <code>seed::set_interval</code>. <code>seed::set_timeout</code> also exists, and works the same way:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">fn</span> view(model: &amp;Model) -&gt; Node&lt;Msg&gt;&gt; <span class="op">{</span>  </a>
 <a class="sourceLine" id="cb4-2" title="2">    <span class="pp">div!</span><span class="op">[</span></a>
 <a class="sourceLine" id="cb4-3" title="3">        did_mount(<span class="kw">move</span> |_| <span class="op">{</span></a>
@@ -212,5 +212,5 @@ r###"
 <a class="sourceLine" id="cb6-8" title="8"><span class="op">}</span></a></code></pre></div>
 <p>See the <a href="https://github.com/David-OConnor/seed/tree/master/examples/server_interaction">server_interaction example</a> for a full example.</p>
 <p>Props to Pauan for writing the Fetch module.</p>
-"###.into()
+"#####.into()
 }

@@ -80,7 +80,7 @@ fetch requests. See the `Http requests` section for more info.
 
 Example:
 ```rust
-fn update(msg: Msg, model: &mut Model, _orders: &mut Orders<Msg>) {
+fn update(msg: Msg, model: &mut Model, _orders: &mut impl Orders<Msg>) {
     match msg {
         Msg::Increment => model.count += 1,
         Msg::SetCount(count) => model.count = count,
@@ -97,7 +97,7 @@ it straightforward, this becomes important with more complex updates.
 More detailed example, from the 
 [todoMVC example](https://github.com/David-OConnor/seed/tree/master/examples/todomvc):
 ```rust
-fn update(msg: Msg, model: &mut Model, _orders: &mut Orders<Msg>) {
+fn update(msg: Msg, model: &mut Model, _orders: &mut impl Orders<Msg>) {
     match msg {
         Msg::ClearCompleted => {
             model.todos = model.todos.into_iter()

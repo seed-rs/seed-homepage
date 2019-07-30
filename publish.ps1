@@ -1,5 +1,5 @@
 python setup_markdown.py
-cargo make all_release
+cargo make build_release
 git add .
 git commit -am "update"
 git push

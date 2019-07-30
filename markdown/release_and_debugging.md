@@ -61,7 +61,7 @@ To run all tests with the Makefile:
 Where `firefox` may be replaced with `chrome` or `safari`.
 
 To run a single test:
-`cargo make test test_name`. 
+`cargo make test_h test_name`. 
 with `test_name` replaced by the name of the test. It uses Firefox.
 
 With `wasm-pack` directly, or to run individual tests, use commands similar to this:

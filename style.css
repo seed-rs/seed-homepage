@@ -60,6 +60,7 @@ a:hover {
 code { /* Eg inline code */
     padding-left: 4px;
     padding-right: 4px;
+    font-size: 14px;
     background-color: var(--color5);
 }
 

@@ -28,7 +28,7 @@ impl ToString for Page {
 #[derive(Clone, Debug)]
 struct GuideSection {
     title: String,
-    elements: Vec<El<Msg>>,
+    content: String,
 }
 
 struct Model {
@@ -55,7 +55,8 @@ impl Default for Model {
                 "Release and debugging",
                 crate::book::release_and_debugging::text(),
             ),
-            ("Element deep-dive", crate::book::element_deepdive::text()),
+//            ("Element deep-dive", crate::book::element_deepdive::text()),
+            ("Complex apps", crate::book::complex_apps::text()),
             (
                 "Server integration",
                 crate::book::server_integration::text(),
@@ -64,14 +65,9 @@ impl Default for Model {
         ];
 
         for (title, md_text) in md_texts {
-            let elements = El::from_markdown(&md_text);
-            //
-            //            for e in &elements {
-            //                p(e);
-            //            }
             guide_sections.push(GuideSection {
                 title: title.to_string(),
-                elements,
+                content: md_text,
             });
         }
 
@@ -90,7 +86,7 @@ enum Msg {
 }
 
 /// The sole source of updating the model; returns a fresh one.
-fn update(msg: Msg, model: &mut Model, _orders: &mut Orders<Msg>) {
+fn update(msg: Msg, model: &mut Model, _orders: &mut impl Orders<Msg>) {
     match msg {
         Msg::ChangePage(page) => model.page = page,
         Msg::ChangeGuidePage(guide_page) => {
@@ -100,7 +96,7 @@ fn update(msg: Msg, model: &mut Model, _orders: &mut Orders<Msg>) {
     }
 }
 
-fn header(_version: &str) -> El<Msg> {
+fn header(_version: &str) -> Node<Msg> {
     let link_style = style! {
         "margin-left" => unit!(20, px);
         "margin-right" => unit!(20, px);
@@ -139,7 +135,7 @@ fn header(_version: &str) -> El<Msg> {
     ]
 }
 
-fn title() -> El<Msg> {
+fn title() -> Node<Msg> {
     div![
         style! {
         // todo look up areas
@@ -172,7 +168,7 @@ fn title() -> El<Msg> {
     ]
 }
 
-fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
+fn guide(sections: &[GuideSection], guide_page: usize) -> Node<Msg> {
     let menu_item_style = style! {
         "display" => "flex";  // So we can vertically center
         "align-items" => "center";
@@ -185,21 +181,16 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
         "font-size" => unit!(1.2, em);
     };
 
-    let menu_items = sections
-        .iter()
-        .enumerate()
-        .map(|(i, s)| {
-            h4![
-                &menu_item_style,
-                attrs! {
-                    At::Class => if i == guide_page {"guide-menu-selected"} else {"guide-menu"};
-                    At::Href => "/guide/".to_string() + &i.to_string()
-                },
-                s.title
-            ]
-        });
-
-//    log!(sections[guide_page]);
+    let menu_items = sections.iter().enumerate().map(|(i, s)| {
+        h4![
+            &menu_item_style,
+            attrs! {
+                At::Class => if i == guide_page {"guide-menu-selected"} else {"guide-menu"};
+                At::Href => "/guide/".to_string() + &i.to_string()
+            },
+            s.title
+        ]
+    });
 
     div![
         style! {
@@ -224,14 +215,30 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> El<Msg> {
                 "grid-column" => "2 / 3";
                 "padding" => unit!(80, px);
             },
-            sections[guide_page].clone().elements
+            raw![&sections[guide_page].content],
         ]
     ]
 }
 
-fn changelog() -> El<Msg> {
-    let entries = span![ El::from_markdown(
+fn changelog() -> Node<Msg> {
+    let entries = span![ md!(
 "
+## v0.4.0
+- `ElContainer`, imported in prelude, renamed to `View`. (Breaking)
+- Internal refactor of `El`: Now wrapped in `Node`, along with
+`Empty` and `Text`. Creation macros return `Node(Element)`. (Breaking)
+- Changed the way special attributes like `disabled`, `autofocus`, and
+`checked` are handled (Breaking)
+- `MessageMapper` now accepts closures
+- `Orders` is a trait now instead of a struct. (Breaking)
+- Significant changes to MessageMapper
+- Orders has new methods, `clone_app` and `msg_mapper` which can allow access to app instance.
+- Added more SVG element macros
+- Several minor bux fixes
+- Examples updated to reflect these changes
+- Improvements to Fetch API, especially regarding error handling
+and deserialization
+
 ## v0.3.7
 - `routes` now accepts `Url` instead of `&Url` (Breaking)
 - Improvements to fetch API
@@ -382,14 +389,14 @@ to allow conditional rendering (Breaking)
     ]
 }
 
-fn footer() -> El<Msg> {
+fn footer() -> Node<Msg> {
     footer![
         style! {"display" => "flex"; "justify-content" => "center"},
         h4!["© 2019 David O'Connor"]
     ]
 }
 
-fn view(model: &Model) -> impl ElContainer<Msg> {
+fn view(model: &Model) -> Node<Msg> {
     let version = "0.3.1";
     div![
         style! {
@@ -420,7 +427,7 @@ fn routes(url: seed::Url) -> Msg {
 
 #[wasm_bindgen]
 pub fn render() {
-    seed::App::build(Model::default(), update, view)
+    seed::App::build(|_, _| Model::default(), update, view)
         .routes(routes)
         .finish()
         .run();

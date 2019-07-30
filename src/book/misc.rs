@@ -1,8 +1,8 @@
 pub fn text() -> String {
-r###"
+r#####"
 <h1 id="misc-features">Misc features</h1>
 <h2 id="logging-in-the-web-browser">Logging in the web browser</h2>
-<p>To output to the web browser's console (ie <code>console.log()</code> in JS), use <code>web_sys::console_log1</code>, or the <code>log</code> macro that wraps it, which is imported in the seed prelude: <code>log!(&quot;On the shoulders of&quot;, 5, &quot;giants&quot;.to_string())</code></p>
+<p>To output to the web browser’s console (ie <code>console.log()</code> in JS), use <code>web_sys::console_log1</code>, or the <code>log</code> macro that wraps it, which is imported in the seed prelude: <code>log!(&quot;On the shoulders of&quot;, 5, &quot;giants&quot;.to_string())</code></p>
 <h2 id="custom-tags">Custom tags</h2>
 <p>Seed generally retricts the element tags allowed by using Enums for the tags, and a predefined set of element-creation macros. If you wish to use a custom tag, you can use using <code>Tag::Custom</code> (<code>El</code> and <code>Tag</code> are exposed in the prelude), either with the <code>El::empty</code> constructor, or using the <code>custom!</code> element-construction macro, where we pass our custom tag as an argument:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">let</span> <span class="kw">mut</span> custom_el = <span class="pp">El::</span>empty(<span class="pp">Tag::</span>Custom(<span class="st">&quot;mytag&quot;</span>.to_string()));</a>
@@ -13,8 +13,8 @@ r###"
 <a class="sourceLine" id="cb1-6" title="6"><span class="op">]</span></a></code></pre></div>
 <p>An example is provided as part of the <a href="https://github.com/David-OConnor/seed/tree/master/examples/todomvc">window_events</a> example.</p>
 <h2 id="local-storage">Local storage</h2>
-<p>You can store page state locally using web_sys's <a href="https://rustwasm.github.io/wasm-bindgen/api/web_sys/struct.Storage.html">Storage struct</a></p>
-<p>Seed provides convenience functions <code>seed::storage::get_storage</code>, which returns the <code>web_sys::storage</code> object, and <code>seed::storage::store_data</code> to store an arbitrary Rust data structure that implements serde's Serialize. Example use:</p>
+<p>You can store page state locally using web_sys’s <a href="https://rustwasm.github.io/wasm-bindgen/api/web_sys/struct.Storage.html">Storage struct</a></p>
+<p>Seed provides convenience functions <code>seed::storage::get_storage</code>, which returns the <code>web_sys::storage</code> object, and <code>seed::storage::store_data</code> to store an arbitrary Rust data structure that implements serde’s Serialize. Example use:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">extern</span> <span class="kw">crate</span> serde;</a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="at">#[</span>macro_use<span class="at">]</span></a>
 <a class="sourceLine" id="cb2-3" title="3"><span class="kw">extern</span> <span class="kw">crate</span> serde_derive;</a>
@@ -75,9 +75,9 @@ r###"
 <a class="sourceLine" id="cb4-10" title="10">    <span class="op">]</span></a>
 <a class="sourceLine" id="cb4-11" title="11"><span class="op">}</span></a></code></pre></div>
 <h2 id="input-elements-are-controlled">Input elements are controlled</h2>
-<p><code>input</code>, <code>textarea</code>, and <code>select</code> elements are always controlled, in the vein of React. This means that even if there's no event associated with user input to these fields, their value will always stay in sync with the model, which may mean ignoring text input if not set up with a <code>Ev::Input</code> event.</p>
+<p><code>input</code>, <code>textarea</code>, and <code>select</code> elements are always controlled, in the vein of React. This means that even if there’s no event associated with user input to these fields, their value will always stay in sync with the model, which may mean ignoring text input if not set up with a <code>Ev::Input</code> event.</p>
 <h2 id="svg">SVG</h2>
-<p>Inline SVGs can be rendered using <code>El::from_html</code>, or by using element-creation macros, ie <code>svg!</code>, <code>path!</code> etc. Setting the <code>xmlns</code> attribute isn't required; it's set automatically when using the macro. Example:</p>
+<p>Inline SVGs can be rendered using <code>El::from_html</code>, or by using element-creation macros, ie <code>svg!</code>, <code>path!</code> etc. Setting the <code>xmlns</code> attribute isn’t required; it’s set automatically when using the macro. Example:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">fn</span> view(model: &amp;Model) -&gt; <span class="dt">Vec</span>&lt;Node&lt;Msg&gt;&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb5-2" title="2">    <span class="pp">vec!</span><span class="op">[</span></a>
 <a class="sourceLine" id="cb5-3" title="3">        <span class="pp">svg!</span><span class="op">[</span></a>
@@ -98,5 +98,5 @@ r###"
 <a class="sourceLine" id="cb5-18" title="18"><span class="op">}</span></a>
 <a class="sourceLine" id="cb5-19" title="19"></a>
 <a class="sourceLine" id="cb5-20" title="20"></a></code></pre></div>
-"###.into()
+"#####.into()
 }

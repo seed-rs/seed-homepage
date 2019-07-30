@@ -135,7 +135,7 @@ enum Msg {
     OnFetchErr(JsValue),
 }
 
-fn update(msg: Msg, model: &mut Model, orders: &mut Orders<Msg>) {
+fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
     match msg {
         Msg::Replace(data) => model.data = data,
 

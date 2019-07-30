@@ -1,12 +1,12 @@
 pub fn text() -> String {
-r###"
+r#####"
 <h1 id="integration-with-rust-backend-servers">Integration with Rust (backend) servers</h1>
 <h1 id="this-page-is-out-of-date.-standby.">This page is out of date. Standby.</h1>
 <p>If pairing Seed with a Rust backend server, we can simplify passing data between server and frontend using a layout like that in the <a href="https://github.com/David-OConnor/seed/tree/master/examples/server_integration">server_integration example</a> Here, we demonstrate using a single struct for both frontend and server, with <code>Actix</code>. as the server. This is useful for reducing duplication of data structures, and allows <code>Serde</code> to elegantly handle [de]serialization. For example, we can use use the same struct which represents a database item on a server in Seed, without redefining or changing it. This includes keeping the same methods on both server and client.</p>
 <p>Highlights from the example:</p>
 <ul>
 <li>We set up the frontend and backend as independent crates, with the client folder inside the backend one. Alternatively, we could set them up at the same nest level.</li>
-<li>We place the shared data structures in a barebones third crate called <code>shared</code>. We can't access data on the backend crate due to it being incompatible with the <code>wasm32-unknown-unknown</code> target. We can't do the reverse due to being unable to import <code>&quot;cdylib&quot;</code> crates.</li>
+<li>We place the shared data structures in a barebones third crate called <code>shared</code>. We can’t access data on the backend crate due to it being incompatible with the <code>wasm32-unknown-unknown</code> target. We can’t do the reverse due to being unable to import <code>&quot;cdylib&quot;</code> crates.</li>
 <li>We set the server and client to use different ports</li>
 <li>We are unable to share a workspace between backend and frontend due to incompatible compile targets.</li>
 </ul>
@@ -15,7 +15,7 @@ r###"
  └── frontend: A normal Seed crate
  └── shared: Contains data structures shared between frontend and backend
  </code></pre>
-<p>Backend Cargo.toml. A normal <code>Rocket</code> one, with a relative-path <code>shared</code> dependency, and CORS support. Notice how we don't use workspaces:</p>
+<p>Backend Cargo.toml. A normal <code>Rocket</code> one, with a relative-path <code>shared</code> dependency, and CORS support. Notice how we don’t use workspaces:</p>
 <pre class="toml"><code>[package]
 name = &quot;backend&quot;
 version = &quot;0.1.0&quot;
@@ -27,7 +27,7 @@ rocket = &quot;^0.4.0-rc.1&quot;
 serde_json = &quot;^1.0.33&quot;
 rocket_cors = &quot;^0.4.0&quot;
 shared = { path = &quot;shared&quot; }</code></pre>
-<p>Frontend Cargo.toml. The only difference from a normal Seed crate is the <code>shared</code> dependency. Note that we don't need to import <code>Serde</code> directly, in this case.</p>
+<p>Frontend Cargo.toml. The only difference from a normal Seed crate is the <code>shared</code> dependency. Note that we don’t need to import <code>Serde</code> directly, in this case.</p>
 <pre class="toml"><code>[package]
 name = &quot;frontend&quot;
 version = &quot;0.1.0&quot;
@@ -98,7 +98,7 @@ serde = { version = &quot;^1.0.80&quot;, features = [&#39;derive&#39;] }</code><
 <a class="sourceLine" id="cb7-22" title="22">    OnFetchErr(JsValue),</a>
 <a class="sourceLine" id="cb7-23" title="23"><span class="op">}</span></a>
 <a class="sourceLine" id="cb7-24" title="24"></a>
-<a class="sourceLine" id="cb7-25" title="25"><span class="kw">fn</span> update(msg: Msg, model: &amp;<span class="kw">mut</span> Model, orders: &amp;<span class="kw">mut</span> Orders&lt;Msg&gt;) <span class="op">{</span></a>
+<a class="sourceLine" id="cb7-25" title="25"><span class="kw">fn</span> update(msg: Msg, model: &amp;<span class="kw">mut</span> Model, orders: &amp;<span class="kw">mut</span> <span class="kw">impl</span> Orders&lt;Msg&gt;) <span class="op">{</span></a>
 <a class="sourceLine" id="cb7-26" title="26">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb7-27" title="27">        <span class="pp">Msg::</span>Replace(data) =&gt; model.data = data,</a>
 <a class="sourceLine" id="cb7-28" title="28"></a>
@@ -117,5 +117,5 @@ serde = { version = &quot;^1.0.80&quot;, features = [&#39;derive&#39;] }</code><
 <a class="sourceLine" id="cb7-41" title="41">        <span class="op">}</span></a>
 <a class="sourceLine" id="cb7-42" title="42">    <span class="op">}</span></a>
 <a class="sourceLine" id="cb7-43" title="43"><span class="op">}</span></a></code></pre></div>
-"###.into()
+"#####.into()
 }

@@ -1,10 +1,10 @@
 pub fn text() -> String {
-r###"
+r#####"
 <h1 id="routing">Routing</h1>
 <p>Seed includes flexible routing, inspired by <a href="https://github.com/reasonml/reason-react/blob/master/docs/router.md">React-Reason</a>: You can trigger state changes that update the address bar, and can be nagivated to/from using forward and back buttons. This works for landing-page routing as well, provided your server is configured to support. See the <a href="https://github.com/David-OConnor/seed/tree/master/examples/homepage">homepage</a> and <a href="https://github.com/David-OConnor/seed/tree/master/examples/todomvc">todomvc</a> examples.</p>
-<p>Let's say our site the following pages: a guide, which can have subpages, and a changelog, accessible by <code>http://seed-rs.org/changelog</code>, <code>http://seed-rs.org/guide</code>, and <code>http://seed-rs.org/guide/3</code> (where 3 is the page we want) respectively. We describe the page by a <code>page</code> field in our model, which is an integer: 0 for guide, 1 for changelog, and an additional number for the guide page. An enum would be cleaner, but we don't wish to complicate this example.</p>
+<p>Let’s say our site the following pages: a guide, which can have subpages, and a changelog, accessible by <code>http://seed-rs.org/changelog</code>, <code>http://seed-rs.org/guide</code>, and <code>http://seed-rs.org/guide/3</code> (where 3 is the page we want) respectively. We describe the page by a <code>page</code> field in our model, which is an integer: 0 for guide, 1 for changelog, and an additional number for the guide page. An enum would be cleaner, but we don’t wish to complicate this example.</p>
 <h2 id="the-basics">The basics</h2>
-<p>To set up the initial routing, pass a <code>routes</code> function describing how to handle routing, to <a href="https://docs.rs/seed/0.4.0/seed/struct.App.html#method.build">App::build</a>'s <code>routes</code> method.</p>
+<p>To set up the initial routing, pass a <code>routes</code> function describing how to handle routing, to <a href="https://docs.rs/seed/0.4.0/seed/struct.App.html#method.build">App::build</a>’s <code>routes</code> method.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">fn</span> routes(url: &amp;<span class="pp">seed::</span>Url) -&gt; Msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-2" title="2">    <span class="kw">if</span> url.path.is_empty() <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-3" title="3">        <span class="kw">return</span> <span class="pp">Msg::</span>ChangePage(<span class="dv">0</span>)</a>
@@ -30,10 +30,10 @@ r###"
 <a class="sourceLine" id="cb1-23" title="23">        .finish()</a>
 <a class="sourceLine" id="cb1-24" title="24">        .run();</a>
 <a class="sourceLine" id="cb1-25" title="25"><span class="op">}</span></a></code></pre></div>
-<p>The simplest way to trigger routing is to set up an element with an <code>At::Href</code> attribute, who's value contains a leading <code>/</code>, and corresponds to one of the routes defined in your <code>routes</code> function. Clicking this will trigger routing, as defined in <code>routes</code>:</p>
+<p>The simplest way to trigger routing is to set up an element with an <code>At::Href</code> attribute, who’s value contains a leading <code>/</code>, and corresponds to one of the routes defined in your <code>routes</code> function. Clicking this will trigger routing, as defined in <code>routes</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="pp">a!</span><span class="op">[</span><span class="st">&quot;Guide&quot;</span>, <span class="pp">attrs!</span><span class="op">{</span><span class="pp">At::</span>Href =&gt; <span class="st">&quot;/guide&quot;</span><span class="op">}</span> <span class="op">]</span></a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="pp">a!</span><span class="op">[</span><span class="st">&quot;Guide page 1&quot;</span>, <span class="pp">attrs!</span><span class="op">{</span><span class="pp">At::</span>Href =&gt; <span class="st">&quot;/guide/1&quot;</span><span class="op">}</span> <span class="op">]</span></a></code></pre></div>
-<p>The tag containing <code>Href</code> doesn't need to be an <code>a!</code> tag; any will work:</p>
+<p>The tag containing <code>Href</code> doesn’t need to be an <code>a!</code> tag; any will work:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="pp">button!</span><span class="op">[</span><span class="st">&quot;Changelog&quot;</span>, <span class="pp">attrs!</span><span class="op">{</span><span class="pp">At::</span>Href =&gt; <span class="st">&quot;/changelog&quot;</span><span class="op">}</span> <span class="op">]</span></a></code></pre></div>
 <h2 id="more-detail-and-routing-using-events">More detail, and routing using events</h2>
 <p>Your <code>routes</code> function outputs the message that handles the routing, and accepts a ref to a <a href="https://docs.rs/seed/0.4.0/seed/routing/struct.Url.html">Url struct</a> describing the route, which routes has the following fields:</p>
@@ -43,7 +43,7 @@ r###"
 <a class="sourceLine" id="cb4-4" title="4">    <span class="kw">pub</span> search: <span class="dt">Option</span>&lt;<span class="dt">String</span>&gt;,</a>
 <a class="sourceLine" id="cb4-5" title="5">    <span class="kw">pub</span> title: <span class="dt">Option</span>&lt;<span class="dt">String</span>&gt;,</a>
 <a class="sourceLine" id="cb4-6" title="6"><span class="op">}</span></a></code></pre></div>
-<p><code>path</code> contains the path heirarchy from top to bottom. For example, the <code>changelog</code> page above's path is <code>vec![String::from(&quot;changelog&quot;)]</code>, representing <code>/changelog/</code>, and guide page 3's is <code>vec![String::from(&quot;guide&quot;), 3.to_string()]</code>, representing <code>/guide/3/</code>. It's likely all you'll need. The other three properties aren't as common; <code>hash</code> describes text after a <code>#</code>; <code>search</code> describes text after a <code>?</code>, but before <code>#</code>, and title is a descriptive title, unimplemented in current web browsers, but may see use in the future.</p>
+<p><code>path</code> contains the path heirarchy from top to bottom. For example, the <code>changelog</code> page above’s path is <code>vec![String::from(&quot;changelog&quot;)]</code>, representing <code>/changelog/</code>, and guide page 3’s is <code>vec![String::from(&quot;guide&quot;), 3.to_string()]</code>, representing <code>/guide/3/</code>. It’s likely all you’ll need. The other three properties aren’t as common; <code>hash</code> describes text after a <code>#</code>; <code>search</code> describes text after a <code>?</code>, but before <code>#</code>, and title is a descriptive title, unimplemented in current web browsers, but may see use in the future.</p>
 <p>To trigger routing from events, instead of using <code>At::Href</code>, include logic like this in the <code>update</code> function:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb5-1" title="1"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
 <a class="sourceLine" id="cb5-2" title="2"><span class="kw">enum</span> Msg <span class="op">{</span></a>
@@ -58,7 +58,7 @@ r###"
 <a class="sourceLine" id="cb5-11" title="11">    model.guide_page = guide_page;</a>
 <a class="sourceLine" id="cb5-12" title="12"><span class="op">}</span></a>
 <a class="sourceLine" id="cb5-13" title="13"></a>
-<a class="sourceLine" id="cb5-14" title="14"><span class="kw">fn</span> update(msg: Msg, model: &amp;<span class="kw">mut</span> Model, orders: &amp;<span class="kw">mut</span> Orders&lt;Msg&gt;) <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-14" title="14"><span class="kw">fn</span> update(msg: Msg, model: &amp;<span class="kw">mut</span> Model, orders: &amp;<span class="kw">mut</span> <span class="kw">impl</span> Orders&lt;Msg&gt;) <span class="op">{</span></a>
 <a class="sourceLine" id="cb5-15" title="15">    <span class="kw">match</span> msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb5-16" title="16">        <span class="pp">Msg::</span>RoutePage(page) =&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb5-17" title="17">            <span class="pp">seed::</span>push_route(<span class="pp">vec!</span><span class="op">[</span>page<span class="op">]</span>);</a>
@@ -85,7 +85,7 @@ r###"
 <a class="sourceLine" id="cb6-4" title="4">        .search(<span class="st">&quot;textafterquestionmark&quot;</span>)</a>
 <a class="sourceLine" id="cb6-5" title="5">)</a></code></pre></div>
 <p>When a page is loaded or browser naviation occurs (eg back button), Seed uses the <code>routes</code> func you provided to determine which message to call.</p>
-<p>Notice how we keep ChangePage and RoutePage separate in our example. Do not call <code>push_route</code> from one of these messages, or you'll end up with recusions/unwanted behavior: <code>ChangePage</code> in our example performs the action associated with routing, while <code>RoutePage</code> updates our route history, then recursively calls <code>ChangePage</code>. If you were to attempt this in the same message, each browser navigation event would add a redundant route history entry, interfering with navigation. `</p>
+<p>Notice how we keep ChangePage and RoutePage separate in our example. Do not call <code>push_route</code> from one of these messages, or you’ll end up with recusions/unwanted behavior: <code>ChangePage</code> in our example performs the action associated with routing, while <code>RoutePage</code> updates our route history, then recursively calls <code>ChangePage</code>. If you were to attempt this in the same message, each browser navigation event would add a redundant route history entry, interfering with navigation. `</p>
 <p>We call routing messages from in-app navigation events, like this:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb7-1" title="1"><span class="pp">h2!</span><span class="op">[</span> simple_ev(<span class="pp">Ev::</span>Click, <span class="pp">Msg::</span>RoutePage(<span class="dv">0</span>)), <span class="st">&quot;Guide&quot;</span> <span class="op">]</span></a></code></pre></div>
 <p>Or programatically using lifecycle hooks:</p>
@@ -95,5 +95,5 @@ r###"
 <a class="sourceLine" id="cb8-4" title="4">        <span class="op">}</span></a>
 <a class="sourceLine" id="cb8-5" title="5">    <span class="op">}</span>)</a></code></pre></div>
 <p>To make landing-page routing work, configure your server so that all relevant paths towards the root or html file, instead of returning an error. The <code>serve.py</code> script included in the quickstart repo and examples is set up for this. Once this is configured, intial routing on page load will work as expected: The page will initialize with the default state, then immediately update based on the message returned by the <code>routes</code> function.</p>
-"###.into()
+"#####.into()
 }

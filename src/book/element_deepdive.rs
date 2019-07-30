@@ -1,5 +1,5 @@
 pub fn text() -> String {
-r###"
+r#####"
 <h1 id="element-creation-macros-under-the-hood">Element-creation macros, under the hood</h1>
 <h1 id="this-page-is-out-of-date.-standby.">This page is out of date. Standby.</h1>
 <p>For a better understanding of how views are created, reference the <a href="https://docs.rs/seed/0.4.0/seed/dom_types/struct.El.html">El API docs page</a>. The following code returns an <code>El</code> representing a few nested DOM elements displayed in a flexbox layout:</p>
@@ -7,8 +7,8 @@ r###"
 <a class="sourceLine" id="cb1-2" title="2">        <span class="pp">h3!</span><span class="op">[</span> <span class="st">&quot;Some things&quot;</span> <span class="op">]</span>,</a>
 <a class="sourceLine" id="cb1-3" title="3">        <span class="pp">button!</span><span class="op">[</span> <span class="st">&quot;Click me!&quot;</span> <span class="op">]</span></a>
 <a class="sourceLine" id="cb1-4" title="4">    <span class="op">]</span></a></code></pre></div>
-<p>This declarative syntax is created using macros, which constrct <code>El</code>s from the arguments passed: The macros know how to use arguments based solely on their type. If a String or &amp;str is passed, it's stored as the El's <code>text</code> field. <code>Attrs</code> and <code>Style</code> structs are stored as the <code>attrs</code> and <code>style</code> fields respectively. <code>Listeners</code>, and Vecs of them are stored as the <code>listeners</code> field. The same principle applies to <code>Els</code>, for the <code>children</code> field. <code>DidMount</code>, <code>DidUpdate</code>, and <code>WillUnmount</code> are also detected appropriately, and passed into appropriate fields.</p>
-<p>Here's an another way to construct the same nested <code>El</code> as above, using constructors instead of macros. Reference the docs page for a full list of modifier methods. These provide conveniet syntax over manually editing fields. (In most cases, you won't edit <code>El</code>s at all; you'll create them declaratively using macros.)</p>
+<p>This declarative syntax is created using macros, which constrct <code>El</code>s from the arguments passed: The macros know how to use arguments based solely on their type. If a String or &amp;str is passed, it’s stored as the El’s <code>text</code> field. <code>Attrs</code> and <code>Style</code> structs are stored as the <code>attrs</code> and <code>style</code> fields respectively. <code>Listeners</code>, and Vecs of them are stored as the <code>listeners</code> field. The same principle applies to <code>Els</code>, for the <code>children</code> field. <code>DidMount</code>, <code>DidUpdate</code>, and <code>WillUnmount</code> are also detected appropriately, and passed into appropriate fields.</p>
+<p>Here’s an another way to construct the same nested <code>El</code> as above, using constructors instead of macros. Reference the docs page for a full list of modifier methods. These provide conveniet syntax over manually editing fields. (In most cases, you won’t edit <code>El</code>s at all; you’ll create them declaratively using macros.)</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">use</span> <span class="pp">seed::dom_types::</span><span class="op">{</span>El, Attrs, Style, Tag<span class="op">}</span>;</a>
 <a class="sourceLine" id="cb2-2" title="2"></a>
 <a class="sourceLine" id="cb2-3" title="3"><span class="kw">let</span> <span class="kw">mut</span> heading = <span class="pp">El::</span>empty();</a>
@@ -73,6 +73,6 @@ r###"
 <a class="sourceLine" id="cb3-47" title="47">        <span class="op">}</span> </a>
 <a class="sourceLine" id="cb3-48" title="48">    <span class="op">]</span></a>
 <a class="sourceLine" id="cb3-49" title="49"><span class="op">}</span></a></code></pre></div>
-<p>For most uses, the first example (using macros) will be the easiest to read and write. You can mix in constructors in components as needed, depending on your code structure. It's evident that struct literals are too verbose, due to the auxillary fields.</p>
-"###.into()
+<p>For most uses, the first example (using macros) will be the easiest to read and write. You can mix in constructors in components as needed, depending on your code structure. It’s evident that struct literals are too verbose, due to the auxillary fields.</p>
+"#####.into()
 }

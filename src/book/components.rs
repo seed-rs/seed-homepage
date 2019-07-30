@@ -1,7 +1,7 @@
 pub fn text() -> String {
-r###"
+r#####"
 <h1 id="components">Components</h1>
-<p>The analog of components in frameworks like React are normal Rust functions that that return <a href="https://docs.rs/seed/0.4.0/seed/dom_types/enum.Node.html">Node</a> s. These functions take parameters that are not treated in a way equivalent to attributes on native DOM elements; they just provide a way to organize your code. In practice, they're used in a way similar to components in React.</p>
+<p>The analog of components in frameworks like React are normal Rust functions that that return <a href="https://docs.rs/seed/0.4.0/seed/dom_types/enum.Node.html">Node</a> s. These functions take parameters that are not treated in a way equivalent to attributes on native DOM elements; they just provide a way to organize your code. In practice, they’re used in a way similar to components in React.</p>
 <p>For example, you could organize one of the examples in the Structure section of the guide like this:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1">    <span class="kw">fn</span> text_display(text: &amp;<span class="dt">str</span>) -&gt; Node&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-2" title="2">        <span class="pp">h3!</span><span class="op">[</span> text <span class="op">]</span></a>
@@ -11,10 +11,10 @@ r###"
 <a class="sourceLine" id="cb1-6" title="6">        text_display(<span class="st">&quot;Some things&quot;</span>),</a>
 <a class="sourceLine" id="cb1-7" title="7">        <span class="pp">button!</span><span class="op">[</span> simple_ev(<span class="st">&quot;click&quot;</span>, <span class="pp">Msg::</span>SayHi), <span class="st">&quot;Click me!&quot;</span> <span class="op">]</span></a>
 <a class="sourceLine" id="cb1-8" title="8">    <span class="op">]</span></a></code></pre></div>
-<p>The text_display component returns a single <code>Node</code> that is inserted into its parents' <code>children</code> Vec; you can use this in patterns as you would in React. You can also use functions that return <code>Vec</code>s of<code>Node</code>s, which you can incorporate into other <code>Node</code>s using normal Rust code. See the Fragments section below. Rust's type system ensures that only <code>Node</code>s can end up as children, so if your app compiles, you haven't violated any rules.</p>
-<p>Unlike in JSX, there's a clear syntax delineation between natural DOM elements (element macros), and custom components (function calls): We called text_display above as <code>text_display(&quot;Some things&quot;)</code>, not <code>text_display![ &quot;Some things&quot; ]</code>.</p>
+<p>The text_display component returns a single <code>Node</code> that is inserted into its parents’ <code>children</code> Vec; you can use this in patterns as you would in React. You can also use functions that return <code>Vec</code>s of<code>Node</code>s, which you can incorporate into other <code>Node</code>s using normal Rust code. See the Fragments section below. Rust’s type system ensures that only <code>Node</code>s can end up as children, so if your app compiles, you haven’t violated any rules.</p>
+<p>Unlike in JSX, there’s a clear syntax delineation between natural DOM elements (element macros), and custom components (function calls): We called text_display above as <code>text_display(&quot;Some things&quot;)</code>, not <code>text_display![ &quot;Some things&quot; ]</code>.</p>
 <h2 id="fragments">Fragments</h2>
-<p>Fragments (<code>&lt;&gt;...&lt;/&gt;</code> syntax in React and Yew) are components that represent multiple elements without a parent. They're useful to avoid unecessary divs, which clutter teh DOM, and breaks things like tables and CSS-grid. There's no special fragment syntax: have your component return a <code>Vec</code> of <code>Node</code>s instead of one. Add it to the parent's element macro:</p>
+<p>Fragments (<code>&lt;&gt;...&lt;/&gt;</code> syntax in React and Yew) are components that represent multiple elements without a parent. They’re useful to avoid unecessary divs, which clutter teh DOM, and breaks things like tables and CSS-grid. There’s no special fragment syntax: have your component return a <code>Vec</code> of <code>Node</code>s instead of one. Add it to the parent’s element macro:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">fn</span> cols() -&gt; <span class="dt">Vec</span>&lt;Node&lt;Msg&gt;&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb2-2" title="2">    <span class="pp">vec!</span><span class="op">[</span></a>
 <a class="sourceLine" id="cb2-3" title="3">        <span class="pp">td!</span><span class="op">[</span> <span class="st">&quot;1&quot;</span> <span class="op">]</span>,</a>
@@ -46,9 +46,9 @@ r###"
 <a class="sourceLine" id="cb3-15" title="15">    <span class="op">]</span></a>
 <a class="sourceLine" id="cb3-16" title="16"><span class="op">}</span></a></code></pre></div>
 <h2 id="dummy-elements">Dummy elements</h2>
-<p>When performing ternary operations inside an element macro, all branches must return an <code>Node</code> (Or <code>Vec</code> of <code>Node</code>s) to satisfy Rust's type system. Seed provides the <a href="https://docs.rs/seed/0.4.0/seed/fn.empty.html">empty</a> function, which creates a <code>Node</code> that will not be rendered, and its <code>empty![]</code> macro alias, which is more concise and consistent:</p>
+<p>When performing ternary operations inside an element macro, all branches must return an <code>Node</code> (Or <code>Vec</code> of <code>Node</code>s) to satisfy Rust’s type system. Seed provides the <a href="https://docs.rs/seed/0.4.0/seed/fn.empty.html">empty</a> function, which creates a <code>Node</code> that will not be rendered, and its <code>empty![]</code> macro alias, which is more concise and consistent:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="pp">div!</span><span class="op">[</span></a>
 <a class="sourceLine" id="cb4-2" title="2">    <span class="kw">if</span> model.count &gt;= <span class="dv">10</span> <span class="op">{</span> <span class="pp">h2!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;padding&quot;</span> =&gt; <span class="dv">50</span><span class="op">}</span>, <span class="st">&quot;Nice!&quot;</span> <span class="op">]</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> <span class="pp">empty!</span><span class="op">[]</span>) <span class="op">}</span></a>
 <a class="sourceLine" id="cb4-3" title="3"><span class="op">]</span></a></code></pre></div>
-"###.into()
+"#####.into()
 }
