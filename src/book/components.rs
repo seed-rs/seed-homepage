@@ -7,7 +7,7 @@ r#####"
 <a class="sourceLine" id="cb1-2" title="2">        <span class="pp">h3!</span><span class="op">[</span> text <span class="op">]</span></a>
 <a class="sourceLine" id="cb1-3" title="3">    <span class="op">}</span>  </a>
 <a class="sourceLine" id="cb1-4" title="4">    </a>
-<a class="sourceLine" id="cb1-5" title="5">    <span class="pp">div!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;display&quot;</span> =&gt; <span class="st">&quot;flex&quot;</span>; <span class="st">&quot;flex-direction&quot;</span> =&gt; <span class="st">&quot;column&quot;</span><span class="op">}</span>,</a>
+<a class="sourceLine" id="cb1-5" title="5">    <span class="pp">div!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="pp">St::</span><span class="bu">Display</span> =&gt; <span class="st">&quot;flex&quot;</span>; <span class="pp">St::</span>FlexDirection =&gt; <span class="st">&quot;column&quot;</span><span class="op">}</span>,</a>
 <a class="sourceLine" id="cb1-6" title="6">        text_display(<span class="st">&quot;Some things&quot;</span>),</a>
 <a class="sourceLine" id="cb1-7" title="7">        <span class="pp">button!</span><span class="op">[</span> simple_ev(<span class="st">&quot;click&quot;</span>, <span class="pp">Msg::</span>SayHi), <span class="st">&quot;Click me!&quot;</span> <span class="op">]</span></a>
 <a class="sourceLine" id="cb1-8" title="8">    <span class="op">]</span></a></code></pre></div>
@@ -48,7 +48,7 @@ r#####"
 <h2 id="dummy-elements">Dummy elements</h2>
 <p>When performing ternary operations inside an element macro, all branches must return an <code>Node</code> (Or <code>Vec</code> of <code>Node</code>s) to satisfy Rust’s type system. Seed provides the <a href="https://docs.rs/seed/0.4.0/seed/fn.empty.html">empty</a> function, which creates a <code>Node</code> that will not be rendered, and its <code>empty![]</code> macro alias, which is more concise and consistent:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="pp">div!</span><span class="op">[</span></a>
-<a class="sourceLine" id="cb4-2" title="2">    <span class="kw">if</span> model.count &gt;= <span class="dv">10</span> <span class="op">{</span> <span class="pp">h2!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;padding&quot;</span> =&gt; <span class="dv">50</span><span class="op">}</span>, <span class="st">&quot;Nice!&quot;</span> <span class="op">]</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> <span class="pp">empty!</span><span class="op">[]</span>) <span class="op">}</span></a>
+<a class="sourceLine" id="cb4-2" title="2">    <span class="kw">if</span> model.count &gt;= <span class="dv">10</span> <span class="op">{</span> <span class="pp">h2!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="pp">St::</span>Padding =&gt; <span class="dv">50</span><span class="op">}</span>, <span class="st">&quot;Nice!&quot;</span> <span class="op">]</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> <span class="pp">empty!</span><span class="op">[]</span>) <span class="op">}</span></a>
 <a class="sourceLine" id="cb4-3" title="3"><span class="op">]</span></a></code></pre></div>
 "#####.into()
 }

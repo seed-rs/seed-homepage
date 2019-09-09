@@ -220,14 +220,15 @@ fn view(model: &Model) -> Node<Msg> {
 Note that you can create any of the above items inside an element macro, or create it separately,
 and pass it in. You can separate different items by comma, semicolon, or space.
 
-Keys passed to `attrs` can be `Seed::At`s,  `String`s, `&str`s. Values passed to `attrs`, and `style` macros can 
-be owned `Strings`, `&str`s, or when applicable, numerical and 
-boolean values. Eg: `input![ attrs!{At::Disabled => false]` and `input![ attrs!{"disabled" => "false"]` 
-are equivalent. You can use the `unit!` macro to apply units. There's a `px` function for the
+Keys passed to `attrs!` can be `Seed::At`s, `String`s, or `&str`s. 
+Keys passed to `style!` can be `Seed::St`s, `String`s, or `&str`s.
+Values passed to `attrs!`, and `style!` macros can 
+be owned `Strings`, `&str`s, or for `style!`, `unit`s. Eg: `input![ attrs!{At::Disabled => false]` and `input![ attrs!{"disabled" => "false"]` 
+are equivalent. You use the `unit!` macro to apply units. There's a `px` function for the
 special case where the unit is pixels:
 ```rust
-style!{"width" => unit!(20, px);}
-style!{"width" => px(20);}  // equivalent
+style!{St::Width => unit!(20, px);}
+style!{St::Width => px(20);}  // equivalent
 ```
 
 We can set multiple values for an attribute using `Attribute.add_multiple`. This
@@ -278,8 +279,8 @@ the same one more than once:
 ```rust
 fn a_component() -> Node<Msg> {
     let item_style = style!{
-        "margin-top" => px(10);
-        "font-size" => unit!(1.2, em)
+        St::MarginTop => px(10);
+        St::FontSize => unit!(1.2, em)
     };
 
     div![
@@ -312,20 +313,20 @@ Example of the style tag, and how you can use pattern-matching in views:
 ```rust
 fn view(model: &Model) -> Node<Msg> {
     div![ style!{
-        "display" => "grid";
-        "grid-template-columns" => "auto";
-        "grid-template-rows" => "100px auto 100px"
+        St:Display => "grid";
+        St::GridTemplateColumns => "auto";
+        St::GridTemplateRows => "100px auto 100px"
         },
-        section![ style!{"grid-row" => "1 / 2"},
+        section![ style!{St::GridRow => "1 / 2"},
             header(),
         ],
-        section![ attrs!{"grid-row" => "2 / 3"},
+        section![ attrs!{St::GridRow => "2 / 3"},
             match model.page {
                 Page::Guide => guide(),
                 Page::Changelog => changelog(),
             },
         ],
-        section![ style!{"grid-row" => "3 / 4"},
+        section![ style!{St::GridRow => "3 / 4"},
             footer()
         ]
     ]
@@ -340,8 +341,8 @@ fn a_component() -> Node<Msg> {
     let base_style = !style{"color" => "lavender"};
 
     div![
-        h1![ &base_style.merge(&style!{"grid-row" => "1 / 2"}) "First row" ],
-        h1![ &base_style.merge(&style!{"grid-row" => "2 / 3"}) "Second row" ],
+        h1![ &base_style.merge(&style!{St::GridRow => "1 / 2"}) "First row" ],
+        h1![ &base_style.merge(&style!{St::GridRow => "2 / 3"}) "Second row" ],
     ]
 }
 ```
@@ -356,7 +357,7 @@ let my_el = div![]
     .add_text("Words")
     .add_class("complete")
     .add_attr("alt".to_string(), "a description".to_string())
-    .add_style("height".to_string(), "20px".to_string())
+    .add_style(St::Height, "20px".to_string())
     .replace_text("OOps, not complete");
 
 ```

@@ -115,9 +115,9 @@ r#####"
 <a class="sourceLine" id="cb9-10" title="10">    <span class="op">]</span></a>
 <a class="sourceLine" id="cb9-11" title="11"><span class="op">}</span></a></code></pre></div>
 <p>Note that you can create any of the above items inside an element macro, or create it separately, and pass it in. You can separate different items by comma, semicolon, or space.</p>
-<p>Keys passed to <code>attrs</code> can be <code>Seed::At</code>s, <code>String</code>s, <code>&amp;str</code>s. Values passed to <code>attrs</code>, and <code>style</code> macros can be owned <code>Strings</code>, <code>&amp;str</code>s, or when applicable, numerical and boolean values. Eg: <code>input![ attrs!{At::Disabled =&gt; false]</code> and <code>input![ attrs!{&quot;disabled&quot; =&gt; &quot;false&quot;]</code> are equivalent. You can use the <code>unit!</code> macro to apply units. There’s a <code>px</code> function for the special case where the unit is pixels:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb10-1" title="1"><span class="pp">style!</span><span class="op">{</span><span class="st">&quot;width&quot;</span> =&gt; <span class="pp">unit!</span>(<span class="dv">20</span>, px);<span class="op">}</span></a>
-<a class="sourceLine" id="cb10-2" title="2"><span class="pp">style!</span><span class="op">{</span><span class="st">&quot;width&quot;</span> =&gt; px(<span class="dv">20</span>);<span class="op">}</span>  <span class="co">// equivalent</span></a></code></pre></div>
+<p>Keys passed to <code>attrs!</code> can be <code>Seed::At</code>s, <code>String</code>s, or <code>&amp;str</code>s. Keys passed to <code>style!</code> can be <code>Seed::St</code>s, <code>String</code>s, or <code>&amp;str</code>s. Values passed to <code>attrs!</code>, and <code>style!</code> macros can be owned <code>Strings</code>, <code>&amp;str</code>s, or for <code>style!</code>, <code>unit</code>s. Eg: <code>input![ attrs!{At::Disabled =&gt; false]</code> and <code>input![ attrs!{&quot;disabled&quot; =&gt; &quot;false&quot;]</code> are equivalent. You use the <code>unit!</code> macro to apply units. There’s a <code>px</code> function for the special case where the unit is pixels:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb10-1" title="1"><span class="pp">style!</span><span class="op">{</span><span class="pp">St::</span>Width =&gt; <span class="pp">unit!</span>(<span class="dv">20</span>, px);<span class="op">}</span></a>
+<a class="sourceLine" id="cb10-2" title="2"><span class="pp">style!</span><span class="op">{</span><span class="pp">St::</span>Width =&gt; px(<span class="dv">20</span>);<span class="op">}</span>  <span class="co">// equivalent</span></a></code></pre></div>
 <p>We can set multiple values for an attribute using <code>Attribute.add_multiple</code>. This is useful for setting multiple classes. Note that we must set this up outside of the view macro, since it involves modifying a variable:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">fn</span> a_component() -&gt; Node&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb11-2" title="2">    <span class="kw">let</span> <span class="kw">mut</span> attributes = <span class="pp">attrs!</span><span class="op">{}</span>;</a>
@@ -145,8 +145,8 @@ r#####"
 <p>Styles and Attrs can be passed as refs as well, which is useful if you need to pass the same one more than once:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb14-1" title="1"><span class="kw">fn</span> a_component() -&gt; Node&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb14-2" title="2">    <span class="kw">let</span> item_style = <span class="pp">style!</span><span class="op">{</span></a>
-<a class="sourceLine" id="cb14-3" title="3">        <span class="st">&quot;margin-top&quot;</span> =&gt; px(<span class="dv">10</span>);</a>
-<a class="sourceLine" id="cb14-4" title="4">        <span class="st">&quot;font-size&quot;</span> =&gt; <span class="pp">unit!</span>(<span class="dv">1.2</span>, em)</a>
+<a class="sourceLine" id="cb14-3" title="3">        <span class="pp">St::</span>MarginTop =&gt; px(<span class="dv">10</span>);</a>
+<a class="sourceLine" id="cb14-4" title="4">        <span class="pp">St::</span>FontSize =&gt; <span class="pp">unit!</span>(<span class="dv">1.2</span>, em)</a>
 <a class="sourceLine" id="cb14-5" title="5">    <span class="op">}</span>;</a>
 <a class="sourceLine" id="cb14-6" title="6"></a>
 <a class="sourceLine" id="cb14-7" title="7">    <span class="pp">div!</span><span class="op">[</span></a>
@@ -169,20 +169,20 @@ r#####"
 <p>Example of the style tag, and how you can use pattern-matching in views:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb17-1" title="1"><span class="kw">fn</span> view(model: &amp;Model) -&gt; Node&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb17-2" title="2">    <span class="pp">div!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span></a>
-<a class="sourceLine" id="cb17-3" title="3">        <span class="st">&quot;display&quot;</span> =&gt; <span class="st">&quot;grid&quot;</span>;</a>
-<a class="sourceLine" id="cb17-4" title="4">        <span class="st">&quot;grid-template-columns&quot;</span> =&gt; <span class="st">&quot;auto&quot;</span>;</a>
-<a class="sourceLine" id="cb17-5" title="5">        <span class="st">&quot;grid-template-rows&quot;</span> =&gt; <span class="st">&quot;100px auto 100px&quot;</span></a>
+<a class="sourceLine" id="cb17-3" title="3">        St:<span class="bu">Display</span> =&gt; <span class="st">&quot;grid&quot;</span>;</a>
+<a class="sourceLine" id="cb17-4" title="4">        <span class="pp">St::</span>GridTemplateColumns =&gt; <span class="st">&quot;auto&quot;</span>;</a>
+<a class="sourceLine" id="cb17-5" title="5">        <span class="pp">St::</span>GridTemplateRows =&gt; <span class="st">&quot;100px auto 100px&quot;</span></a>
 <a class="sourceLine" id="cb17-6" title="6">        <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb17-7" title="7">        <span class="pp">section!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;1 / 2&quot;</span><span class="op">}</span>,</a>
+<a class="sourceLine" id="cb17-7" title="7">        <span class="pp">section!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="pp">St::</span>GridRow =&gt; <span class="st">&quot;1 / 2&quot;</span><span class="op">}</span>,</a>
 <a class="sourceLine" id="cb17-8" title="8">            header(),</a>
 <a class="sourceLine" id="cb17-9" title="9">        <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb17-10" title="10">        <span class="pp">section!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;2 / 3&quot;</span><span class="op">}</span>,</a>
+<a class="sourceLine" id="cb17-10" title="10">        <span class="pp">section!</span><span class="op">[</span> <span class="pp">attrs!</span><span class="op">{</span><span class="pp">St::</span>GridRow =&gt; <span class="st">&quot;2 / 3&quot;</span><span class="op">}</span>,</a>
 <a class="sourceLine" id="cb17-11" title="11">            <span class="kw">match</span> model.page <span class="op">{</span></a>
 <a class="sourceLine" id="cb17-12" title="12">                <span class="pp">Page::</span>Guide =&gt; guide(),</a>
 <a class="sourceLine" id="cb17-13" title="13">                <span class="pp">Page::</span>Changelog =&gt; changelog(),</a>
 <a class="sourceLine" id="cb17-14" title="14">            <span class="op">}</span>,</a>
 <a class="sourceLine" id="cb17-15" title="15">        <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb17-16" title="16">        <span class="pp">section!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;3 / 4&quot;</span><span class="op">}</span>,</a>
+<a class="sourceLine" id="cb17-16" title="16">        <span class="pp">section!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="pp">St::</span>GridRow =&gt; <span class="st">&quot;3 / 4&quot;</span><span class="op">}</span>,</a>
 <a class="sourceLine" id="cb17-17" title="17">            footer()</a>
 <a class="sourceLine" id="cb17-18" title="18">        <span class="op">]</span></a>
 <a class="sourceLine" id="cb17-19" title="19">    <span class="op">]</span></a>
@@ -192,8 +192,8 @@ r#####"
 <a class="sourceLine" id="cb18-2" title="2">    <span class="kw">let</span> base_style = !style<span class="op">{</span><span class="st">&quot;color&quot;</span> =&gt; <span class="st">&quot;lavender&quot;</span><span class="op">}</span>;</a>
 <a class="sourceLine" id="cb18-3" title="3"></a>
 <a class="sourceLine" id="cb18-4" title="4">    <span class="pp">div!</span><span class="op">[</span></a>
-<a class="sourceLine" id="cb18-5" title="5">        <span class="pp">h1!</span><span class="op">[</span> &amp;base_style.merge(&amp;<span class="pp">style!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;1 / 2&quot;</span><span class="op">}</span>) <span class="st">&quot;First row&quot;</span> <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb18-6" title="6">        <span class="pp">h1!</span><span class="op">[</span> &amp;base_style.merge(&amp;<span class="pp">style!</span><span class="op">{</span><span class="st">&quot;grid-row&quot;</span> =&gt; <span class="st">&quot;2 / 3&quot;</span><span class="op">}</span>) <span class="st">&quot;Second row&quot;</span> <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb18-5" title="5">        <span class="pp">h1!</span><span class="op">[</span> &amp;base_style.merge(&amp;<span class="pp">style!</span><span class="op">{</span><span class="pp">St::</span>GridRow =&gt; <span class="st">&quot;1 / 2&quot;</span><span class="op">}</span>) <span class="st">&quot;First row&quot;</span> <span class="op">]</span>,</a>
+<a class="sourceLine" id="cb18-6" title="6">        <span class="pp">h1!</span><span class="op">[</span> &amp;base_style.merge(&amp;<span class="pp">style!</span><span class="op">{</span><span class="pp">St::</span>GridRow =&gt; <span class="st">&quot;2 / 3&quot;</span><span class="op">}</span>) <span class="st">&quot;Second row&quot;</span> <span class="op">]</span>,</a>
 <a class="sourceLine" id="cb18-7" title="7">    <span class="op">]</span></a>
 <a class="sourceLine" id="cb18-8" title="8"><span class="op">}</span></a></code></pre></div>
 <p>Overall: we leverage of Rust’s strict type system to flexibly-create the view using normal Rust code.W</p>
@@ -202,7 +202,7 @@ r#####"
 <a class="sourceLine" id="cb19-2" title="2">    .add_text(<span class="st">&quot;Words&quot;</span>)</a>
 <a class="sourceLine" id="cb19-3" title="3">    .add_class(<span class="st">&quot;complete&quot;</span>)</a>
 <a class="sourceLine" id="cb19-4" title="4">    .add_attr(<span class="st">&quot;alt&quot;</span>.to_string(), <span class="st">&quot;a description&quot;</span>.to_string())</a>
-<a class="sourceLine" id="cb19-5" title="5">    .add_style(<span class="st">&quot;height&quot;</span>.to_string(), <span class="st">&quot;20px&quot;</span>.to_string())</a>
+<a class="sourceLine" id="cb19-5" title="5">    .add_style(<span class="pp">St::</span>Height, <span class="st">&quot;20px&quot;</span>.to_string())</a>
 <a class="sourceLine" id="cb19-6" title="6">    .replace_text(<span class="st">&quot;OOps, not complete&quot;</span>);</a></code></pre></div>
 <h2 id="initializing">Initializing</h2>
 <p>To start your app, call the <code>seed::App::build</code> method, which takes the following parameters:</p>

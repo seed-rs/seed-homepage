@@ -11,7 +11,7 @@ For example, you could organize one of the examples in the Structure section of 
         h3![ text ]
     }  
     
-    div![ style!{"display" => "flex"; "flex-direction" => "column"},
+    div![ style!{St::Display => "flex"; St::FlexDirection => "column"},
         text_display("Some things"),
         button![ simple_ev("click", Msg::SayHi), "Click me!" ]
     ]
@@ -77,7 +77,7 @@ branches must return an `Node` (Or `Vec` of `Node`s) to satisfy Rust's type syst
 rendered, and its `empty![]` macro alias, which is more concise and consistent:
 ```rust
 div![
-    if model.count >= 10 { h2![ style!{"padding" => 50}, "Nice!" ] } else { empty![]) }
+    if model.count >= 10 { h2![ style!{St::Padding => 50}, "Nice!" ] } else { empty![]) }
 ]
 
 ```

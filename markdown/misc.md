@@ -88,6 +88,19 @@ and just [learn to code](https://play.rust-lang.org/).
 
 ```
 
+## Using `web_sys` to view element data.
+`web_sys`, which Seed uses internally, can be used to view information about elements. For example:
+```rust
+fn get_height(id: &str) -> i32 {	
+    let html_el = seed::document().get_element_by_id("my_el").unwrap();
+    let h = html_el.client_height();	
+    log!("Height {:?}", h);	
+    h	
+}
+```
+Where we've given the element we wish to query id `my_el`.
+
+
 ## Some convenience functions
 You can use `seed::document` and `seed::window` to access the `web_sys` document
 and window functions. Example:
