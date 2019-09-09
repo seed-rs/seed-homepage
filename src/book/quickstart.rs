@@ -104,9 +104,9 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <a class="sourceLine" id="cb3-59" title="59"></a>
 <a class="sourceLine" id="cb3-60" title="60">    <span class="co">// Attrs, Style, Events, and children may be defined separately.</span></a>
 <a class="sourceLine" id="cb3-61" title="61">    <span class="kw">let</span> outer_style = <span class="pp">style!</span><span class="op">{</span></a>
-<a class="sourceLine" id="cb3-62" title="62">            <span class="st">&quot;display&quot;</span> =&gt; <span class="st">&quot;flex&quot;</span>;</a>
-<a class="sourceLine" id="cb3-63" title="63">            <span class="st">&quot;flex-direction&quot;</span> =&gt; <span class="st">&quot;column&quot;</span>;</a>
-<a class="sourceLine" id="cb3-64" title="64">            <span class="st">&quot;text-align&quot;</span> =&gt; <span class="st">&quot;center&quot;</span></a>
+<a class="sourceLine" id="cb3-62" title="62">            <span class="pp">St::</span><span class="bu">Display</span> =&gt; <span class="st">&quot;flex&quot;</span>;</a>
+<a class="sourceLine" id="cb3-63" title="63">            <span class="pp">St::</span>FlexDirection =&gt; <span class="st">&quot;column&quot;</span>;</a>
+<a class="sourceLine" id="cb3-64" title="64">            <span class="pp">St::</span>TextAlign =&gt; <span class="st">&quot;center&quot;</span></a>
 <a class="sourceLine" id="cb3-65" title="65">    <span class="op">}</span>;</a>
 <a class="sourceLine" id="cb3-66" title="66"></a>
 <a class="sourceLine" id="cb3-67" title="67">    <span class="pp">div!</span><span class="op">[</span> outer_style,</a>
@@ -114,9 +114,9 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <a class="sourceLine" id="cb3-69" title="69">        <span class="pp">div!</span><span class="op">[</span></a>
 <a class="sourceLine" id="cb3-70" title="70">            <span class="pp">style!</span><span class="op">{</span></a>
 <a class="sourceLine" id="cb3-71" title="71">                <span class="co">// Example of conditional logic in a style.</span></a>
-<a class="sourceLine" id="cb3-72" title="72">                <span class="st">&quot;color&quot;</span> =&gt; <span class="kw">if</span> model.count &gt; <span class="dv">4</span> <span class="op">{</span><span class="st">&quot;purple&quot;</span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span><span class="st">&quot;gray&quot;</span><span class="op">}</span>;</a>
-<a class="sourceLine" id="cb3-73" title="73">                <span class="st">&quot;border&quot;</span> =&gt; <span class="st">&quot;2px solid #004422&quot;</span>; </a>
-<a class="sourceLine" id="cb3-74" title="74">                <span class="st">&quot;padding&quot;</span> =&gt; <span class="pp">unit!</span>(<span class="dv">20</span>, px);</a>
+<a class="sourceLine" id="cb3-72" title="72">                <span class="pp">St::</span>Color =&gt; <span class="kw">if</span> model.count &gt; <span class="dv">4</span> <span class="op">{</span><span class="st">&quot;purple&quot;</span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span><span class="st">&quot;gray&quot;</span><span class="op">}</span>;</a>
+<a class="sourceLine" id="cb3-73" title="73">                <span class="pp">St::</span>Border =&gt; <span class="st">&quot;2px solid #004422&quot;</span>; </a>
+<a class="sourceLine" id="cb3-74" title="74">                <span class="pp">St::</span>Padding =&gt; <span class="pp">unit!</span>(<span class="dv">20</span>, px);</a>
 <a class="sourceLine" id="cb3-75" title="75">            <span class="op">}</span>,</a>
 <a class="sourceLine" id="cb3-76" title="76">            <span class="co">// We can use normal Rust code and comments in the view.</span></a>
 <a class="sourceLine" id="cb3-77" title="77">            <span class="pp">h3!</span><span class="op">[</span> <span class="pp">format!</span>(<span class="st">&quot;{} {}{} so far&quot;</span>, model.count, model.what_we_count, plural) <span class="op">]</span>,</a>
@@ -124,7 +124,7 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <a class="sourceLine" id="cb3-79" title="79">            <span class="pp">button!</span><span class="op">[</span> simple_ev(<span class="pp">Ev::</span>Click, <span class="pp">Msg::</span>Decrement), <span class="st">&quot;-&quot;</span> <span class="op">]</span>,</a>
 <a class="sourceLine" id="cb3-80" title="80"></a>
 <a class="sourceLine" id="cb3-81" title="81">            <span class="co">// Optionally-displaying an element</span></a>
-<a class="sourceLine" id="cb3-82" title="82">            <span class="kw">if</span> model.count &gt;= <span class="dv">10</span> <span class="op">{</span> <span class="pp">h2!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="st">&quot;padding&quot;</span> =&gt; px(<span class="dv">50</span>)<span class="op">}</span>, <span class="st">&quot;Nice!&quot;</span> <span class="op">]</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> <span class="pp">empty!</span><span class="op">[]</span> <span class="op">}</span></a>
+<a class="sourceLine" id="cb3-82" title="82">            <span class="kw">if</span> model.count &gt;= <span class="dv">10</span> <span class="op">{</span> <span class="pp">h2!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span><span class="pp">St::</span>Padding =&gt; px(<span class="dv">50</span>)<span class="op">}</span>, <span class="st">&quot;Nice!&quot;</span> <span class="op">]</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> <span class="pp">empty!</span><span class="op">[]</span> <span class="op">}</span></a>
 <a class="sourceLine" id="cb3-83" title="83">        <span class="op">]</span>,</a>
 <a class="sourceLine" id="cb3-84" title="84">        success_level(model.count),  <span class="co">// Incorporating a separate component</span></a>
 <a class="sourceLine" id="cb3-85" title="85"></a>

@@ -745,17 +745,17 @@ function init(module) {
 
         return addHeapObject(real);
     };
-    imports.wbg.__wbindgen_closure_wrapper117 = function(arg0, arg1, arg2) {
+    imports.wbg.__wbindgen_closure_wrapper349 = function(arg0, arg1, arg2) {
 
-        const f = wasm.__wbg_function_table.get(2);
-        const d = wasm.__wbg_function_table.get(3);
+        const f = wasm.__wbg_function_table.get(43);
+        const d = wasm.__wbg_function_table.get(44);
         const b = arg1;
         const cb = function(arg0) {
             this.cnt++;
             let a = this.a;
             this.a = 0;
             try {
-                return f(a, b, arg0);
+                return f(a, b, addHeapObject(arg0));
 
             } finally {
                 if (--this.cnt === 0) d(a, b);
@@ -771,17 +771,17 @@ function init(module) {
 
         return addHeapObject(real);
     };
-    imports.wbg.__wbindgen_closure_wrapper349 = function(arg0, arg1, arg2) {
+    imports.wbg.__wbindgen_closure_wrapper117 = function(arg0, arg1, arg2) {
 
-        const f = wasm.__wbg_function_table.get(43);
-        const d = wasm.__wbg_function_table.get(44);
+        const f = wasm.__wbg_function_table.get(2);
+        const d = wasm.__wbg_function_table.get(3);
         const b = arg1;
         const cb = function(arg0) {
             this.cnt++;
             let a = this.a;
             this.a = 0;
             try {
-                return f(a, b, addHeapObject(arg0));
+                return f(a, b, arg0);
 
             } finally {
                 if (--this.cnt === 0) d(a, b);
