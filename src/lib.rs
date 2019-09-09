@@ -223,6 +223,12 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> Node<Msg> {
 fn changelog() -> Node<Msg> {
     let entries = span![ md!(
 "
+## v0.4.1
+- Added more SVG `At` variants
+- Added the `St` enum, for style keys; similar to `At`
+- Improved ergonomics of `add_child`, `add_attr`, `add_class`,
+`add_style`, `replace_text`, and `add_text`, `Node` methods
+
 ## v0.4.0
 - `ElContainer`, imported in prelude, renamed to `View`. (Breaking)
 - Internal refactor of `El`: Now wrapped in `Node`, along with
