@@ -48,7 +48,7 @@ impl Default for Model {
             ("Events", crate::book::events::text()),
             ("Components", crate::book::components::text()),
             ("Http requests and state", crate::book::fetch::text()),
-            ("Lifecycle hooks", crate::book::lifecycle::text()),
+//            ("Lifecycle hooks", crate::book::lifecycle::text()),
             ("Routing", crate::book::routing::text()),
             ("Misc features", crate::book::misc::text()),
             (
@@ -148,7 +148,7 @@ fn title() -> Node<Msg> {
         div![
             style! {"grid-row" => "1/2"; "grid-column" => "1 / 4"},
             img![
-                attrs! {At::Src => "public/seed_logo.svg"; At::Width => 256; At::Alt => "Seed"},
+                attrs! {At::Src => "/public/seed_logo.svg"; At::Width => 256; At::Alt => "Seed"},
                 style! {"margin-top" => unit!(30, px)},
             ],
             h2!["A Rust framework for creating web apps"],

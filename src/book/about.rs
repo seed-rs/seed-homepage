@@ -7,6 +7,11 @@ r#####"
 <li><p>Complete documentation that always matches the current version. Getting examples working, and starting a project should be painless, and require nothing beyond this guide.</p></li>
 <li><p>Expressive, flexible view syntax that’s easy to read and write.</p></li>
 </ul>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://github.com/MartinKavik/awesome-seed-rs">Awesome-seed-rs</a>: A curated list of resources</li>
+<li><a href="https://github.com/MartinKavik/seed-rs-realworld">Seed Realworld</a>: A detailed realworld example site</li>
+</ul>
 <h2 id="a-note-on-view-syntax">A note on view syntax</h2>
 <p>This project uses an unconventional approach to describe how to display DOM elements. It neither uses completely natural (ie macro-free) Rust code, nor an HTML-like abstraction (eg JSX or templates). My intent is to make the code close to natural Rust, while streamlining the syntax in a way suited for creating a visual layout with minimal repetition. The macros used are thin wrappers for constructors, and don’t conceal much.</p>
 <p>Specifically, the element-creation macros allow for accepting a variable number and order of parameters, and the attrs/style marcros are essentially HashMap literals, with wrappers that let element macros know how to distinguish them.</p>

@@ -14,9 +14,9 @@ And cargo-make: `cargo install --force cargo-make`
 
 To start, clone [the quickstart repo](https://github.com/David-OConnor/seed-quickstart):
 `git clone https://github.com/david-oconnor/seed-quickstart.git`,
-run `cargo make all` in a terminal to build the app, and `cargo make serve` to start a dev server
-on `127.0.0.0:8000`. If you'd like the compiler automatically check and recompile when you 
-make changes, run `cargo make watch` instead of `cargo make all`.
+run `cargo make build` in a terminal to build the app, and `cargo make serve` to start a dev server
+on `127.0.0.0:8000`. If you'd like the compiler to automatically check and recompile when you 
+make changes, run `cargo make watch` instead of `cargo make build`.
 
 
 ## A little deeper
@@ -124,9 +124,9 @@ fn update(msg: Msg, model: &mut Model, _orders: &mut impl Orders<Msg>) {
 /// A simple component.
 fn success_level(clicks: i32) -> Node<Msg> {
     let descrip = match clicks {
-        0 ... 5 => "Not very many 🙁",
-        6 ... 9 => "I got my first real six-string 😐",
-        10 ... 11 => "Spinal Tap 🙂",
+        0 ..= 5 => "Not very many 🙁",
+        6 ..= 9 => "I got my first real six-string 😐",
+        10 ..= 11 => "Spinal Tap 🙂",
         _ => "Double pendulum 🙃"
     };
     p![ descrip ]
@@ -173,14 +173,14 @@ pub fn render() {
     seed::App::build(|_, _| Model::default(), update, view)
         .finish()
         .run();
-}}
+}
 ```
 
 For a truly minimimal example, see [lib.rs in the quickstart repo](https://github.com/David-OConnor/seed-quickstart/blob/master/src/lib.rs)
 
 ## Building and running
 
-To build your app, run `cargo make all`, and to host on a dev server, run `cargo make serve`.
+To build your app, run `cargo make build`, and to host on a dev server, run `cargo make serve`.
 
 For a more robust starting setup, check out Martin Kavik's [seed-quickstart-webpack repo](https://github.com/MartinKavik/seed-quickstart-webpack).
 

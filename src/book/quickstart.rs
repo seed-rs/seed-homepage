@@ -7,7 +7,7 @@ r#####"
 <p>The wasm32-unknown-unknown target: <code>rustup target add wasm32-unknown-unknown</code></p>
 <p>And cargo-make: <code>cargo install --force cargo-make</code></p>
 <h2 id="the-theoretical-minimum">The theoretical minimum</h2>
-<p>To start, clone <a href="https://github.com/David-OConnor/seed-quickstart">the quickstart repo</a>: <code>git clone https://github.com/david-oconnor/seed-quickstart.git</code>, run <code>cargo make all</code> in a terminal to build the app, and <code>cargo make serve</code> to start a dev server on <code>127.0.0.0:8000</code>. If you’d like the compiler automatically check and recompile when you make changes, run <code>cargo make watch</code> instead of <code>cargo make all</code>.</p>
+<p>To start, clone <a href="https://github.com/David-OConnor/seed-quickstart">the quickstart repo</a>: <code>git clone https://github.com/david-oconnor/seed-quickstart.git</code>, run <code>cargo make build</code> in a terminal to build the app, and <code>cargo make serve</code> to start a dev server on <code>127.0.0.0:8000</code>. If you’d like the compiler to automatically check and recompile when you make changes, run <code>cargo make watch</code> instead of <code>cargo make build</code>.</p>
 <h2 id="a-little-deeper">A little deeper</h2>
 <p>Alternatively, create a new lib with Cargo: <code>cargo new --lib appname</code>. Here and everywhere it appears in this guide, <code>appname</code> should be replaced with the name of your app.</p>
 <p>If not using the quickstart repo, create an Html file with a body that contains this:</p>
@@ -90,9 +90,9 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <a class="sourceLine" id="cb3-45" title="45"><span class="co">/// A simple component.</span></a>
 <a class="sourceLine" id="cb3-46" title="46"><span class="kw">fn</span> success_level(clicks: <span class="dt">i32</span>) -&gt; Node&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-47" title="47">    <span class="kw">let</span> descrip = <span class="kw">match</span> clicks <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-48" title="48">        <span class="dv">0</span> ... <span class="dv">5</span> =&gt; <span class="st">&quot;Not very many 🙁&quot;</span>,</a>
-<a class="sourceLine" id="cb3-49" title="49">        <span class="dv">6</span> ... <span class="dv">9</span> =&gt; <span class="st">&quot;I got my first real six-string 😐&quot;</span>,</a>
-<a class="sourceLine" id="cb3-50" title="50">        <span class="dv">10</span> ... <span class="dv">11</span> =&gt; <span class="st">&quot;Spinal Tap 🙂&quot;</span>,</a>
+<a class="sourceLine" id="cb3-48" title="48">        <span class="dv">0</span> ..= <span class="dv">5</span> =&gt; <span class="st">&quot;Not very many 🙁&quot;</span>,</a>
+<a class="sourceLine" id="cb3-49" title="49">        <span class="dv">6</span> ..= <span class="dv">9</span> =&gt; <span class="st">&quot;I got my first real six-string 😐&quot;</span>,</a>
+<a class="sourceLine" id="cb3-50" title="50">        <span class="dv">10</span> ..= <span class="dv">11</span> =&gt; <span class="st">&quot;Spinal Tap 🙂&quot;</span>,</a>
 <a class="sourceLine" id="cb3-51" title="51">        _ =&gt; <span class="st">&quot;Double pendulum 🙃&quot;</span></a>
 <a class="sourceLine" id="cb3-52" title="52">    <span class="op">}</span>;</a>
 <a class="sourceLine" id="cb3-53" title="53">    <span class="pp">p!</span><span class="op">[</span> descrip <span class="op">]</span></a>
@@ -139,10 +139,10 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <a class="sourceLine" id="cb3-94" title="94">    <span class="pp">seed::App::</span>build(|_, _| <span class="pp">Model::</span><span class="kw">default</span>(), update, view)</a>
 <a class="sourceLine" id="cb3-95" title="95">        .finish()</a>
 <a class="sourceLine" id="cb3-96" title="96">        .run();</a>
-<a class="sourceLine" id="cb3-97" title="97"><span class="op">}}</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-97" title="97"><span class="op">}</span></a></code></pre></div>
 <p>For a truly minimimal example, see <a href="https://github.com/David-OConnor/seed-quickstart/blob/master/src/lib.rs">lib.rs in the quickstart repo</a></p>
 <h2 id="building-and-running">Building and running</h2>
-<p>To build your app, run <code>cargo make all</code>, and to host on a dev server, run <code>cargo make serve</code>.</p>
+<p>To build your app, run <code>cargo make build</code>, and to host on a dev server, run <code>cargo make serve</code>.</p>
 <p>For a more robust starting setup, check out Martin Kavik’s <a href="https://github.com/MartinKavik/seed-quickstart-webpack">seed-quickstart-webpack repo</a>.</p>
 <h2 id="running-included-examples">Running included examples</h2>
 <p>To run an example located in the <a href="https://github.com/David-OConnor/seed/tree/master/examples">examples folder</a>, run <code>cargo make start example_name</code>, where you replace <code>example_name</code> with the example name. Eg: <code>cargo make start counter</code>.</p>

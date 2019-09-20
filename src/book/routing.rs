@@ -23,9 +23,9 @@ r#####"
 <a class="sourceLine" id="cb1-16" title="16">    <span class="op">}</span></a>
 <a class="sourceLine" id="cb1-17" title="17"><span class="op">}</span></a>
 <a class="sourceLine" id="cb1-18" title="18"></a>
-<a class="sourceLine" id="cb1-19" title="19"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
+<a class="sourceLine" id="cb1-19" title="19"><span class="at">#[</span>wasm_bindgen<span class="at">(</span>start<span class="at">)]</span></a>
 <a class="sourceLine" id="cb1-20" title="20"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-21" title="21">    <span class="pp">seed::App::</span>build(<span class="pp">Model::</span><span class="kw">default</span>(), update, view)</a>
+<a class="sourceLine" id="cb1-21" title="21">    <span class="pp">seed::App::</span>build(|_, _| <span class="pp">Model::</span><span class="kw">default</span>(), update, view)</a>
 <a class="sourceLine" id="cb1-22" title="22">        .routes(routes)</a>
 <a class="sourceLine" id="cb1-23" title="23">        .finish()</a>
 <a class="sourceLine" id="cb1-24" title="24">        .run();</a>
