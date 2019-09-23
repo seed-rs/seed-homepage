@@ -9,6 +9,7 @@
     "package.js",
     "package.d.ts"
   ],
-  "browser": "package.js",
-  "types": "package.d.ts"
+  "module": "package.js",
+  "types": "package.d.ts",
+  "sideEffects": "false"
 }
