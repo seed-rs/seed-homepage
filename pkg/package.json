@@ -1,0 +1,14 @@
+{
+  "name": "seed_homepage",
+  "collaborators": [
+    "David O'Connor <david.alan.oconnor@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "package_bg.wasm",
+    "package.js",
+    "package.d.ts"
+  ],
+  "browser": "package.js",
+  "types": "package.d.ts"
+}
