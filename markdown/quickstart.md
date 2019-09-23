@@ -193,3 +193,7 @@ run `cargo make start example_name`, where you replace `example_name` with the e
 Some examples also require to run API server in another terminal window - `cargo make start_server example_name`.
 
 When server(s) are running, open [127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
+
+## Resources
+- [Awesome-seed-rs](https://github.com/MartinKavik/awesome-seed-rs): A curated list of resources
+- [Seed Realworld](https://github.com/MartinKavik/seed-rs-realworld): A detailed realworld example site

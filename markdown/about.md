@@ -10,10 +10,6 @@
 
 - Expressive, flexible view syntax that's easy to read and write.
 
-## Resources
-- [Awesome-seed-rs](https://github.com/MartinKavik/awesome-seed-rs): A curated list of resources
-- [Seed Realworld](https://github.com/MartinKavik/seed-rs-realworld): A detailed realworld example site
-
 ## A note on view syntax
 
 This project uses an unconventional approach to describe how to display DOM elements.

@@ -148,5 +148,10 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <p>To run an example located in the <a href="https://github.com/David-OConnor/seed/tree/master/examples">examples folder</a>, run <code>cargo make start example_name</code>, where you replace <code>example_name</code> with the example name. Eg: <code>cargo make start counter</code>.</p>
 <p>Some examples also require to run API server in another terminal window - <code>cargo make start_server example_name</code>.</p>
 <p>When server(s) are running, open <a href="http://127.0.0.1:8000">127.0.0.1:8000</a> in your browser.</p>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://github.com/MartinKavik/awesome-seed-rs">Awesome-seed-rs</a>: A curated list of resources</li>
+<li><a href="https://github.com/MartinKavik/seed-rs-realworld">Seed Realworld</a>: A detailed realworld example site</li>
+</ul>
 "#####.into()
 }

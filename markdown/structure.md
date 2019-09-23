@@ -365,7 +365,7 @@ let my_el = div![]
 ## Initializing
 To start your app, call the `seed::App::build` method, which takes the following parameters:
 
-- The initial instance of your model
+- An `init` function which accepts an initial routing, initial orders, and outputs an initial model
 - Your update function
 - Your view function
 
@@ -380,36 +380,44 @@ And must must complete with these methods: `.finish().run()`.
 
 `.mount()` takes a single argument, which can be the id of the element you wish to mount in,
 a `web_sys::Element`, or a `web_sys::HtmlElement`. Examples:
-`seed::App::build(Model::default(), update, view).mount(seed::body())`
-`seed::App::build(Model::default(), update, view).mount('a_div_id`)`
+`seed::App::build(|_, _| Model::default(), update, view).mount(seed::body())`
+`seed::App::build(|_, _| Model::default(), update, view).mount('a_div_id`)`
 
 ```
-seed::App::build(Model::default(), update, view).mount(
+seed::App::build(|_, _| Model::default(), update, view).mount(
     seed::body().querySelector("section").unwrap().unwrap()
 )
 ```
 
-
-This must be wrapped in a function named `render`, with the `#[wasm_bindgen]` invocation above.
- (More correctly, its name must match the func in this line in your html file):
-```javascript
-function run() {
-    render();
-}
-```
+The `seed::App::build` call must be wrapped in a function with the `#[wasm_bindgen(start)]` invocation.
 
 Example, with optional methods:
 ```rust
-#[wasm_bindgen]
+#[wasm_bindgen(start)]
 pub fn render() {
-    seed::App::build(Model::default(), update, view)
+    seed::App::build(|_, _| Model::default(), update, view)
         .mount("main")
         .routes(routes)
         .window_events(window_events)
         .finish()
         .run();
 }
+```
 
+Example of using a standalone `init` function:
+```rust
+fn init(url: Url, orders: &mut impl Orders<Msg>) -> Model {
+    let mut model = Model::default();
+    update(routes(url).unwrap(), &mut model, orders);
+    model
+}
+
+#[wasm_bindgen(start)]
+pub fn render() {
+    seed::App::build(init, update, view)
+        .finish()
+        .run();
+}
 ```
 
 This will render your app to the element holding the id you passed; in the case of this example,

@@ -651,48 +651,6 @@ function init(module) {
     imports.wbg.__widl_f_set_text_content_Node = function(arg0, arg1, arg2) {
         getObject(arg0).textContent = arg1 === 0 ? undefined : getStringFromWasm(arg1, arg2);
     };
-    imports.wbg.__widl_instanceof_PopStateEvent = function(arg0) {
-        const ret = getObject(arg0) instanceof PopStateEvent;
-        return ret;
-    };
-    imports.wbg.__widl_f_state_PopStateEvent = function(arg0) {
-        const ret = getObject(arg0).state;
-        return addHeapObject(ret);
-    };
-    imports.wbg.__widl_f_target_Event = function(arg0) {
-        const ret = getObject(arg0).target;
-        return isLikeNone(ret) ? 0 : addHeapObject(ret);
-    };
-    imports.wbg.__widl_f_closest_Element = function(arg0, arg1, arg2) {
-        try {
-            const ret = getObject(arg0).closest(getStringFromWasm(arg1, arg2));
-            return isLikeNone(ret) ? 0 : addHeapObject(ret);
-        } catch (e) {
-            handleError(e)
-        }
-    };
-    imports.wbg.__widl_f_prevent_default_Event = function(arg0) {
-        getObject(arg0).preventDefault();
-    };
-    imports.wbg.__wbindgen_json_parse = function(arg0, arg1) {
-        const ret = JSON.parse(getStringFromWasm(arg0, arg1));
-        return addHeapObject(ret);
-    };
-    imports.wbg.__widl_f_history_Window = function(arg0) {
-        try {
-            const ret = getObject(arg0).history;
-            return addHeapObject(ret);
-        } catch (e) {
-            handleError(e)
-        }
-    };
-    imports.wbg.__widl_f_push_state_with_url_History = function(arg0, arg1, arg2, arg3, arg4, arg5) {
-        try {
-            getObject(arg0).pushState(getObject(arg1), getStringFromWasm(arg2, arg3), arg4 === 0 ? undefined : getStringFromWasm(arg4, arg5));
-        } catch (e) {
-            handleError(e)
-        }
-    };
     imports.wbg.__widl_f_text_content_Node = function(arg0, arg1) {
         const ret = getObject(arg1).textContent;
         const ptr0 = isLikeNone(ret) ? 0 : passStringToWasm(ret);
@@ -751,6 +709,48 @@ function init(module) {
             handleError(e)
         }
     };
+    imports.wbg.__widl_instanceof_PopStateEvent = function(arg0) {
+        const ret = getObject(arg0) instanceof PopStateEvent;
+        return ret;
+    };
+    imports.wbg.__widl_f_state_PopStateEvent = function(arg0) {
+        const ret = getObject(arg0).state;
+        return addHeapObject(ret);
+    };
+    imports.wbg.__widl_f_target_Event = function(arg0) {
+        const ret = getObject(arg0).target;
+        return isLikeNone(ret) ? 0 : addHeapObject(ret);
+    };
+    imports.wbg.__widl_f_closest_Element = function(arg0, arg1, arg2) {
+        try {
+            const ret = getObject(arg0).closest(getStringFromWasm(arg1, arg2));
+            return isLikeNone(ret) ? 0 : addHeapObject(ret);
+        } catch (e) {
+            handleError(e)
+        }
+    };
+    imports.wbg.__widl_f_prevent_default_Event = function(arg0) {
+        getObject(arg0).preventDefault();
+    };
+    imports.wbg.__wbindgen_json_parse = function(arg0, arg1) {
+        const ret = JSON.parse(getStringFromWasm(arg0, arg1));
+        return addHeapObject(ret);
+    };
+    imports.wbg.__widl_f_history_Window = function(arg0) {
+        try {
+            const ret = getObject(arg0).history;
+            return addHeapObject(ret);
+        } catch (e) {
+            handleError(e)
+        }
+    };
+    imports.wbg.__widl_f_push_state_with_url_History = function(arg0, arg1, arg2, arg3, arg4, arg5) {
+        try {
+            getObject(arg0).pushState(getObject(arg1), getStringFromWasm(arg2, arg3), arg4 === 0 ? undefined : getStringFromWasm(arg4, arg5));
+        } catch (e) {
+            handleError(e)
+        }
+    };
     imports.wbg.__wbindgen_closure_wrapper3417 = function(arg0, arg1, arg2) {
         const state = { a: arg0, b: arg1, cnt: 1 };
         const real = (arg0) => {
@@ -787,7 +787,7 @@ function init(module) {
         const ret = real;
         return addHeapObject(ret);
     };
-    imports.wbg.__wbindgen_closure_wrapper3502 = function(arg0, arg1, arg2) {
+    imports.wbg.__wbindgen_closure_wrapper3477 = function(arg0, arg1, arg2) {
         const state = { a: arg0, b: arg1, cnt: 1 };
         const real = (arg0) => {
             state.cnt++;
