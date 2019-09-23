@@ -29,11 +29,41 @@ impl ToString for Page {
 struct GuideSection {
     title: String,
     content: String,
+    path: String,  // For use with routing.
+//    page: GuidePage,
 }
+
+//#[derive(Copy, Clone, Debug)]
+//enum GuidePage {
+//    Quickstart,
+//    Prereqs,
+//    Structure,
+//    Events,
+//    Components,
+//    Http,
+//    Routing,
+//    Misc,
+//    Release,
+//    Complex,
+//    Server,
+//    About
+//}
+//
+//impl GuidePage {
+//    /// This corresponds to the path field in Guidesection.  Alternatively, could use an id.
+//    fn from_path(path: &str) -> Self {
+//        match path {
+//            "quickstart" => Self::Quickstart,
+//            "prereqs" => Self::Prereqs,
+//            "structure" => Self::Structure,
+//            "events"
+//        }
+//    }
+//}
 
 struct Model {
     page: Page,
-    guide_page: usize, // Index of our guide sections.
+    guide_page: String,  // corresponds to the `path` field of GuidePage
     guide_sections: Vec<GuideSection>,
 }
 
@@ -48,14 +78,12 @@ impl Default for Model {
             ("Events", crate::book::events::text()),
             ("Components", crate::book::components::text()),
             ("Http requests and state", crate::book::fetch::text()),
-//            ("Lifecycle hooks", crate::book::lifecycle::text()),
             ("Routing", crate::book::routing::text()),
             ("Misc features", crate::book::misc::text()),
             (
                 "Release and debugging",
                 crate::book::release_and_debugging::text(),
             ),
-//            ("Element deep-dive", crate::book::element_deepdive::text()),
             ("Complex apps", crate::book::complex_apps::text()),
             (
                 "Server integration",
@@ -68,12 +96,14 @@ impl Default for Model {
             guide_sections.push(GuideSection {
                 title: title.to_string(),
                 content: md_text,
+                path: title.to_lowercase().replace(" ", "-"),
             });
         }
 
         Self {
             page: Page::Guide,
-            guide_page: 0,
+//            guide_page: GuidePage::Quickstart,
+            guide_page: "quickstart".into(),
             guide_sections,
         }
     }
@@ -82,7 +112,7 @@ impl Default for Model {
 #[derive(Clone, Debug)]
 enum Msg {
     ChangePage(Page),
-    ChangeGuidePage(usize),
+    ChangeGuidePage(String),
 }
 
 /// The sole source of updating the model; returns a fresh one.
@@ -168,7 +198,7 @@ fn title() -> Node<Msg> {
     ]
 }
 
-fn guide(sections: &[GuideSection], guide_page: usize) -> Node<Msg> {
+fn guide(sections: &[GuideSection], guide_page: &str) -> Node<Msg> {
     let menu_item_style = style! {
         "display" => "flex";  // So we can vertically center
         "align-items" => "center";
@@ -181,12 +211,12 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> Node<Msg> {
         "font-size" => unit!(1.2, em);
     };
 
-    let menu_items = sections.iter().enumerate().map(|(i, s)| {
+    let menu_items = sections.iter().map(|s| {
         h4![
             &menu_item_style,
             attrs! {
-                At::Class => if i == guide_page {"guide-menu-selected"} else {"guide-menu"};
-                At::Href => "/guide/".to_string() + &i.to_string()
+                At::Class => if s.path == guide_page {"guide-menu-selected"} else {"guide-menu"};
+                At::Href => "/guide/".to_string() + &s.path
             },
             s.title
         ]
@@ -215,7 +245,7 @@ fn guide(sections: &[GuideSection], guide_page: usize) -> Node<Msg> {
                 "grid-column" => "2 / 3";
                 "padding" => unit!(80, px);
             },
-            raw![&sections[guide_page].content],
+            raw![&sections.iter().find(|s| s.path == guide_page).unwrap().content],
         ]
     ]
 }
@@ -412,7 +442,7 @@ fn view(model: &Model) -> Node<Msg> {
         section![header(version)],
         section![title()],
         section![match model.page {
-            Page::Guide => guide(&model.guide_sections, model.guide_page),
+            Page::Guide => guide(&model.guide_sections, &model.guide_page),
             Page::Changelog => changelog(),
         }],
         section![footer()],
@@ -421,14 +451,14 @@ fn view(model: &Model) -> Node<Msg> {
 
 #[allow(clippy::needless_pass_by_value)]
 fn routes(url: seed::Url) -> Option<Msg> {
-    match url.path.get(0).map(String::as_str) {
+    Some(match url.path.get(0).map(String::as_str) {
         Some("guide") => match url.path.get(1).as_ref() {
-            Some(page) => Some(Msg::ChangeGuidePage(page.parse::<usize>().unwrap())),
-            None => Some(Msg::ChangePage(Page::Guide)),
+            Some(page) => Msg::ChangeGuidePage(page.to_string()),
+            None => Msg::ChangePage(Page::Guide),
         },
-        Some("changelog") => Some(Msg::ChangePage(Page::Changelog)),
-        _ => Some(Msg::ChangePage(Page::Guide)),
-    }
+        Some("changelog") => Msg::ChangePage(Page::Changelog),
+        _ => Msg::ChangePage(Page::Guide),
+    })
 }
 
 fn init(url: Url, orders: &mut impl Orders<Msg>) -> Model {

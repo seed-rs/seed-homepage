@@ -20,12 +20,12 @@ To set up the initial routing, pass a `routes` function describing how to handle
 routing, to [App::build](https://docs.rs/seed/0.2.5/seed/struct.App.html#method.build)'s 
 `routes` method.
 ```rust
-fn routes(url: &seed::Url) -> Msg {
+fn routes(url: &seed::Url) -> Option<Msg> {
     if url.path.is_empty() {
         return Msg::ChangePage(0)
     }
 
-    match url.path[0].as_ref() {
+    Some(match url.path[0].as_ref() {
         "guide" => {
             // Determine if we're at the main guide page, or a subpage
             match url.path.get(1).as_ref() {
@@ -35,7 +35,7 @@ fn routes(url: &seed::Url) -> Msg {
         },
         "changelog" => Msg::ChangePage(1),
         _ => Msg::ChangePage(0),
-    }
+    })
 }
 
 #[wasm_bindgen(start)]
@@ -65,7 +65,7 @@ button!["Changelog", attrs!{At::Href => "/changelog"} ]
 
 ## More detail, and routing using events
 
-Your `routes` function outputs the message that handles the routing, and accepts a ref to a 
+Your `routes` function outputs the message that handles the routing as an `Option`, and accepts a 
 [Url struct](https://docs.rs/seed/0.2.4/seed/routing/struct.Url.html)
 describing the route, which routes has the following fields:
 ```rust
@@ -110,7 +110,7 @@ fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
         },
         // This is separate, because nagivating the route triggers state updates, which would
         // trigger an additional push state.
-        Msg::ChangePage(page) => model.page = page
+        Msg::ChangePage(page) => model.page = page,
         Msg::ChangeGuidePage(guide_page) => Render(Model {guide_page, page: Page::Guide, ..model}),
         Msg::ChangeGuidePage(guide_page) => {
             model.guide_page = page;
