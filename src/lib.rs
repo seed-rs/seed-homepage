@@ -420,20 +420,26 @@ fn view(model: &Model) -> Node<Msg> {
 }
 
 #[allow(clippy::needless_pass_by_value)]
-fn routes(url: seed::Url) -> Msg {
+fn routes(url: seed::Url) -> Option<Msg> {
     match url.path.get(0).map(String::as_str) {
         Some("guide") => match url.path.get(1).as_ref() {
-            Some(page) => Msg::ChangeGuidePage(page.parse::<usize>().unwrap()),
-            None => Msg::ChangePage(Page::Guide),
+            Some(page) => Some(Msg::ChangeGuidePage(page.parse::<usize>().unwrap())),
+            None => Some(Msg::ChangePage(Page::Guide)),
         },
-        Some("changelog") => Msg::ChangePage(Page::Changelog),
-        _ => Msg::ChangePage(Page::Guide),
+        Some("changelog") => Some(Msg::ChangePage(Page::Changelog)),
+        _ => Some(Msg::ChangePage(Page::Guide)),
     }
 }
 
-#[wasm_bindgen]
+fn init(url: Url, orders: &mut impl Orders<Msg>) -> Model {
+    let mut model = Model::default();
+    update(routes(url).unwrap(), &mut model, orders);
+    model
+}
+
+#[wasm_bindgen(start)]
 pub fn render() {
-    seed::App::build(|_, _| Model::default(), update, view)
+    seed::App::build(init, update, view)
         .routes(routes)
         .finish()
         .run();
