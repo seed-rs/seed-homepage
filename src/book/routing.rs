@@ -5,12 +5,12 @@ r#####"
 <p>Let’s say our site the following pages: a guide, which can have subpages, and a changelog, accessible by <code>http://seed-rs.org/changelog</code>, <code>http://seed-rs.org/guide</code>, and <code>http://seed-rs.org/guide/3</code> (where 3 is the page we want) respectively. We describe the page by a <code>page</code> field in our model, which is an integer: 0 for guide, 1 for changelog, and an additional number for the guide page. An enum would be cleaner, but we don’t wish to complicate this example.</p>
 <h2 id="the-basics">The basics</h2>
 <p>To set up the initial routing, pass a <code>routes</code> function describing how to handle routing, to <a href="https://docs.rs/seed/0.4.0/seed/struct.App.html#method.build">App::build</a>’s <code>routes</code> method.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">fn</span> routes(url: &amp;<span class="pp">seed::</span>Url) -&gt; Msg <span class="op">{</span></a>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">fn</span> routes(url: &amp;<span class="pp">seed::</span>Url) -&gt; <span class="dt">Option</span>&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-2" title="2">    <span class="kw">if</span> url.path.is_empty() <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-3" title="3">        <span class="kw">return</span> <span class="pp">Msg::</span>ChangePage(<span class="dv">0</span>)</a>
 <a class="sourceLine" id="cb1-4" title="4">    <span class="op">}</span></a>
 <a class="sourceLine" id="cb1-5" title="5"></a>
-<a class="sourceLine" id="cb1-6" title="6">    <span class="kw">match</span> url.path<span class="op">[</span><span class="dv">0</span><span class="op">]</span>.as_ref() <span class="op">{</span></a>
+<a class="sourceLine" id="cb1-6" title="6">    <span class="cn">Some</span>(<span class="kw">match</span> url.path<span class="op">[</span><span class="dv">0</span><span class="op">]</span>.as_ref() <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-7" title="7">        <span class="st">&quot;guide&quot;</span> =&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-8" title="8">            <span class="co">// Determine if we&#39;re at the main guide page, or a subpage</span></a>
 <a class="sourceLine" id="cb1-9" title="9">            <span class="kw">match</span> url.path.get(<span class="dv">1</span>).as_ref() <span class="op">{</span></a>
@@ -20,7 +20,7 @@ r#####"
 <a class="sourceLine" id="cb1-13" title="13">        <span class="op">}</span>,</a>
 <a class="sourceLine" id="cb1-14" title="14">        <span class="st">&quot;changelog&quot;</span> =&gt; <span class="pp">Msg::</span>ChangePage(<span class="dv">1</span>),</a>
 <a class="sourceLine" id="cb1-15" title="15">        _ =&gt; <span class="pp">Msg::</span>ChangePage(<span class="dv">0</span>),</a>
-<a class="sourceLine" id="cb1-16" title="16">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb1-16" title="16">    <span class="op">}</span>)</a>
 <a class="sourceLine" id="cb1-17" title="17"><span class="op">}</span></a>
 <a class="sourceLine" id="cb1-18" title="18"></a>
 <a class="sourceLine" id="cb1-19" title="19"><span class="at">#[</span>wasm_bindgen<span class="at">(</span>start<span class="at">)]</span></a>
@@ -36,7 +36,7 @@ r#####"
 <p>The tag containing <code>Href</code> doesn’t need to be an <code>a!</code> tag; any will work:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="pp">button!</span><span class="op">[</span><span class="st">&quot;Changelog&quot;</span>, <span class="pp">attrs!</span><span class="op">{</span><span class="pp">At::</span>Href =&gt; <span class="st">&quot;/changelog&quot;</span><span class="op">}</span> <span class="op">]</span></a></code></pre></div>
 <h2 id="more-detail-and-routing-using-events">More detail, and routing using events</h2>
-<p>Your <code>routes</code> function outputs the message that handles the routing, and accepts a ref to a <a href="https://docs.rs/seed/0.4.0/seed/routing/struct.Url.html">Url struct</a> describing the route, which routes has the following fields:</p>
+<p>Your <code>routes</code> function outputs the message that handles the routing as an <code>Option</code>, and accepts a <a href="https://docs.rs/seed/0.4.0/seed/routing/struct.Url.html">Url struct</a> describing the route, which routes has the following fields:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">pub</span> <span class="kw">struct</span> Url <span class="op">{</span></a>
 <a class="sourceLine" id="cb4-2" title="2">    <span class="kw">pub</span> path: <span class="dt">Vec</span>&lt;<span class="dt">String</span>&gt;,</a>
 <a class="sourceLine" id="cb4-3" title="3">    <span class="kw">pub</span> hash: <span class="dt">Option</span>&lt;<span class="dt">String</span>&gt;,</a>
@@ -70,7 +70,7 @@ r#####"
 <a class="sourceLine" id="cb5-23" title="23">        <span class="op">}</span>,</a>
 <a class="sourceLine" id="cb5-24" title="24">        <span class="co">// This is separate, because nagivating the route triggers state updates, which would</span></a>
 <a class="sourceLine" id="cb5-25" title="25">        <span class="co">// trigger an additional push state.</span></a>
-<a class="sourceLine" id="cb5-26" title="26">        <span class="pp">Msg::</span>ChangePage(page) =&gt; model.page = page</a>
+<a class="sourceLine" id="cb5-26" title="26">        <span class="pp">Msg::</span>ChangePage(page) =&gt; model.page = page,</a>
 <a class="sourceLine" id="cb5-27" title="27">        <span class="pp">Msg::</span>ChangeGuidePage(guide_page) =&gt; Render(Model <span class="op">{</span>guide_page, page: <span class="pp">Page::</span>Guide, ..model<span class="op">}</span>),</a>
 <a class="sourceLine" id="cb5-28" title="28">        <span class="pp">Msg::</span>ChangeGuidePage(guide_page) =&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb5-29" title="29">            model.guide_page = page;</a>
