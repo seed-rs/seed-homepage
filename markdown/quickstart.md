@@ -27,17 +27,9 @@ If not using the quickstart repo, create an Html file with a body that contains 
 
 ```html
 <section id="app"></section>
-
-<script src="/pkg/package.js"></script>
-
-<script>
-  const { render } = wasm_bindgen;
-  function run() {
-    render();
-  }
-  wasm_bindgen("/pkg/package_bg.wasm")
-    .then(run)
-    .catch(console.error);
+<script type="module">
+    import init from '/pkg/package.js';
+    init('/pkg/package_bg.wasm');
 </script>
 ```
 

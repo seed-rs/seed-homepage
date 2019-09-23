@@ -12,18 +12,10 @@ r#####"
 <p>Alternatively, create a new lib with Cargo: <code>cargo new --lib appname</code>. Here and everywhere it appears in this guide, <code>appname</code> should be replaced with the name of your app.</p>
 <p>If not using the quickstart repo, create an Html file with a body that contains this:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">&lt;section</span><span class="ot"> id=</span><span class="st">&quot;app&quot;</span><span class="kw">&gt;&lt;/section&gt;</span></a>
-<a class="sourceLine" id="cb1-2" title="2"></a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;/pkg/package.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span></a>
-<a class="sourceLine" id="cb1-4" title="4"></a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="kw">&lt;script&gt;</span></a>
-<a class="sourceLine" id="cb1-6" title="6">  <span class="kw">const</span> <span class="op">{</span> render <span class="op">}</span> <span class="op">=</span> wasm_bindgen<span class="op">;</span></a>
-<a class="sourceLine" id="cb1-7" title="7">  <span class="kw">function</span> <span class="at">run</span>() <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-8" title="8">    <span class="at">render</span>()<span class="op">;</span></a>
-<a class="sourceLine" id="cb1-9" title="9">  <span class="op">}</span></a>
-<a class="sourceLine" id="cb1-10" title="10">  <span class="at">wasm_bindgen</span>(<span class="st">&quot;/pkg/package_bg.wasm&quot;</span>)</a>
-<a class="sourceLine" id="cb1-11" title="11">    .<span class="at">then</span>(run)</a>
-<a class="sourceLine" id="cb1-12" title="12">    .<span class="at">catch</span>(<span class="va">console</span>.<span class="at">error</span>)<span class="op">;</span></a>
-<a class="sourceLine" id="cb1-13" title="13"><span class="kw">&lt;/script&gt;</span></a></code></pre></div>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">&lt;script</span><span class="ot"> type=</span><span class="st">&quot;module&quot;</span><span class="kw">&gt;</span></a>
+<a class="sourceLine" id="cb1-3" title="3">    <span class="im">import</span> init <span class="im">from</span> <span class="st">&#39;/pkg/package.js&#39;</span><span class="op">;</span></a>
+<a class="sourceLine" id="cb1-4" title="4">    <span class="at">init</span>(<span class="st">&#39;/pkg/package_bg.wasm&#39;</span>)<span class="op">;</span></a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="kw">&lt;/script&gt;</span></a></code></pre></div>
 <p>The first line above is an empty element with id: It’s where your app will render. The subsequent ones load your app’s wasm modules.</p>
 <p>The quickstart repo includes this file. You will eventually need to modify it to change the page’s title, add a description, favicon, stylesheet etc.</p>
 <p><code>Cargo.toml</code>, which is a file created by Cargo that describes your app, needs <code>wasm-bindgen</code>, <code>web-sys</code>, and <code>seed</code> as depdendencies, and crate-type of <code>&quot;cdylib&quot;</code>. The version in the quickstart repo has these set up already. Example:</p>
