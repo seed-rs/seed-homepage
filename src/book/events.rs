@@ -128,7 +128,7 @@ r#####"
 <a class="sourceLine" id="cb10-27" title="27"></a>
 <a class="sourceLine" id="cb10-28" title="28"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
 <a class="sourceLine" id="cb10-29" title="29"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
-<a class="sourceLine" id="cb10-30" title="30">    <span class="pp">seed::App::</span>build(<span class="pp">Model::</span><span class="kw">default</span>(), update, view)</a>
+<a class="sourceLine" id="cb10-30" title="30">    <span class="pp">seed::App::</span>build(<span class="pp">Init::</span>new(<span class="pp">Model::</span><span class="kw">default</span>()), update, view)</a>
 <a class="sourceLine" id="cb10-31" title="31">        .window_events(window_events)</a>
 <a class="sourceLine" id="cb10-32" title="32">        .finish()</a>
 <a class="sourceLine" id="cb10-33" title="33">        .run();</a>

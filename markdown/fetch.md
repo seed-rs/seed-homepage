@@ -5,8 +5,9 @@ to make HTTP requests in the browser, wrapping the [Fetch API](https://developer
 To use this, we need to include `futures = "^0.1.26"` in `Cargo.toml`. The [Fetch module](https://docs.rs/seed/0.2.3/seed/fetch/index.html)
 is standalone: It can be used with any wasm-bindgen program.
 
-Example, where we update the state on initial load (similar to the `server_interaction` example in the repo)
-from a server. It demonstrates a `GET` request, and deserializing JSON data. The `server_integration`
+Example, where we update the state on initial load (similar to the 
+[server_interaction example](https://github.com/David-OConnor/seed/tree/master/examples/server_interaction)
+) from a server. It demonstrates a `GET` request, and deserializing JSON data. The `server_interaction`
 example contains more sample code.
 
 ```rust
@@ -26,43 +27,24 @@ pub struct Branch {
 
 #[derive(Clone)]
 enum Msg {
-    FetchData,
-    DataFetched(fetch::FetchObject<Branch>),
-    OnFetchError {
-        label: &'static str,
-        fail_reason: fetch::FailReason,
-    },
+    DataFetched(seed::fetch::ResponseDataResult<Branch>),
+
 }
 
 fn fetch_data() -> impl Future<Item = Msg, Error = Msg> {
     let url = "https://api.github.com/repos/david-oconnor/seed/branches/master";
-    Request::new(url.into()).fetch_json(Msg::DataFetched)
+    Request::new(url.into()).fetch_json_data(Msg::DataFetched)
 }
 
 fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
     match msg {
-        Msg::FetchData => {
-            orders
-                .skip()
-                .perform_cmd(fetch_data());
-        }
+        Msg::DataFetched(Ok(branch)) => model.branch = branch,
 
-        Msg::DataFetched(fetch_object) => {
-            match fetch_object.response() {
-                Ok(response) => model.branch = response.data,
-                Err(fail_reason) => {
-                    orders
-                        .send_msg(Msg::OnFetchError {
-                            label: "Fetching repository info failed",
-                            fail_reason,
-                        })
-                        .skip();
-                }
-            }
-        }
-
-        Msg::OnFetchError { label, fail_reason } => {
-            error!(format!("Fetch error - {} - {:#?}", label, fail_reason));
+        Msg::DataFetched(Err(fail_reason)) => {
+            error!(format!(
+                "Fetch error - Fetching repository info failed - {:#?}",
+                fail_reason
+            ));
             orders.skip();
         }
     }
@@ -75,10 +57,14 @@ fn view(model: &Model) -> Node<Msg> {
     )]
 }
 
+fn init(_: Url, orders: &mut impl Orders<Msg>) -> Init<Model> {
+    orders.perform_cmd(fetch_data());
+    Init::new(Model::default())
+}
 
 #[wasm_bindgen]
 pub fn render() {
-    let app = seed::App::build(Model::default(), update, view)
+    let app = seed::App::build(init, update, view)
         .finish()
         .run();
 
@@ -86,13 +72,13 @@ pub fn render() {
 }
 
 ```
-On page load, we trigger an update using `Msg::FetchData`, which points the `update`
-function to use the `Orders.perform_cmd` method. This allows state to be
+On page load, we trigger an update in the `init` function using `Msg::FetchData`, 
+which points the `update` via `orders.perform_cmd` and a function we've created
+called `fetch_data`. This allows state to be
 update asynchronosly, when the request is complete. `skip()` is a convenience method that
 sets `Update::ShouldRender` to `Skip`; sending the request doesn't trigger a render.
 We pattern-match the response in the `update` function's`DataFetched` arm: If successful, we update the model.
-If not, we update recursively to the `OnFetchError` branch using `.send_msg()`, in this case
-displaying an error in the console.
+If not, we display an error in the console using the `error!` macro.
 
 We've set up nested structs that have fields matching the names of the JSON fields of
 the response, which `Serde` deserializes the response into, through the `fetch_json` method of
@@ -100,11 +86,10 @@ the response, which `Serde` deserializes the response into, through the `fetch_j
 what's contained in our Branch struct is included
 in the response, Serde automatically applies only the info matching our struct's fields.
 
- 
-If we wish to trigger
+ If we wish to trigger
 this update from a normal event instead of on load, we can do something like this:
 ```rust
-fn view(model: &Model) -> Vec<Node<Msg>>> {
+fn view(model: &Model) -> Vec<Node<Msg>> {
     vec![
         div![format!(
             "Repo info: Name: {}, SHA: {}",
@@ -133,11 +118,7 @@ struct ResponseBody {
 #[derive(Clone)]
 enum Msg {
     SendMessage,
-    MessageSent(fetch::FetchObject<ResponseBody>),
-    OnFetchError {
-        label: &'static str,
-        fail_reason: fetch::FailReason,
-    },
+    MessageSent(seed::fetch::ResponseDataResult<SendMessageResponseBody>),
 }
 
 fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
@@ -146,23 +127,16 @@ fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
             orders.skip().perform_cmd(send_message());
         }
 
-        Msg::MessageSent(fetch_object) => match fetch_object.response() {
-            Ok(response) => {
-                log!(format!("Response data: {:#?}", response.data));
-                orders.skip();
-            }
-            Err(fail_reason) => {
-                orders
-                    .send_msg(Msg::OnFetchError {
-                        label: "Sending message failed",
-                        fail_reason,
-                    })
-                    .skip();
-            }
-        },
+        Msg::MessageSent(Ok(response_data)) => {
+            log!(format!("Response data: {:#?}", response_data));
+            orders.skip();
+        }
 
-        Msg::OnFetchError { label, fail_reason } => {
-            log!(format!("Fetch error - {} - {:#?}", label, fail_reason));
+        Msg::MessageSent(Err(fail_reason)) => {
+            error!(format!(
+                "Fetch error - Sending message failed - {:#?}",
+                fail_reason
+            ));
             orders.skip();
         }
     }
@@ -175,14 +149,13 @@ fn send_message() -> impl Future<Item = Msg, Error = Msg> {
         message: "I wanna be like Iron Man".into(),
     };
 
-    Request::new(CONTACT_URL.into())
+    Request::new(CONTACT_URL)
         .method(Method::Post)
-        .header("Content-Type", "application/json")
         .send_json(&message)
-        .fetch_json(Msg::MessageSent)
+        .fetch_json_data(Msg::MessageSent)
 }
 
-fn view(model: &Model) ->Node<Msg>> {
+fn view(model: &Model) -> Node<Msg> {
     button![
         simple_ev(Ev::Click, Msg::SendMessage),
         "Send an urgent message (see console log)"
@@ -262,8 +235,3 @@ pub fn render() {
     spawn_local(get_data(state));
 }
 ```
-
-See the [server_interaction example](https://github.com/David-OConnor/seed/tree/master/examples/server_interaction)
-for a full example.
-
-Props to Pauan for writing the Fetch module.

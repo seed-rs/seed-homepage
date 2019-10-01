@@ -29,9 +29,8 @@ edition = &quot;2018&quot;
 crate-type = [&quot;cdylib&quot;]
 
 [dependencies]
-seed = &quot;^0.3.4&quot;
-wasm-bindgen = &quot;^0.2.38&quot;
-web-sys = &quot;^0.3.6&quot;</code></pre>
+seed = &quot;^0.4.1&quot;
+wasm-bindgen = &quot;^0.2.50&quot;</code></pre>
 <h2 id="a-short-example">A short example</h2>
 <p>Here’s an example demonstrating structure and syntax; it can be found in working form in the <a href="https://github.com/David-OConnor/seed/tree/master/examples/counter">counter example</a> Descriptions of its parts are in the Guide section below. Its structure follows <a href="https://guide.elm-lang.org/architecture/">The Elm Architecture</a>.</p>
 <p><em>lib.rs</em>:</p>
@@ -128,7 +127,7 @@ web-sys = &quot;^0.3.6&quot;</code></pre>
 <a class="sourceLine" id="cb3-91" title="91"></a>
 <a class="sourceLine" id="cb3-92" title="92"><span class="at">#[</span>wasm_bindgen<span class="at">(</span>start<span class="at">)]</span></a>
 <a class="sourceLine" id="cb3-93" title="93"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
-<a class="sourceLine" id="cb3-94" title="94">    <span class="pp">seed::App::</span>build(|_, _| <span class="pp">Model::</span><span class="kw">default</span>(), update, view)</a>
+<a class="sourceLine" id="cb3-94" title="94">    <span class="pp">seed::App::</span>build(|_, _| <span class="pp">Init::</span>new(<span class="pp">Model::</span><span class="kw">default</span>()), update, view)</a>
 <a class="sourceLine" id="cb3-95" title="95">        .finish()</a>
 <a class="sourceLine" id="cb3-96" title="96">        .run();</a>
 <a class="sourceLine" id="cb3-97" title="97"><span class="op">}</span></a></code></pre></div>

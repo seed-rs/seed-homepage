@@ -226,7 +226,7 @@ r#####"
 <p>Example, with optional methods:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb21-1" title="1"><span class="at">#[</span>wasm_bindgen<span class="at">(</span>start<span class="at">)]</span></a>
 <a class="sourceLine" id="cb21-2" title="2"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
-<a class="sourceLine" id="cb21-3" title="3">    <span class="pp">seed::App::</span>build(|_, _| <span class="pp">Model::</span><span class="kw">default</span>(), update, view)</a>
+<a class="sourceLine" id="cb21-3" title="3">    <span class="pp">seed::App::</span>build(|_, _| <span class="pp">Init::</span>new(<span class="pp">Model::</span><span class="kw">default</span>()), update, view)</a>
 <a class="sourceLine" id="cb21-4" title="4">        .mount(<span class="st">&quot;main&quot;</span>)</a>
 <a class="sourceLine" id="cb21-5" title="5">        .routes(routes)</a>
 <a class="sourceLine" id="cb21-6" title="6">        .window_events(window_events)</a>
@@ -234,18 +234,16 @@ r#####"
 <a class="sourceLine" id="cb21-8" title="8">        .run();</a>
 <a class="sourceLine" id="cb21-9" title="9"><span class="op">}</span></a></code></pre></div>
 <p>Example of using a standalone <code>init</code> function:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb22-1" title="1"><span class="kw">fn</span> init(url: Url, orders: &amp;<span class="kw">mut</span> <span class="kw">impl</span> Orders&lt;Msg&gt;) -&gt; Model <span class="op">{</span></a>
-<a class="sourceLine" id="cb22-2" title="2">    <span class="kw">let</span> <span class="kw">mut</span> model = <span class="pp">Model::</span><span class="kw">default</span>();</a>
-<a class="sourceLine" id="cb22-3" title="3">    update(routes(url).unwrap(), &amp;<span class="kw">mut</span> model, orders);</a>
-<a class="sourceLine" id="cb22-4" title="4">    model</a>
-<a class="sourceLine" id="cb22-5" title="5"><span class="op">}</span></a>
-<a class="sourceLine" id="cb22-6" title="6"></a>
-<a class="sourceLine" id="cb22-7" title="7"><span class="at">#[</span>wasm_bindgen<span class="at">(</span>start<span class="at">)]</span></a>
-<a class="sourceLine" id="cb22-8" title="8"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
-<a class="sourceLine" id="cb22-9" title="9">    <span class="pp">seed::App::</span>build(init, update, view)</a>
-<a class="sourceLine" id="cb22-10" title="10">        .finish()</a>
-<a class="sourceLine" id="cb22-11" title="11">        .run();</a>
-<a class="sourceLine" id="cb22-12" title="12"><span class="op">}</span></a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb22-1" title="1"><span class="kw">fn</span> init(url: Url, orders: &amp;<span class="kw">mut</span> <span class="kw">impl</span> Orders&lt;Msg&gt;) -&gt; Init&lt;Model&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb22-2" title="2">    <span class="pp">Init::</span>new(<span class="pp">Model::</span><span class="kw">default</span>())</a>
+<a class="sourceLine" id="cb22-3" title="3"><span class="op">}</span></a>
+<a class="sourceLine" id="cb22-4" title="4"></a>
+<a class="sourceLine" id="cb22-5" title="5"><span class="at">#[</span>wasm_bindgen<span class="at">(</span>start<span class="at">)]</span></a>
+<a class="sourceLine" id="cb22-6" title="6"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
+<a class="sourceLine" id="cb22-7" title="7">    <span class="pp">seed::App::</span>build(init, update, view)</a>
+<a class="sourceLine" id="cb22-8" title="8">        .finish()</a>
+<a class="sourceLine" id="cb22-9" title="9">        .run();</a>
+<a class="sourceLine" id="cb22-10" title="10"><span class="op">}</span></a></code></pre></div>
 <p>This will render your app to the element holding the id you passed; in the case of this example, “main”. The only part of the web page Seed will interact with is that element, so you can use other HTML not part of Seed, or other JS code/frameworks in the same document.</p>
 "#####.into()
 }

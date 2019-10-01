@@ -461,15 +461,11 @@ fn routes(url: seed::Url) -> Option<Msg> {
     })
 }
 
-fn init(url: Url, orders: &mut impl Orders<Msg>) -> Model {
-    let mut model = Model::default();
-    update(routes(url).unwrap(), &mut model, orders);
-    model
-}
 
 #[wasm_bindgen(start)]
 pub fn render() {
-    seed::App::build(init, update, view)
+        seed::App::build(|_, _| Init::new(Model::default()), update, view)
+
         .routes(routes)
         .finish()
         .run();

@@ -395,7 +395,7 @@ Example, with optional methods:
 ```rust
 #[wasm_bindgen(start)]
 pub fn render() {
-    seed::App::build(|_, _| Model::default(), update, view)
+    seed::App::build(|_, _| Init::new(Model::default()), update, view)
         .mount("main")
         .routes(routes)
         .window_events(window_events)
@@ -406,10 +406,8 @@ pub fn render() {
 
 Example of using a standalone `init` function:
 ```rust
-fn init(url: Url, orders: &mut impl Orders<Msg>) -> Model {
-    let mut model = Model::default();
-    update(routes(url).unwrap(), &mut model, orders);
-    model
+fn init(url: Url, orders: &mut impl Orders<Msg>) -> Init<Model> {
+    Init::new(Model::default())
 }
 
 #[wasm_bindgen(start)]

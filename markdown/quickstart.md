@@ -54,9 +54,8 @@ edition = "2018"
 crate-type = ["cdylib"]
 
 [dependencies]
-seed = "^0.3.4"
-wasm-bindgen = "^0.2.38"
-web-sys = "^0.3.6"
+seed = "^0.4.1"
+wasm-bindgen = "^0.2.50"
 ```
 
 ## A short example
@@ -162,7 +161,7 @@ fn view(model: &Model) -> impl View<Msg> {
 
 #[wasm_bindgen(start)]
 pub fn render() {
-    seed::App::build(|_, _| Model::default(), update, view)
+    seed::App::build(|_, _| Init::new(Model::default()), update, view)
         .finish()
         .run();
 }
