@@ -134,54 +134,5 @@ r#####"
 <a class="sourceLine" id="cb3-57" title="57">    <span class="op">]</span></a>
 <a class="sourceLine" id="cb3-58" title="58"><span class="op">}</span></a></code></pre></div>
 <p>Reference the <code>Request</code> API docs (linked above) for a full list of methods available to configure the request, and links to the <code>MDN</code> docs describing them. (eg: <code>credentials</code>, <code>mode</code>, <code>integrity</code>)</p>
-<h2 id="updating-state">Updating state</h2>
-<h2 id="todo-this-section-is-out-of-date-and-the-behavior-it-describes-will-change-in-the-future.">Todo: This section is out of date, and the behavior it describes will change in the future.</h2>
-<p>To update the model outside of the element-based event system, we call <code>update_state</code> on our state var, which is the first parameter in our view func. A consequence of this is that we must pass state to any components that need to update state in this way. This may require calling <code>state.clone()</code>, to use it in multiple places. Note that we also need to prepend our closures with <code>move</code>, as above, any time <code>state</code> is used in one.</p>
-<p>Here’s an example of using set_interval to update the state once every second. It uses <code>seed::set_interval</code>. <code>seed::set_timeout</code> also exists, and works the same way:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">fn</span> view(model: &amp;Model) -&gt; Node&lt;Msg&gt;&gt; <span class="op">{</span>  </a>
-<a class="sourceLine" id="cb4-2" title="2">    <span class="pp">div!</span><span class="op">[</span></a>
-<a class="sourceLine" id="cb4-3" title="3">        did_mount(<span class="kw">move</span> |_| <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-4" title="4">            <span class="kw">let</span> state2 = state.clone();</a>
-<a class="sourceLine" id="cb4-5" title="5"></a>
-<a class="sourceLine" id="cb4-6" title="6">            <span class="kw">let</span> callback = <span class="kw">move</span> || <span class="op">{</span></a>
-<a class="sourceLine" id="cb4-7" title="7">                state2.update(<span class="pp">Msg::</span>Increment);</a>
-<a class="sourceLine" id="cb4-8" title="8">            <span class="op">}</span>;</a>
-<a class="sourceLine" id="cb4-9" title="9"></a>
-<a class="sourceLine" id="cb4-10" title="10">            <span class="pp">seed::</span>set_interval(<span class="dt">Box</span>::new(callback), <span class="dv">1000</span>);</a>
-<a class="sourceLine" id="cb4-11" title="11">        <span class="op">}</span>),</a>
-<a class="sourceLine" id="cb4-12" title="12">        </a>
-<a class="sourceLine" id="cb4-13" title="13">        <span class="pp">button!</span><span class="op">[</span></a>
-<a class="sourceLine" id="cb4-14" title="14">            simple_ev(<span class="pp">Ev::</span>Click, <span class="pp">Msg::</span>Increment),</a>
-<a class="sourceLine" id="cb4-15" title="15">            <span class="pp">format!</span>(<span class="st">&quot;Hello, World × {}&quot;</span>, model.val)</a>
-<a class="sourceLine" id="cb4-16" title="16">        <span class="op">]</span></a>
-<a class="sourceLine" id="cb4-17" title="17">    <span class="op">]</span></a>
-<a class="sourceLine" id="cb4-18" title="18"><span class="op">}</span></a></code></pre></div>
-<p><code>App::build</code> returns an instance of <code>seed::App</code>, which we can use to updated state from the <code>render</code> function. Example:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">fn</span> open_websockets(state: <span class="pp">seed::</span>App&lt;Msg, Model&gt;) <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-2" title="2"></a>
-<a class="sourceLine" id="cb5-3" title="3">  <span class="co">// setup websockets ...</span></a>
-<a class="sourceLine" id="cb5-4" title="4"></a>
-<a class="sourceLine" id="cb5-5" title="5">  <span class="kw">let</span> on_message = <span class="dt">Box</span>::new(<span class="kw">move</span>|ev: MessageEvent| <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-6" title="6">    <span class="kw">let</span> txt = ev.data().as_string().unwrap();</a>
-<a class="sourceLine" id="cb5-7" title="7">    <span class="kw">let</span> json: JsonMsg = <span class="pp">serde_json::</span>from_str(&amp;text).unwrap();</a>
-<a class="sourceLine" id="cb5-8" title="8">    state.update(<span class="pp">Msg::</span>Json(json));</a>
-<a class="sourceLine" id="cb5-9" title="9">  <span class="op">}</span>);</a>
-<a class="sourceLine" id="cb5-10" title="10"><span class="op">}</span></a>
-<a class="sourceLine" id="cb5-11" title="11"></a>
-<a class="sourceLine" id="cb5-12" title="12"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-13" title="13">    <span class="kw">let</span> state = <span class="pp">App::</span>build(<span class="pp">Model::</span><span class="kw">default</span>(), update, view)</a>
-<a class="sourceLine" id="cb5-14" title="14">        .finish()</a>
-<a class="sourceLine" id="cb5-15" title="15">        .run();</a>
-<a class="sourceLine" id="cb5-16" title="16">    open_websockets(state);</a>
-<a class="sourceLine" id="cb5-17" title="17"><span class="op">}</span></a></code></pre></div>
-<p>Re-examining our initial example, instead of loading the data when the top-level element mounts, we can load it in <code>render</code> like this:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb6-1" title="1"><span class="at">#[</span>wasm_bindgen<span class="at">]</span></a>
-<a class="sourceLine" id="cb6-2" title="2"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
-<a class="sourceLine" id="cb6-3" title="3">    <span class="kw">let</span> state = <span class="pp">seed::App::</span>build(<span class="pp">Model::</span><span class="kw">default</span>(), update, view)</a>
-<a class="sourceLine" id="cb6-4" title="4">        .finish()</a>
-<a class="sourceLine" id="cb6-5" title="5">        .run();</a>
-<a class="sourceLine" id="cb6-6" title="6"></a>
-<a class="sourceLine" id="cb6-7" title="7">    spawn_local(get_data(state));</a>
-<a class="sourceLine" id="cb6-8" title="8"><span class="op">}</span></a></code></pre></div>
 "#####.into()
 }
