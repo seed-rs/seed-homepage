@@ -358,8 +358,23 @@ let my_el = div![]
     .add_class("complete")
     .add_attr("alt".to_string(), "a description".to_string())
     .add_style(St::Height, "20px".to_string())
-    .replace_text("OOps, not complete");
+    .replace_text("Oops, not complete");oo
 
+```
+
+## Svg
+You can create `SVG` elements in the same way as normal `Html` elements:
+```rust
+svg![
+    rect![
+        attrs!{
+            At::X => "5",
+            At::Y =>"5",
+            At::Width => "20",
+            At::Height => "20",
+        }
+    ]
+];
 ```
 
 ## Initializing

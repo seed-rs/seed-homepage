@@ -1,7 +1,8 @@
 pub fn text() -> String {
 r#####"
-<h1 id="http-requests-fetch-and-updating-state">Http requests (fetch), and updating state</h1>
+<h1 id="http-requests-fetch">HTTP Requests (fetch)</h1>
 <p>We use the <a href="https://docs.rs/seed/0.4.0/seed/fetch/struct.Request.html">seed::Request</a> struct to make HTTP requests in the browser, wrapping the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>. To use this, we need to include <code>futures = &quot;^0.1.26&quot;</code> in <code>Cargo.toml</code>. The <a href="https://docs.rs/seed/0.4.0/seed/fetch/index.html">Fetch module</a> is standalone: It can be used with any wasm-bindgen program.</p>
+<h2 id="receiving-data">Receiving data</h2>
 <p>Example, where we update the state on initial load (similar to the <a href="https://github.com/David-OConnor/seed/tree/master/examples/server_interaction">server_interaction example</a> ) from a server. It demonstrates a <code>GET</code> request, and deserializing JSON data. The <code>server_interaction</code> example contains more sample code.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">use</span> <span class="pp">futures::</span>Future;</a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="kw">use</span> <span class="pp">serde::</span><span class="op">{</span>Serialize, Deserialize<span class="op">}</span>;</a>
@@ -74,6 +75,7 @@ r#####"
 <a class="sourceLine" id="cb2-7" title="7">        <span class="pp">button!</span><span class="op">[</span> raw_ev(<span class="pp">Ev::</span>Click, <span class="kw">move</span> |_| <span class="pp">Msg::</span>FetchData), <span class="st">&quot;Update&quot;</span><span class="op">]</span></a>
 <a class="sourceLine" id="cb2-8" title="8">    <span class="op">]</span></a>
 <a class="sourceLine" id="cb2-9" title="9"><span class="op">}</span></a></code></pre></div>
+<h2 id="sending-data">Sending data</h2>
 <p>Example showing a POST request where we send data to a server and receive the response, and a header:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="at">#[</span>derive<span class="at">(</span>Serialize<span class="at">)]</span></a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="kw">struct</span> RequestBody <span class="op">{</span></a>
@@ -90,7 +92,7 @@ r#####"
 <a class="sourceLine" id="cb3-13" title="13"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></a>
 <a class="sourceLine" id="cb3-14" title="14"><span class="kw">enum</span> Msg <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-15" title="15">    SendMessage,</a>
-<a class="sourceLine" id="cb3-16" title="16">    MessageSent(<span class="pp">seed::fetch::</span>ResponseDataResult&lt;SendMessageResponseBody&gt;),</a>
+<a class="sourceLine" id="cb3-16" title="16">    MessageSent(<span class="pp">seed::fetch::</span>ResponseDataResult&lt;ResponseBody&gt;),</a>
 <a class="sourceLine" id="cb3-17" title="17"><span class="op">}</span></a>
 <a class="sourceLine" id="cb3-18" title="18"></a>
 <a class="sourceLine" id="cb3-19" title="19"><span class="kw">fn</span> update(msg: Msg, model: &amp;<span class="kw">mut</span> Model, orders: &amp;<span class="kw">mut</span> <span class="kw">impl</span> Orders&lt;Msg&gt;) <span class="op">{</span></a>

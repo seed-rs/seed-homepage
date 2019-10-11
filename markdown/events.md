@@ -1,6 +1,6 @@
 # Events
 Events are created by passing [Listener](https://docs.rs/seed/0.1.6/seed/dom_types/struct.Listener.html)s,
-or vecs of Listeners into `El` macros. They're created using the following functions exposed in the prelude: `simple_ev`,
+or vecs of Listeners into `Node` macros. They're created using the following functions exposed in the prelude: `simple_ev`,
 `input_ev`, `keyboard_ev`, `mouse_ev`, and `raw_ev`. The first is demonstrated in the example in the quickstart section,
 and all are demonstrated in the todomvc example.
 
@@ -87,11 +87,11 @@ input_ev("input", move |text| Msg::NewWords(text, 0))
 `raw_ev` returns a [web_sys::Event](https://rustwasm.github.io/wasm-bindgen/api/web_sys/struct.Event.html). 
 It lets you access any part of any type of
 event, albeit with more verbose syntax.
-If you wish to do something like prevent_default(), or anything not listed above, 
+If you wish to do something like `prevent_default()`, or anything not listed above, 
 you may need to take this approach. Note that for many common operations, like taking
 the value of an input element after an `input` or `change` event, you have to deal with
 casting from a generic event or target to the specific one. Seed provides convenience
-functions to handle this. They wrap wasm-bindgen's .dyn_ref(), from its
+functions to handle this. They wrap wasm-bindgen's `.dyn_ref()`, from its
 [JsCast](https://rustwasm.github.io/wasm-bindgen/api/wasm_bindgen/trait.JsCast.html) trait.
 
 Example syntax showing how you might use raw_ev; processing an input and handling a keyboard
@@ -116,11 +116,11 @@ and `to_mouse_event`, which you'd use like `to_kbevent`.
 
 This extra step is caused by a conflict between Rust's type system, and the way DOM events
 are handled. For example, you may wish to pull text from an input field by reading the event target's
-value field. However, not all targets contain value; it may have to be represented as
+`value` field. However, not all targets contain value; it may have to be represented as
 an `HtmlInputElement`. (See [the web-sys ref](https://rustwasm.github.io/wasm-bindgen/api/web_sys/struct.EventTarget.html), 
 and [Mdn ref](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget); there's no value field)) Another example:
-If we wish to read the key_code of an event, we must first cast it as a KeyboardEvent; pure Events
-(web_sys and DOM) do not contain this field.
+If we wish to read the key_code of an event, we must first cast it as a `KeyboardEvent`; pure Events
+(`web_sys` and DOM) do not contain this field.
 
 It's likely you'll be able to do most of what you wish with the simpler event funcs.
 If there's a type of event or use you think would benefit from a similar func, submit

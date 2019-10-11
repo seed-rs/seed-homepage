@@ -1,9 +1,11 @@
-# Http requests (fetch), and updating state
+# HTTP Requests (fetch)
 
 We use the [seed::Request](https://docs.rs/seed/0.1.12/seed/fetch/struct.Request.html) struct
 to make HTTP requests in the browser, wrapping the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
 To use this, we need to include `futures = "^0.1.26"` in `Cargo.toml`. The [Fetch module](https://docs.rs/seed/0.2.3/seed/fetch/index.html)
 is standalone: It can be used with any wasm-bindgen program.
+
+## Receiving data
 
 Example, where we update the state on initial load (similar to the 
 [server_interaction example](https://github.com/David-OConnor/seed/tree/master/examples/server_interaction)
@@ -100,6 +102,8 @@ fn view(model: &Model) -> Vec<Node<Msg>> {
 }
 ```
 
+## Sending data
+
 Example showing a POST request where we send data to a server and receive the response, 
 and a header:
 ```rust
@@ -118,7 +122,7 @@ struct ResponseBody {
 #[derive(Clone)]
 enum Msg {
     SendMessage,
-    MessageSent(seed::fetch::ResponseDataResult<SendMessageResponseBody>),
+    MessageSent(seed::fetch::ResponseDataResult<ResponseBody>),
 }
 
 fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {

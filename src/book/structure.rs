@@ -203,7 +203,19 @@ r#####"
 <a class="sourceLine" id="cb19-3" title="3">    .add_class(<span class="st">&quot;complete&quot;</span>)</a>
 <a class="sourceLine" id="cb19-4" title="4">    .add_attr(<span class="st">&quot;alt&quot;</span>.to_string(), <span class="st">&quot;a description&quot;</span>.to_string())</a>
 <a class="sourceLine" id="cb19-5" title="5">    .add_style(<span class="pp">St::</span>Height, <span class="st">&quot;20px&quot;</span>.to_string())</a>
-<a class="sourceLine" id="cb19-6" title="6">    .replace_text(<span class="st">&quot;OOps, not complete&quot;</span>);</a></code></pre></div>
+<a class="sourceLine" id="cb19-6" title="6">    .replace_text(<span class="st">&quot;Oops, not complete&quot;</span>);oo</a></code></pre></div>
+<h2 id="svg">Svg</h2>
+<p>You can create <code>SVG</code> elements in the same way as normal <code>Html</code> elements:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb20-1" title="1"><span class="pp">svg!</span><span class="op">[</span></a>
+<a class="sourceLine" id="cb20-2" title="2">    <span class="pp">rect!</span><span class="op">[</span></a>
+<a class="sourceLine" id="cb20-3" title="3">        <span class="pp">attrs!</span><span class="op">{</span></a>
+<a class="sourceLine" id="cb20-4" title="4">            <span class="pp">At::</span>X =&gt; <span class="st">&quot;5&quot;</span>,</a>
+<a class="sourceLine" id="cb20-5" title="5">            <span class="pp">At::</span>Y =&gt;<span class="st">&quot;5&quot;</span>,</a>
+<a class="sourceLine" id="cb20-6" title="6">            <span class="pp">At::</span>Width =&gt; <span class="st">&quot;20&quot;</span>,</a>
+<a class="sourceLine" id="cb20-7" title="7">            <span class="pp">At::</span>Height =&gt; <span class="st">&quot;20&quot;</span>,</a>
+<a class="sourceLine" id="cb20-8" title="8">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb20-9" title="9">    <span class="op">]</span></a>
+<a class="sourceLine" id="cb20-10" title="10"><span class="op">]</span>;</a></code></pre></div>
 <h2 id="initializing">Initializing</h2>
 <p>To start your app, call the <code>seed::App::build</code> method, which takes the following parameters:</p>
 <ul>
@@ -224,26 +236,26 @@ r#####"
 )</code></pre>
 <p>The <code>seed::App::build</code> call must be wrapped in a function with the <code>#[wasm_bindgen(start)]</code> invocation.</p>
 <p>Example, with optional methods:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb21-1" title="1"><span class="at">#[</span>wasm_bindgen<span class="at">(</span>start<span class="at">)]</span></a>
-<a class="sourceLine" id="cb21-2" title="2"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
-<a class="sourceLine" id="cb21-3" title="3">    <span class="pp">seed::App::</span>build(|_, _| <span class="pp">Init::</span>new(<span class="pp">Model::</span><span class="kw">default</span>()), update, view)</a>
-<a class="sourceLine" id="cb21-4" title="4">        .mount(<span class="st">&quot;main&quot;</span>)</a>
-<a class="sourceLine" id="cb21-5" title="5">        .routes(routes)</a>
-<a class="sourceLine" id="cb21-6" title="6">        .window_events(window_events)</a>
-<a class="sourceLine" id="cb21-7" title="7">        .finish()</a>
-<a class="sourceLine" id="cb21-8" title="8">        .run();</a>
-<a class="sourceLine" id="cb21-9" title="9"><span class="op">}</span></a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb22-1" title="1"><span class="at">#[</span>wasm_bindgen<span class="at">(</span>start<span class="at">)]</span></a>
+<a class="sourceLine" id="cb22-2" title="2"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
+<a class="sourceLine" id="cb22-3" title="3">    <span class="pp">seed::App::</span>build(|_, _| <span class="pp">Init::</span>new(<span class="pp">Model::</span><span class="kw">default</span>()), update, view)</a>
+<a class="sourceLine" id="cb22-4" title="4">        .mount(<span class="st">&quot;main&quot;</span>)</a>
+<a class="sourceLine" id="cb22-5" title="5">        .routes(routes)</a>
+<a class="sourceLine" id="cb22-6" title="6">        .window_events(window_events)</a>
+<a class="sourceLine" id="cb22-7" title="7">        .finish()</a>
+<a class="sourceLine" id="cb22-8" title="8">        .run();</a>
+<a class="sourceLine" id="cb22-9" title="9"><span class="op">}</span></a></code></pre></div>
 <p>Example of using a standalone <code>init</code> function:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb22-1" title="1"><span class="kw">fn</span> init(url: Url, orders: &amp;<span class="kw">mut</span> <span class="kw">impl</span> Orders&lt;Msg&gt;) -&gt; Init&lt;Model&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb22-2" title="2">    <span class="pp">Init::</span>new(<span class="pp">Model::</span><span class="kw">default</span>())</a>
-<a class="sourceLine" id="cb22-3" title="3"><span class="op">}</span></a>
-<a class="sourceLine" id="cb22-4" title="4"></a>
-<a class="sourceLine" id="cb22-5" title="5"><span class="at">#[</span>wasm_bindgen<span class="at">(</span>start<span class="at">)]</span></a>
-<a class="sourceLine" id="cb22-6" title="6"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
-<a class="sourceLine" id="cb22-7" title="7">    <span class="pp">seed::App::</span>build(init, update, view)</a>
-<a class="sourceLine" id="cb22-8" title="8">        .finish()</a>
-<a class="sourceLine" id="cb22-9" title="9">        .run();</a>
-<a class="sourceLine" id="cb22-10" title="10"><span class="op">}</span></a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb23-1" title="1"><span class="kw">fn</span> init(url: Url, orders: &amp;<span class="kw">mut</span> <span class="kw">impl</span> Orders&lt;Msg&gt;) -&gt; Init&lt;Model&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb23-2" title="2">    <span class="pp">Init::</span>new(<span class="pp">Model::</span><span class="kw">default</span>())</a>
+<a class="sourceLine" id="cb23-3" title="3"><span class="op">}</span></a>
+<a class="sourceLine" id="cb23-4" title="4"></a>
+<a class="sourceLine" id="cb23-5" title="5"><span class="at">#[</span>wasm_bindgen<span class="at">(</span>start<span class="at">)]</span></a>
+<a class="sourceLine" id="cb23-6" title="6"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
+<a class="sourceLine" id="cb23-7" title="7">    <span class="pp">seed::App::</span>build(init, update, view)</a>
+<a class="sourceLine" id="cb23-8" title="8">        .finish()</a>
+<a class="sourceLine" id="cb23-9" title="9">        .run();</a>
+<a class="sourceLine" id="cb23-10" title="10"><span class="op">}</span></a></code></pre></div>
 <p>This will render your app to the element holding the id you passed; in the case of this example, “main”. The only part of the web page Seed will interact with is that element, so you can use other HTML not part of Seed, or other JS code/frameworks in the same document.</p>
 "#####.into()
 }

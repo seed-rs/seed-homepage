@@ -1,9 +1,10 @@
 # Misc features
 
 ## Logging in the web browser
-To output to the web browser's console (ie `console.log()` in JS), use `web_sys::console_log1`,
-or the `log` macro that wraps it, which is imported in the seed prelude: 
-`log!("On the shoulders of", 5, "giants".to_string())`
+To output to the web browser's console (ie `console.log()` in JS), use 
+ the `log!`, which is imported in the seed prelude: 
+`log!("On the shoulders of", 5, "giants".to_string())`. You can use the `error!` macro
+in a similar way, equivalent to JS's `console.error()`.
 
 ## Custom tags
 Seed generally retricts the element tags allowed by using Enums for the tags, and
@@ -52,11 +53,11 @@ let data = serde_json::from_str(&loaded_serialized).unwrap();
 
 ## Display markdown and raw HTML
 Seed supports creating elements from markdown text, using [pulldown-cmark](https://github.com/raphlinus/pulldown-cmark)
-internally. Use the [El::from_markdown()](https://docs.rs/seed/0.1.6/seed/dom_types/struct.El.html#method.from_markdown)
+internally. Use the [Node::from_markdown()](https://docs.rs/seed/0.1.6/seed/dom_types/struct.Node.html#method.from_markdown)
 method to create an element that accepts a markdown &str as its only parameter, and displays
 it normally as html. Note that it does not support syntax highlighting. You can render raw HTML with `El::from_html(html)`, where `html` is a 
 &str of HTML. You can also use the `raw!` and `md!` macros for `from_html` and 
-`from_markdown1` respectively.
+`from_markdown` respectively.
 
 Example:
 ```rust
@@ -81,11 +82,20 @@ and just [learn to code](https://play.rust-lang.org/).
 ;
     
     vec![
-        El::from_markdown(markdown)   // or md!(markdown)
-        El::from_html(html)  // or raw!(html)
+        Node::from_markdown(markdown)   // or md!(markdown)
+        Node::from_html(html)  // or raw!(html)
     ]
 }
+```
 
+This works for SVG as well:
+```rust
+fn view(model: &Model) -> Impl View<Msg> {
+    Node::from_html(
+r#"<svg xmlns="http://www.w3.org/2000/svg">
+    <rect x="5" y="5" width="20" height="20"></rect>
+</svg>"#)
+}
 ```
 
 ## Using `web_sys` to view element data.

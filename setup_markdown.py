@@ -23,7 +23,7 @@ def main():
         "events",
         "components",
         "fetch",
-        "lifecycle",
+        # "lifecycle",
         "routing",
         "release_and_debugging",
         "complex_apps",
