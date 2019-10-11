@@ -1,7 +1,7 @@
 pub fn text() -> String {
 r#####"
 <h2 id="building-a-release-version">Building a release version</h2>
-<p>The build commands in the Building and Running section are intended for development: They produce large <code>.wasm</code> file sizes, and unoptimized performance. To build a release version, run <code>cargo make all_release</code> instead of <code>cargo make all</code>.</p>
+<p>The build commands in the Building and Running section are intended for development: They produce large <code>.wasm</code> file sizes, and unoptimized performance. To build a release version, run <code>cargo make build_release</code> instead of <code>cargo make build</code>.</p>
 <h2 id="debugging">Debugging</h2>
 <p>There are two categories of error message you may receive: Compiler errors, and panics. I’m using a different definition than the one in <a href="https://doc.rust-lang.org/book/ch09-00-error-handling.html">this section of the Rust book</a>.</p>
 <p>1: Compiler errors are occur while building, and will be displayed in the terminal after running <code>cargo build</code>, or calling build script. Rust’s compiler usually provides helpful messages, so try to work through these using the information available. It attempts to highlight which part of your code triggered the error, and suggest fixes. Examples include syntax errors, using the wrong type of parameter, calling something that doesn’t exist, and running afoul of the borrow checker.</p>

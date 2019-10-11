@@ -69,8 +69,7 @@ fn view(model: &Model) -> Vec<Node<Msg>> {
 
 Let's set the existence-of-God issue aside for a later volume,
 and just [learn to code](https://play.rust-lang.org/).
-"
-;
+";
 
     let html = 
 "
@@ -78,8 +77,7 @@ and just [learn to code](https://play.rust-lang.org/).
     <p>It is a truth universally acknowledged, that a single man in 
     possession of a good fortune, must be in want of a good time.</p>
 </div>
-"
-;
+";
     
     vec![
         Node::from_markdown(markdown)   // or md!(markdown)
@@ -92,9 +90,11 @@ This works for SVG as well:
 ```rust
 fn view(model: &Model) -> Impl View<Msg> {
     Node::from_html(
-r#"<svg xmlns="http://www.w3.org/2000/svg">
+r#"
+<svg xmlns="http://www.w3.org/2000/svg">
     <rect x="5" y="5" width="20" height="20"></rect>
-</svg>"#)
+</svg>
+"#)
 }
 ```
 

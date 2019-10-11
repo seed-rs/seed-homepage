@@ -1,7 +1,7 @@
 ## Building a release version
 The build commands in the Building and Running section are intended
 for development: They produce large `.wasm` file sizes, and unoptimized performance.
-To build a release version, run `cargo make all_release` instead of `cargo make all`.
+To build a release version, run `cargo make build_release` instead of `cargo make build`.
 
 ## Debugging
 There are two categories of error message you may receive: Compiler errors, and panics.

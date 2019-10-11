@@ -44,30 +44,30 @@ r#####"
 <a class="sourceLine" id="cb3-6" title="6"></a>
 <a class="sourceLine" id="cb3-7" title="7"><span class="st">Let&#39;s set the existence-of-God issue aside for a later volume,</span></a>
 <a class="sourceLine" id="cb3-8" title="8"><span class="st">and just [learn to code](https://play.rust-lang.org/).</span></a>
-<a class="sourceLine" id="cb3-9" title="9"><span class="st">&quot;</span></a>
-<a class="sourceLine" id="cb3-10" title="10">;</a>
-<a class="sourceLine" id="cb3-11" title="11"></a>
-<a class="sourceLine" id="cb3-12" title="12">    <span class="kw">let</span> html = </a>
-<a class="sourceLine" id="cb3-13" title="13"><span class="st">&quot;</span></a>
-<a class="sourceLine" id="cb3-14" title="14"><span class="st">&lt;div&gt;</span></a>
-<a class="sourceLine" id="cb3-15" title="15"><span class="st">    &lt;p&gt;It is a truth universally acknowledged, that a single man in </span></a>
-<a class="sourceLine" id="cb3-16" title="16"><span class="st">    possession of a good fortune, must be in want of a good time.&lt;/p&gt;</span></a>
-<a class="sourceLine" id="cb3-17" title="17"><span class="st">&lt;/div&gt;</span></a>
-<a class="sourceLine" id="cb3-18" title="18"><span class="st">&quot;</span></a>
-<a class="sourceLine" id="cb3-19" title="19">;</a>
-<a class="sourceLine" id="cb3-20" title="20">    </a>
-<a class="sourceLine" id="cb3-21" title="21">    <span class="pp">vec!</span><span class="op">[</span></a>
-<a class="sourceLine" id="cb3-22" title="22">        <span class="pp">Node::</span>from_markdown(markdown)   <span class="co">// or md!(markdown)</span></a>
-<a class="sourceLine" id="cb3-23" title="23">        <span class="pp">Node::</span>from_html(html)  <span class="co">// or raw!(html)</span></a>
-<a class="sourceLine" id="cb3-24" title="24">    <span class="op">]</span></a>
-<a class="sourceLine" id="cb3-25" title="25"><span class="op">}</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-9" title="9"><span class="st">&quot;</span>;</a>
+<a class="sourceLine" id="cb3-10" title="10"></a>
+<a class="sourceLine" id="cb3-11" title="11">    <span class="kw">let</span> html = </a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb3-13" title="13"><span class="st">&lt;div&gt;</span></a>
+<a class="sourceLine" id="cb3-14" title="14"><span class="st">    &lt;p&gt;It is a truth universally acknowledged, that a single man in </span></a>
+<a class="sourceLine" id="cb3-15" title="15"><span class="st">    possession of a good fortune, must be in want of a good time.&lt;/p&gt;</span></a>
+<a class="sourceLine" id="cb3-16" title="16"><span class="st">&lt;/div&gt;</span></a>
+<a class="sourceLine" id="cb3-17" title="17"><span class="st">&quot;</span>;</a>
+<a class="sourceLine" id="cb3-18" title="18">    </a>
+<a class="sourceLine" id="cb3-19" title="19">    <span class="pp">vec!</span><span class="op">[</span></a>
+<a class="sourceLine" id="cb3-20" title="20">        <span class="pp">Node::</span>from_markdown(markdown)   <span class="co">// or md!(markdown)</span></a>
+<a class="sourceLine" id="cb3-21" title="21">        <span class="pp">Node::</span>from_html(html)  <span class="co">// or raw!(html)</span></a>
+<a class="sourceLine" id="cb3-22" title="22">    <span class="op">]</span></a>
+<a class="sourceLine" id="cb3-23" title="23"><span class="op">}</span></a></code></pre></div>
 <p>This works for SVG as well:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">fn</span> view(model: &amp;Model) -&gt; Impl View&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb4-2" title="2">    <span class="pp">Node::</span>from_html(</a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="st">r#&quot;&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;</span></a>
-<a class="sourceLine" id="cb4-4" title="4"><span class="st">    &lt;rect x=&quot;5&quot; y=&quot;5&quot; width=&quot;20&quot; height=&quot;20&quot;&gt;&lt;/rect&gt;</span></a>
-<a class="sourceLine" id="cb4-5" title="5"><span class="st">&lt;/svg&gt;&quot;#</span>)</a>
-<a class="sourceLine" id="cb4-6" title="6"><span class="op">}</span></a></code></pre></div>
+<a class="sourceLine" id="cb4-3" title="3"><span class="st">r#&quot;</span></a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="st">&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;</span></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="st">    &lt;rect x=&quot;5&quot; y=&quot;5&quot; width=&quot;20&quot; height=&quot;20&quot;&gt;&lt;/rect&gt;</span></a>
+<a class="sourceLine" id="cb4-6" title="6"><span class="st">&lt;/svg&gt;</span></a>
+<a class="sourceLine" id="cb4-7" title="7"><span class="st">&quot;#</span>)</a>
+<a class="sourceLine" id="cb4-8" title="8"><span class="op">}</span></a></code></pre></div>
 <h2 id="using-web_sys-to-view-element-data.">Using <code>web_sys</code> to view element data.</h2>
 <p><code>web_sys</code>, which Seed uses internally, can be used to view information about elements. For example:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">fn</span> get_height(id: &amp;<span class="dt">str</span>) -&gt; <span class="dt">i32</span> <span class="op">{</span>    </a>
