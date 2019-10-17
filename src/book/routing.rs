@@ -71,13 +71,12 @@ r#####"
 <a class="sourceLine" id="cb5-24" title="24">        <span class="co">// This is separate, because nagivating the route triggers state updates, which would</span></a>
 <a class="sourceLine" id="cb5-25" title="25">        <span class="co">// trigger an additional push state.</span></a>
 <a class="sourceLine" id="cb5-26" title="26">        <span class="pp">Msg::</span>ChangePage(page) =&gt; model.page = page,</a>
-<a class="sourceLine" id="cb5-27" title="27">        <span class="pp">Msg::</span>ChangeGuidePage(guide_page) =&gt; Render(Model <span class="op">{</span>guide_page, page: <span class="pp">Page::</span>Guide, ..model<span class="op">}</span>),</a>
-<a class="sourceLine" id="cb5-28" title="28">        <span class="pp">Msg::</span>ChangeGuidePage(guide_page) =&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb5-29" title="29">            model.guide_page = page;</a>
-<a class="sourceLine" id="cb5-30" title="30">            model.page = <span class="pp">Page::</span>Guide;</a>
-<a class="sourceLine" id="cb5-31" title="31">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb5-32" title="32">    <span class="op">}</span></a>
-<a class="sourceLine" id="cb5-33" title="33"><span class="op">}</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-27" title="27">        <span class="pp">Msg::</span>ChangeGuidePage(guide_page) =&gt; <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-28" title="28">            model.guide_page = page;</a>
+<a class="sourceLine" id="cb5-29" title="29">            model.page = <span class="pp">Page::</span>Guide;</a>
+<a class="sourceLine" id="cb5-30" title="30">        <span class="op">}</span></a>
+<a class="sourceLine" id="cb5-31" title="31">    <span class="op">}</span></a>
+<a class="sourceLine" id="cb5-32" title="32"><span class="op">}</span></a></code></pre></div>
 <p>Notice how the <code>Route</code> messages above call <a href="https://docs.rs/seed/0.4.0/seed/routing/fn.push_route.html">seed::push_route</a>, and the <code>Change</code> messages are called in the <code>routes</code> function, and are recursively called in the update function. <code>push_route</code> accepts a single parameter: a <code>Url</code> struct, which you can create with a struct literal, or <a href="https://docs.rs/seed/0.4.0/seed/routing/struct.Url.html#method.new">seed::Url::new</a>. Alternatively, you can pass a <code>Vec&lt;String&gt;</code> / <code>Vec&lt;&amp;str&gt;</code>, representing the path.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb6-1" title="1"><span class="pp">seed::</span>push_route(</a>
 <a class="sourceLine" id="cb6-2" title="2">    <span class="pp">seed::Url::</span>new(<span class="pp">vec!</span><span class="op">[</span><span class="st">&quot;myurl&quot;</span><span class="op">]</span>)</a>
@@ -86,14 +85,8 @@ r#####"
 <a class="sourceLine" id="cb6-5" title="5">)</a></code></pre></div>
 <p>When a page is loaded or browser naviation occurs (eg back button), Seed uses the <code>routes</code> func you provided to determine which message to call.</p>
 <p>Notice how we keep ChangePage and RoutePage separate in our example. Do not call <code>push_route</code> from one of these messages, or you’ll end up with recusions/unwanted behavior: <code>ChangePage</code> in our example performs the action associated with routing, while <code>RoutePage</code> updates our route history, then recursively calls <code>ChangePage</code>. If you were to attempt this in the same message, each browser navigation event would add a redundant route history entry, interfering with navigation. `</p>
-<p>We call routing messages from in-app navigation events, like this:</p>
+<p>We can call routing messages from in-app navigation events, like this:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb7-1" title="1"><span class="pp">h2!</span><span class="op">[</span> simple_ev(<span class="pp">Ev::</span>Click, <span class="pp">Msg::</span>RoutePage(<span class="dv">0</span>)), <span class="st">&quot;Guide&quot;</span> <span class="op">]</span></a></code></pre></div>
-<p>Or programatically using lifecycle hooks:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb8-1" title="1">    did_mount(<span class="kw">move</span> |_| <span class="op">{</span></a>
-<a class="sourceLine" id="cb8-2" title="2">        <span class="kw">if</span> model.logged_in <span class="op">{</span></a>
-<a class="sourceLine" id="cb8-3" title="3">            state.update(<span class="pp">Msg::</span>RoutePage(<span class="dv">0</span>))</a>
-<a class="sourceLine" id="cb8-4" title="4">        <span class="op">}</span></a>
-<a class="sourceLine" id="cb8-5" title="5">    <span class="op">}</span>)</a></code></pre></div>
-<p>To make landing-page routing work, configure your server so that all relevant paths towards the root or html file, instead of returning an error. The <code>serve.py</code> script included in the quickstart repo and examples is set up for this. Once this is configured, intial routing on page load will work as expected: The page will initialize with the default state, then immediately update based on the message returned by the <code>routes</code> function.</p>
+<p>To make landing-page routing work, configure your server so that all relevant paths towards the root or html file, instead of returning an error. Running <code>cargo make serve</code> from the quickstart repo and examples is set up for this. The page will initialize with the default state, then immediately update based on the message returned by the <code>routes</code> function.</p>
 "#####.into()
 }

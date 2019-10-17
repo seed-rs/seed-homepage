@@ -9,14 +9,14 @@ in a similar way, equivalent to JS's `console.error()`.
 ## Custom tags
 Seed generally retricts the element tags allowed by using Enums for the tags, and
 a predefined set of element-creation macros. If you wish to use a custom tag, you can
-use using `Tag::Custom` (`El` and `Tag` are
+use using `Tag::from` (`El` and `Tag` are
 exposed in the prelude), either with the `El::empty` constructor, or using the `custom!`
 element-construction macro, where we pass our custom tag as an argument:
 ```rust
 let mut custom_el = El::empty(Tag::Custom("mytag".to_string()));
 custom_el.set_text("Words");
 
-custom![ Tag::Custom("anothertag".into())
+custom![ Tag::from("anothertag".into())
     custom_el,
 ]
 ```

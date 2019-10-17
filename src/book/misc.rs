@@ -4,11 +4,11 @@ r#####"
 <h2 id="logging-in-the-web-browser">Logging in the web browser</h2>
 <p>To output to the web browser’s console (ie <code>console.log()</code> in JS), use the <code>log!</code>, which is imported in the seed prelude: <code>log!(&quot;On the shoulders of&quot;, 5, &quot;giants&quot;.to_string())</code>. You can use the <code>error!</code> macro in a similar way, equivalent to JS’s <code>console.error()</code>.</p>
 <h2 id="custom-tags">Custom tags</h2>
-<p>Seed generally retricts the element tags allowed by using Enums for the tags, and a predefined set of element-creation macros. If you wish to use a custom tag, you can use using <code>Tag::Custom</code> (<code>El</code> and <code>Tag</code> are exposed in the prelude), either with the <code>El::empty</code> constructor, or using the <code>custom!</code> element-construction macro, where we pass our custom tag as an argument:</p>
+<p>Seed generally retricts the element tags allowed by using Enums for the tags, and a predefined set of element-creation macros. If you wish to use a custom tag, you can use using <code>Tag::from</code> (<code>El</code> and <code>Tag</code> are exposed in the prelude), either with the <code>El::empty</code> constructor, or using the <code>custom!</code> element-construction macro, where we pass our custom tag as an argument:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">let</span> <span class="kw">mut</span> custom_el = <span class="pp">El::</span>empty(<span class="pp">Tag::</span>Custom(<span class="st">&quot;mytag&quot;</span>.to_string()));</a>
 <a class="sourceLine" id="cb1-2" title="2">custom_el.set_text(<span class="st">&quot;Words&quot;</span>);</a>
 <a class="sourceLine" id="cb1-3" title="3"></a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="pp">custom!</span><span class="op">[</span> <span class="pp">Tag::</span>Custom(<span class="st">&quot;anothertag&quot;</span>.into())</a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="pp">custom!</span><span class="op">[</span> <span class="pp">Tag::</span>from(<span class="st">&quot;anothertag&quot;</span>.into())</a>
 <a class="sourceLine" id="cb1-5" title="5">    custom_el,</a>
 <a class="sourceLine" id="cb1-6" title="6"><span class="op">]</span></a></code></pre></div>
 <p>An example is provided as part of the <a href="https://github.com/David-OConnor/seed/tree/master/examples/todomvc">window_events</a> example.</p>
