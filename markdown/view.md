@@ -3,8 +3,8 @@
  Visual layout (ie HTML/DOM elements) is described declaratively in Rust, and uses 
 [macros]( https://doc.rust-lang.org/book/appendix-04-macros.html) to simplify syntax.
 
-The view's defined by a function that's passed to `seed::run`. This takes a `Seed::app<Msg, Model>`, and Model
-as parameters, and outputs something that implements the ` View` trait, which is imported in the prelude.
+The view's defined by a function that's passed to `seed::run`. This takes a `&Model`
+as its parameter, and outputs something that implements the ` View` trait, which is imported in the prelude.
 Usually, this is a `Node`, or `Vec<Node>`, representing all nodes that will be inserted as children
 on the top-level one. (The top-level `Node` is in the html file, and specified with
 `seed::App::build.mount()`, or as a default, the element with id `app`).
