@@ -87,16 +87,13 @@ Keys passed to `attrs!` can be `Seed::At`s, `String`s, or `&str`s.
 Keys passed to `style!` can be `Seed::St`s, `String`s, or `&str`s.
 Values passed to `attrs!`, and `style!` macros can 
 be owned `Strings`, `&str`s, or for `style!`, `unit`s. 
-Eg: `input![ attrs!{At::Disabled => false]` and `input![ attrs!{"disabled" => "false"]` 
-are equivalent. You use the `unit!` macro to apply units. There's a `px` function for the
+
+You use the `unit!` macro to apply units. There's a `px` function for the
 special case where the unit is pixels:
 ```rust
 style!{St::Width => unit!(20, px);}
 style!{St::Width => px(20);}  // equivalent
 ```
-
-For boolean attributes that are handled by presense or absense, like `disabled`,
-use can use `.as_at_value`: `input![ attrs!{At::Disabled => false.as_at_value() ]`
 
 We can set multiple values for an attribute using `Attribute.add_multiple`. This
 is useful for setting multiple classes. Note that we must set this up outside of
@@ -159,15 +156,19 @@ fn a_component() -> Node<Msg> {
 }
 ```
 
-Setting an InputElement's `checked`, or `autofocus` property is done through normal attributes:
+For boolean attributes that are handled by presense or absense, like `disabled`, `checked`,
+`autofocus` etc, use `.as_at_value`: `input![ attrs!{At::Disabled => false.as_at_value() ]`:
+
 ```rust
 fn a_component() -> Node<Msg> {
     // ...
-    input![ attrs!{At::Typed => "checkbox"; At::Checked => true} ]
-    input![ attrs!{At::Autofocus => true} ]
+    input![ attrs!{At::Typed => "checkbox"; At::Checked => true.as_at_value()} ]
+    input![ attrs!{At::Autofocus => true.as_at_value()} ]
     // ...
 }
 ```
+`At::Checked => true.as_at_value()` is equivalent to the presense of a `checked` attribute,
+and `At::Checked => false.as_at_value()` is equivalent to ommitting it.
 
 To change Attrs or Styles you've created, edit their .vals HashMap. To add
 a new part to them, use their .add method:

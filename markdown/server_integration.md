@@ -17,6 +17,7 @@ The [Engineering Rust Web Applications book](https://erwabook.com/)
  this book.
  
 Highlights:
+
 - We set up three crates, each with its own `Cargo.toml`: One each for server, client, and 
  shared code.
 - We place the shared data structures in a barebones third crate called `shared`.
@@ -27,8 +28,8 @@ Folder structure:
 ```
 project folder: 
  └── server: Our Rust server crate, in this case Rocket
- └── frontend: A normal Seed crate
- └── shared: Contains data structures shared between frontend and backend
+ └── client: A normal Seed crate
+ └── shared: Contains data structures shared between the server and client
  ```
 
 The top-level project folder contains a `Cargo.toml` that may look like this:
@@ -106,7 +107,7 @@ fn data_api() -> String {
 ```
 
 Client, showing how you might use the same struct as part of the model, and
-update it from the backend:
+update it from the server:
 ```rust
 use shared::Data;
 

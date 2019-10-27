@@ -4,12 +4,17 @@ r#####"
 <p>If pairing Seed with a Rust backend server, we can simplify passing data between server and frontend using a layout like that in the <a href="https://github.com/David-OConnor/seed/tree/master/examples/server_integration">server_integration example</a></p>
 <p>A key advantage of this approach is that you can reuse data structures, and code that operates on them on both client and server. We use <code>Serde</code> to elegantly, and mostly transparently, handle [de]serialization. For example, we can use use the same struct which represents a database model on a server in Seed, without redefining or changing it. This includes keeping the same methods on both server and client.</p>
 <p>The <a href="https://erwabook.com/">Engineering Rust Web Applications book</a> is an excellent resource showing a more detailed layout including a database using <a href="https://diesel.rs">Diesel</a>, as a step-by-step tutorial. You may wish to stop reading this page now, and skip directly to reading this book.</p>
-<p>Highlights: - We set up three crates, each with its own <code>Cargo.toml</code>: One each for server, client, and shared code. - We place the shared data structures in a barebones third crate called <code>shared</code>. - We set the server and client to use different ports</p>
+<p>Highlights:</p>
+<ul>
+<li>We set up three crates, each with its own <code>Cargo.toml</code>: One each for server, client, and shared code.</li>
+<li>We place the shared data structures in a barebones third crate called <code>shared</code>.</li>
+<li>We set the server and client to use different ports</li>
+</ul>
 <p>Folder structure:</p>
 <pre><code>project folder: 
  └── server: Our Rust server crate, in this case Rocket
- └── frontend: A normal Seed crate
- └── shared: Contains data structures shared between frontend and backend</code></pre>
+ └── client: A normal Seed crate
+ └── shared: Contains data structures shared between the server and client</code></pre>
 <p>The top-level project folder contains a <code>Cargo.toml</code> that may look like this:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="op">[</span>workspace<span class="op">]</span></a>
 <a class="sourceLine" id="cb2-2" title="2"></a>
@@ -64,7 +69,7 @@ diesel = { version = &quot;^1.4.2&quot;, features = [&quot;postgres&quot;] }</co
 <a class="sourceLine" id="cb6-9" title="9"></a>
 <a class="sourceLine" id="cb6-10" title="10">    <span class="pp">serde_json::</span>to_string(&amp;data).unwrap()</a>
 <a class="sourceLine" id="cb6-11" title="11"><span class="op">}</span></a></code></pre></div>
-<p>Client, showing how you might use the same struct as part of the model, and update it from the backend:</p>
+<p>Client, showing how you might use the same struct as part of the model, and update it from the server:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">use</span> <span class="pp">shared::</span>Data;</a>
 <a class="sourceLine" id="cb7-2" title="2"></a>
 <a class="sourceLine" id="cb7-3" title="3"><span class="kw">struct</span> Model <span class="op">{</span></a>
