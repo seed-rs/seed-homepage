@@ -137,7 +137,7 @@ sub-functions to aid code organization.
 
 
 ## View
-See the [view section](https://seed-rs.org/guide/view) for details
+See the [view section](https://seed-rs.org/guide/view) for details.
 
 
 ## Initializing

@@ -25,7 +25,7 @@ r#####"
 <p>Views are described using <a href="https://docs.rs/seed/0.4.0/seed/dom_types/struct.El.html">El</a> structs, defined in the <a href="https://docs.rs/seed/0.4.0/seed/dom_types/index.html">seed::dom_types</a> module.</p>
 <p><code>Attrs</code> and <code>Style</code> are thinly-wrapped hashmaps created with their own macros: <code>attrs!{}</code> and <code>style!{}</code> respectively.</p>
 <p>Example:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">fn</span> view(model: &amp;Model) -&gt; Node&lt;Msg&gt; <span class="op">{</span></a>
+<div class="sourceCode" id="cb4"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">fn</span> view(model: &amp;Model) -&gt; <span class="kw">impl</span> View&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb4-2" title="2">    <span class="kw">let</span> things = <span class="pp">vec!</span><span class="op">[</span> <span class="pp">h4!</span><span class="op">[</span> <span class="st">&quot;thing1&quot;</span> <span class="op">]</span>, <span class="pp">h4!</span><span class="op">[</span> <span class="st">&quot;thing2&quot;</span> <span class="op">]</span> <span class="op">]</span>;</a>
 <a class="sourceLine" id="cb4-3" title="3">    </a>
 <a class="sourceLine" id="cb4-4" title="4">    <span class="kw">let</span> other_things = <span class="pp">vec!</span><span class="op">[</span><span class="dv">1</span>, <span class="dv">2</span><span class="op">]</span>;</a>
@@ -90,7 +90,7 @@ r#####"
 <div class="sourceCode" id="cb11"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">let</span> <span class="kw">mut</span> attributes = <span class="pp">attrs!</span><span class="op">{}</span>;</a>
 <a class="sourceLine" id="cb11-2" title="2">attributes.add(<span class="pp">At::</span>Class, <span class="st">&quot;truckloads&quot;</span>);</a></code></pre></div>
 <p>Example of the style tag, and how you can use pattern-matching in views:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">fn</span> view(model: &amp;Model) -&gt; Node&lt;Msg&gt; <span class="op">{</span></a>
+<div class="sourceCode" id="cb12"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">fn</span> view(model: &amp;Model) -&gt; <span class="kw">impl</span> View&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb12-2" title="2">    <span class="pp">div!</span><span class="op">[</span> <span class="pp">style!</span><span class="op">{</span></a>
 <a class="sourceLine" id="cb12-3" title="3">        St:<span class="bu">Display</span> =&gt; <span class="st">&quot;grid&quot;</span>;</a>
 <a class="sourceLine" id="cb12-4" title="4">        <span class="pp">St::</span>GridTemplateColumns =&gt; <span class="st">&quot;auto&quot;</span>;</a>
@@ -144,10 +144,11 @@ r#####"
 <a class="sourceLine" id="cb15-12" title="12"><span class="op">]</span></a></code></pre></div>
 <p>The same exmaple using <code>from_html</code>:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb16-1" title="1"><span class="pp">Node::</span>from_html(</a>
-<a class="sourceLine" id="cb16-2" title="2">    <span class="st">&quot;&lt;svg&gt;</span></a>
-<a class="sourceLine" id="cb16-3" title="3"><span class="st">      &lt;rect x=&quot;</span><span class="dv">5</span><span class="st">&quot; y=&quot;</span><span class="dv">5</span><span class="st">&quot; width=&quot;</span><span class="dv">20</span><span class="st">&quot; height=&quot;</span><span class="dv">20</span><span class="st">&quot; stroke=&quot;</span>green<span class="st">&quot; stroke-width=&quot;</span><span class="dv">4</span><span class="st">&quot; /&gt;</span></a>
-<a class="sourceLine" id="cb16-4" title="4"><span class="st">    &lt;/svg&gt;&quot;</span></a>
-<a class="sourceLine" id="cb16-5" title="5">)</a></code></pre></div>
+<a class="sourceLine" id="cb16-2" title="2"><span class="st">r#&quot;</span></a>
+<a class="sourceLine" id="cb16-3" title="3"><span class="st">&lt;svg&gt;</span></a>
+<a class="sourceLine" id="cb16-4" title="4"><span class="st">    &lt;rect x=&quot;#</span><span class="dv">5</span><span class="st">&quot; y=&quot;</span><span class="dv">5</span><span class="st">&quot; width=&quot;</span><span class="dv">20</span><span class="st">&quot; height=&quot;</span><span class="dv">20</span><span class="st">&quot; stroke=&quot;</span>green<span class="st">&quot; stroke-width=&quot;</span><span class="dv">4</span><span class="st">&quot; /&gt;</span></a>
+<a class="sourceLine" id="cb16-5" title="5"><span class="st">&lt;/svg&gt;</span></a>
+<a class="sourceLine" id="cb16-6" title="6"><span class="st">&quot;</span>#)</a></code></pre></div>
 <p>Another example, showing it in the <code>View</code> fn:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb17-1" title="1"><span class="kw">fn</span> view(model: &amp;Model) -&gt; <span class="dt">Vec</span>&lt;Node&lt;Msg&gt;&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb17-2" title="2">    <span class="pp">vec!</span><span class="op">[</span></a>

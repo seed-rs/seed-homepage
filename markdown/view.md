@@ -68,7 +68,7 @@ respectively.
 
 Example:
 ```rust
-fn view(model: &Model) -> Node<Msg> {
+fn view(model: &Model) -> impl View<Msg> {
     let things = vec![ h4![ "thing1" ], h4![ "thing2" ] ];
     
     let other_things = vec![1, 2];
@@ -178,7 +178,7 @@ attributes.add(At::Class, "truckloads");
 
 Example of the style tag, and how you can use pattern-matching in views:
 ```rust
-fn view(model: &Model) -> Node<Msg> {
+fn view(model: &Model) -> impl View<Msg> {
     div![ style!{
         St:Display => "grid";
         St::GridTemplateColumns => "auto";
@@ -252,10 +252,11 @@ svg![
 The same exmaple using `from_html`:
 ```rust
 Node::from_html(
-    "<svg>
-      <rect x="5" y="5" width="20" height="20" stroke="green" stroke-width="4" />
-    </svg>"
-)
+r#"
+<svg>
+    <rect x="#5" y="5" width="20" height="20" stroke="green" stroke-width="4" />
+</svg>
+"#)
 ```
 
 Another example, showing it in the `View` fn:

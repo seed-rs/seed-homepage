@@ -79,7 +79,7 @@ r#####"
 <p>For an example of how to use orders, see the <a href="https://github.com/David-OConnor/seed/blob/master/examples/orders/src/lib.rs">orders example</a>.</p>
 <p>As with the model, only one update function is passed to the app, but it may be split into sub-functions to aid code organization.</p>
 <h2 id="view">View</h2>
-<p>See the <a href="https://seed-rs.org/guide/view">view section</a> for details</p>
+<p>See the <a href="https://seed-rs.org/guide/view">view section</a> for details.</p>
 <h2 id="initializing">Initializing</h2>
 <p>To start your app, call the <code>seed::App::build</code> method, which takes the following parameters:</p>
 <ul>
