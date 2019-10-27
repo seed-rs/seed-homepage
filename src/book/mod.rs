@@ -5,7 +5,6 @@ pub mod about;
 pub mod complex_apps;
 pub mod events;
 pub mod fetch;
-pub mod lifecycle;
 pub mod misc;
 pub mod prereqs;
 pub mod quickstart;

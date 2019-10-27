@@ -33,7 +33,7 @@ not `Debug`, call `to_string()` on it when using it in the function or macro.
 
 
 ### Debugging elements
-`El` implements the `Debug` trait, so you can view them using `log!`: `log!(format!("{:?}", my_el));`
+`El` and `Node` implement the `Debug` trait, so you can view them using `log!`: `log!(format!("{:?}", my_el));`
 In order to take advantage of this, you must implement `Debug` for your message type, and 
 any sub-types. Example:
 

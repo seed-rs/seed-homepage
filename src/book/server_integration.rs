@@ -1,49 +1,44 @@
 pub fn text() -> String {
 r#####"
 <h1 id="integration-with-rust-backend-servers">Integration with Rust (backend) servers</h1>
-<h1 id="this-page-is-out-of-date.-standby.">This page is out of date. Standby.</h1>
-<p>If pairing Seed with a Rust backend server, we can simplify passing data between server and frontend using a layout like that in the <a href="https://github.com/David-OConnor/seed/tree/master/examples/server_integration">server_integration example</a> Here, we demonstrate using a single struct for both frontend and server, with <code>Actix</code>. as the server. This is useful for reducing duplication of data structures, and allows <code>Serde</code> to elegantly handle [de]serialization. For example, we can use use the same struct which represents a database item on a server in Seed, without redefining or changing it. This includes keeping the same methods on both server and client.</p>
+<p>If pairing Seed with a Rust backend server, we can simplify passing data between server and frontend using a layout like that in the <a href="https://github.com/David-OConnor/seed/tree/master/examples/server_integration">server_integration example</a></p>
+<p>Additionally, the <a href="https://erwabook.com/">Engineering Rust Web Applications book</a> is a great resource showing a more detailed layout including a database using <a href="https://diesel.rs">Diesel</a>, as a step-by-step tutorial.</p>
+<p>A key advantage of this approach is that you can reuse data structures, and code that operates on them on both client and server. We use <code>Serde</code> to elegantly, and mostly transparently, handle [de]serialization. For example, we can use use the same struct which represents a database model on a server in Seed, without redefining or changing it. This includes keeping the same methods on both server and client.</p>
 <p>Highlights from the example:</p>
 <ul>
-<li>We set up the frontend and backend as independent crates, with the client folder inside the backend one. Alternatively, we could set them up at the same nest level.</li>
-<li>We place the shared data structures in a barebones third crate called <code>shared</code>. We can’t access data on the backend crate due to it being incompatible with the <code>wasm32-unknown-unknown</code> target. We can’t do the reverse due to being unable to import <code>&quot;cdylib&quot;</code> crates.</li>
+<li>We set up three crates, each with its own <code>Cargo.toml</code>: One each for server, client, and shared code.</li>
+<li>We place the shared data structures in a barebones third crate called <code>shared</code>.</li>
 <li>We set the server and client to use different ports</li>
-<li>We are unable to share a workspace between backend and frontend due to incompatible compile targets.</li>
 </ul>
 <p>Folder structure:</p>
-<pre><code>backend: Our server crate, in this case Rocket
+<pre><code>project folder: 
+ └── server: Our Rust server crate, in this case Rocket
  └── frontend: A normal Seed crate
- └── shared: Contains data structures shared between frontend and backend
- </code></pre>
-<p>Backend Cargo.toml. A normal <code>Rocket</code> one, with a relative-path <code>shared</code> dependency, and CORS support. Notice how we don’t use workspaces:</p>
+ └── shared: Contains data structures shared between frontend and backend</code></pre>
+<p>The top-level project folder contains a <code>Cargo.toml</code> that may look like this:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb2-1" title="1"><span class="op">[</span>workspace<span class="op">]</span></a>
+<a class="sourceLine" id="cb2-2" title="2"></a>
+<a class="sourceLine" id="cb2-3" title="3">members = <span class="op">[</span></a>
+<a class="sourceLine" id="cb2-4" title="4">    <span class="st">&quot;client&quot;</span>,</a>
+<a class="sourceLine" id="cb2-5" title="5">    <span class="st">&quot;server&quot;</span>,</a>
+<a class="sourceLine" id="cb2-6" title="6"><span class="op">]</span></a></code></pre></div>
+<p>A makefile, which will may additional scripts from those included in the quickstart for running the server, client etc.</p>
+<p>Server <code>Cargo.toml</code>: A normal one for <code>Rocket</code>/<code>Actix</code> etc, with a relative-path <code>shared</code> dependency</p>
 <pre class="toml"><code>[package]
-name = &quot;backend&quot;
+name = &quot;server&quot;
 version = &quot;0.1.0&quot;
 authors = [&quot;Your Name &lt;email@address.com&gt;&quot;]
 edition = &quot;2018&quot;
 
 [dependencies]
-rocket = &quot;^0.4.0-rc.1&quot;
-serde_json = &quot;^1.0.33&quot;
-rocket_cors = &quot;^0.4.0&quot;
-shared = { path = &quot;shared&quot; }</code></pre>
-<p>Frontend Cargo.toml. The only difference from a normal Seed crate is the <code>shared</code> dependency. Note that we don’t need to import <code>Serde</code> directly, in this case.</p>
-<pre class="toml"><code>[package]
-name = &quot;frontend&quot;
-version = &quot;0.1.0&quot;
-authors = [&quot;Your Name &lt;email@address.com&gt;&quot;]
-edition = &quot;2018&quot;
+actix = &quot;0.8.3&quot;
+actix-web = &quot;1.0.0&quot;
+actix-files = &quot;0.1.1&quot;
+actix-multipart = &quot;0.1.2&quot;
+tokio-timer = &quot;0.2.11&quot;
 
-[lib]
-crate-type = [&quot;cdylib&quot;]
-
-[dependencies]
-futures = &quot;^0.1.20&quot;
-seed = &quot;^0.2.1&quot;
-wasm-bindgen = &quot;^0.2.29&quot;
-web-sys = &quot;^0.3.6&quot;
-shared = { path = &quot;../shared&quot;}</code></pre>
-<p>Shared Cargo.toml:</p>
+shared = { path = &quot;../shared&quot; }</code></pre>
+<p>The client’s <code>cargo.toml</code> is a standard Seed one. The shared <code>Cargo.toml</code> includes whatever you need for your shared data structures and code; it will usually include <code>serde</code> for serializing and deserializing, and may include database code, since this crate is a good place for databse models and schema.</p>
 <pre class="toml"><code>[package]
 name = &quot;shared&quot;
 version = &quot;0.1.0&quot;
@@ -51,7 +46,8 @@ authors = [&quot;Your Name &lt;email@address.com&gt;&quot;]
 edition = &quot;2018&quot;
 
 [dependencies]
-serde = { version = &quot;^1.0.80&quot;, features = [&#39;derive&#39;] }</code></pre>
+serde = { version = &quot;^1.0.80&quot;, features = [&#39;derive&#39;] }
+diesel = { version = &quot;^1.4.2&quot;, features = [&quot;postgres&quot;] }</code></pre>
 <p>In <code>shared/lib.rs</code>, we set up serializable data structures:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">use</span> <span class="pp">serde::</span><span class="op">{</span>Serialize, Deserialize<span class="op">}</span>;</a>
 <a class="sourceLine" id="cb5-2" title="2"></a>
@@ -60,8 +56,8 @@ serde = { version = &quot;^1.0.80&quot;, features = [&#39;derive&#39;] }</code><
 <a class="sourceLine" id="cb5-5" title="5">    <span class="kw">pub</span> val: <span class="dt">i8</span>,</a>
 <a class="sourceLine" id="cb5-6" title="6">    <span class="kw">pub</span> text: <span class="dt">String</span>,</a>
 <a class="sourceLine" id="cb5-7" title="7"><span class="op">}</span></a></code></pre></div>
-<p>In the frontend and backend, we import <code>shared</code>, and use these structures normally:</p>
-<p>Backend:</p>
+<p>In the server and client, we import <code>shared</code>, and use these structures normally:</p>
+<p>Eg server using <code>Rocket</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">use</span> <span class="pp">shared::</span>Data;</a>
 <a class="sourceLine" id="cb6-2" title="2"></a>
 <a class="sourceLine" id="cb6-3" title="3"><span class="at">#[</span>get<span class="at">(</span><span class="st">&quot;/data&quot;</span><span class="at">,</span> format <span class="at">=</span> <span class="st">&quot;application/json&quot;</span><span class="at">)]</span></a>
@@ -73,7 +69,7 @@ serde = { version = &quot;^1.0.80&quot;, features = [&#39;derive&#39;] }</code><
 <a class="sourceLine" id="cb6-9" title="9"></a>
 <a class="sourceLine" id="cb6-10" title="10">    <span class="pp">serde_json::</span>to_string(&amp;data).unwrap()</a>
 <a class="sourceLine" id="cb6-11" title="11"><span class="op">}</span></a></code></pre></div>
-<p>Frontend, showing how you might use the same data Struct as part of the model, and update it from the backend:</p>
+<p>Client, showing how you might use the same struct as part of the model, and update it from the backend:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">use</span> <span class="pp">shared::</span>Data;</a>
 <a class="sourceLine" id="cb7-2" title="2"></a>
 <a class="sourceLine" id="cb7-3" title="3"><span class="kw">struct</span> Model <span class="op">{</span></a>

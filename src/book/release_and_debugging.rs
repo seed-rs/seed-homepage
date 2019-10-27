@@ -9,7 +9,7 @@ r#####"
 <h3 id="logging">Logging</h3>
 <p>You may log things to the browser console using the following functions: <code>seed::log</code>, and <code>seed::error</code>. They accept a single argument which implements <code>Debug</code>. Each has a corresponding macro: <code>log!</code>, and <code>error!</code>, which work in a similar way, but accept multiple arguments, which will be displayed separated by spaces. If you’d like to log something which implements <code>ToString</code>, but not <code>Debug</code>, call <code>to_string()</code> on it when using it in the function or macro.</p>
 <h3 id="debugging-elements">Debugging elements</h3>
-<p><code>El</code> implements the <code>Debug</code> trait, so you can view them using <code>log!</code>: <code>log!(format!(&quot;{:?}&quot;, my_el));</code> In order to take advantage of this, you must implement <code>Debug</code> for your message type, and any sub-types. Example:</p>
+<p><code>El</code> and <code>Node</code> implement the <code>Debug</code> trait, so you can view them using <code>log!</code>: <code>log!(format!(&quot;{:?}&quot;, my_el));</code> In order to take advantage of this, you must implement <code>Debug</code> for your message type, and any sub-types. Example:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Copy</span><span class="at">,</span> <span class="bu">Clone</span><span class="at">,</span> <span class="bu">Debug</span><span class="at">)]</span></a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="kw">enum</span> Page <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-3" title="3">    Guide,</a>
