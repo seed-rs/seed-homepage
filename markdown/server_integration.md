@@ -4,20 +4,19 @@ If pairing Seed with a Rust backend server, we can simplify passing data between
 server and frontend using a layout like that in the 
 [server_integration example](https://github.com/David-OConnor/seed/tree/master/examples/server_integration)
 
- Additionally, the [Engineering Rust Web Applications book](https://erwabook.com/)
- is a great resource showing a more detailed layout including a database using
-[Diesel](https://diesel.rs), as a step-by-step
- tutorial.
-
 A key advantage of this approach is that you can reuse data structures, and code that
 operates on them on both client and server. We use `Serde` to elegantly, and mostly transparently,
  handle [de]serialization. For example, we can use use the same struct which represents a 
 database model on a server in Seed, without redefining or changing it. This includes
 keeping the same methods on both server and client.
+
+The [Engineering Rust Web Applications book](https://erwabook.com/)
+ is an excellent resource showing a more detailed layout including a database using
+[Diesel](https://diesel.rs), as a step-by-step
+ tutorial. You may wish to stop reading this page now, and skip directly to reading
+ this book.
  
-
-Highlights from the example:
-
+Highlights:
 - We set up three crates, each with its own `Cargo.toml`: One each for server, client, and 
  shared code.
 - We place the shared data structures in a barebones third crate called `shared`.

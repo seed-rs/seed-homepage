@@ -2,14 +2,9 @@ pub fn text() -> String {
 r#####"
 <h1 id="integration-with-rust-backend-servers">Integration with Rust (backend) servers</h1>
 <p>If pairing Seed with a Rust backend server, we can simplify passing data between server and frontend using a layout like that in the <a href="https://github.com/David-OConnor/seed/tree/master/examples/server_integration">server_integration example</a></p>
-<p>Additionally, the <a href="https://erwabook.com/">Engineering Rust Web Applications book</a> is a great resource showing a more detailed layout including a database using <a href="https://diesel.rs">Diesel</a>, as a step-by-step tutorial.</p>
 <p>A key advantage of this approach is that you can reuse data structures, and code that operates on them on both client and server. We use <code>Serde</code> to elegantly, and mostly transparently, handle [de]serialization. For example, we can use use the same struct which represents a database model on a server in Seed, without redefining or changing it. This includes keeping the same methods on both server and client.</p>
-<p>Highlights from the example:</p>
-<ul>
-<li>We set up three crates, each with its own <code>Cargo.toml</code>: One each for server, client, and shared code.</li>
-<li>We place the shared data structures in a barebones third crate called <code>shared</code>.</li>
-<li>We set the server and client to use different ports</li>
-</ul>
+<p>The <a href="https://erwabook.com/">Engineering Rust Web Applications book</a> is an excellent resource showing a more detailed layout including a database using <a href="https://diesel.rs">Diesel</a>, as a step-by-step tutorial. You may wish to stop reading this page now, and skip directly to reading this book.</p>
+<p>Highlights: - We set up three crates, each with its own <code>Cargo.toml</code>: One each for server, client, and shared code. - We place the shared data structures in a barebones third crate called <code>shared</code>. - We set the server and client to use different ports</p>
 <p>Folder structure:</p>
 <pre><code>project folder: 
  └── server: Our Rust server crate, in this case Rocket
