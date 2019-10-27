@@ -42,10 +42,6 @@ def main():
         with open(f'./src/book/{filename}.html', encoding="utf8") as f:
             data = f.read()
 
-        # Correct pandoc quirks.
-        # data = data.replace("’", "'")
-        # data = data.replace("#", "\#")
-
         regex = re.compile(r'<body>(.*?)</body>', re.DOTALL)
         m = re.search(regex, data)
 

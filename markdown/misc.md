@@ -129,36 +129,7 @@ fn view(model: &Model) -> Vec<Node<Msg>> {
 ```
 
 ## Input elements are controlled
-`input`, `textarea`, and `select` elements are always controlled, in the vein of React.
+`input`, `textarea`, and `select` elements are always controlled, in the vein of `React`.
 This means that even if there's no event associated with user input to these fields, their
 value will always stay in sync with the model, which may mean ignoring text input if
 not set up with a `Ev::Input` event.
-
-
-## SVG
-Inline SVGs can be rendered using `El::from_html`, or by using element-creation macros, ie `svg!`,
-`path!` etc. Setting the `xmlns` attribute isn't required; it's set automatically when using the macro. Example:
-
-```rust
-fn view(model: &Model) -> Vec<Node<Msg>> {
-    vec![
-        svg![
-            attrs!{
-                At::Width => "100%";
-                At::Height => "100%";
-                At::ViewBox => "0 0 512 512";
-            },
-            path![ 
-                attrs!{
-                    At::Fill => "lightgrey";
-                    At::D => "M345.863,281.853c19.152-8.872,38.221-15.344,56.1"  // etc
-                }
-            ],
-            // More elements as required, eg mesh, polyline, circle
-        ]
-    ]
-}
-
-
-
-```

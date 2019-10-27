@@ -91,28 +91,6 @@ r#####"
 <a class="sourceLine" id="cb6-10" title="10">    <span class="op">]</span></a>
 <a class="sourceLine" id="cb6-11" title="11"><span class="op">}</span></a></code></pre></div>
 <h2 id="input-elements-are-controlled">Input elements are controlled</h2>
-<p><code>input</code>, <code>textarea</code>, and <code>select</code> elements are always controlled, in the vein of React. This means that even if there’s no event associated with user input to these fields, their value will always stay in sync with the model, which may mean ignoring text input if not set up with a <code>Ev::Input</code> event.</p>
-<h2 id="svg">SVG</h2>
-<p>Inline SVGs can be rendered using <code>El::from_html</code>, or by using element-creation macros, ie <code>svg!</code>, <code>path!</code> etc. Setting the <code>xmlns</code> attribute isn’t required; it’s set automatically when using the macro. Example:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">fn</span> view(model: &amp;Model) -&gt; <span class="dt">Vec</span>&lt;Node&lt;Msg&gt;&gt; <span class="op">{</span></a>
-<a class="sourceLine" id="cb7-2" title="2">    <span class="pp">vec!</span><span class="op">[</span></a>
-<a class="sourceLine" id="cb7-3" title="3">        <span class="pp">svg!</span><span class="op">[</span></a>
-<a class="sourceLine" id="cb7-4" title="4">            <span class="pp">attrs!</span><span class="op">{</span></a>
-<a class="sourceLine" id="cb7-5" title="5">                <span class="pp">At::</span>Width =&gt; <span class="st">&quot;100%&quot;</span>;</a>
-<a class="sourceLine" id="cb7-6" title="6">                <span class="pp">At::</span>Height =&gt; <span class="st">&quot;100%&quot;</span>;</a>
-<a class="sourceLine" id="cb7-7" title="7">                <span class="pp">At::</span>ViewBox =&gt; <span class="st">&quot;0 0 512 512&quot;</span>;</a>
-<a class="sourceLine" id="cb7-8" title="8">            <span class="op">}</span>,</a>
-<a class="sourceLine" id="cb7-9" title="9">            <span class="pp">path!</span><span class="op">[</span> </a>
-<a class="sourceLine" id="cb7-10" title="10">                <span class="pp">attrs!</span><span class="op">{</span></a>
-<a class="sourceLine" id="cb7-11" title="11">                    <span class="pp">At::</span>Fill =&gt; <span class="st">&quot;lightgrey&quot;</span>;</a>
-<a class="sourceLine" id="cb7-12" title="12">                    <span class="pp">At::</span>D =&gt; <span class="st">&quot;M345.863,281.853c19.152-8.872,38.221-15.344,56.1&quot;</span>  <span class="co">// etc</span></a>
-<a class="sourceLine" id="cb7-13" title="13">                <span class="op">}</span></a>
-<a class="sourceLine" id="cb7-14" title="14">            <span class="op">]</span>,</a>
-<a class="sourceLine" id="cb7-15" title="15">            <span class="co">// More elements as required, eg mesh, polyline, circle</span></a>
-<a class="sourceLine" id="cb7-16" title="16">        <span class="op">]</span></a>
-<a class="sourceLine" id="cb7-17" title="17">    <span class="op">]</span></a>
-<a class="sourceLine" id="cb7-18" title="18"><span class="op">}</span></a>
-<a class="sourceLine" id="cb7-19" title="19"></a>
-<a class="sourceLine" id="cb7-20" title="20"></a></code></pre></div>
+<p><code>input</code>, <code>textarea</code>, and <code>select</code> elements are always controlled, in the vein of <code>React</code>. This means that even if there’s no event associated with user input to these fields, their value will always stay in sync with the model, which may mean ignoring text input if not set up with a <code>Ev::Input</code> event.</p>
 "#####.into()
 }

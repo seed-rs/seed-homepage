@@ -223,13 +223,17 @@ and pass it in. You can separate different items by comma, semicolon, or space.
 Keys passed to `attrs!` can be `Seed::At`s, `String`s, or `&str`s. 
 Keys passed to `style!` can be `Seed::St`s, `String`s, or `&str`s.
 Values passed to `attrs!`, and `style!` macros can 
-be owned `Strings`, `&str`s, or for `style!`, `unit`s. Eg: `input![ attrs!{At::Disabled => false]` and `input![ attrs!{"disabled" => "false"]` 
+be owned `Strings`, `&str`s, or for `style!`, `unit`s. 
+Eg: `input![ attrs!{At::Disabled => false]` and `input![ attrs!{"disabled" => "false"]` 
 are equivalent. You use the `unit!` macro to apply units. There's a `px` function for the
 special case where the unit is pixels:
 ```rust
 style!{St::Width => unit!(20, px);}
 style!{St::Width => px(20);}  // equivalent
 ```
+
+For boolean attributes that are handled by presense or absense, like `disabled`,
+use can use `.as_at_value`: `input![ attrs!{At::Disabled => false.as_at_value() ]`
 
 We can set multiple values for an attribute using `Attribute.add_multiple`. This
 is useful for setting multiple classes. Note that we must set this up outside of
@@ -363,7 +367,10 @@ let my_el = div![]
 ```
 
 ## Svg
-You can create `SVG` elements in the same way as normal `Html` elements:
+You can create `SVG` elements in the same way as normal `Html` elements.
+Setting the `xmlns` attribute isn't required; it's set automatically when using the macro.
+
+Example using macros:
 ```rust
 svg![
     rect![
@@ -372,10 +379,44 @@ svg![
             At::Y =>"5",
             At::Width => "20",
             At::Height => "20",
+            At::Stroke => "green",
+            At::StrokeWidth => "4",
         }
     ]
-];
+]
 ```
+
+The same exmaple using `from_html`:
+```rust
+Node::from_html(
+    "<svg>
+      <rect x="5" y="5" width="20" height="20" stroke="green" stroke-width="4" />
+    </svg>"
+)
+```
+
+Another example, showing it in the `View` fn:
+```rust
+fn view(model: &Model) -> Vec<Node<Msg>> {
+    vec![
+        svg![
+            attrs!{
+                At::Width => "100%";
+                At::Height => "100%";
+                At::ViewBox => "0 0 512 512";
+            },
+            path![ 
+                attrs!{
+                    At::Fill => "lightgrey";
+                    At::D => "M345.863,281.853c19.152-8.872,38.221-15.344,56.1"  // etc
+                }
+            ],
+            // More elements as required, eg mesh, polyline, circle
+        ]
+    ]
+}
+```
+
 
 ## Initializing
 To start your app, call the `seed::App::build` method, which takes the following parameters:

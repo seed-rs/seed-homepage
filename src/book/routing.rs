@@ -5,21 +5,21 @@ r#####"
 <p>Let’s say our site the following pages: a guide, which can have subpages, and a changelog, accessible by <code>http://seed-rs.org/changelog</code>, <code>http://seed-rs.org/guide</code>, and <code>http://seed-rs.org/guide/3</code> (where 3 is the page we want) respectively. We describe the page by a <code>page</code> field in our model, which is an integer: 0 for guide, 1 for changelog, and an additional number for the guide page. An enum would be cleaner, but we don’t wish to complicate this example.</p>
 <h2 id="the-basics">The basics</h2>
 <p>To set up the initial routing, pass a <code>routes</code> function describing how to handle routing, to <a href="https://docs.rs/seed/0.4.0/seed/struct.App.html#method.build">App::build</a>’s <code>routes</code> method.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">fn</span> routes(url: &amp;<span class="pp">seed::</span>Url) -&gt; <span class="dt">Option</span>&lt;Msg&gt; <span class="op">{</span></a>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">fn</span> routes(url: Url) -&gt; <span class="dt">Option</span>&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-2" title="2">    <span class="kw">if</span> url.path.is_empty() <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-3" title="3">        <span class="kw">return</span> <span class="pp">Msg::</span>ChangePage(<span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb1-3" title="3">        <span class="kw">return</span> <span class="cn">Some</span>(<span class="pp">Msg::</span>ChangePage(<span class="dv">0</span>))</a>
 <a class="sourceLine" id="cb1-4" title="4">    <span class="op">}</span></a>
 <a class="sourceLine" id="cb1-5" title="5"></a>
 <a class="sourceLine" id="cb1-6" title="6">    <span class="cn">Some</span>(<span class="kw">match</span> url.path<span class="op">[</span><span class="dv">0</span><span class="op">]</span>.as_ref() <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-7" title="7">        <span class="st">&quot;guide&quot;</span> =&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-8" title="8">            <span class="co">// Determine if we&#39;re at the main guide page, or a subpage</span></a>
 <a class="sourceLine" id="cb1-9" title="9">            <span class="kw">match</span> url.path.get(<span class="dv">1</span>).as_ref() <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-10" title="10">                <span class="cn">Some</span>(page) =&gt; <span class="pp">Msg::</span>ChangeGuidePage(page.<span class="pp">parse::</span>&lt;<span class="dt">usize</span>&gt;().unwrap()),</a>
-<a class="sourceLine" id="cb1-11" title="11">                <span class="cn">None</span> =&gt; <span class="pp">Msg::</span>ChangePage(<span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb1-10" title="10">                <span class="cn">Some</span>(page) =&gt; <span class="cn">Some</span>(<span class="pp">Msg::</span>ChangeGuidePage(page.<span class="pp">parse::</span>&lt;<span class="dt">usize</span>&gt;().unwrap())),</a>
+<a class="sourceLine" id="cb1-11" title="11">                <span class="cn">None</span> =&gt; <span class="cn">Some</span>(<span class="pp">Msg::</span>ChangePage(<span class="dv">0</span>))</a>
 <a class="sourceLine" id="cb1-12" title="12">            <span class="op">}</span></a>
 <a class="sourceLine" id="cb1-13" title="13">        <span class="op">}</span>,</a>
 <a class="sourceLine" id="cb1-14" title="14">        <span class="st">&quot;changelog&quot;</span> =&gt; <span class="pp">Msg::</span>ChangePage(<span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb1-15" title="15">        _ =&gt; <span class="pp">Msg::</span>ChangePage(<span class="dv">0</span>),</a>
+<a class="sourceLine" id="cb1-15" title="15">        _ =&gt; <span class="cn">Some</span>(<span class="pp">Msg::</span>ChangePage(<span class="dv">0</span>)),</a>
 <a class="sourceLine" id="cb1-16" title="16">    <span class="op">}</span>)</a>
 <a class="sourceLine" id="cb1-17" title="17"><span class="op">}</span></a>
 <a class="sourceLine" id="cb1-18" title="18"></a>

@@ -20,21 +20,21 @@ To set up the initial routing, pass a `routes` function describing how to handle
 routing, to [App::build](https://docs.rs/seed/0.2.5/seed/struct.App.html#method.build)'s 
 `routes` method.
 ```rust
-fn routes(url: &seed::Url) -> Option<Msg> {
+fn routes(url: Url) -> Option<Msg> {
     if url.path.is_empty() {
-        return Msg::ChangePage(0)
+        return Some(Msg::ChangePage(0))
     }
 
     Some(match url.path[0].as_ref() {
         "guide" => {
             // Determine if we're at the main guide page, or a subpage
             match url.path.get(1).as_ref() {
-                Some(page) => Msg::ChangeGuidePage(page.parse::<usize>().unwrap()),
-                None => Msg::ChangePage(0)
+                Some(page) => Some(Msg::ChangeGuidePage(page.parse::<usize>().unwrap())),
+                None => Some(Msg::ChangePage(0))
             }
         },
         "changelog" => Msg::ChangePage(1),
-        _ => Msg::ChangePage(0),
+        _ => Some(Msg::ChangePage(0)),
     })
 }
 
