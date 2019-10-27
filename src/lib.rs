@@ -49,7 +49,6 @@ impl Default for Model {
             ("Structure", book::structure::text()),
             ("View", book::view::text()),
             ("Events", book::events::text()),
-            ("Components", book::components::text()),
             ("Http requests and state", book::fetch::text()),
             ("Routing", book::routing::text()),
             ("Misc features", book::misc::text()),

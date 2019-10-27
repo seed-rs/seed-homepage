@@ -2,9 +2,7 @@
 //! Markdown-to-HTML provided by https://dillinger.io/
 
 pub mod about;
-pub mod components;
 pub mod complex_apps;
-pub mod element_deepdive;
 pub mod events;
 pub mod fetch;
 pub mod lifecycle;
