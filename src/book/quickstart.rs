@@ -143,6 +143,7 @@ wasm-bindgen = &quot;^0.2.50&quot;</code></pre>
 <ul>
 <li><a href="https://github.com/MartinKavik/awesome-seed-rs">Awesome-seed-rs</a>: A curated list of resources</li>
 <li><a href="https://github.com/MartinKavik/seed-rs-realworld">Seed Realworld</a>: A detailed realworld example site</li>
+<li><a href="https://erwabook.com/">Engineering Rust Web Applications</a>: A book describing full-stack Rust web-development, using Seed for the frontend</li>
 </ul>
 "#####.into()
 }

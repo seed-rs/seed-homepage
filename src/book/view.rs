@@ -2,7 +2,7 @@ pub fn text() -> String {
 r#####"
 <h1 id="view">View</h1>
 <p>Visual layout (ie HTML/DOM elements) is described declaratively in Rust, and uses <a href="https://doc.rust-lang.org/book/appendix-04-macros.html">macros</a> to simplify syntax.</p>
-<p>The view’s defined by a function that’s passed to <code>seed::run</code>. This takes a <code>&amp;Model</code> as its parameter, and outputs something that implements the <code>View</code> trait, which is imported in the prelude. Usually, this is a <code>Node</code>, or <code>Vec&lt;Node&gt;</code>, representing all nodes that will be inserted as children on the top-level one. (The top-level <code>Node</code> is in the html file, and specified with <code>seed::App::build.mount()</code>, or as a default, the element with id <code>app</code>). It may composed into sub-functions, which can be thought of like components in other frameworks.</p>
+<p>The view’s defined by a function that’s passed to <code>seed::App::build</code>. This takes a <code>&amp;Model</code> as its parameter, and outputs something that implements the <code>View</code> trait, which is imported in the prelude. Usually, this is a <code>Node</code>, or <code>Vec&lt;Node&gt;</code>, representing all nodes that will be inserted as children on the top-level one. (The top-level <code>Node</code> is in the html file, and specified with <code>seed::App::build.mount()</code>, or as a default, the element with id <code>app</code>). It may composed into sub-functions, which can be thought of like components in other frameworks.</p>
 <p>Examples:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">fn</span> view(model: &amp;Model) -&gt; Node&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb1-2" title="2">    <span class="pp">h1!</span><span class="op">[</span> <span class="st">&quot;Let there be light&quot;</span> <span class="op">]</span>,</a>
@@ -15,7 +15,12 @@ r#####"
 <a class="sourceLine" id="cb2-6" title="6"><span class="op">}</span></a></code></pre></div>
 <p>In either of those examples, you could use the signature: <code>fn view(model: &amp;Model) -&gt; impl View&lt;Msg&gt;</code> instead. This allows you to change between them without changing the function signature.</p>
 <h2 id="the-node-enum">The Node Enum</h2>
-<p>The Virtual DOM is represnted by nested <a href="https://docs.rs/seed/0.4.1/seed/dom_types/enum.None.html">Nodes</a>. <code>Node</code> has 3 variants: - <code>Text</code> holds a <a href="https://docs.rs/seed/0.4.1/seed/dom_types/struct.Text.html">Text</a> struct. Mostly for internal use, but can be created with <code>Node::new_text()</code>. - <code>Element</code> wraps an <a href="https://docs.rs/seed/0.4.1/seed/dom_types/struct.El.html">El</a>, which is the main component of our VDOM. Created using macros, described below. - <code>Empty</code> is a placeholder that doens’t render anything; useful in conditional/ternary logic. Created using the <code>empty![]</code> macro, or <code>seed::empty()</code>.</p>
+<p>The Virtual DOM is represnted by nested <a href="https://docs.rs/seed/0.4.1/seed/dom_types/enum.Node.html">Nodes</a>. <code>Node</code> has 3 variants:</p>
+<ul>
+<li><code>Text</code> holds a <a href="https://docs.rs/seed/0.4.1/seed/dom_types/struct.Text.html">Text</a> struct. Mostly for internal use, but can be created with <code>Node::new_text()</code>.</li>
+<li><code>Element</code> wraps an <a href="https://docs.rs/seed/0.4.1/seed/dom_types/struct.El.html">El</a>, which is the main component of our VDOM. Created using macros, described below.</li>
+<li><code>Empty</code> is a placeholder that doens’t render anything; useful in conditional/ternary logic. Created using the <code>empty![]</code> macro, or <code>seed::empty()</code>.</li>
+</ul>
 <h2 id="elements-attributes-styles">Elements, attributes, styles</h2>
 <p>Elements are created using macros, named by the lowercase name of each element, and imported into the global namespace. Eg <code>div!</code> above. We use this code to import them:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb3-1" title="1"><span class="at">#[</span>macro_use<span class="at">]</span></a>
@@ -197,7 +202,7 @@ r#####"
 <a class="sourceLine" id="cb19-11" title="11">        <span class="pp">tr!</span><span class="op">[</span> cols() <span class="op">]</span></a>
 <a class="sourceLine" id="cb19-12" title="12">    <span class="op">]</span></a>
 <a class="sourceLine" id="cb19-13" title="13"><span class="op">}</span></a></code></pre></div>
-<p>You can mix <code>Node</code> <code>Vec</code>s with <code>Els</code> in macros:</p>
+<p>You can mix <code>Node</code> <code>Vec</code>s with <code>Node</code>s in macros:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb20-1" title="1"><span class="kw">fn</span> items() -&gt; Node&lt;Msg&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb20-2" title="2">    <span class="co">// You may wish to keep complicated or dynamic logic separate.</span></a>
 <a class="sourceLine" id="cb20-3" title="3">    <span class="kw">let</span> <span class="kw">mut</span> more_cols = <span class="pp">vec!</span><span class="op">[</span> <span class="pp">td!</span><span class="op">[</span> <span class="st">&quot;another col&quot;</span> <span class="op">]</span>, <span class="pp">td!</span><span class="op">[</span> <span class="st">&quot;and another&quot;</span> <span class="op">]</span> <span class="op">]</span>;</a>

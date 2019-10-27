@@ -3,7 +3,7 @@
  Visual layout (ie HTML/DOM elements) is described declaratively in Rust, and uses 
 [macros]( https://doc.rust-lang.org/book/appendix-04-macros.html) to simplify syntax.
 
-The view's defined by a function that's passed to `seed::run`. This takes a `&Model`
+The view's defined by a function that's passed to `seed::App::build`. This takes a `&Model`
 as its parameter, and outputs something that implements the ` View` trait, which is imported in the prelude.
 Usually, this is a `Node`, or `Vec<Node>`, representing all nodes that will be inserted as children
 on the top-level one. (The top-level `Node` is in the html file, and specified with
@@ -29,8 +29,9 @@ In either of those examples, you could use the signature: `fn view(model: &Model
 This allows you to change between them without changing the function signature.
 
 ## The Node Enum
-The Virtual DOM is represnted by nested [Nodes](https://docs.rs/seed/0.1.6/seed/dom_types/enum.None.html).
+The Virtual DOM is represnted by nested [Nodes](https://docs.rs/seed/0.1.6/seed/dom_types/enum.Node.html).
 `Node` has 3 variants: 
+
 - `Text` holds a [Text](https://docs.rs/seed/0.1.6/seed/dom_types/struct.Text.html)
 struct. Mostly for internal use, but can be created with `Node::new_text()`.
 - `Element` wraps an [El](https://docs.rs/seed/0.1.6/seed/dom_types/struct.El.html), which is
@@ -334,7 +335,7 @@ fn items() -> Node<Msg> {
 }
 ```
 
-You can mix `Node` `Vec`s with `Els` in macros:
+You can mix `Node` `Vec`s with `Node`s in macros:
 ```rust
 fn items() -> Node<Msg> {
     // You may wish to keep complicated or dynamic logic separate.
