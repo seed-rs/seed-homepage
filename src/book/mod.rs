@@ -15,3 +15,4 @@ pub mod release_and_debugging;
 pub mod routing;
 pub mod server_integration;
 pub mod structure;
+pub mod view;

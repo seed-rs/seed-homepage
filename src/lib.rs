@@ -30,36 +30,8 @@ struct GuideSection {
     title: String,
     content: String,
     path: String,  // For use with routing.
-//    page: GuidePage,
 }
 
-//#[derive(Copy, Clone, Debug)]
-//enum GuidePage {
-//    Quickstart,
-//    Prereqs,
-//    Structure,
-//    Events,
-//    Components,
-//    Http,
-//    Routing,
-//    Misc,
-//    Release,
-//    Complex,
-//    Server,
-//    About
-//}
-//
-//impl GuidePage {
-//    /// This corresponds to the path field in Guidesection.  Alternatively, could use an id.
-//    fn from_path(path: &str) -> Self {
-//        match path {
-//            "quickstart" => Self::Quickstart,
-//            "prereqs" => Self::Prereqs,
-//            "structure" => Self::Structure,
-//            "events"
-//        }
-//    }
-//}
 
 struct Model {
     page: Page,
@@ -72,24 +44,25 @@ impl Default for Model {
     fn default() -> Self {
         let mut guide_sections = Vec::new();
         let md_texts = vec![
-            ("Quickstart", crate::book::quickstart::text()),
-            ("Prereqs", crate::book::prereqs::text()),
-            ("Structure", crate::book::structure::text()),
-            ("Events", crate::book::events::text()),
-            ("Components", crate::book::components::text()),
-            ("Http requests and state", crate::book::fetch::text()),
-            ("Routing", crate::book::routing::text()),
-            ("Misc features", crate::book::misc::text()),
+            ("Quickstart", book::quickstart::text()),
+            ("Prereqs", book::prereqs::text()),
+            ("Structure", book::structure::text()),
+            ("View", book::view::text()),
+            ("Events", book::events::text()),
+            ("Components", book::components::text()),
+            ("Http requests and state", book::fetch::text()),
+            ("Routing", book::routing::text()),
+            ("Misc features", book::misc::text()),
             (
                 "Release and debugging",
-                crate::book::release_and_debugging::text(),
+                book::release_and_debugging::text(),
             ),
-            ("Complex apps", crate::book::complex_apps::text()),
+            ("Complex apps", book::complex_apps::text()),
             (
                 "Server integration",
-                crate::book::server_integration::text(),
+                book::server_integration::text(),
             ),
-            ("About", crate::book::about::text()),
+            ("About", book::about::text()),
         ];
 
         for (title, md_text) in md_texts {
@@ -102,7 +75,6 @@ impl Default for Model {
 
         Self {
             page: Page::Guide,
-//            guide_page: GuidePage::Quickstart,
             guide_page: "quickstart".into(),
             guide_sections,
         }

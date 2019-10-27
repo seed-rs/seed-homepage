@@ -20,6 +20,7 @@ def main():
         "quickstart",
         "prereqs",
         "structure",
+        "view",
         "events",
         "components",
         "fetch",
