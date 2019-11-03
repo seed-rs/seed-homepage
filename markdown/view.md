@@ -182,7 +182,7 @@ Example of the style tag, and how you can use pattern-matching in views:
 ```rust
 fn view(model: &Model) -> impl View<Msg> {
     div![ style!{
-        St:Display => "grid";
+        St::Display => "grid";
         St::GridTemplateColumns => "auto";
         St::GridTemplateRows => "100px auto 100px"
         },
@@ -207,7 +207,7 @@ an &Attrs and &Style respectively. This can be used to compose styles from reusa
 Example:
 ```rust
 fn a_component() -> Node<Msg> {
-    let base_style = !style{"color" => "lavender"};
+    let base_style = style!{"color" => "lavender"};
 
     div![
         h1![ &base_style.merge(&style!{St::GridRow => "1 / 2"}) "First row" ],
