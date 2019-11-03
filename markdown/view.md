@@ -96,6 +96,22 @@ style!{St::Width => unit!(20, px);}
 style!{St::Width => px(20);}  // equivalent
 ```
 
+Some types, like `Option`s, implement a trait allowing them to be used directly in
+`style!`:
+```rust
+let display: &str = "flex";
+let direction: String = "column".to_string();
+let order: Option<u32> = None;
+let gap: Option<&str> = Some("8px");
+
+let style = style![
+    St::Display => display,
+    St::FlexDirection => direction,
+    St::Order => order,
+    St::Gap => gap,
+];
+```
+
 We can set multiple values for an attribute using `Attribute.add_multiple`. This
 is useful for setting multiple classes. Note that we must set this up outside of
 the view macro, since it involves modifying a variable:

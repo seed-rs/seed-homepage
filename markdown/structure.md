@@ -143,7 +143,8 @@ See the [view section](https://seed-rs.org/guide/view) for details.
 ## Initializing
 To start your app, call the `seed::App::build` method, which takes the following parameters:
 
-- An `init` function which accepts an initial routing, initial orders, and outputs an initial model
+- An `init` function which accepts an initial routing, initial orders, and outputs 
+an [Init struct](https://docs.rs/seed/0.4.1/seed/struct.Init.html), wrapping the initial model
 - Your update function
 - Your view function
 
@@ -168,6 +169,10 @@ seed::App::build(|_, _| Model::default(), update, view).mount(
 ```
 
 The `seed::App::build` call must be wrapped in a function with the `#[wasm_bindgen(start)]` invocation.
+
+This will render your app to the element holding the id you passed; in the case of this example,
+"main". The only part of the web page Seed will interact with is that element, so you can
+use other HTML not part of Seed, or other JS code/frameworks in the same document.
 
 Example, with optional methods:
 ```rust
@@ -196,6 +201,17 @@ pub fn render() {
 }
 ```
 
-This will render your app to the element holding the id you passed; in the case of this example,
-"main". The only part of the web page Seed will interact with is that element, so you can
-use other HTML not part of Seed, or other JS code/frameworks in the same document.
+`Init` has the following fields:
+    - `model`: The initial model
+    - `url_handling`: A `UrlHandling` enum, which has variants `PassToRoutes`: default with `Init::new()`),
+    and `None`
+    - `mount_type`: A `MountType` enum, which has variants `Append`: default with `Init::new()`,
+    Leave the previously existing elements in the mount alone. This does not make guarantees of
+    elements added after the `App` has been mounted),
+    and `Takeover`:  Take control of previously existing elements in the mount. This does not make guarantees of
+    elements added after the `App` has been mounted. Note that existing elements in the DOM will 
+    be recreated. This can be dangerous for script tags and other, similar tags.
+
+`Init::new()` covers the most common use-cases of the `Init`, but pass an `Init` literal if you'd
+like to use `url_handling` or `mount_type`.
+

@@ -112,7 +112,7 @@ Where we've given the element we wish to query id `my_el`.
 
 
 ## Some convenience functions
-You can use `seed::document` and `seed::window` to access the `web_sys` document
+You can use `seed::document()` and `seed::window()` to access the `web_sys` document
 and window functions. Example:
 ```rust
 fn view(model: &Model) -> Vec<Node<Msg>> {
@@ -127,6 +127,11 @@ fn view(model: &Model) -> Vec<Node<Msg>> {
     ]
 }
 ```
+
+Additionally, use `seed::html_document()` in the same way, to return a 
+[HtmlDocument](https://rustwasm.github.io/wasm-bindgen/api/web_sys/struct.HtmlDocument.html)
+
+You can call `seed::cookies()` to retrieve all cookies from the current `HtmlDocument`.
 
 ## Input elements are controlled
 `input`, `textarea`, and `select` elements are always controlled, in the vein of `React`.
