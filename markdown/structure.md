@@ -156,7 +156,7 @@ You can can chain the following optional methods:
 state based on url (See the `Routing` section)
 - `.window_events(window_events)`, to set a function describing events on the `Window`. (See the `Events` section)
 
-And must must complete with the method `.build_and_run();`.
+And must must complete with the method `.build_and_start();`.
 
 `.mount()` takes a single argument, which can be the id of the element you wish to mount in,
 a `web_sys::Element`, or a `web_sys::HtmlElement`. Examples:
@@ -183,7 +183,7 @@ pub fn render() {
         .mount("main")
         .routes(routes)
         .window_events(window_events)
-        .build_and_run();
+        .build_and_start();
 }
 ```
 
@@ -196,7 +196,7 @@ fn init(url: Url, orders: &mut impl Orders<Msg>) -> Init<Model> {
 #[wasm_bindgen(start)]
 pub fn render() {
     seed::App::build(init, update, view)
-        .build_and_run();
+        .build_and_start();
 }
 ```
 

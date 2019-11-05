@@ -93,7 +93,7 @@ r#####"
 <li><code>.routes(routes)</code> to set a HashMap of landing-page routings, used to initialize your state based on url (See the <code>Routing</code> section)</li>
 <li><code>.window_events(window_events)</code>, to set a function describing events on the <code>Window</code>. (See the <code>Events</code> section)</li>
 </ul>
-<p>And must must complete with the method <code>.build_and_run();</code>.</p>
+<p>And must must complete with the method <code>.build_and_start();</code>.</p>
 <p><code>.mount()</code> takes a single argument, which can be the id of the element you wish to mount in, a <code>web_sys::Element</code>, or a <code>web_sys::HtmlElement</code>. Examples: <code>seed::App::build(|_, _| Model::default(), update, view).mount(seed::body())</code> <code>seed::App::build(|_, _| Model::default(), update, view).mount('a_div_id</code>)`</p>
 <pre><code>seed::App::build(|_, _| Model::default(), update, view).mount(
     seed::body().querySelector(&quot;section&quot;).unwrap().unwrap()
@@ -107,7 +107,7 @@ r#####"
 <a class="sourceLine" id="cb7-4" title="4">        .mount(<span class="st">&quot;main&quot;</span>)</a>
 <a class="sourceLine" id="cb7-5" title="5">        .routes(routes)</a>
 <a class="sourceLine" id="cb7-6" title="6">        .window_events(window_events)</a>
-<a class="sourceLine" id="cb7-7" title="7">        .build_and_run();</a>
+<a class="sourceLine" id="cb7-7" title="7">        .build_and_start();</a>
 <a class="sourceLine" id="cb7-8" title="8"><span class="op">}</span></a></code></pre></div>
 <p>Example of using a standalone <code>init</code> function:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">fn</span> init(url: Url, orders: &amp;<span class="kw">mut</span> <span class="kw">impl</span> Orders&lt;Msg&gt;) -&gt; Init&lt;Model&gt; <span class="op">{</span></a>
@@ -117,7 +117,7 @@ r#####"
 <a class="sourceLine" id="cb8-5" title="5"><span class="at">#[</span>wasm_bindgen<span class="at">(</span>start<span class="at">)]</span></a>
 <a class="sourceLine" id="cb8-6" title="6"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
 <a class="sourceLine" id="cb8-7" title="7">    <span class="pp">seed::App::</span>build(init, update, view)</a>
-<a class="sourceLine" id="cb8-8" title="8">        .build_and_run();</a>
+<a class="sourceLine" id="cb8-8" title="8">        .build_and_start();</a>
 <a class="sourceLine" id="cb8-9" title="9"><span class="op">}</span></a></code></pre></div>
 <p><code>Init</code> has the following fields: - <code>model</code>: The initial model - <code>url_handling</code>: A <a href="https://docs.rs/seed/0.4.2/seed/enum.UrlHandling.html">Urlhandling</a> enum, which has variants <code>PassToRoutes</code>: default with <code>Init::new()</code>), and <code>None</code> - <code>mount_type</code>: A <a href="https://docs.rs/seed/0.4.2/seed/enum.MountType.html">MountType</a> enum, which has variants <code>Append</code>: default with <code>Init::new()</code>, Leave the previously existing elements in the mount alone. This does not make guarantees of elements added after the <code>App</code> has been mounted), and <code>Takeover</code>: Take control of previously existing elements in the mount. This does not make guarantees of elements added after the <code>App</code> has been mounted. Note that existing elements in the DOM will be recreated. This can be dangerous for script tags and other, similar tags.</p>
 <p><code>Init::new()</code> covers the most common use-cases of the <code>Init</code>, but pass an <code>Init</code> literal if you’d like to use <code>url_handling</code> or <code>mount_type</code>. <code>UrlHandling</code> and <code>MountType</code> are imported in the prelude.</p>

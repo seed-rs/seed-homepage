@@ -128,7 +128,7 @@ wasm-bindgen = &quot;^0.2.50&quot;</code></pre>
 <a class="sourceLine" id="cb3-92" title="92"><span class="at">#[</span>wasm_bindgen<span class="at">(</span>start<span class="at">)]</span></a>
 <a class="sourceLine" id="cb3-93" title="93"><span class="kw">pub</span> <span class="kw">fn</span> render() <span class="op">{</span></a>
 <a class="sourceLine" id="cb3-94" title="94">    <span class="pp">seed::App::</span>build(|_, _| <span class="pp">Init::</span>new(<span class="pp">Model::</span><span class="kw">default</span>()), update, view)</a>
-<a class="sourceLine" id="cb3-95" title="95">        .build_and_run();</a>
+<a class="sourceLine" id="cb3-95" title="95">        .build_and_start();</a>
 <a class="sourceLine" id="cb3-96" title="96"><span class="op">}</span></a></code></pre></div>
 <p>For a truly minimimal example, see <a href="https://github.com/David-OConnor/seed-quickstart/blob/master/src/lib.rs">lib.rs in the quickstart repo</a></p>
 <h2 id="building-and-running">Building and running</h2>
