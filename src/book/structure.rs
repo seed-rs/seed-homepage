@@ -69,7 +69,7 @@ r#####"
 <a class="sourceLine" id="cb5-16" title="16">            <span class="op">}</span></a>
 <a class="sourceLine" id="cb5-17" title="17">        <span class="op">}</span></a>
 <a class="sourceLine" id="cb5-18" title="18"><span class="op">}</span></a></code></pre></div>
-<p>The third parameter of the update function is an <a href="https://docs.rs/seed/0.4.1/seed/prelude/struct.Orders.html">Orders</a> struct, imported in the prelude. It has four methods, each defining an update behavior:</p>
+<p>The third parameter of the update function is an <a href="https://docs.rs/seed/0.4.2/seed/prelude/struct.Orders.html">Orders</a> struct, imported in the prelude. It has four methods, each defining an update behavior:</p>
 <ul>
 <li><code>render</code>: Rerender the DOM, based on the new model. If <code>orders</code> is not used for a branch, it is used.</li>
 <li><code>skip</code>: Update the model without re-rendering</li>
@@ -83,7 +83,7 @@ r#####"
 <h2 id="initializing">Initializing</h2>
 <p>To start your app, call the <code>seed::App::build</code> method, which takes the following parameters:</p>
 <ul>
-<li>An <code>init</code> function which accepts an initial routing, initial orders, and outputs an <a href="https://docs.rs/seed/0.4.1/seed/struct.Init.html">Init struct</a> (imported in the prelude), wrapping the initial model.</li>
+<li>An <code>init</code> function which accepts an initial routing, initial orders, and outputs an <a href="https://docs.rs/seed/0.4.2/seed/struct.Init.html">Init struct</a> (imported in the prelude), wrapping the initial model.</li>
 <li>Your update function</li>
 <li>Your view function</li>
 </ul>
@@ -119,7 +119,7 @@ r#####"
 <a class="sourceLine" id="cb8-7" title="7">    <span class="pp">seed::App::</span>build(init, update, view)</a>
 <a class="sourceLine" id="cb8-8" title="8">        .build_and_run();</a>
 <a class="sourceLine" id="cb8-9" title="9"><span class="op">}</span></a></code></pre></div>
-<p><code>Init</code> has the following fields: - <code>model</code>: The initial model - <code>url_handling</code>: A <a href="https://docs.rs/seed/0.4.1/seed/enum.UrlHandling.html">Urlhandling</a> enum, which has variants <code>PassToRoutes</code>: default with <code>Init::new()</code>), and <code>None</code> - <code>mount_type</code>: A <a href="https://docs.rs/seed/0.4.1/seed/enum.MountType.html">MountType</a> enum, which has variants <code>Append</code>: default with <code>Init::new()</code>, Leave the previously existing elements in the mount alone. This does not make guarantees of elements added after the <code>App</code> has been mounted), and <code>Takeover</code>: Take control of previously existing elements in the mount. This does not make guarantees of elements added after the <code>App</code> has been mounted. Note that existing elements in the DOM will be recreated. This can be dangerous for script tags and other, similar tags.</p>
+<p><code>Init</code> has the following fields: - <code>model</code>: The initial model - <code>url_handling</code>: A <a href="https://docs.rs/seed/0.4.2/seed/enum.UrlHandling.html">Urlhandling</a> enum, which has variants <code>PassToRoutes</code>: default with <code>Init::new()</code>), and <code>None</code> - <code>mount_type</code>: A <a href="https://docs.rs/seed/0.4.2/seed/enum.MountType.html">MountType</a> enum, which has variants <code>Append</code>: default with <code>Init::new()</code>, Leave the previously existing elements in the mount alone. This does not make guarantees of elements added after the <code>App</code> has been mounted), and <code>Takeover</code>: Take control of previously existing elements in the mount. This does not make guarantees of elements added after the <code>App</code> has been mounted. Note that existing elements in the DOM will be recreated. This can be dangerous for script tags and other, similar tags.</p>
 <p><code>Init::new()</code> covers the most common use-cases of the <code>Init</code>, but pass an <code>Init</code> literal if you’d like to use <code>url_handling</code> or <code>mount_type</code>. <code>UrlHandling</code> and <code>MountType</code> are imported in the prelude.</p>
 "#####.into()
 }

@@ -1,7 +1,7 @@
 pub fn text() -> String {
 r#####"
 <h1 id="http-requests-fetch">HTTP Requests (fetch)</h1>
-<p>We use the <a href="https://docs.rs/seed/0.4.1/seed/fetch/struct.Request.html">seed::Request</a> struct to make HTTP requests in the browser, wrapping the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>. To use this, we need to include <code>futures = &quot;^0.1.26&quot;</code> in <code>Cargo.toml</code>. The <a href="https://docs.rs/seed/0.4.1/seed/fetch/index.html">Fetch module</a> is standalone: It can be used with any wasm-bindgen program.</p>
+<p>We use the <a href="https://docs.rs/seed/0.4.2/seed/fetch/struct.Request.html">seed::Request</a> struct to make HTTP requests in the browser, wrapping the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>. To use this, we need to include <code>futures = &quot;^0.1.26&quot;</code> in <code>Cargo.toml</code>. The <a href="https://docs.rs/seed/0.4.2/seed/fetch/index.html">Fetch module</a> is standalone: It can be used with any wasm-bindgen program.</p>
 <h2 id="receiving-data">Receiving data</h2>
 <p>Example, where we update the state on initial load (similar to the <a href="https://github.com/David-OConnor/seed/tree/master/examples/server_interaction">server_interaction example</a> ) from a server. It demonstrates a <code>GET</code> request, and deserializing JSON data. The <code>server_interaction</code> example contains more sample code.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">use</span> <span class="pp">futures::</span>Future;</a>
