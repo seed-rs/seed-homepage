@@ -78,7 +78,7 @@ r#####"
 <a class="sourceLine" id="cb5-6" title="6"><span class="op">}</span></a></code></pre></div>
 <p>Where we’ve given the element we wish to query id <code>my_el</code>.</p>
 <h2 id="some-convenience-functions">Some convenience functions</h2>
-<p>You can use <code>seed::document</code> and <code>seed::window</code> to access the <code>web_sys</code> document and window functions. Example:</p>
+<p>You can use <code>seed::document()</code> and <code>seed::window()</code> to access the <code>web_sys</code> document and window functions. Example:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">fn</span> view(model: &amp;Model) -&gt; <span class="dt">Vec</span>&lt;Node&lt;Msg&gt;&gt; <span class="op">{</span></a>
 <a class="sourceLine" id="cb6-2" title="2">    <span class="pp">vec!</span><span class="op">[</span></a>
 <a class="sourceLine" id="cb6-3" title="3">        <span class="pp">button!</span><span class="op">[</span> </a>
@@ -90,6 +90,8 @@ r#####"
 <a class="sourceLine" id="cb6-9" title="9">        <span class="op">]</span></a>
 <a class="sourceLine" id="cb6-10" title="10">    <span class="op">]</span></a>
 <a class="sourceLine" id="cb6-11" title="11"><span class="op">}</span></a></code></pre></div>
+<p>Additionally, use <code>seed::html_document()</code> in the same way, to return a <a href="https://rustwasm.github.io/wasm-bindgen/api/web_sys/struct.HtmlDocument.html">HtmlDocument</a></p>
+<p>You can call <code>seed::cookies()</code> to retrieve all cookies from the current <code>HtmlDocument</code>.</p>
 <h2 id="input-elements-are-controlled">Input elements are controlled</h2>
 <p><code>input</code>, <code>textarea</code>, and <code>select</code> elements are always controlled, in the vein of <code>React</code>. This means that even if there’s no event associated with user input to these fields, their value will always stay in sync with the model, which may mean ignoring text input if not set up with a <code>Ev::Input</code> event.</p>
 "#####.into()

@@ -144,7 +144,8 @@ See the [view section](https://seed-rs.org/guide/view) for details.
 To start your app, call the `seed::App::build` method, which takes the following parameters:
 
 - An `init` function which accepts an initial routing, initial orders, and outputs 
-an [Init struct](https://docs.rs/seed/0.4.1/seed/struct.Init.html), wrapping the initial model
+an [Init struct](https://docs.rs/seed/0.4.1/seed/struct.Init.html) (imported in the prelude),
+ wrapping the initial model.
 - Your update function
 - Your view function
 
@@ -155,7 +156,7 @@ You can can chain the following optional methods:
 state based on url (See the `Routing` section)
 - `.window_events(window_events)`, to set a function describing events on the `Window`. (See the `Events` section)
 
-And must must complete with these methods: `.finish().run()`.
+And must must complete with the method `.build_and_run();`.
 
 `.mount()` takes a single argument, which can be the id of the element you wish to mount in,
 a `web_sys::Element`, or a `web_sys::HtmlElement`. Examples:
@@ -182,8 +183,7 @@ pub fn render() {
         .mount("main")
         .routes(routes)
         .window_events(window_events)
-        .finish()
-        .run();
+        .build_and_run();
 }
 ```
 
@@ -196,16 +196,16 @@ fn init(url: Url, orders: &mut impl Orders<Msg>) -> Init<Model> {
 #[wasm_bindgen(start)]
 pub fn render() {
     seed::App::build(init, update, view)
-        .finish()
-        .run();
+        .build_and_run();
 }
 ```
 
 `Init` has the following fields:
     - `model`: The initial model
-    - `url_handling`: A `UrlHandling` enum, which has variants `PassToRoutes`: default with `Init::new()`),
+    - `url_handling`: A [Urlhandling](https://docs.rs/seed/0.4.1/seed/enum.UrlHandling.html)  enum, which has 
+    variants `PassToRoutes`: default with `Init::new()`),
     and `None`
-    - `mount_type`: A `MountType` enum, which has variants `Append`: default with `Init::new()`,
+    - `mount_type`: A [MountType](https://docs.rs/seed/0.4.1/seed/enum.MountType.html)  enum, which has variants `Append`: default with `Init::new()`,
     Leave the previously existing elements in the mount alone. This does not make guarantees of
     elements added after the `App` has been mounted),
     and `Takeover`:  Take control of previously existing elements in the mount. This does not make guarantees of
@@ -213,5 +213,5 @@ pub fn render() {
     be recreated. This can be dangerous for script tags and other, similar tags.
 
 `Init::new()` covers the most common use-cases of the `Init`, but pass an `Init` literal if you'd
-like to use `url_handling` or `mount_type`.
+like to use `url_handling` or `mount_type`. `UrlHandling` and `MountType` are imported in the prelude.
 

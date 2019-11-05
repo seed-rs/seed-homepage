@@ -218,8 +218,8 @@ fn view(model: &Model) -> impl View<Msg> {
 }
 ```
 
-We can combine Attrs and Style instances using their `merge` methods, which take
-an &Attrs and &Style respectively. This can be used to compose styles from reusable parts. 
+We can combine Attrs and `Style` instances using their `merge` methods, which take
+an `&Attrs` and `&Style` respectively. This can be used to compose styles from reusable parts. 
 Example:
 ```rust
 fn a_component() -> Node<Msg> {
@@ -231,6 +231,25 @@ fn a_component() -> Node<Msg> {
     ]
 }
 ```
+
+Perhaps more cleanly, we can use multiple `Style`s together, to merge their entries:
+```rust
+fn a_component() -> Node<Msg> {
+    let base_style = style!{"color" => "lavender"};
+
+    div![
+        h1![ 
+            &base_style, 
+            style!{St::GridRow => "1 / 2"},
+            "First row" ],
+        h1![ 
+            &base_style, 
+            style!{St::GridRow => "2 / 3"}, 
+            "Second row" ],
+    ]
+}
+```
+
 
 Overall: we leverage of Rust's strict type system to flexibly-create the view
 using normal Rust code.W
