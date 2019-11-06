@@ -52,7 +52,7 @@ enum Msg {
 ```
 
 
-### Tests
+## Tests
 To run tests, you may either use `wasm-pack` test commands, or simplified ones from the 
 `Makefile.toml` included in the quickstart repo. 
 

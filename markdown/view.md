@@ -1,13 +1,17 @@
 # View
 
  Visual layout (ie HTML/DOM elements) is described declaratively in Rust, and uses 
-[macros]( https://doc.rust-lang.org/book/appendix-04-macros.html) to simplify syntax.
+[macros]( https://doc.rust-lang.org/book/appendix-04-macros.html) to simplify syntax. Each element
+is represented by a macro, eg `div![]`. These act as functions that accept an arbitrary
+number of parameters, in any order: They handle the parameters based exclusively on type.
 
-The view's defined by a function that's passed to `seed::App::build`. This takes a `&Model`
+The view's defined by a function that's passed to 
+[seed::App::build](https://docs.rs/seed/0.4.2/seed/struct.App.html#method.build). This takes a `&Model`
 as its parameter, and outputs something that implements the ` View` trait, which is imported in the prelude.
 Usually, this is a `Node`, or `Vec<Node>`, representing all nodes that will be inserted as children
 on the top-level one. (The top-level `Node` is in the html file, and specified with
-`seed::App::build.mount()`, or as a default, the element with id `app`).
+[seed::App::build.mount()](https://docs.rs/seed/0.4.2/seed/struct.AppBuilder.html#method.mount), 
+or as a default, the element with id `app`).
  It may composed into sub-functions, which can be thought of like components in other frameworks. 
 
 Examples:
@@ -112,8 +116,9 @@ let style = style![
 ];
 ```
 
-We can set multiple values for an attribute using `Attribute.add_multiple`. This
-is useful for setting multiple classes. Note that we must set this up outside of
+We can set multiple values for an attribute using 
+[Attribute.add_multiple](https://docs.rs/seed/0.4.2/seed/dom_types/struct.Attrs.html#method.add_multiple).
+ This is useful for setting multiple classes. Note that we must set this up outside of
 the view macro, since it involves modifying a variable:
 ```rust
 fn a_component() -> Node<Msg> {
@@ -125,7 +130,8 @@ fn a_component() -> Node<Msg> {
 ```
 
 Seed validates attributes [against this list](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes);
-The `At` enum includes only these values, and `&strs` passed are converted into `At`s. If you
+The [At](https://docs.rs/seed/0.4.2/seed/dom_types/enum.At.html) 
+enum includes only these values, and `&strs` passed are converted into `At`s. If you
 wish to use a custom attribute, use 
 [At::Custom](https://docs.rs/seed/0.4.1/seed/dom_types/enum.At.html#variant.Custom)
 , eg `At::Custom(name)`, where `name` is a `String` of your
@@ -180,7 +186,9 @@ fn a_component() -> Node<Msg> {
 ```
 
 For boolean attributes that are handled by presense or absense, like `disabled`, `checked`,
-`autofocus` etc, use `.as_at_value`: `input![ attrs!{At::Disabled => false.as_at_value() ]`:
+`autofocus` etc, use 
+[.as_at_value](https://docs.rs/seed/0.4.2/seed/dom_types/values/trait.AsAtValue.html#tymethod.as_at_value):
+ `input![ attrs!{At::Disabled => false.as_at_value() ]`:
 
 ```rust
 fn a_component() -> Node<Msg> {
@@ -294,7 +302,7 @@ svg![
 ]
 ```
 
-The same exmaple using `from_html`:
+The same exmaple using [from_html](https://docs.rs/seed/0.4.2/seed/dom_types/enum.Node.html#method.from_html):
 ```rust
 Node::from_html(
 r#"

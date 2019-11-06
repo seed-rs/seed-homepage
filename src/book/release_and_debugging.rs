@@ -21,7 +21,7 @@ r#####"
 <a class="sourceLine" id="cb1-9" title="9">    RoutePage(Page),</a>
 <a class="sourceLine" id="cb1-10" title="10">    ChangePage(Page),</a>
 <a class="sourceLine" id="cb1-11" title="11"><span class="op">}</span></a></code></pre></div>
-<h3 id="tests">Tests</h3>
+<h2 id="tests">Tests</h2>
 <p>To run tests, you may either use <code>wasm-pack</code> test commands, or simplified ones from the <code>Makefile.toml</code> included in the quickstart repo.</p>
 <p>To run all tests with the Makefile: <code>cargo make test_h firefox</code> Where <code>firefox</code> may be replaced with <code>chrome</code> or <code>safari</code>.</p>
 <p>To run a single test: <code>cargo make test_h test_name</code>. with <code>test_name</code> replaced by the name of the test. It uses Firefox.</p>
