@@ -126,9 +126,15 @@ fn a_component() -> Node<Msg> {
 
 Seed validates attributes [against this list](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes);
 The `At` enum includes only these values, and `&strs` passed are converted into `At`s. If you
-wish to use a custom attribute, use `At::Custom(name)`, where `name` is a `String` of your
+wish to use a custom attribute, use 
+[At::Custom](https://docs.rs/seed/0.4.1/seed/dom_types/enum.At.html#variant.Custom)
+, eg `At::Custom(name)`, where `name` is a `String` of your
 attribute's name. In `attrs!` when using `&str`s, inserting an unrecognized attribute
-will do the same.
+will do the same. Similar `Custom` methods exist for 
+[Style](https://docs.rs/seed/0.4.1/seed/dom_entity_names/styles/enum.St.html#variant.Custom),
+[Namespace](https://docs.rs/seed/0.4.1/seed/dom_types/enum.Namespace.html#variant.Custom),
+[Tag](https://docs.rs/seed/0.4.1/seed/dom_types/enum.Tag.html#variant.Custom), and
+[Category](https://docs.rs/seed/0.4.1/seed/events/enum.Category.html#variant.Custom).
 
 The `class!` and `id!` convenience macros allow settings
 attributes as a list of classes, or a single id, if no other attributes are required.
@@ -218,7 +224,9 @@ fn view(model: &Model) -> impl View<Msg> {
 }
 ```
 
-We can combine Attrs and `Style` instances using their `merge` methods, which take
+We can combine Attrs and `Style` instances using their 
+[merge](https://docs.rs/seed/0.4.1/seed/dom_types/struct.Attrs.html#method.merge)
+ methods, which take
 an `&Attrs` and `&Style` respectively. This can be used to compose styles from reusable parts. 
 Example:
 ```rust

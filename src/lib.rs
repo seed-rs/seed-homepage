@@ -153,6 +153,7 @@ fn title() -> Node<Msg> {
                 style! {"margin-top" => unit!(30, px)},
             ],
             h2!["A Rust framework for creating web apps"],
+            h3!["Latest release: 0.4.2 (Nov 05, 2019)"],
         ],
         div![
             style! {"grid-row" => "2/3"; "grid-column" => "1 / 2"},
@@ -438,6 +439,5 @@ pub fn render() {
         seed::App::build(|_, _| Init::new(Model::default()), update, view)
 
         .routes(routes)
-        .finish()
-        .run();
+        .build_and_start();
 }
