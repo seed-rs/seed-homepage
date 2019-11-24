@@ -13,3 +13,4 @@ pub mod routing;
 pub mod server_integration;
 pub mod structure;
 pub mod view;
+pub mod js;
