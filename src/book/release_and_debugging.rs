@@ -9,23 +9,23 @@ r#####"
 <h3 id="logging">Logging</h3>
 <p>You may log things to the browser console using the following functions: <code>seed::log</code>, and <code>seed::error</code>. They accept a single argument which implements <code>Debug</code>. Each has a corresponding macro: <code>log!</code>, and <code>error!</code>, which work in a similar way, but accept multiple arguments, which will be displayed separated by spaces. If you’d like to log something which implements <code>ToString</code>, but not <code>Debug</code>, call <code>to_string()</code> on it when using it in the function or macro.</p>
 <h3 id="debugging-elements">Debugging elements</h3>
-<p><code>El</code> and <code>Node</code> implement the <code>Debug</code> trait, so you can view them using <code>log!</code>: <code>log!(format!(&quot;{:?}&quot;, my_el));</code> In order to take advantage of this, you must implement <code>Debug</code> for your message type, and any sub-types. Example:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><a class="sourceLine" id="cb1-1" title="1"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Copy</span><span class="at">,</span> <span class="bu">Clone</span><span class="at">,</span> <span class="bu">Debug</span><span class="at">)]</span></a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw">enum</span> Page <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-3" title="3">    Guide,</a>
-<a class="sourceLine" id="cb1-4" title="4">    Changelog</a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="op">}</span></a>
-<a class="sourceLine" id="cb1-6" title="6"></a>
-<a class="sourceLine" id="cb1-7" title="7"><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">,</span> <span class="bu">Debug</span><span class="at">)]</span></a>
-<a class="sourceLine" id="cb1-8" title="8"><span class="kw">enum</span> Msg <span class="op">{</span></a>
-<a class="sourceLine" id="cb1-9" title="9">    RoutePage(Page),</a>
-<a class="sourceLine" id="cb1-10" title="10">    ChangePage(Page),</a>
-<a class="sourceLine" id="cb1-11" title="11"><span class="op">}</span></a></code></pre></div>
+<p><code>El</code> and <code>Node</code> implement the <code>Debug</code> trait, so you can view them using <code>log!</code>: <code>log!(format!("{:?}", my_el));</code> In order to take advantage of this, you must implement <code>Debug</code> for your message type, and any sub-types. Example:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Copy</span><span class="at">,</span> <span class="bu">Clone</span><span class="at">,</span> <span class="bu">Debug</span><span class="at">)]</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">enum</span> Page <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>    Guide,</span>
+<span id="cb1-4"><a href="#cb1-4"></a>    Changelog</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="op">}</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">,</span> <span class="bu">Debug</span><span class="at">)]</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="kw">enum</span> Msg <span class="op">{</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a>    RoutePage(Page),</span>
+<span id="cb1-10"><a href="#cb1-10"></a>    ChangePage(Page),</span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="op">}</span></span></code></pre></div>
 <h2 id="tests">Tests</h2>
 <p>To run tests, you may either use <code>wasm-pack</code> test commands, or simplified ones from the <code>Makefile.toml</code> included in the quickstart repo.</p>
 <p>To run all tests with the Makefile: <code>cargo make test_h firefox</code> Where <code>firefox</code> may be replaced with <code>chrome</code> or <code>safari</code>.</p>
 <p>To run a single test: <code>cargo make test_h test_name</code>. with <code>test_name</code> replaced by the name of the test. It uses Firefox.</p>
 <p>With <code>wasm-pack</code> directly, or to run individual tests, use commands similar to this:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" title="1"><span class="ex">wasm-pack</span> test --firefox --headless -- --lib test_name</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">wasm-pack</span> test --firefox --headless -- --lib test_name</span></code></pre></div>
 "#####.into()
 }

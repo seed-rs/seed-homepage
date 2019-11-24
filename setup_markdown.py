@@ -21,7 +21,7 @@ def main():
         "prereqs",
         "structure",
         "view",
-        "events",p
+        "events",
         "fetch",
         "routing",
         "release_and_debugging",
