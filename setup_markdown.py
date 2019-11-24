@@ -29,6 +29,7 @@ def main():
         "misc",
         "server_integration",
         "about",
+        "js",
     ]
     
     for filename in filenames:

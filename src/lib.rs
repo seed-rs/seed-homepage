@@ -52,6 +52,7 @@ impl Default for Model {
             ("Http requests and state", book::fetch::text()),
             ("Routing", book::routing::text()),
             ("Misc features", book::misc::text()),
+            ("Javascript interaction", book::js::text()),
             (
                 "Release and debugging",
                 book::release_and_debugging::text(),
