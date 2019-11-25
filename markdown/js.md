@@ -3,7 +3,7 @@
 ## Calling Javascript functions from seed.
 If you have Javascript functions in your app, you can call them from seed code using 
 `wasm_bindgen`. For a detailed
-example, see the [official exampe](https://github.com/seed-rs/seed/tree/master/examples/update_from_js).
+example, see the [official example](https://github.com/seed-rs/seed/tree/master/examples/update_from_js).
 
 For example, you might have a Javascript function defined elsewhere in your document,
 like this:
@@ -35,3 +35,5 @@ You can then call this anywhere in your app, eg:
 ```rust
 h1![ format!("Two plus one equals {}", addOne(2)) ]
 ```
+
+For more info, reference [this wasm-bindgen example](https://rustwasm.github.io/wasm-bindgen/examples/import-js.html).
