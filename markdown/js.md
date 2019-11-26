@@ -1,6 +1,6 @@
 # Interaction with Javascript
 
-## Calling Javascript functions from seed.
+## Calling Javascript functions
 If you have Javascript functions in your app, you can call them from seed code using 
 `wasm_bindgen`. For a detailed
 example, see the [official example](https://github.com/seed-rs/seed/tree/master/examples/update_from_js).
@@ -17,7 +17,7 @@ like this:
 <section id="app"></section>
 <script type="module">
     import init from '/static/pkg/mypage.js';
-    init('/static/pkg/rap_bg.wasm');
+    init('/static/pkg/mypage.wasm');
 </script>
 ```
 

@@ -94,6 +94,6 @@ r#####"
 <p>We also include <code>seed::canvas()</code>, and <code>seed::canvas_context()</code>. (Unreleased)</p>
 <p>You can call <code>seed::cookies()</code> to retrieve all cookies from the current <code>HtmlDocument</code>.</p>
 <h2 id="input-elements-are-controlled">Input elements are controlled</h2>
-<p><code>input</code>, <code>textarea</code>, and <code>select</code> elements are always controlled, in the vein of <code>React</code>. This means that even if there’s no event associated with user input to these fields, their value will always stay in sync with the model, which may mean ignoring text input if not set up with a <code>Ev::Input</code> event.</p>
+<p><code>input</code>, <code>textarea</code>, and <code>select</code> elements are always controlled, in the vein of <code>React</code>’s <a href="https://reactjs.org/docs/forms.html#controlled-components">controlled components</a>. This means that even if there’s no event associated with user input to these fields, their value will always stay in sync with the model, which may mean ignoring text input if not set up with a <code>Ev::Input</code> event.</p>
 "#####.into()
 }
