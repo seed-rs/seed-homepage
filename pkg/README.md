@@ -1,1 +1,1 @@
-This is separate from seed/examples to simplify deploying.
+Deprecated in favor of [the new page](https://github.com/seed-rs/seed-rs.org)

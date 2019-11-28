@@ -21,7 +21,6 @@ like this:
 </script>
 ```
 
-
 Define a function like this in your app, where `addOne` here is the same name as the
 javascript function you wish to call.
 ```rust
